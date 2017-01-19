@@ -1,7 +1,5 @@
 #!/bin/bash
 
-[ -f ~/.bashrc_local ] && source ~/.bashrc_local
-
 ################################################################################
 # tmux_attach_or_reattach
 # 
@@ -61,10 +59,10 @@ function conf {
 			tmux source-file ~/.tmux.conf
 			;;
 		v)
-			vim ~/.vimrc
+			vim ~/.vimrc$suffix
 			;;
 		r)
-			vim ~/README.md
+			vim ~/.dotfiles/readme.md
 			;;
 		i)
 			vim ~/.inputrc
@@ -72,4 +70,5 @@ function conf {
 	esac
 }
 
+[ -f ~/.bashrc_local ] && source ~/.bashrc_local
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
