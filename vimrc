@@ -383,9 +383,11 @@ endfunction
 "==============================================================================
 " Plugins and Misc
 "==============================================================================
-
-"==========[ athena ]==========
-set tags=$ATHENA_HOME/tags 
+"==========[ local vimrc ]==========
+let $LOCALFILE=expand("~/.vimrc_local")
+if filereadable($LOCALFILE)
+	source $LOCALFILE
+endif
 
 "==========[ tester.vim ]==========
 nnoremap <leader>t :call g:tester.OpenPairedFile()<cr>
@@ -409,10 +411,6 @@ nnoremap <leader>j :SplitjoinSplit<cr>
 
 " quickly edit macros
 nnoremap <leader>m :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
-
-nnoremap <silent> <leader>p4a :!p4 add %:p<cr>
-nnoremap <silent> <leader>p4e :!p4 edit %:p<cr>
-nnoremap <silent> <leader>p4r :!p4 revert %:p<cr>
 
 nnoremap <leader>f :FZF<cr>
 
