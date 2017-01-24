@@ -53,6 +53,9 @@ Plug 'mileszs/ack.vim'
 " haven't really used yet
 Plug 'tpope/vim-speeddating'
 
+" Iterm2 theme because terminal was ultrawhackslow
+Plug 'altercation/vim-colors-solarized'
+
 call plug#end()
 
 "==============================================================================
@@ -63,20 +66,16 @@ call plug#end()
 let netrw_liststyle=3
 let mapleader="\<space>"
 
-try
-	colorscheme tolerable
-catch
-endtry
-
-hi clear SignColumn 
+set background=dark
+colorscheme solarized
 
 set dictionary="/usr/dict/words"
 set foldenable
 set lazyredraw
 
 "==========[ interface ]==========
-set list
-set listchars=tab:\|\ 
+" set list
+" set listchars=tab:\|\ 
 set noerrorbells
 set novisualbell
 set number
@@ -90,6 +89,7 @@ set ttimeoutlen=0 " no pause on esc
 
 "==========[ files ]==========
 set autowrite
+set autowriteall
 set fileformats=unix,dos,mac
 set noswapfile
 set undodir=~/.vim/undodir
@@ -127,11 +127,8 @@ set splitbelow
 set splitright
 
 "==========[ statusline ]==========
-hi statusline guibg=DarkGrey
 hi statusline ctermfg=0
 hi statusline ctermbg=14
-hi statuslinenc ctermfg=0
-hi statuslinenc ctermbg=14
 set statusline=%.100F " Full path (100 chars)
 set statusline+=%= " right side
 set statusline+=%c " column
@@ -174,14 +171,14 @@ nnoremap <leader>w :w!<cr>
 nnoremap <leader>vv :sp $MYVIMRC<cr>
 nnoremap <leader>vs :source $MYVIMRC<cr>:nohl<cr>
 
-" make n always go forward and N always go back
-nnoremap <expr> n 'Nn'[v:searchforward]
-nnoremap <expr> N 'nN'[v:searchforward]
-
 " I don't use ex mode; play last macro
 nnoremap Q @@
 
 "==========[ insert ]==========
+
+" forward delete
+inoremap <c-d> <del>
+
 " I find <c-c> easier to type than <c-[> or <esc>
 " and haven't found myself wanting to cancel during an insertion
 inoremap <c-c> <esc>
@@ -200,6 +197,15 @@ inoremap '<tab> ''<esc>i
 
 inoremap "<tab> ""<esc>i
 
+" more intuitive completion mappings
+inoremap <c-j> <c-n>
+inoremap <c-k> <c-p>
+inoremap <c-o> <c-x><c-o>
+inoremap <c-u> <c-x><c-u>
+inoremap <c-f> <c-x><c-f>
+inoremap <c-]> <c-x><c-]>
+inoremap <c-l> <c-x><c-l>
+
 "==========[ visual ]==========
 " unindent/indent
 vnoremap > >gv
@@ -207,16 +213,6 @@ vnoremap < <gv
 
 " paste without overwriting buffer
 vnoremap r "_dP"
-
-"------insert mode mappings
-" forward delete
-inoremap <c-d> <del>
-
-" autocompletion
-inoremap <tab> <c-r>=TabOrComplete()<cr>
-
-" Turn off <esc> as mode exit in visual mode.
-vnoremap <esc> <nop>
 
 " search by visual selection
 vnoremap <silent> * :<c-u>call VisualSelection('', '')<cr>/<c-r>=@/<cr><cr>
@@ -236,14 +232,17 @@ nnoremap ^ g^
 vnoremap ^ g^
 
 " when jumping, recenter
-nnoremap n nzz
-nnoremap N Nzz
-
 nnoremap <c-f> <c-f>zz
 vnoremap <c-f> <c-f>zz
 
 nnoremap <c-b> <c-b>zz
 vnoremap <c-b> <c-b>zz
+
+" make n always go forward and N always go back 
+nnoremap <expr> n 'Nn'[v:searchforward].'zz'
+vnoremap <expr> n 'Nn'[v:searchforward].'zz'
+nnoremap <expr> N 'nN'[v:searchforward].'zz'
+vnoremap <expr> N 'nN'[v:searchforward].'zz'
 
 "==========[ normal/visual/insert ]==========
 inoremap <up> <nop>
@@ -343,14 +342,6 @@ function! ModifyLineEndDelimiter(character)
 	call setline('.', newline)
 endfunction
 
-function! TabOrComplete()
-	if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-		return "\<c-n>"
-	else
-		return "\<tab>"
-	endif
-endfunction
-
 function! VisualSelection(direction, extra_filter) range
 	let l:saved_reg=@"
 	execute "normal! vgvy"
@@ -432,10 +423,10 @@ function! NumberToggle(relative)
 	endif
 endfunction
 
-" autocmd! BufEnter * :call NumberToggle(1)
-" autocmd! BufLeave * :call NumberToggle(0)
-" autocmd! FocusGained * :call NumberToggle(1)
-" autocmd! FocusLost * :call NumberToggle(0)
+autocmd! BufEnter * :call NumberToggle(1)
+autocmd! BufLeave * :call NumberToggle(0)
+autocmd! FocusGained * :call NumberToggle(1)
+autocmd! FocusLost * :call NumberToggle(0)
 
 " set shortmess=a
 cnoreabbrev Ag Ack!
@@ -445,26 +436,9 @@ if executable('ag')
 	let g:ackprg = 'ag --vimgrep'
 endif
 
-" testing andrewradev's completion mappings
-inoremap <c-j> <c-n>
-inoremap <c-k> <c-p>
-inoremap <c-o> <c-x><c-o>
-inoremap <c-u> <c-x><c-u>
-inoremap <c-f> <c-x><c-f>
-inoremap <c-]> <c-x><c-]>
-inoremap <c-l> <c-x><c-l>
-
-" easier paste in insert mode (unsure how I feel about this overwriting
-" backwards-completion, but maybe it's ok with the <c-k> mapping above
-inoremap <c-p> <c-r>"
-
-" move to beginning/end of line (commenting out because I should use the
-" tokens that regexes use)
-" nnoremap H ^
-" vnoremap H ^
-" nnoremap L $
-" vnoremap L $
-
 " don't store "{"/"}" motions in jump list
 nnoremap <silent> } :<c-u>execute "keepjumps normal! " . v:count1 . "}"<cr>
 nnoremap <silent> { :<c-u>execute "keepjumps normal! " . v:count1 . "{"<cr>
+
+let g:solarized_visibility='low'
+
