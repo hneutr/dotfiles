@@ -4,7 +4,7 @@ This repository contains my dotfiles.
 ## Todos:
 - all:
 	- make own colorscheme that works with all languages
-	- unify colors
+	- make it so that you can change the $SUFFIX seamlessly
 - vim:
 	- better switching between windows (there's weird stuff afoot re: c-l)
 	- add in 'find to last in line' for f/F/t/T
@@ -15,6 +15,7 @@ This repository contains my dotfiles.
 	- learn about ctrl-w
 	- learn about more text-objects
 	- possibly set viminfo settings?
+	- autowrite/autowriteall not working? maybe because I use c-c to escape?
 - tmux:
 	- better switching between windows (there's weird stuff afoot re: c-l)
 - bashrc:
