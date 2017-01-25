@@ -17,6 +17,7 @@ Plug 'junegunn/fzf', { 'dir' : '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-unimpaired'
 Plug 'neomake/neomake'
+Plug 'altercation/vim-colors-solarized'
 
 "==========[ text editing ]==========
 Plug 'AndrewRadev/splitjoin.vim'
@@ -53,9 +54,6 @@ Plug 'mileszs/ack.vim'
 " haven't really used yet
 Plug 'tpope/vim-speeddating'
 
-" Iterm2 theme because terminal was ultrawhackslow
-Plug 'altercation/vim-colors-solarized'
-
 call plug#end()
 
 "==============================================================================
@@ -72,10 +70,9 @@ colorscheme solarized
 set dictionary="/usr/dict/words"
 set foldenable
 set lazyredraw
+set tildeop	" tilde should be an operator
 
 "==========[ interface ]==========
-" set list
-" set listchars=tab:\|\ 
 set noerrorbells
 set novisualbell
 set number
@@ -83,6 +80,7 @@ set nocursorline
 set nowrap
 set smartindent
 set showcmd
+set shortmess=ac
 set showmatch " highlight matching braces
 set timeoutlen=1000 
 set ttimeoutlen=0 " no pause on esc
@@ -92,19 +90,21 @@ set autowrite
 set autowriteall
 set fileformats=unix,dos,mac
 set noswapfile
-set undodir=~/.vim/undodir
 set undofile
+set undodir=~/.vim/undodir
 
 "==========[ tabs ]==========
 set smarttab
 set shiftwidth=4
 set softtabstop=4
 set tabstop=4
+set shiftround
 
 "==========[ completion ]==========
 set wildmode=list:longest,full
-set wildignore=*DS_Store*
-set wildignore+=tmp/**
+set wildignorecase
+set wildignore+=.DS_Store,.git
+set wildignore+=*.tmp,*.swp
 set wildignore+=*.png,*.jpg,*.gif
 set complete-=i " don't scan included files
 set complete-=t " don't scan tags
@@ -163,9 +163,6 @@ nnoremap <silent> <leader>; :call ModifyLineEndDelimiter(';')<cr>
 " remove trailing whitespace
 nnoremap <leader>w :%s/\s\+$//<cr>nohlsearch<cr>
 
-" save
-nnoremap <leader>w :w!<cr>
-
 " edit and load various different files
 " vimrc
 nnoremap <leader>vv :sp $MYVIMRC<cr>
@@ -173,6 +170,13 @@ nnoremap <leader>vs :source $MYVIMRC<cr>:nohl<cr>
 
 " I don't use ex mode; play last macro
 nnoremap Q @@
+
+" don't store "{"/"}" motions in jump list
+nnoremap <silent> } :<c-u>execute "keepjumps normal! " . v:count1 . "}"<cr>
+nnoremap <silent> { :<c-u>execute "keepjumps normal! " . v:count1 . "{"<cr>
+
+" yank to end of line; consistency is king
+nnoremap Y y$
 
 "==========[ insert ]==========
 
@@ -200,7 +204,6 @@ inoremap "<tab> ""<esc>i
 " more intuitive completion mappings
 inoremap <c-j> <c-n>
 inoremap <c-k> <c-p>
-inoremap <c-o> <c-x><c-o>
 inoremap <c-u> <c-x><c-u>
 inoremap <c-f> <c-x><c-f>
 inoremap <c-]> <c-x><c-]>
@@ -225,11 +228,6 @@ nnoremap j gj
 vnoremap j gj
 nnoremap k gk
 vnoremap k gk
-
-nnoremap $ g$
-vnoremap $ g$
-nnoremap ^ g^
-vnoremap ^ g^
 
 " when jumping, recenter
 nnoremap <c-f> <c-f>zz
@@ -371,6 +369,19 @@ function! StripTrailingWhitespace()
 	normal mZ
 endfunction
 
+" relative is a boolean indicating either
+" --> relativenumber (when true)
+" --> norelativenumber (when false)
+function! NumberToggle(relative)
+	if (&number)
+		if (a:relative == 1)
+			set relativenumber
+		else
+			set norelativenumber
+		endif
+	endif
+endfunction
+
 "==============================================================================
 " Plugins and Misc
 "==============================================================================
@@ -398,7 +409,9 @@ nnoremap <leader>n :Neomake<cr>
 nnoremap <leader>k :SplitjoinJoin<cr>
 nnoremap <leader>j :SplitjoinSplit<cr>
 
-"==========[ testing ]==========
+"==============================================================================
+" Testing
+"==============================================================================
 
 " quickly edit macros
 nnoremap <leader>m :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
@@ -408,20 +421,6 @@ nnoremap <leader>f :FZF<cr>
 let g:fzf_action = {
 	\'ctrl-b': 'vsplit',
 	\'ctrl-v': 'split'}
-
-" testing with relative numbers
-" relative is a boolean indicating either
-" --> relativenumber (when true)
-" --> norelativenumber (when false)
-function! NumberToggle(relative)
-	if (&number)
-		if (a:relative == 1)
-			set relativenumber
-		else
-			set norelativenumber
-		endif
-	endif
-endfunction
 
 autocmd! BufEnter * :call NumberToggle(1)
 autocmd! BufLeave * :call NumberToggle(0)
@@ -435,10 +434,4 @@ nnoremap <leader>a :Ack!<space>
 if executable('ag')
 	let g:ackprg = 'ag --vimgrep'
 endif
-
-" don't store "{"/"}" motions in jump list
-nnoremap <silent> } :<c-u>execute "keepjumps normal! " . v:count1 . "}"<cr>
-nnoremap <silent> { :<c-u>execute "keepjumps normal! " . v:count1 . "{"<cr>
-
-let g:solarized_visibility='low'
 
