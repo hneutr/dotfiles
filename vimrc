@@ -54,6 +54,10 @@ Plug 'mileszs/ack.vim'
 " haven't really used yet
 Plug 'tpope/vim-speeddating'
 
+"==========[ writing ]==========
+Plug 'junegunn/goyo.vim'
+Plug 'reedes/vim-pencil'
+
 call plug#end()
 
 "==============================================================================
@@ -421,6 +425,10 @@ nnoremap <leader>f :FZF<cr>
 let g:fzf_action = {
 	\'ctrl-b': 'vsplit',
 	\'ctrl-v': 'split'}
+
+" this doesnt work because it changes pane :(
+" inoremap <c-j> <plug>(fzf-maps-n)
+" inoremap <c-k> <plug>(fzf-maps-p)
 
 autocmd! BufEnter * :call NumberToggle(1)
 autocmd! BufLeave * :call NumberToggle(0)
