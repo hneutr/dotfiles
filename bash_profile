@@ -10,5 +10,3 @@ fi
 
 [ -f ~/.bash_profile_local ] && source ~/.bash_profile_local
 [ -f ~/.bashrc ] && source ~/.bashrc
-
-cd ~

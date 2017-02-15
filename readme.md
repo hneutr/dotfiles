@@ -20,7 +20,6 @@ This repository contains my dotfiles.
 		- set up plugin settings (goyo/pencil) 
 		- set 'writing' settings
 - tmux:
-	- bind command to open new split at same directory
 - bashrc:
 	- add in yaml file for "this file should be sourced afterwards with this command" for conf function
 - bash\_profile:
