@@ -29,6 +29,8 @@ Plug 'wellle/targets.vim'
 "==========[ tmux ]==========
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'roxma/vim-tmux-clipboard'
+Plug 'tmux-plugins/vim-tmux'
+Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'wellle/tmux-complete.vim'
 
 "==========[ language ]==========

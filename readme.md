@@ -28,10 +28,17 @@ This repository contains my dotfiles.
 - inputrc:
 	- learn more stuff
 - fzf:
+	- maybe set up tmux stuff for 's'/'g'?
+	- maybe change 's' to 'svim' or something?
+	- maybe change 'g' to 'cdf'?
+- iterm2:
+	- fix option/meta key problem
+		- http://www.hackaddict.net/2007/07/skip-to-next-or-previous-word-in-iterm.html
+		- also send +Esc
 
-## Notes/Thoughts
+# Notes/Thoughts
 
-# Writing in vim
+## Writing in vim
 desire:
 - frictionless switch between code/prose
 	- ideally don't want to do anything (aka approach probably involves autocmds)
