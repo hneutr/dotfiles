@@ -182,6 +182,8 @@ nnoremap <silent> { :<c-u>execute "keepjumps normal! " . v:count1 . "{"<cr>
 " yank to end of line; consistency is king
 nnoremap Y y$
 
+" change case of character under cursor
+nnoremap ~~ ~l
 "==========[ insert ]==========
 
 " forward delete
@@ -413,6 +415,21 @@ nnoremap <leader>n :Neomake<cr>
 nnoremap <leader>k :SplitjoinJoin<cr>
 nnoremap <leader>j :SplitjoinSplit<cr>
 
+"==========[ ack ]==========
+cnoreabbrev ag Ack!
+nnoremap <leader>a :Ack!<space>
+
+if executable('ag')
+	let g:ackprg = 'ag --vimgrep'
+endif
+
+"==========[ fzf ]==========
+nnoremap <leader>f :FZF<cr>
+
+let g:fzf_action = {
+	\'ctrl-b': 'vsplit',
+	\'ctrl-v': 'split'}
+
 "==============================================================================
 " Testing
 "==============================================================================
@@ -420,26 +437,8 @@ nnoremap <leader>j :SplitjoinSplit<cr>
 " quickly edit macros
 nnoremap <leader>m :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
-nnoremap <leader>f :FZF<cr>
-
-let g:fzf_action = {
-	\'ctrl-b': 'vsplit',
-	\'ctrl-v': 'split'}
-
-" this doesnt work because it changes pane :(
-" inoremap <c-j> <plug>(fzf-maps-n)
-" inoremap <c-k> <plug>(fzf-maps-p)
-
 autocmd! BufEnter * :call NumberToggle(1)
 autocmd! BufLeave * :call NumberToggle(0)
 autocmd! FocusGained * :call NumberToggle(1)
 autocmd! FocusLost * :call NumberToggle(0)
-
-" set shortmess=a
-cnoreabbrev Ag Ack!
-nnoremap <leader>a :Ack!<space>
-
-if executable('ag')
-	let g:ackprg = 'ag --vimgrep'
-endif
 
