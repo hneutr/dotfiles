@@ -19,6 +19,8 @@ This repository contains my dotfiles.
 	- writing:
 		- set up plugin settings (goyo/pencil) 
 		- set 'writing' settings
+		- pencil fixes:
+			- address that stupid unmapping of <cr> in insert in the middle of a paragraph
 - tmux:
 - bashrc:
 	- add in yaml file for "this file should be sourced afterwards with this command" for conf function
@@ -26,5 +28,12 @@ This repository contains my dotfiles.
 - inputrc:
 	- learn more stuff
 - fzf:
-	- make 's' func take an optional argument which indicates starting dir
-	- make function to either cd (if dir) or open in vim (if file)
+
+## Notes/Thoughts
+
+# Writing in vim
+desire:
+- frictionless switch between code/prose
+	- ideally don't want to do anything (aka approach probably involves autocmds)
+- want to separate settings for writing vs for code.
+	- current organization is only in a single group, will need to split that out

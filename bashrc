@@ -1,5 +1,8 @@
 #!/bin/bash
 
+[ -f ~/.bashrc_local ] && source ~/.bashrc_local
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
 ################################################################################
 # tmux_attach_or_reattach
 # 
@@ -70,5 +73,36 @@ function conf {
 	esac
 }
 
-[ -f ~/.bashrc_local ] && source ~/.bashrc_local
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+###############################################################################
+# starts fzf at directory (if specified) and echos the file selected
+###############################################################################
+function start_fzf_at_dir {
+	local START_DIR
+	if [ $# -eq 1 ]; then
+		cd $1
+		START_DIR=$1
+	fi
+
+	echo $START_DIR/$(fzf)
+}
+
+###############################################################################
+# starts fzf at directory (if specified) and opens in vim
+###############################################################################
+function s {
+	vim $(start_fzf_at_dir $@)
+}
+
+###############################################################################
+# starts fzf at directory (if specified) and goes to parent directory of
+# selected file
+###############################################################################
+function g {
+	local DESTINATION=$(start_fzf_at_dir $@)
+	if [ -d "$DESTINATION" ]; then
+		cd $DESTINATION
+	elif [ -f "$DESTINATION" ]; then
+		cd $(dirname $DESTINATION)
+	fi
+}
+
