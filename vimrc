@@ -12,53 +12,42 @@ if ! has('nvim')
 endif
 
 "==========[ interface ]==========
-Plug 'hunter-/tester.vim'
-Plug 'junegunn/fzf', { 'dir' : '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-unimpaired'
-Plug 'neomake/neomake'
-Plug 'altercation/vim-colors-solarized'
+Plug 'altercation/vim-colors-solarized'                            " colorscheme
+Plug 'hunter-/tester.vim'                                          " pair test files
+Plug 'junegunn/fzf', { 'dir' : '~/.fzf', 'do': './install --all' } " install fzf
+Plug 'junegunn/fzf.vim'                                            " fzf for vim
+Plug 'mileszs/ack.vim'                                             " better vimgrep
+Plug 'neomake/neomake'                                             " async linting
+Plug 'tpope/vim-unimpaired'                                        " paired options
 
 "==========[ text editing ]==========
-Plug 'AndrewRadev/splitjoin.vim'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-surround'
-Plug 'wellle/targets.vim'
+Plug 'AndrewRadev/splitjoin.vim' " join/split lines
+Plug 'junegunn/vim-easy-align'   " align text at a separator
+Plug 'tpope/vim-commentary'      " comment language-agnostically
+Plug 'tpope/vim-endwise'         " end some structures automatically
+Plug 'tpope/vim-speeddating'     " smarter date logic
+Plug 'tpope/vim-surround'        " deal with pairs
+Plug 'wellle/targets.vim'        " better text objects
 
 "==========[ tmux ]==========
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'roxma/vim-tmux-clipboard'
-Plug 'tmux-plugins/vim-tmux'
-Plug 'tmux-plugins/vim-tmux-focus-events'
-Plug 'wellle/tmux-complete.vim'
+Plug 'christoomey/vim-tmux-navigator'     " move seamlessly between tmux/vim splits
+Plug 'roxma/vim-tmux-clipboard'           " paste between vim windows in different tmux spots
+Plug 'tmux-plugins/vim-tmux-focus-events' " focus events for tmux+vim
+Plug 'wellle/tmux-complete.vim'           " autocomplete across tmux panes
 
 "==========[ language ]==========
-Plug 'mustache/vim-mustache-handlebars', { 'for' : 'mustache' }
-Plug 'vim-perl/vim-perl', { 'for' : 'perl' }
-Plug 'Yggdroot/indentLine', { 'for' : 'python' }
-
-"==========[ testing ]==========
-
-" use for:
-" - opening specific sized splits
-" untested
-Plug 'wellle/visual-split.vim'
-" use for:
-" - tabularizing
-" untested
-Plug 'godlygeek/tabular'
-" use for:
-" - idk but it's tpope right?
-Plug 'tpope/vim-tbone'
-"Plug 'justinmk/vim-sneak'
-Plug 'mileszs/ack.vim'
-" haven't really used yet
-Plug 'tpope/vim-speeddating'
+Plug 'Yggdroot/indentLine', { 'for' : 'python' }                " show indent lines in python
+Plug 'mustache/vim-mustache-handlebars', { 'for' : 'mustache' } " syntax for mustache
+Plug 'tmux-plugins/vim-tmux'                                    " syntax for .tmux.conf files
+Plug 'vim-perl/vim-perl', { 'for' : 'perl' }                    " syntax for perl
 
 "==========[ writing ]==========
-Plug 'junegunn/goyo.vim'
-Plug 'reedes/vim-pencil'
+Plug 'junegunn/goyo.vim' " distraction free + centered editing
+Plug 'reedes/vim-pencil' " autowrap lines
+
+"==========[ testing ]==========
+Plug 'wellle/visual-split.vim' " opening specific-sized splits
+"Plug 'justinmk/vim-sneak' " looks awesome but I love 's' and :( surround.vim
 
 call plug#end()
 
@@ -67,7 +56,6 @@ call plug#end()
 "==============================================================================
 
 "==========[ general ]==========
-let netrw_liststyle=3
 let mapleader="\<space>"
 
 set background=dark
@@ -88,11 +76,10 @@ set smartindent
 set showcmd
 set shortmess=ac
 set showmatch " highlight matching braces
-set timeoutlen=1000 
+set timeoutlen=1000
 set ttimeoutlen=0 " no pause on esc
 
 "==========[ files ]==========
-set autowrite
 set autowriteall
 set fileformats=unix,dos,mac
 set noswapfile
@@ -120,8 +107,8 @@ endif
 
 "==========[ searching ]==========
 set ignorecase " ignore case
-set smartcase " case insensitive search becomes sensitive with capitals
-set infercase " allow completions to be case-smart
+set smartcase  " case insensitive search becomes sensitive with capitals
+set infercase  " allow completions to be case-smart
 
 "==========[ scrolling ]==========
 set scrolloff=10
@@ -136,8 +123,8 @@ set splitright
 hi statusline ctermfg=0
 hi statusline ctermbg=14
 set statusline=%.100F " Full path (100 chars)
-set statusline+=%= " right side
-set statusline+=%c " column
+set statusline+=%=    " right side
+set statusline+=%c    " column
 
 "==============================================================================
 " Mappings
@@ -147,10 +134,9 @@ set statusline+=%c " column
 " select what was just pasted 
 nnoremap gV `[v`]
 
-" Windows
-" vertical 
+" side-by-side windows
 nnoremap <c-w>1 <c-w>H
-" horizontal
+" stacked windows
 nnoremap <c-w>2 <c-w>K
 
 " */# to not map whole word; map g*/g# to match whole word
@@ -169,8 +155,7 @@ nnoremap <silent> <leader>; :call ModifyLineEndDelimiter(';')<cr>
 " remove trailing whitespace
 nnoremap <leader>w :%s/\s\+$//<cr>nohlsearch<cr>
 
-" edit and load various different files
-" vimrc
+" edit and load vimrc
 nnoremap <leader>vv :sp $MYVIMRC<cr>
 nnoremap <leader>vs :source $MYVIMRC<cr>:nohl<cr>
 
@@ -186,14 +171,14 @@ nnoremap Y y$
 
 " change case of character under cursor
 nnoremap ~~ ~l
+
 "==========[ insert ]==========
+
+" don't cancel iabbrevs on exit
+imap <c-c> <esc>
 
 " forward delete
 inoremap <c-d> <del>
-
-" I find <c-c> easier to type than <c-[> or <esc>
-" and haven't found myself wanting to cancel during an insertion
-inoremap <c-c> <esc>
 
 " close various structures automatically
 inoremap (<cr> (<cr>)<esc>O
@@ -205,9 +190,14 @@ inoremap [<tab> []<esc>i
 inoremap {<cr> {<cr>}<esc>O
 inoremap {<tab> {}<esc>i
 
+inoremap <<cr> <<cr>><esc>O
+inoremap <<tab> <><esc>i
+
 inoremap '<tab> ''<esc>i
 
 inoremap "<tab> ""<esc>i
+
+inoremap `<tab> ``<esc>i
 
 " more intuitive completion mappings
 inoremap <c-j> <c-n>
@@ -432,6 +422,10 @@ let g:fzf_action = {
 	\'ctrl-b': 'vsplit',
 	\'ctrl-v': 'split'}
 
+"==========[ easy align ]==========
+nmap <Bar> <Plug>(EasyAlign)
+xmap <Bar> <Plug>(EasyAlign)
+
 "==============================================================================
 " Testing
 "==============================================================================
@@ -443,4 +437,3 @@ autocmd! BufEnter * :call NumberToggle(1)
 autocmd! BufLeave * :call NumberToggle(0)
 autocmd! FocusGained * :call NumberToggle(1)
 autocmd! FocusLost * :call NumberToggle(0)
-
