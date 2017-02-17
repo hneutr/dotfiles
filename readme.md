@@ -17,10 +17,11 @@ This repository contains my dotfiles.
 		- autowrite/autowriteall not working? maybe because I use c-c to escape?
 	- code:
 	- writing:
-		- set up plugin settings (goyo/pencil) 
+		- set up plugin settings (goyo/pencil)
 		- set 'writing' settings
-		- pencil fixes:
-			- address that stupid unmapping of <cr> in insert in the middle of a paragraph
+			- set pencil width to 80 (why it is 74 is beyond me)
+			- <leader>P for vim-pencil
+			- <leader>W for goyo.vim
 - tmux:
 - bashrc:
 	- add in yaml file for "this file should be sourced afterwards with this command" for conf function
@@ -44,3 +45,5 @@ desire:
 	- ideally don't want to do anything (aka approach probably involves autocmds)
 - want to separate settings for writing vs for code.
 	- current organization is only in a single group, will need to split that out
+
+

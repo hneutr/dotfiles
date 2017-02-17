@@ -24,7 +24,6 @@ Plug 'tpope/vim-unimpaired'                                        " paired opti
 Plug 'AndrewRadev/splitjoin.vim' " join/split lines
 Plug 'junegunn/vim-easy-align'   " align text at a separator
 Plug 'tpope/vim-commentary'      " comment language-agnostically
-Plug 'tpope/vim-endwise'         " end some structures automatically
 Plug 'tpope/vim-speeddating'     " smarter date logic
 Plug 'tpope/vim-surround'        " deal with pairs
 Plug 'wellle/targets.vim'        " better text objects
@@ -47,7 +46,9 @@ Plug 'reedes/vim-pencil' " autowrap lines
 
 "==========[ testing ]==========
 Plug 'wellle/visual-split.vim' " opening specific-sized splits
-"Plug 'justinmk/vim-sneak' " looks awesome but I love 's' and :( surround.vim
+" Plug 'justinmk/vim-sneak'    " looks awesome but I love 's' and :( surround.vim
+" Plug 'tpope/vim-endwise'     " end some structures automatically (but
+                               " conflicts with pencil)
 
 call plug#end()
 
@@ -75,7 +76,7 @@ set nowrap
 set smartindent
 set showcmd
 set shortmess=ac
-set showmatch " highlight matching braces
+set showmatch     " highlight matching braces
 set timeoutlen=1000
 set ttimeoutlen=0 " no pause on esc
 
@@ -157,7 +158,7 @@ nnoremap <leader>w :%s/\s\+$//<cr>nohlsearch<cr>
 
 " edit and load vimrc
 nnoremap <leader>vv :sp $MYVIMRC<cr>
-nnoremap <leader>vs :source $MYVIMRC<cr>:nohl<cr>
+nnoremap <leader>vs :source $MYVIMRC<cr>:nohlsearch<cr>
 
 " I don't use ex mode; play last macro
 nnoremap Q @@
@@ -433,7 +434,10 @@ xmap <Bar> <Plug>(EasyAlign)
 " quickly edit macros
 nnoremap <leader>m :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
-autocmd! BufEnter * :call NumberToggle(1)
-autocmd! BufLeave * :call NumberToggle(0)
-autocmd! FocusGained * :call NumberToggle(1)
-autocmd! FocusLost * :call NumberToggle(0)
+augroup interface
+	autocmd!
+
+	autocmd! BufEnter,FocusGained * :call NumberToggle(1)
+	autocmd! BufLeave,FocusLost * :call NumberToggle(0)
+augroup END
+
