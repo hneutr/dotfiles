@@ -4,6 +4,11 @@ This repository contains my dotfiles.
 ## Todos:
 - all:
 	- make it so that you can change the $SUFFIX seamlessly
+	- figure out way to represent "things to do to migrate" for all things (eg iTerm2 option-->+Esc)
+- conflicts:
+	- would like to use <c-l>/<c-j> for panes from fzf in vim but can't because those are bound to movements
+		- solutions:
+			- change bindings for create new panes? use meta?
 - vim:
 	- general:
 		- add in 'find to last in line' for f/F/t/T
@@ -33,9 +38,6 @@ This repository contains my dotfiles.
 	- maybe change 's' to 'svim' or something?
 	- maybe change 'g' to 'cdf'?
 - iterm2:
-	- fix option/meta key problem
-		- http://www.hackaddict.net/2007/07/skip-to-next-or-previous-word-in-iterm.html
-		- also send +Esc
 
 # Notes/Thoughts
 
