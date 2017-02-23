@@ -8,16 +8,14 @@
 - link:
     ~/.bash_profile:
     ~/.bashrc:
-    ~/.config/nvim/init.vim: vimrc
-    ~/.config/nvim: vim/
     ~/.dotfiles: ''
     ~/.gitconfig:
-    ~/.gitignore_global:
     ~/.inputrc: 
-    ~/.tmux.conf:
     ~/.tmux.conf:
     ~/.vim:
     ~/.vimrc:
+    ~/.config/nvim/init.vim: vimrc
+    ~/.config/nvim: vim/
 
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
