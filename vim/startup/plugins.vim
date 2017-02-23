@@ -1,3 +1,7 @@
+"==============================================================================
+" Loading
+"==============================================================================
+
 call plug#begin('~/.vim/plugged')
 
 if ! has('nvim')
@@ -43,3 +47,43 @@ Plug 'wellle/visual-split.vim' " opening specific-sized splits
 " Plug 'tpope/vim-endwise'     " end some structures automatically (but
                                " conflicts with pencil)
 call plug#end()
+
+"==============================================================================
+" Settings
+"==============================================================================
+
+"==========[ neomake ]==========
+
+let g:neomake_javascript_jshint_maker = {
+	\ 'args': ['--verbose'],
+	\ 'errorformat': '%A%f: line %l\, col %v\, %m \(%t%*\d\)',
+	\ }
+let g:neomake_javascript_enabled_markers = ['jshint']
+let g:neomake_open_list = 2
+
+"==========[ ack ]==========
+if executable('ag')
+	let g:ackprg = 'ag --vimgrep'
+endif
+
+"==========[ fzf ]==========
+let g:fzf_action = { 'ctrl-l': 'vsplit', 'ctrl-j': 'split' }
+
+"==============================================================================
+" Mappings
+"==============================================================================
+
+nmap ga <Plug>(EasyAlign)
+xmap ga <Plug>(EasyAlign)
+
+nnoremap <leader>sa :Ack!<space>
+nnoremap <leader>sf :FZF<cr>
+nnoremap <leader>sg :Goyo<cr>
+nnoremap <leader>sg :Pencil<cr>
+nnoremap <leader>sn :Neomake<cr>
+nnoremap <leader>stl :call g:tester.OpenPairedFile('vs')<cr>
+nnoremap <leader>stj :call g:tester.OpenPairedFile()<cr>
+" removed to try to use gS/gJ
+" nnoremap <leader>k :SplitjoinJoin<cr>
+" nnoremap <leader>j :SplitjoinSplit<cr>
+

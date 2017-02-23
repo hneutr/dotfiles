@@ -46,6 +46,10 @@ nnoremap <silent> <leader>; :call ModifyLineEndDelimiter(';')<cr>
 " don't cancel iabbrevs on exit
 imap <c-c> <esc>
 
+" more intuitive untab/retab
+inoremap <c-l> <c-t>
+inoremap <c-h> <c-d>
+
 " forward delete
 inoremap <c-d> <del>
 
