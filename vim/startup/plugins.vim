@@ -46,6 +46,7 @@ Plug 'wellle/visual-split.vim' " opening specific-sized splits
 " Plug 'justinmk/vim-sneak'    " looks awesome but I love 's' and :( surround.vim
 " Plug 'tpope/vim-endwise'     " end some structures automatically (but
                                " conflicts with pencil)
+Plug 'tpope/vim-markdown'
 call plug#end()
 
 "==============================================================================
@@ -69,6 +70,9 @@ endif
 "==========[ fzf ]==========
 let g:fzf_action = { 'ctrl-l': 'vsplit', 'ctrl-j': 'split' }
 
+"==========[ pencil ]==========
+let g:pencil#textwidth = 80
+
 "==============================================================================
 " Mappings
 "==============================================================================
@@ -79,7 +83,7 @@ xmap ga <Plug>(EasyAlign)
 nnoremap <leader>sa :Ack!<space>
 nnoremap <leader>sf :FZF<cr>
 nnoremap <leader>sg :Goyo<cr>
-nnoremap <leader>sg :Pencil<cr>
+nnoremap <leader>sp :PencilToggle<cr>
 nnoremap <leader>sn :Neomake<cr>
 nnoremap <leader>stl :call g:tester.OpenPairedFile('vs')<cr>
 nnoremap <leader>stj :call g:tester.OpenPairedFile()<cr>

@@ -16,4 +16,14 @@ set background=dark
 colorscheme solarized
 
 "==========[ testing ]==========
+" runtime starup/commands.vim
 
+" sets some stuff up for writing
+function! UnstructuredText()
+	call pencil#init({ 'wrap' : 'hard' })
+
+	setlocal wrap
+	setlocal textwidth=80
+endfunction
+
+command -nargs=0 Text call UnstructuredText()

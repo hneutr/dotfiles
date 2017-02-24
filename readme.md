@@ -9,24 +9,24 @@ This repository contains my dotfiles.
 	- would like to use <c-l>/<c-j> for panes from fzf in vim but can't because those are bound to movements
 		- solutions:
 			- change bindings for create new panes? use meta?
+- ag:
+	- set up actual ignorelist
 - vim:
 	- general:
 		- add in 'find to last in line' for f/F/t/T
-		- format .vimrc like andrewradev's because it's rad
 		- think about the default vi bindings and what can be changed from vim
 			- i.e. q has a lot of open real estate
 		- learn about matchpairs
-		- learn about ctrl-w
 		- learn about more text-objects
 		- possibly set viminfo settings?
 		- autowrite/autowriteall not working? maybe because I use c-c to escape?
 	- code:
+		- fork 'jeffkreeftmeijer/vim-numbertoggle' and use its commands to work with writing
+			- i.e. make it's autocommands into groups
 	- writing:
-		- set up plugin settings (goyo/pencil)
+		- learn about 'spell'
 		- set 'writing' settings
-			- set pencil width to 80 (why it is 74 is beyond me)
-			- <leader>P for vim-pencil
-			- <leader>W for goyo.vim
+		- make plugin for switching between code/prose+verse
 - tmux:
 - bashrc:
 	- add in yaml file for "this file should be sourced afterwards with this command" for conf function
@@ -48,4 +48,11 @@ desire:
 - want to separate settings for writing vs for code.
 	- current organization is only in a single group, will need to split that out
 
-
+idea:
+- make something to effectively split vimrc in two for code/prose+verse:
+	1. structured text
+	2. unstructured text
+- you can choose to either whitelist things or blacklist them?
+	- choose a default of (1) or (2)
+	- default has blacklist
+	- non-default has whitelist
