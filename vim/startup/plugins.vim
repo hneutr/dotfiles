@@ -47,6 +47,8 @@ Plug 'wellle/visual-split.vim' " opening specific-sized splits
 " Plug 'tpope/vim-endwise'     " end some structures automatically (but
                                " conflicts with pencil)
 Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-rsi'
+
 call plug#end()
 
 "==============================================================================

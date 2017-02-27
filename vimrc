@@ -24,6 +24,7 @@ function! UnstructuredText()
 
 	setlocal wrap
 	setlocal textwidth=80
+	setlocal spell
 endfunction
 
-command -nargs=0 Text call UnstructuredText()
+command! -nargs=0 Text call UnstructuredText()

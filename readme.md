@@ -13,6 +13,8 @@ This repository contains my dotfiles.
 	- set up actual ignorelist
 - vim:
 	- general:
+		- undo useless (thought aesthetically attractive) splitting of vimrc.
+			- can keep 'settings' split out, as that I only change rarely.
 		- add in 'find to last in line' for f/F/t/T
 		- think about the default vi bindings and what can be changed from vim
 			- i.e. q has a lot of open real estate
@@ -28,6 +30,8 @@ This repository contains my dotfiles.
 		- set 'writing' settings
 		- make plugin for switching between code/prose+verse
 - tmux:
+	- use tmux plugins?
+		- namely tmux-resurrect?
 - bashrc:
 	- add in yaml file for "this file should be sourced afterwards with this command" for conf function
 - bash\_profile:
