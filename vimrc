@@ -7,9 +7,9 @@ runtime startup/abbreviations.vim
 runtime startup/mappings.vim
 
 "==========[ load local settings ]==========
-let $LOCALFILE = expand("~/.vimrc_local")
-if filereadable($LOCALFILE)
-	source $LOCALFILE
+let s:local_vimrc = expand("~/.vimrc_local")
+if filereadable(s:local_vimrc)
+	execute 'source' s:local_vimrc
 endif
 
 set background=dark
@@ -28,3 +28,7 @@ function! UnstructuredText()
 endfunction
 
 command! -nargs=0 Text call UnstructuredText()
+
+" use tab for indenting/unindenting
+vnoremap <tab> >gv|
+vnoremap <s-tab> <gv

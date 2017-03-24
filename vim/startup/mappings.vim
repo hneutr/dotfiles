@@ -106,24 +106,6 @@ vnoremap <expr> n 'Nn'[v:searchforward].'zz'
 nnoremap <expr> N 'nN'[v:searchforward].'zz'
 vnoremap <expr> N 'nN'[v:searchforward].'zz'
 
-"==========[ normal/visual/insert ]==========
-
-inoremap <up> <nop>
-nnoremap <up> <nop>
-vnoremap <up> <nop>
-
-inoremap <down> <nop>
-nnoremap <down> <nop>
-vnoremap <down> <nop>
-
-inoremap <left> <nop>
-nnoremap <left> <nop>
-vnoremap <left> <nop>
-
-inoremap <right> <nop>
-nnoremap <right> <nop>
-vnoremap <right> <nop>
-
 "==========[ command ]==========
 
 " Bash-like hotkeys for navigation
@@ -140,5 +122,3 @@ cnoremap <m-f> <s-right>
 " make commandline history smarter (use text entered so far)
 cnoremap <c-n> <up>
 cnoremap <c-p> <down>
-
-"==========[  ]==========

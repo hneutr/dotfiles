@@ -23,6 +23,15 @@ iabbrev FUNC <esc>80i#<esc>
 	\ Returns:
 	\<esc>8kA
 
+" smallfunction declaration
+iabbrev SFUNC <esc>80i#<esc>
+	\yyp
+	\O
+	\<cr>
+	\<cr>
+	\ Documentation:<cr>
+	\<esc>3kA
+
 " testfunction declaration
 iabbrev UTEST <esc>80i#<esc>
 	\yyp

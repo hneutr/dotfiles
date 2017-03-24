@@ -22,6 +22,8 @@ This repository contains my dotfiles.
 		- learn about more text-objects
 		- possibly set viminfo settings?
 		- autowrite/autowriteall not working? maybe because I use c-c to escape?
+		- switch:
+			- instead of vim --> nvim, nvim --> vim
 	- code:
 		- fork 'jeffkreeftmeijer/vim-numbertoggle' and use its commands to work with writing
 			- i.e. make it's autocommands into groups
@@ -60,3 +62,29 @@ idea:
 	- choose a default of (1) or (2)
 	- default has blacklist
 	- non-default has whitelist
+
+## Consistency Across The Terminal:
+desire:
+- tools which do similar things should behave similarly and have similar mappings
+
+things to make consistent:
+- 'commandline' interfaces:
+	- "real" commandline
+	- vim:
+		- modes:
+			- command mode
+			- insert mode
+		- plugins:
+			- denite.vim
+			- fzf.vim
+- window management:
+	- tmux
+	- vim
+	- denite.vim
+	- fzf.vim
+
+conflicts:
+- c-j/c-l as pane management and directional keys
+	- denite.vim
+		- problem: there is a use for <c-j>/<c-k> as up/down
+		- solution: use <c-n>/<c-p>?

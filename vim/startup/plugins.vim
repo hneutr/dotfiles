@@ -24,6 +24,7 @@ Plug 'tpope/vim-commentary'      " comment language-agnostically
 Plug 'tpope/vim-speeddating'     " smarter date logic
 Plug 'tpope/vim-surround'        " deal with pairs
 Plug 'wellle/targets.vim'        " better text objects
+Plug 'zirrostig/vim-schlepp'     " move lines around
 
 "==========[ tmux ]==========
 Plug 'christoomey/vim-tmux-navigator'     " move seamlessly between tmux/vim splits
@@ -42,27 +43,20 @@ Plug 'junegunn/goyo.vim' " distraction free + centered editing
 Plug 'reedes/vim-pencil' " autowrap lines
 
 "==========[ testing ]==========
-Plug 'wellle/visual-split.vim' " opening specific-sized splits
-" Plug 'justinmk/vim-sneak'    " looks awesome but I love 's' and :( surround.vim
-" Plug 'tpope/vim-endwise'     " end some structures automatically (but
-                               " conflicts with pencil)
-Plug 'tpope/vim-markdown'
-Plug 'tpope/vim-rsi'
+Plug 'wellle/visual-split.vim'     " opening specific-sized splits
+" Plug 'justinmk/vim-sneak'        " looks awesome but I love 's' and :( surround.vim
+" Plug 'tpope/vim-endwise'         " end some structures automatically (but
+                                   " conflicts with pencil)
+Plug 'tpope/vim-markdown'          " syntax for markdown; supports conceal
+" Plug 'tpope/vim-rsi'               " consistent readline bindings
+Plug 'reedes/vim-textobj-sentence' " improved sentence object
+Plug 'shougo/denite.nvim'          " meta-whackness 10
 
 call plug#end()
 
 "==============================================================================
 " Settings
 "==============================================================================
-
-"==========[ neomake ]==========
-
-let g:neomake_javascript_jshint_maker = {
-	\ 'args': ['--verbose'],
-	\ 'errorformat': '%A%f: line %l\, col %v\, %m \(%t%*\d\)',
-	\ }
-let g:neomake_javascript_enabled_markers = ['jshint']
-let g:neomake_open_list = 2
 
 "==========[ ack ]==========
 if executable('ag')
@@ -83,13 +77,19 @@ nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
 
 nnoremap <leader>sa :Ack!<space>
+nnoremap <leader>sd<space> :Denite 
+nnoremap <leader>sdf :Denite file_rec<cr>
+nnoremap <leader>sdm :Denite menu<cr>
 nnoremap <leader>sf :FZF<cr>
 nnoremap <leader>sg :Goyo<cr>
-nnoremap <leader>sp :PencilToggle<cr>
 nnoremap <leader>sn :Neomake<cr>
-nnoremap <leader>stl :call g:tester.OpenPairedFile('vs')<cr>
+nnoremap <leader>sp :PencilToggle<cr>
 nnoremap <leader>stj :call g:tester.OpenPairedFile()<cr>
-" removed to try to use gS/gJ
-" nnoremap <leader>k :SplitjoinJoin<cr>
-" nnoremap <leader>j :SplitjoinSplit<cr>
+nnoremap <leader>stl :call g:tester.OpenPairedFile('vs')<cr>
 
+"==============================================================================
+" Plugin Setting files
+"==============================================================================
+runtime startup/plugins/denite.vim
+runtime startup/plugins/neomake.vim
+runtime startup/plugins/schlepp.vim
