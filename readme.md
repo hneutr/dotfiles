@@ -24,6 +24,8 @@ This repository contains my dotfiles.
 		- autowrite/autowriteall not working? maybe because I use c-c to escape?
 		- switch:
 			- instead of vim --> nvim, nvim --> vim
+	- plugins:
+		- command/mappings to set source files based on filetypes
 	- code:
 		- fork 'jeffkreeftmeijer/vim-numbertoggle' and use its commands to work with writing
 			- i.e. make it's autocommands into groups

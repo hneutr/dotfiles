@@ -21,7 +21,6 @@ colorscheme solarized
 " sets some stuff up for writing
 function! UnstructuredText()
 	call pencil#init({ 'wrap' : 'hard' })
-
 	setlocal wrap
 	setlocal textwidth=80
 	setlocal spell
@@ -32,3 +31,38 @@ command! -nargs=0 Text call UnstructuredText()
 " use tab for indenting/unindenting
 vnoremap <tab> >gv|
 vnoremap <s-tab> <gv
+
+" this stuff is from justinmk
+let g:surround_indent = 1
+
+" mark before searching... stupid simple
+nnoremap / ms/
+
+inoremap <M-o> <C-O>o
+inoremap <M-O> <C-O>O
+
+" use grepprg instead of ack.vim
+if executable('ag')
+	set grepprg=ag\ --vimgrep
+endif
+nnoremap <silent> K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+" bind \ (backward slash) to grep shortcut
+command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+nnoremap \ :Ag<SPACE>
+
+" more instantly better vim
+" highlight things past 80 columns
+" highlight ColorColumn ctermbg=0
+" call matchadd('ColorColumn', '\%81v', 100)
+
+" digraphs
+" inoremap <expr> <c-k> ShowDigraphs()
+
+" function! ShowDigraphs()
+" 	digraphs
+" 	call getchar()
+" 	return "\<c-k>"
+" endfunction
+
+highligh clear SignColumn
+

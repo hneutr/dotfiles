@@ -54,22 +54,32 @@ inoremap <c-h> <c-d>
 inoremap <c-d> <del>
 
 " close various structures automatically
+" cr
 inoremap (<cr> (<cr>)<esc>O
-inoremap (<tab> ()<esc>i
-
 inoremap [<cr> [<cr>]<esc>O
-inoremap [<tab> []<esc>i
-
 inoremap {<cr> {<cr>}<esc>O
-inoremap {<tab> {}<esc>i
-
 inoremap <<cr> <<cr>><esc>O
+
+" ;
+inoremap (; ();<esc>hi
+inoremap [; [];<esc>hi
+inoremap {; {};<esc>hi
+
+" ,
+inoremap (, (),<esc>hi
+inoremap {, {},<esc>hi
+inoremap [, [],<esc>hi
+inoremap ', '',<esc>hi
+inoremap ", "",<esc>hi
+inoremap `, ``,<esc>hi
+
+" tab
+inoremap (<tab> ()<esc>i
+inoremap [<tab> []<esc>i
+inoremap {<tab> {}<esc>i
 inoremap <<tab> <><esc>i
-
 inoremap '<tab> ''<esc>i
-
 inoremap "<tab> ""<esc>i
-
 inoremap `<tab> ``<esc>i
 
 "==========[ visual ]==========
