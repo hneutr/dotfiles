@@ -46,6 +46,7 @@ Plug 'reedes/vim-pencil' " autowrap lines
 Plug 'wellle/visual-split.vim'     " opening specific-sized splits
 Plug 'reedes/vim-textobj-sentence' " improved sentence object
 Plug 'shougo/denite.nvim'          " meta-whackness 10
+Plug 'Glench/Vim-Jinja2-Syntax'
 
 call plug#end()
 

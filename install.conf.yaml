@@ -21,7 +21,3 @@
     - [git submodule update --init --recursive, Installing submodules]
     - command: curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     - command: vim +PlugUpdate +PlugUpgrade +qall
-        stdin: true
-        stdout: true
-        stderr: true
-

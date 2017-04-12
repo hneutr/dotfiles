@@ -22,6 +22,9 @@ function tmux_attach_or_reattach {
 alias a0="tmux_attach_or_reattach 0"
 alias a1="tmux_attach_or_reattach 1"
 
+#-------ag
+alias ag='ag --path-to-ignore ~/.agignore'
+
 ################################################################################
 # conf
 # 

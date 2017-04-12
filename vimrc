@@ -66,3 +66,7 @@ nnoremap \ :Ag<SPACE>
 
 highligh clear SignColumn
 
+
+" open last window in split/vsplit
+nnoremap <c-s-l> :vsb#<cr>
+nnoremap <c-s-l> :sb#<cr>
