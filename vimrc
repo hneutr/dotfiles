@@ -66,3 +66,6 @@ nnoremap \ :Ag<SPACE>
 " 	return "\<c-k>"
 " endfunction
 
+" open last window in split/vsplit
+nnoremap <c-s-l> :vsb#<cr>
+nnoremap <c-s-l> :sb#<cr>
