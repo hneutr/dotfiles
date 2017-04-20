@@ -25,6 +25,8 @@ Plug 'tpope/vim-speeddating'     " smarter date logic
 Plug 'tpope/vim-surround'        " deal with pairs
 Plug 'wellle/targets.vim'        " better text objects
 Plug 'zirrostig/vim-schlepp'     " move lines around
+Plug 'SirVer/ultisnips'          " snippet engine
+Plug 'honza/vim-snippets'        " predefined snippets
 
 "==========[ tmux ]==========
 Plug 'christoomey/vim-tmux-navigator'     " move seamlessly between tmux/vim splits
@@ -66,7 +68,6 @@ let g:pencil#textwidth = 80
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
 
-nnoremap <leader>sa :Ack!<space>
 nnoremap <leader>sd<space> :Denite 
 nnoremap <leader>sf :FZF<cr>
 nnoremap <leader>sg :Goyo<cr>
@@ -74,11 +75,12 @@ nnoremap <leader>sn :Neomake<cr>
 nnoremap <leader>sp :PencilToggle<cr>
 nnoremap <leader>stj :call g:tester.OpenPairedFile()<cr>
 nnoremap <leader>stl :call g:tester.OpenPairedFile('vs')<cr>
+nnoremap <leader>su :UltiSnipsEdit<cr>
 
 "==============================================================================
 " Plugin Setting files
 "==============================================================================
 runtime startup/plugins/denite.vim
-runtime startup/plugins/neomake.vim
 runtime startup/plugins/schlepp.vim
 runtime startup/plugins/sneak.vim
+runtime startup/plugins/ultisnips.vim

@@ -1,0 +1,13 @@
+snippet testing "tag"
+<div>
+testing
+</div>
+endsnippet
+
+snippet t "testfile"
+`!p 
+import os
+filepath = os.path.join(os.getcwd(), snip.basename)
+
+snip.rv = filepath`
+endsnippet

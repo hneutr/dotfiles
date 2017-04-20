@@ -1,0 +1,22 @@
+snippet ast "description" b
+AthenaTest::SimpleTest({
+	NAME => "$1",
+});
+endsnippet
+	
+snippet pkg "expands to define a package" b
+package `!p 
+import os
+import re
+string = os.path.join(os.getcwd(), snip.basename)
+string = re.sub('^.*/perllib/Athena/', '', string)
+string = re.sub('/', '::', string)
+string += ';'
+snip.rv = string
+`
+
+use Athena::Policy;
+
+1;
+endsnippet
+	

@@ -59,9 +59,16 @@ set sidescrolloff=5
 set splitbelow
 set splitright
 
-"==========[ statusline ]==========
-hi statusline ctermfg=0
-hi statusline ctermbg=14
+"==========[ display ]==========
+
+highlight statusline ctermfg=0
+highlight statusline ctermbg=14
 set statusline=%.100F " Full path (100 chars)
 set statusline+=%=    " right side
 set statusline+=%c    " column
+
+if has('nvim')
+	" turn cursor into a '|' in insert mode
+	let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+endif
+

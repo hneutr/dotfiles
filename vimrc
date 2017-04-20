@@ -1,10 +1,13 @@
 "==========[ load startup files ]==========
 runtime startup/settings.vim
+runtime startup/mappings.vim
 runtime startup/plugins.vim
 runtime startup/functions.vim
 runtime startup/autocommands.vim
 runtime startup/abbreviations.vim
-runtime startup/mappings.vim
+
+" add plugins to rtp so that ultisnips picks them up
+set runtimepath+=~/.vim/startup/plugins/
 
 "==========[ load local settings ]==========
 let s:local_vimrc = expand("~/.vimrc_local")
@@ -14,6 +17,9 @@ endif
 
 set background=dark
 colorscheme solarized
+
+" SignColumn should be same color as line number column
+highlight clear SignColumn
 
 "==========[ testing ]==========
 " runtime starup/commands.vim
@@ -38,6 +44,7 @@ let g:surround_indent = 1
 " mark before searching... stupid simple
 nnoremap / ms/
 
+" this is currently taken by app shortcuts at the alfred-level
 inoremap <M-o> <C-O>o
 inoremap <M-O> <C-O>O
 
@@ -50,11 +57,6 @@ nnoremap <silent> K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 nnoremap \ :Ag<SPACE>
 
-" more instantly better vim
-" highlight things past 80 columns
-" highlight ColorColumn ctermbg=0
-" call matchadd('ColorColumn', '\%81v', 100)
-
 " digraphs
 " inoremap <expr> <c-k> ShowDigraphs()
 
@@ -63,6 +65,4 @@ nnoremap \ :Ag<SPACE>
 " 	call getchar()
 " 	return "\<c-k>"
 " endfunction
-
-highligh clear SignColumn
 

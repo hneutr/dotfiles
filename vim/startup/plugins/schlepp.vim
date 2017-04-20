@@ -5,6 +5,9 @@ let g:Schlepp#allowSquishingBlocks = 1
 " reindent when moving
 let g:Schlepp#reindent = 1
 
+" map toggle reindent
+vmap t <Plug>SchleppToggleReindent
+
 vmap <up>    <Plug>SchleppUp
 vmap <down>  <Plug>SchleppDown
 vmap <left>  <Plug>SchleppLeft
