@@ -1,3 +1,6 @@
+# Add homebrew's path
+export PATH=$PATH:/usr/local/bin
+
 export ZPLUG_HOME=~/.zplug
 export ZPLUG_LOADFILE=~/.zsh/zplug.zsh
 
@@ -16,17 +19,20 @@ if [[ -f $ZPLUG_HOME/init.zsh ]]; then
 	zplug load
 fi
 
-# set dircolors
-eval `dircolors -b $ZPLUG_HOME/repos/seebi/dircolors-solarized/dircolors.256dark`
+if [[ "$(uname)" = "Darwin" ]]; then
+	export CLICOLOR=1
+	export LSCOLORS=gxfxbEaEBxxEhEhBaDaCaD
+else
+	eval `dircolors -b $ZPLUG_HOME/repos/seebi/dircolors-solarized/dircolors.256dark`
+fi
 
-function get_prompt() {
-	local shortpwd="${PWD/$HOME/~}"
-	echo "$fg[yellow]$shortpwd $reset_color> "
+function set_prompt() {
+	echo "$fg[yellow]${PWD/$HOME/~} $reset_color> "
 }
 
 # enable reactive prompt substitution
 setopt PROMPT_SUBST
-PROMPT='$(get_prompt)'
+PROMPT='$(set_prompt)'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f ~/.zsh/aliases.zsh ] && source ~/.zsh/aliases.zsh
