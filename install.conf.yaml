@@ -16,6 +16,9 @@
     ~/.vimrc:
     ~/.config/nvim/init.vim: vimrc
     ~/.config/nvim: vim/
+    ~/.zshrc: zshrc
+    ~/.zsh: zsh
+    ~/.zplug:
 
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
