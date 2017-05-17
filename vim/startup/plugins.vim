@@ -34,21 +34,22 @@ Plug 'roxma/vim-tmux-clipboard'           " paste between vim windows in differe
 Plug 'tmux-plugins/vim-tmux-focus-events' " focus events for tmux+vim
 Plug 'wellle/tmux-complete.vim'           " autocomplete across tmux panes
 
-"==========[ language ]==========
-Plug 'mustache/vim-mustache-handlebars', { 'for' : 'mustache' } " syntax for mustache
-Plug 'tmux-plugins/vim-tmux'                                    " syntax for .tmux.conf files
-Plug 'tpope/vim-markdown'                                       " syntax for markdown; supports conceal
-Plug 'vim-perl/vim-perl', { 'for' : 'perl' }                    " syntax for perl
+"==========[ language/syntax ]==========
+Plug 'mustache/vim-mustache-handlebars', { 'for' : 'mustache' } " mustache
+Plug 'tmux-plugins/vim-tmux', { 'for' : 'tmux' }                " tmux
+Plug 'tpope/vim-markdown', { 'for' : 'markdown' }               " markdown; supports conceal
+Plug 'vim-perl/vim-perl', { 'for' : 'perl' }                    " perl
 
 "==========[ writing ]==========
-Plug 'junegunn/goyo.vim' " distraction free + centered editing
-Plug 'reedes/vim-pencil' " autowrap lines
+Plug 'junegunn/goyo.vim', { 'for' : [ 'markdown', 'html', 'text' ], } " distraction free + centered editing
+Plug 'reedes/vim-pencil', { 'for' : [ 'markdown', 'html', 'text' ], } " autowrap lines
 
 "==========[ testing ]==========
 Plug 'wellle/visual-split.vim'     " opening specific-sized splits
 Plug 'reedes/vim-textobj-sentence' " improved sentence object
 Plug 'shougo/denite.nvim'          " meta-whackness 10
 Plug 'Glench/Vim-Jinja2-Syntax'
+Plug 'sts10/vim-zipper'			   " better folding?
 
 call plug#end()
 

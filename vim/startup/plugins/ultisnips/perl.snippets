@@ -1,4 +1,4 @@
-snippet ast "description" b
+snippet test "description" b
 AthenaTest::SimpleTest({
 	NAME => "$1",
 });
@@ -6,8 +6,6 @@ endsnippet
 	
 snippet pkg "expands to define a package" b
 package `!p 
-import os
-import re
 string = os.path.join(os.getcwd(), snip.basename)
 string = re.sub('^.*/perllib/Athena/', '', string)
 string = re.sub('/', '::', string)
@@ -17,6 +15,19 @@ snip.rv = string
 
 use Athena::Policy;
 
+$1
+
 1;
 endsnippet
-	
+
+snippet arg "unpacks an argument" b
+my \$${1} = $args->{`!p snip.rv = t[1].upper()`};
+endsnippet
+
+snippet harg "unpacks a hash argument" b
+my %${1} = %{ $args->{`!p snip.rv = t[1].upper()`} || {} };
+endsnippet
+
+snippet larg "unpacks a list argument" b
+my @${1} = @{ $args->{`!p snip.rv = t[1].upper()`} || [] };
+endsnippet
