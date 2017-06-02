@@ -46,8 +46,8 @@ nnoremap <leader>w :w<cr>
 nnoremap <leader>w :%s/\s\+$//<cr>nohlsearch<cr>
 
 " Conditionally modify character at end of line
-nnoremap <silent> <leader>, :call ModifyLineEndDelimiter(',')<cr>
-nnoremap <silent> <leader>; :call ModifyLineEndDelimiter(';')<cr>
+nnoremap <silent> <leader>, :call lib#ModifyLineEndDelimiter(',')<cr>
+nnoremap <silent> <leader>; :call lib#ModifyLineEndDelimiter(';')<cr>
 
 " ag easier
 nnoremap \ :Ag<SPACE>
