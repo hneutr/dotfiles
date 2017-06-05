@@ -13,7 +13,7 @@
     ~/.inputrc: 
     ~/.tmux.conf:
     ~/.config:
-    ~/.tmux/plugins/tmp: tpm
+    ~/.tmux/plugins/tpm: tpm
     ~/.zshrc: zshrc
     ~/.zsh: zsh
     ~/.zplug:
