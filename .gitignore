@@ -1,7 +1,7 @@
 .gitmodules
-vim/.netrwhist
-vim/autoload
-vim/plugged
-vim/undodir
-vim/colors
-vim/doc
+config/nvim/.netrwhist
+config/nvim/autoload
+config/nvim/plugged
+config/nvim/undodir
+config/nvim/colors
+config/nvim/doc
