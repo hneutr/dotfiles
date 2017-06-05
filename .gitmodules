@@ -6,6 +6,6 @@
 	path = zplug
 	url = https://github.com/zplug/zplug
 
-[submodule "tmp"]
-	path = tmp
+[submodule "tpm"]
+	path = tpm
 	url = https://github.com/tmux-plugins/tpm
