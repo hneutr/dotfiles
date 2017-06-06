@@ -1,6 +1,5 @@
-let g:vim_config = "~/.config/nvim"
+let g:vim_config = $HOME . "/.config/nvim"
 let g:plugged_path = g:vim_config . "/plugged"
-let g:hne_plugin_path = g:vim_config . "startup/plugins/"
 
 " set mapleader first so that it is available for binding.
 let mapleader="\<space>"
@@ -13,9 +12,6 @@ runtime startup/functions.vim
 runtime startup/autocommands.vim
 runtime startup/abbreviations.vim
 runtime startup/settings.vim
-
-" add plugins to rtp so that ultisnips picks them up
-set runtimepath+=g:hne_plugin_path
 
 "==========[ load local settings ]==========
 let s:local_vimrc = expand("~/.vimrc_local")
