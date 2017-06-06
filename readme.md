@@ -33,6 +33,7 @@ This repository contains my dotfiles.
 		- learn about 'spell'
 		- set 'writing' settings
 		- make plugin for switching between code/prose+verse
+		- turn off fold for md/txt
 - tmux:
 	- use tmux plugins?
 		- namely tmux-resurrect?
