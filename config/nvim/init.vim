@@ -5,12 +5,12 @@ let g:plugged_path = g:vim_config . "/plugged"
 let mapleader="\<space>"
 
 "==========[ load startup files ]==========
-runtime starup/commands.vim
 runtime startup/mappings.vim
 runtime startup/plugins.vim
 runtime startup/functions.vim
 runtime startup/autocommands.vim
 runtime startup/abbreviations.vim
+runtime startup/commands.vim
 runtime startup/settings.vim
 
 "==========[ load local settings ]==========
