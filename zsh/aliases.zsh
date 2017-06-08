@@ -1,6 +1,10 @@
+# cd
 alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
 
-# ls aliases
+# ls
 alias ld='ls -ld'   # Show info about the directory
 alias lla='ls -lAF' # Show hidden all files
 alias ll='ls -lF'   # Show long file information
@@ -12,5 +16,9 @@ alias lu='ls -ltur' # Sort by and show access time, most recent last
 alias lt='ls -ltr'  # Sort by date, most recent last
 alias lr='ls -lR'   # Recursive ls
 
+# vim
 alias vi="nvim"
 alias vim="nvim"
+
+# ag
+alias agl="ag -l"

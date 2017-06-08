@@ -1,5 +1,14 @@
-# Statement:
-This repository contains my dotfiles.
+# dotfiles
+Repeated actions should be easy.
+Be consistent.
+Name things reasonably.
+Don't reimplement something you don't want to turn into a personal project.
+
+# Tools:
+- ag
+- nvim
+- tmux
+- zsh
 
 ## Todos:
 - all:
@@ -22,49 +31,34 @@ This repository contains my dotfiles.
 		- learn about more text-objects
 		- possibly set viminfo settings?
 		- autowrite/autowriteall not working? maybe because I use c-c to escape?
-		- switch:
-			- instead of vim --> nvim, nvim --> vim
+		- reformat conceal stuff from autocmd to ftplugin
 	- plugins:
 		- command/mappings to set source files based on filetypes
-	- code:
-		- fork 'jeffkreeftmeijer/vim-numbertoggle' and use its commands to work with writing
-			- i.e. make it's autocommands into groups
 	- writing:
 		- learn about 'spell'
-		- set 'writing' settings
-		- make plugin for switching between code/prose+verse
-		- turn off fold for md/txt
+			- how to add words
+			- local to project (eg character names)
+		- writing settings function:
+			- make toggleable
 - tmux:
 	- use tmux plugins?
 		- namely tmux-resurrect?
 - bashrc:
 	- add in yaml file for "this file should be sourced afterwards with this command" for conf function
-- bash\_profile:
 - inputrc:
 	- learn more stuff
 - fzf:
-	- maybe set up tmux stuff for 's'/'g'?
-	- maybe change 's' to 'svim' or something?
-	- maybe change 'g' to 'cdf'?
 - iterm2:
+	- let <option>left/<option>right to move by word
+- zsh:
+	- migrate `conf` function from bashrc
+	- add some tool plugins
+		- git
+		- pip
+		- brew
+		- tmux
 
 # Notes/Thoughts
-
-## Writing in vim
-desire:
-- frictionless switch between code/prose
-	- ideally don't want to do anything (aka approach probably involves autocmds)
-- want to separate settings for writing vs for code.
-	- current organization is only in a single group, will need to split that out
-
-idea:
-- make something to effectively split vimrc in two for code/prose+verse:
-	1. structured text
-	2. unstructured text
-- you can choose to either whitelist things or blacklist them?
-	- choose a default of (1) or (2)
-	- default has blacklist
-	- non-default has whitelist
 
 ## Consistency Across The Terminal:
 desire:
