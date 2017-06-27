@@ -115,3 +115,13 @@ function! lib#UnstructuredText()
 	setlocal textwidth=80
 	setlocal spell
 endfunction
+
+" Show help along the screen's larger dimension
+function! lib#ShowHelp(tag) abort
+	if winheight('%') < ( winwidth('%') / 2 )
+		execute 'vertical help ' . a:tag
+	else
+		execute 'help ' . a:tag
+	endif
+endfunction
+

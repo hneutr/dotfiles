@@ -1,5 +1,5 @@
 snippet test "description" b
-AthenaTest::SimpleTest({
+Test::SimpleTest({
 	NAME => "$1",
 });
 endsnippet
@@ -7,7 +7,7 @@ endsnippet
 snippet pkg "expands to define a package" b
 package `!p 
 string = os.path.join(os.getcwd(), snip.basename)
-string = re.sub('^.*/perllib/Athena/', '', string)
+string = re.sub('^.*/perllib/', '', string)
 string = re.sub('/', '::', string)
 string += ';'
 snip.rv = string
