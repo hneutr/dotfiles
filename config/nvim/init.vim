@@ -1,4 +1,6 @@
-"====================[ structure and guiding principles ]====================
+"===============================================================================
+"======================[ structure and guiding principles ]=====================
+"===============================================================================
 " 1. Be consistent. 
 " 2. Readability is valuable.
 " 3. Functional value > Aesthetic value
@@ -8,7 +10,7 @@
 " Style:
 " - comments on the line above their referant
 
-"====================[ settings ]====================
+"==================================[ settings ]=================================
 " write whenever you can
 set autowriteall
 
@@ -23,7 +25,8 @@ set dictionary="/usr/dict/words"
 
 set fileformats=unix,dos,mac
 
-set foldenable
+" set foldenable
+set nofoldenable
 
 set foldmethod=indent
 
@@ -106,7 +109,7 @@ set wildignorecase
 
 set wildmode=list:longest,full
 
-"==========[ indentation ]==========
+"================================[ indentation ]================================
 set smartindent
 
 set smarttab
@@ -120,7 +123,7 @@ set tabstop=4
 " if there are spaces when </>, round down
 set shiftround
 
-"==========[ searching ]==========
+"=================================[ searching ]=================================
 " ignore case when searching
 set ignorecase 
 
@@ -130,17 +133,18 @@ set infercase
 " override ignore case if search includes capital letters
 set smartcase
 
-"==========[ config vars ]==========
+"================================[ config vars ]================================
 let g:vim_config = $HOME . "/.config/nvim"
 let g:plugged_path = g:vim_config . "/plugged"
 
 let mapleader = "\<space>"
 
-"====================[ plugins ]====================
-
+"===============================================================================
+"==================================[ plugins ]==================================
+"===============================================================================
 call plug#begin(g:plugged_path)
 
-"==========[ interface ]==========
+"=================================[ interface ]=================================
 Plug 'altercation/vim-colors-solarized'                            " colorscheme
 Plug 'hunter-/tester.vim'                                          " pair test files
 Plug 'junegunn/fzf', { 'dir' : '~/.fzf', 'do': './install --all' } " install fzf
@@ -148,7 +152,7 @@ Plug 'junegunn/fzf.vim'                                            " fzf for vim
 Plug 'tpope/vim-unimpaired'                                        " paired options
 Plug 'w0rp/ale'                                                    " asynchronous lint engine
 
-"==========[ text editing ]==========
+"================================[ text editing ]===============================
 Plug 'AndrewRadev/splitjoin.vim' " join/split lines
 Plug 'junegunn/vim-easy-align'   " align text at a separator
 Plug 'justinmk/vim-sneak'        " 2char motions
@@ -160,23 +164,23 @@ Plug 'zirrostig/vim-schlepp'     " move lines around
 Plug 'SirVer/ultisnips'          " snippet engine
 Plug 'honza/vim-snippets'        " predefined snippets
 
-"==========[ tmux ]==========
+"====================================[ tmux ]===================================
 Plug 'christoomey/vim-tmux-navigator'     " move seamlessly between tmux/vim splits
 Plug 'roxma/vim-tmux-clipboard'           " paste between vim windows in different tmux spots
 Plug 'tmux-plugins/vim-tmux-focus-events' " focus events for tmux+vim
 Plug 'wellle/tmux-complete.vim'           " autocomplete across tmux panes
 
-"==========[ language/syntax ]==========
+"==============================[ language/syntax ]==============================
 Plug 'mustache/vim-mustache-handlebars', { 'for' : 'mustache' } " mustache
 Plug 'tmux-plugins/vim-tmux', { 'for' : 'tmux' }                " tmux
 Plug 'tpope/vim-markdown', { 'for' : 'markdown' }               " markdown; supports conceal
 Plug 'vim-perl/vim-perl', { 'for' : 'perl' }                    " perl
 
-"==========[ writing ]==========
+"==================================[ writing ]==================================
 Plug 'junegunn/goyo.vim', " distraction free + centered editing
 Plug 'reedes/vim-pencil', " autowrap lines
 
-"==========[ testing ]==========
+"==================================[ testing ]==================================
 Plug 'wellle/visual-split.vim'     " opening specific-sized splits
 Plug 'reedes/vim-textobj-sentence' " improved sentence object
 Plug 'shougo/denite.nvim'          " meta-whackness 10
@@ -185,13 +189,13 @@ Plug 'Glench/Vim-Jinja2-Syntax'
 
 call plug#end()
 
-"==========[ fzf ]==========
+" fzf
 let g:fzf_action = { 'ctrl-l': 'vsplit', 'ctrl-j': 'split' }
 
-"==========[ pencil ]==========
+" pencil
 let g:pencil#textwidth = 80
 
-"==========[ surround ]==========
+" surround
 let g:surround_indent = 1
 
 runtime startup/plugins/denite.vim
@@ -199,9 +203,11 @@ runtime startup/plugins/schlepp.vim
 runtime startup/plugins/sneak.vim
 runtime startup/plugins/ultisnips.vim
 
-"====================[ mappings ]====================
+"===============================================================================
+"==================================[ mappings ]=================================
+"===============================================================================
 
-"==========[ normal mode ]==========
+"================================[ normal mode ]================================
 
 " select what was just pasted 
 nnoremap gV `[v`]
@@ -272,7 +278,8 @@ nnoremap <leader>dtj :call g:tester.OpenPairedFile()<cr>
 nnoremap <leader>dtl :call g:tester.OpenPairedFile('vs')<cr>
 nnoremap <leader>du :UltiSnipsEdit<cr>
 
-"==========[ insert mode ]==========
+"================================[ insert mode ]================================
+
 " don't cancel iabbrevs on mode exit
 imap <c-c> <esc>
 
@@ -314,7 +321,8 @@ inoremap `<tab> ``<esc>i
 
 " TODO: add in markdown-specific remaps for italics ('__'), bold ('____')
 
-"==========[ visual mode ]==========
+"================================[ visual mode ]================================
+
 " unindent/indent
 vnoremap > >gv
 vnoremap < <gv
@@ -322,7 +330,8 @@ vnoremap < <gv
 " paste without overwriting buffer
 vnoremap r "_dP"
 
-"==========[ normal and visual modes ]==========
+"==========================[ normal and visual modes ]==========================
+
 " bind easy align keys
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
@@ -349,7 +358,8 @@ vnoremap <expr> n 'Nn'[v:searchforward].'zz'
 nnoremap <expr> N 'nN'[v:searchforward].'zz'
 vnoremap <expr> N 'nN'[v:searchforward].'zz'
 
-"==========[ command mode ]==========
+"================================[ command mode ]===============================
+
 " make start of line and end of line movements match zsh/bash
 cnoremap <c-a> <home>
 cnoremap <c-e> <end>
@@ -362,7 +372,9 @@ cnoremap <m-f> <s-right>
 cnoremap <c-n> <up>
 cnoremap <c-p> <down>
 
-"====================[ autocommands ]====================
+"===============================================================================
+"================================[ autocommands ]===============================
+"===============================================================================
 augroup startupgroup
 	autocmd!
 
@@ -378,13 +390,18 @@ augroup startupgroup
 	endif
 augroup END
 
-"====================[ abbreviations ]====================
+"===============================================================================
+"===============================[ abbreviations ]===============================
+"===============================================================================
 " TODO: move to ultisnips so abbreviations are tab-triggered
 "==========[ insert mode ]==========
 iabbrev _sdate <c-r>=strftime("%Y/%m/%d")<cr>
 iabbrev _date <c-r>=strftime("%m/%d/%y")<cr>
 
-"====================[ commands ]====================
+"===============================================================================
+"==================================[ commands ]=================================
+"===============================================================================
+
 command! -nargs=0 Text call lib#UnstructuredText()
 
 command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
@@ -397,7 +414,10 @@ if filereadable(s:local_vimrc)
 	execute 'source' s:local_vimrc
 endif
 
-"====================[ colors ]====================
+"===============================================================================
+"===================================[ colors ]==================================
+"===============================================================================
+
 colorscheme solarized
 
 " SignColumn should be same color as line number column
@@ -409,7 +429,9 @@ highlight statusline ctermbg=14
 
 highlight Folded cterm=NONE
 
-"==========[ testing ]==========
+"===============================================================================
+"==================================[ testing ]==================================
+"===============================================================================
 
 " open last window in split/vsplit
 " nnoremap <c-s-l> :vsb#<cr>
