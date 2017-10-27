@@ -110,9 +110,7 @@ endfunction
 
 " sets some stuff up for writing
 function! lib#UnstructuredText()
-	call pencil#init({ 'wrap' : 'hard' })
 	setlocal wrap
-	setlocal textwidth=80
 	setlocal spell
 endfunction
 

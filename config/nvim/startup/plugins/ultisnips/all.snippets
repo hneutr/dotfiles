@@ -7,9 +7,18 @@ snip.rv = filepath`
 endsnippet
 
 snippet quote "generic format for a quote"
+
 -----
 ${1:page number}:
 
 ${2:quote}
 
+endsnippet
+
+snippet -when "output sysdate in yyyymmdd format (the best format)"
+`!p
+from datetime import datetime
+now = datetime.now()
+snip.rv = "%d%d%d" % (now.year, now.month, now.day)
+`
 endsnippet
