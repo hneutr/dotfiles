@@ -408,7 +408,7 @@ augroup END
 "===============================================================================
 command! -nargs=0 Text call lib#UnstructuredText()
 
-command! -nargs=+ -complete=file -bar rg silent! grep! <args>|cwindow|redraw!
+command! -nargs=+ -complete=file -bar Rg silent! grep! <args>|cwindow|redraw!
 
 command! -nargs=1 H call lib#ShowHelp(<f-args>)
 
