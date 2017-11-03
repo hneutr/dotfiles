@@ -12,7 +12,7 @@
 " - comments on the line above their referant
 
 "==================================[ settings ]=================================
-" write whenever you can
+" write all the time
 set autowriteall
 
 set background=dark
@@ -26,9 +26,9 @@ set dictionary="/usr/dict/words"
 
 set fileformats=unix,dos,mac
 
-" use ag if it is available
-if executable('ag')
-	set grepprg=ag\ --vimgrep
+" use rg if it is available
+if executable('rg')
+	set grepprg=rg\ --vimgrep
 endif
 
 " cursor magic:
@@ -41,14 +41,14 @@ set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,
 " show results of a command while typing
 set inccommand=nosplit
 
-" redraw less often
+" redraw less
 set lazyredraw
 
 set nocursorline
 
 set noerrorbells
 
-" don't make .swp files
+" don't clutter with .swp files
 set noswapfile
 
 set novisualbell
@@ -69,7 +69,6 @@ set shortmess=a
 " ----> don't show completion messages
 set shortmess+=c
 
-" show commands
 set showcmd
 
 " highlight matchpairs
@@ -162,7 +161,6 @@ Plug 'junegunn/fzf', { 'dir' : '~/.fzf', 'do': './install --all' } " install fzf
 Plug 'junegunn/fzf.vim'                                            " fzf for vim
 Plug 'mbbill/undotree'                                             " undo tree
 Plug 'tpope/vim-unimpaired'                                        " paired options
-Plug 'w0rp/ale'                                                    " asynchronous lint engine
 
 "================================[ text editing ]===============================
 Plug 'AndrewRadev/splitjoin.vim'       " join/split lines
@@ -170,11 +168,12 @@ Plug 'SirVer/ultisnips'                " snippet engine
 Plug 'honza/vim-snippets'              " predefined snippets
 Plug 'junegunn/vim-easy-align'         " align text at a separator
 Plug 'justinmk/vim-sneak'              " 2char motions
-Plug 'tpope/vim-commentary'            " comment language-agnostically
+Plug 'machakann/vim-sandwich'          " deal with pairs
+Plug 'tpope/vim-commentary'            " language-agnostic commenting
 Plug 'tpope/vim-speeddating'           " smarter date logic
-Plug 'tpope/vim-surround'              " deal with pairs
-Plug 'vim-scripts/ReplaceWithRegister' " without overwriting
+Plug 'vim-scripts/ReplaceWithRegister' " (without overwriting)
 Plug 'wellle/targets.vim'              " more text objects
+Plug 'zirrostig/vim-schlepp'           " move things up and down
 
 "====================================[ tmux ]===================================
 Plug 'christoomey/vim-tmux-navigator'     " move seamlessly between tmux/vim splits
@@ -183,18 +182,19 @@ Plug 'roxma/vim-tmux-clipboard'           " paste between vim windows across tmu
 Plug 'tmux-plugins/vim-tmux-focus-events' " focus events for tmux+vim
 Plug 'wellle/tmux-complete.vim'           " autocomplete across tmux panes
 
-"==============================[ language/syntax ]==============================
-Plug 'sheerun/vim-polyglot'                          " many languages
-Plug 'Glench/Vim-Jinja2-Syntax', { 'for' : 'jinja' } " jinja...
+"==============================[ language support ]=============================
+Plug 'Glench/Vim-Jinja2-Syntax', { 'for' : 'jinja' }                     " jinja...
+Plug 'autozimu/LanguageClient-neovim', { 'do' : ':UpdateRemotePlugins' } " LSP
+Plug 'sheerun/vim-polyglot'                                              " many languages
+Plug 'w0rp/ale'                                                          " asynchronous lint engine
 
 "==================================[ writing ]==================================
 Plug 'junegunn/goyo.vim' " distraction free + centered editing
 
 "==================================[ testing ]==================================
-Plug 'wellle/visual-split.vim'                                           " opening specific-sized splits
-Plug 'reedes/vim-textobj-sentence'                                       " improved sentence object
-Plug 'shougo/denite.nvim'                                                " meta-whackness 10
-Plug 'autozimu/LanguageClient-neovim', { 'do' : ':UpdateRemotePlugins' } " LSP
+Plug 'wellle/visual-split.vim'     " opening specific-sized splits
+Plug 'reedes/vim-textobj-sentence' " improved sentence object
+Plug 'shougo/denite.nvim'          " meta-whackness 10
 
 call plug#end()
 
@@ -202,13 +202,13 @@ call plug#end()
 " fzf
 let g:fzf_action = { 'ctrl-l': 'vsplit', 'ctrl-j': 'split' }
 
-" surround
-let g:surround_indent = 1
-
 runtime startup/plugins/denite.vim
 runtime startup/plugins/schlepp.vim
 runtime startup/plugins/sneak.vim
 runtime startup/plugins/ultisnips.vim
+runtime startup/plugins/sandwich.vim
+runtime startup/plugins/goyo.vim
+runtime startup/plugins/languageclient.vim
 
 "===============================================================================
 "==================================[ mappings ]=================================
@@ -281,7 +281,7 @@ nnoremap <leader>dt :UndotreeToggle<cr>
 
 " save the pinky
 inoremap jk <esc>
-inoremap kj <esc>
+inoremap jf <esc>
 inoremap <c-c> <nop>
 
 " forward delete (consistent with osx)
@@ -360,12 +360,6 @@ vnoremap <expr> n 'Nn'[v:searchforward].'zz'
 nnoremap <expr> N 'nN'[v:searchforward].'zz'
 vnoremap <expr> N 'nN'[v:searchforward].'zz'
 
-" Move current line / visual line selection up or down.
-nnoremap <M-j> :m+<CR>==
-nnoremap <M-k> :m-2<CR>==
-vnoremap <M-j> :m'>+<CR>gv=gv
-vnoremap <M-k> :m-2<CR>gv=gv
-
 "================================[ command mode ]===============================
 " make start of line and end of line movements match zsh/bash
 cnoremap <c-a> <home>
@@ -376,8 +370,8 @@ cnoremap <m-b> <s-left>
 cnoremap <m-f> <s-right>
 
 " make commandline history smarter (use text entered so far)
-cnoremap <c-n> <up>
-cnoremap <c-p> <down>
+cnoremap <c-n> <down>
+cnoremap <c-p> <up>
 
 "===============================================================================
 "================================[ autocommands ]===============================
@@ -398,11 +392,11 @@ augroup END
 augroup save
 	autocmd!
 
-	" write events
-	autocmd BufLeave,FocusLost,InsertLeave,TextChanged * silent! wall
-	
-	" read events
-	autocmd BufEnter,BufWinEnter,CursorHold,FocusGained * silent! checktime
+	" write events (without changing the locations list)
+	autocmd BufLeave,FocusLost,InsertLeave,TextChanged * silent! wall lockmarks
+      
+	" read events (without changing the locations list)
+	autocmd BufEnter,BufWinEnter,CursorHold,FocusGained * silent! checktime lockmarks
 augroup END
 
 "===============================================================================
@@ -412,17 +406,15 @@ augroup END
 "===============================================================================
 "==================================[ commands ]=================================
 "===============================================================================
-
 command! -nargs=0 Text call lib#UnstructuredText()
 
-command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+command! -nargs=+ -complete=file -bar rg silent! grep! <args>|cwindow|redraw!
 
 command! -nargs=1 H call lib#ShowHelp(<f-args>)
 
 "===============================================================================
 "===================================[ colors ]==================================
 "===============================================================================
-
 colorscheme solarized
 
 " SignColumn should be same color as line number column
@@ -447,97 +439,6 @@ endif
 "===============================================================================
 "==================================[ testing ]==================================
 "===============================================================================
-
-function! s:goyo_enter()
-  silent !tmux set status off
-  silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
-  setlocal noshowmode
-  setlocal noshowcmd
-  setlocal scrolloff=999
-  setlocal sidescroll=0
-  setlocal spell
-  set wrap
-  set linebreak
-endfunction
-
-function! s:goyo_leave()
-  silent !tmux set status on
-  silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
-  setlocal showmode
-  setlocal showcmd
-  setlocal scrolloff=10
-  setlocal nospell
-  set nowrap
-  set nolinebreak
-endfunction
-
-autocmd! User GoyoEnter nested call <SID>goyo_enter()
-autocmd! User GoyoLeave nested call <SID>goyo_leave()
-
-" LSP
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_serverCommands = {}
-
-let g:LanguageClient_diagnosticsDisplay = {
-	\ 1: { 
-		\"name": "Error",
-		\"texthl": "ALEError", 
-		\"signText": "➤",
-		\"signTexthl": "ALEErrorSign",
-		\},
-	\2: {
-		\"name": "Warning",
-		\"texthl": "ALEWarning",
-		\"signText": "➤",
-		\"signTexthl": "ALEWarningSign",
-		\},
-	\3: {
-		\"name": "Information",
-		\"texthl": "ALEInfo",
-		\"signText": "➤",
-		\"signTexthl": "ALEInfoSign",
-		\},
-	\4: {
-		\"name": "Hint",
-		\"texthl": "ALEInfo",
-		\"signText": "➤",
-		\"signTexthl": "ALEInfoSign",
-		\},
-	\}
-
-" \"signText": "✖", 
-" \"signText": "⚠",
-" \"signText": "ℹ",
-
-" let g:LanguageClient_notify
-
-if executable('javascript-typescript-stdio')
-	let g:LanguageClient_serverCommands.javascript = ['javascript-typescript-stdio']
-endif
-
-if executable('pyls')
-	let g:LanguageClient_serverCommands.python = ['pyls']
-endif
-
-augroup LanguageClientConfig
-	autocmd!
-
-	" <leader>ld to go to definition
-	autocmd FileType javascript,python nnoremap <buffer> <leader>ld :call LanguageClient_textDocument_definition()<cr>
-	" <leader>lf to autoformat document
-	autocmd FileType javascript,python nnoremap <buffer> <leader>lf :call LanguageClient_textDocument_formatting()<cr>
-	" <leader>lh for type info under cursor
-	autocmd FileType javascript,python nnoremap <buffer> <leader>lh :call LanguageClient_textDocument_hover()<cr>
-	" <leader>lr to rename variable under cursor
-	autocmd FileType javascript,python nnoremap <buffer> <leader>lr :call LanguageClient_textDocument_rename()<cr>
-	" <leader>lc to switch omnifunc to LanguageClient
-	autocmd FileType javascript,python nnoremap <buffer> <leader>lc :setlocal omnifunc=LanguageClient#complete<cr>
-	" <leader>ls to fuzzy find the symbols in the current document
-	autocmd FileType javascript,python nnoremap <buffer> <leader>ls :call LanguageClient_textDocument_documentSymbol()<cr>
-	" Use LanguageServer for omnifunc completion
-	autocmd FileType javascript,python setlocal omnifunc=LanguageClient#complete
-augroup END
-
 " autoformat paragraphs (see autoformat)
 " set formatoptions+=a
 
@@ -569,4 +470,12 @@ augroup END
 " save more easily
 " nnoremap <leader>w :w<cr>
 nnoremap <leader>w :echoerr "stop it you have autosave"<cr>
-cabbrev w echoerr "stop it you have autosave"
+" cabbrev w echoerr "stop it you have autosave"
+
+
+" Move current line / visual line selection up or down.
+" nnoremap <M-j> :m+<CR>==
+" nnoremap <M-k> :m-2<CR>==
+" vnoremap <M-j> :m'>+<CR>gv=gv
+" vnoremap <M-k> :m-2<CR>gv=gv
+
