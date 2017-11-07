@@ -1,16 +1,17 @@
-# Dircolors to match colorscheme
-zplug 'seebi/dircolors-solarized'
+export ZPLUG_HOME=~/.zplug
+export ZPLUG_LOADFILE=~/.zsh/zplugins.zsh
 
-# Completions, etc
-zplug 'zsh-users/zsh-completions'
-zplug 'zsh-users/zsh-syntax-highlighting', defer:2
+if [[ -f $ZPLUG_HOME/init.zsh ]]; then
+	source $ZPLUG_HOME/init.zsh
 
-# better cd?
-# zplug "b4b4r07/enhancd", use:init.sh
-# zplug "rupa/z"
+	if ! zplug check --verbose; then
+		printf "Install? [y/N]: "
 
-# oh-my-zsh plugins that are convenient
-zplug 'plugins/git', from:oh-my-zsh
-zplug 'plugins/tmux', from:oh-my-zsh
-zplug 'plugins/brew', from:oh-my-zsh
-zplug 'plugins/z', from:oh-my-zsh
+		if read -q; then
+			echo; zplug install
+		fi
+		echo
+	fi
+
+	zplug load
+fi

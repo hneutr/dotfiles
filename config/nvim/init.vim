@@ -13,6 +13,9 @@
 
 "==================================[ settings ]=================================
 " write all the time
+set autowrite
+
+" write even more
 set autowriteall
 
 set background=dark
@@ -386,17 +389,8 @@ augroup startup
 	autocmd BufEnter,FocusGained * :call lib#NumberToggle(1)
 	autocmd BufLeave,FocusLost * :call lib#NumberToggle(0)
 
-augroup END
-
-" Save all the time
-augroup save
-	autocmd!
-
-	" write events (without changing the locations list)
-	autocmd BufLeave,FocusLost,InsertLeave,TextChanged * silent! wall lockmarks
-      
-	" read events (without changing the locations list)
-	autocmd BufEnter,BufWinEnter,CursorHold,FocusGained * silent! checktime lockmarks
+	" save whenever things change
+	autocmd TextChanged,TextChangedI * nested silent! write
 augroup END
 
 "===============================================================================
