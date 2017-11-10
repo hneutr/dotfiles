@@ -123,3 +123,38 @@ function! lib#ShowHelp(tag) abort
 	endif
 endfunction
 
+" Store visual selection marks, save, restore visual selection marks
+function! lib#SaveAndRestoreVisualSelectionMarks() abort
+	let start_mark = getpos("'[")
+	let end_mark = getpos("']")
+
+	try
+		silent write
+	catch
+	finally
+		call setpos("'[", start_mark)
+		call setpos("']", end_mark)
+	endtry
+endfunction
+
+
+" takes the filetype of the file I'm in and a single argument for 'plugin' or
+" 'detect' (defaults to 'plugin') and opens the ftplugin or ftdetect file for
+" that filetype
+function! lib#OpenFileSettings(...)
+	let l:setting_type = 'plugin'
+	if a:0 >= 1
+		let l:setting_type = a:1
+	endif
+
+	if ! (l:setting_type ==# 'plugin' || l:setting_type ==# 'detect')
+		return
+	endif
+
+	let l:file = expand("~/.config/nvim/ft" . l:setting_type . '/' . &filetype . '.vim')
+
+	execute 'split ' l:file
+endfunction
+
+" select what was just pasted  (I think this is the same as gv?)
+" nnoremap gV `[v`]

@@ -6,8 +6,6 @@ function! s:goyo_enter()
   setlocal scrolloff=999
   setlocal sidescroll=0
   setlocal spell
-  set wrap
-  set linebreak
 endfunction
 
 function! s:goyo_leave()
@@ -17,8 +15,6 @@ function! s:goyo_leave()
   setlocal showcmd
   setlocal scrolloff=10
   setlocal nospell
-  set nowrap
-  set nolinebreak
 endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()

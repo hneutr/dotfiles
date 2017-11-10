@@ -12,18 +12,16 @@
 " - comments on the line above their referant
 
 "==================================[ settings ]=================================
-" write all the time
-set autowrite
-
 " write even more
 set autowriteall
 
 set background=dark
 
 " excluded completion types:
-"             |---> don't scan included files
-"             ||--> don't scan tags
-set complete-=it
+" ----> included files
+set complete-=i
+" ----> don't scan tags
+set complete-=t
 
 set dictionary="/usr/dict/words"
 
@@ -113,15 +111,15 @@ set wildmode=list:longest,full
 set nofoldenable
 
 set foldmethod=indent
+
 " only fold 1 level
 set foldnestmax=1
+
 " custom fold function
 set foldtext=lib#FoldDisplayText()
 
 "================================[ indentation ]================================
 set smartindent
-
-set smarttab
 
 set shiftwidth=4
 
@@ -202,25 +200,15 @@ Plug 'shougo/denite.nvim'          " meta-whackness 10
 call plug#end()
 
 "==============================[ plugin settings ]==============================
-" fzf
-let g:fzf_action = { 'ctrl-l': 'vsplit', 'ctrl-j': 'split' }
-
-runtime startup/plugins/denite.vim
-runtime startup/plugins/schlepp.vim
-runtime startup/plugins/sneak.vim
-runtime startup/plugins/ultisnips.vim
-runtime startup/plugins/sandwich.vim
-runtime startup/plugins/goyo.vim
-runtime startup/plugins/languageclient.vim
+for plugin_setting in split(glob("~/.config/nvim/startup/plugins/*.vim"), "\n")
+	execute "source" plugin_setting
+endfor
 
 "===============================================================================
 "==================================[ mappings ]=================================
 "===============================================================================
 
 "================================[ normal mode ]================================
-" select what was just pasted 
-nnoremap gV `[v`]
-
 " alias of "verticalsplit" (for consistency with tmux)
 nnoremap <c-w>1 <c-w>H
 
@@ -281,7 +269,6 @@ nnoremap <silent> <leader>du :UltiSnipsEdit<cr>
 nnoremap <leader>dt :UndotreeToggle<cr>
 
 "================================[ insert mode ]================================
-
 " save the pinky
 inoremap jk <esc>
 inoremap jf <esc>
@@ -390,7 +377,7 @@ augroup startup
 	autocmd BufLeave,FocusLost * :call lib#NumberToggle(0)
 
 	" save whenever things change
-	autocmd TextChanged,TextChangedI * nested silent! write
+	autocmd TextChanged,TextChangedI * call lib#SaveAndRestoreVisualSelectionMarks()
 augroup END
 
 "===============================================================================
@@ -400,11 +387,13 @@ augroup END
 "===============================================================================
 "==================================[ commands ]=================================
 "===============================================================================
-command! -nargs=0 Text call lib#UnstructuredText()
-
 command! -nargs=+ -complete=file -bar Rg silent! grep! <args>|cwindow|redraw!
 
+command! -nargs=0 Text call lib#UnstructuredText()
+
 command! -nargs=1 H call lib#ShowHelp(<f-args>)
+
+command! -nargs=? FS call lib#OpenFileSettings(<f-args>)
 
 "===============================================================================
 "===================================[ colors ]==================================
@@ -461,7 +450,6 @@ augroup easy_close
 	autocmd FileType help,qf nnoremap <buffer> <cr> <cr>
 augroup END
 
-" save more easily
 " nnoremap <leader>w :w<cr>
 nnoremap <leader>w :echoerr "stop it you have autosave"<cr>
 " cabbrev w echoerr "stop it you have autosave"
