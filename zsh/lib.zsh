@@ -5,3 +5,10 @@ function topdf() {
 	local output="${1:r}.pdf"
 	markdown-pdf $1 -o $output 2> /dev/null
 }
+
+# fuzzy find into vim (credit to "bag-man/dotfiles/bashrc")
+function fvim() {
+  local IFS=$'\n'
+  local files=($(fzf --query="$1" --multi --select-1 --exit-0))
+  [[ -n "$files" ]] && vim "${files[@]}"
+}
