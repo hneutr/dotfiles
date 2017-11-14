@@ -1,0 +1,1 @@
+cnoreabbrev OFS OpenFileSettings
