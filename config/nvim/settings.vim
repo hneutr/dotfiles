@@ -44,6 +44,8 @@ set nowrap
 
 set number
 
+set relativenumber
+
 set scrolloff=10
 
 set sidescroll=1

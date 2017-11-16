@@ -7,4 +7,10 @@ augroup startup
 
 	" save whenever things change
 	autocmd TextChanged,TextChangedI * call lib#SaveAndRestoreVisualSelectionMarks()
+
+	" turn off numbers in terminal mode
+	autocmd TermOpen * setlocal nonumber
+
+	" enter insert mode whenever we're in a terminal
+	autocmd TermOpen,BufWinEnter,BufEnter term://* startinsert
 augroup END

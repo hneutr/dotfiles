@@ -64,10 +64,3 @@ augroup END
 nnoremap <leader>w :echoerr "stop it you have autosave"<cr>
 " cabbrev w echoerr "stop it you have autosave"
 
-
-" Move current line / visual line selection up or down.
-" nnoremap <M-j> :m+<CR>==
-" nnoremap <M-k> :m-2<CR>==
-" vnoremap <M-j> :m'>+<CR>gv=gv
-" vnoremap <M-k> :m-2<CR>gv=gv
-

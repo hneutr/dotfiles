@@ -70,10 +70,6 @@ inoremap <c-c> <nop>
 " forward delete (consistent with osx)
 inoremap <c-d> <del>
 
-" untab/retab (default mapping used above)
-inoremap <c-l> <c-t>
-inoremap <c-h> <c-d>
-
 " close various structures automatically
 " newline triggered
 inoremap (<cr> (<cr>)<esc>O
@@ -112,9 +108,6 @@ inoremap **<tab> ****<esc>hi
 " unindent/indent
 vnoremap > >gv
 vnoremap < <gv
-
-" paste without overwriting buffer
-vnoremap r "_dP"
 
 "==========================[ normal and visual modes ]==========================
 " bind easy align keys
@@ -163,3 +156,13 @@ cnoremap <m-f> <s-right>
 " make commandline history smarter (use text entered so far)
 cnoremap <c-n> <down>
 cnoremap <c-p> <up>
+
+"==================================[ terminal ]=================================
+" I like to get out with one key
+tnoremap <esc> <c-\><c-n>
+tnoremap <c-[> <c-\><c-n>
+
+tnoremap <c-w>h <c-\><c-n><c-w>h
+tnoremap <c-w>j <c-\><c-n><c-w>j
+tnoremap <c-w>k <c-\><c-n><c-w>k
+tnoremap <c-w>l <c-\><c-n><c-w>l
