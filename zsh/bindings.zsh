@@ -1,2 +1,4 @@
-# bindkey -s '^V' "vim ^T\n"
 bindkey -s '^V' "fvim\n"
+
+# alt-. inserts last word
+bindkey '\e.' insert-last-word

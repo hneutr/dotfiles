@@ -1,6 +1,7 @@
 export PATH=$PATH:/usr/local/bin
+export PATH=$PATH:/Users/hne/Library/Python/3.6/bin
 
-export editor=nvim
+export EDITOR=nvim
 
 ################################################################################
 # Plugin Setup

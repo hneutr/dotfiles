@@ -17,3 +17,6 @@ alias pip="pip3"
 
 # ag
 alias agl="ag -l"
+
+# use nvr
+alias nvim="nvr"
