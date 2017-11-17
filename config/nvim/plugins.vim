@@ -56,9 +56,11 @@ if empty(s:plug_dir)
 endif
 
 " source plugin settings that must execute before the plugins load
-for plugin_setting in split(globpath(s:plugin_settings_dir, "*.vim"), "\n")
-	try
-		execute "source" plugin_setting
-	catch
-	endtry
+for plugin_setting in split(globpath(s:plugin_settings_dir, "*"), "\n")
+	if filereadable(plugin_setting)
+		try
+			execute "source" plugin_setting
+		catch
+		endtry
+	endif
 endfor

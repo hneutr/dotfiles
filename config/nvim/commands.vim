@@ -5,3 +5,6 @@ command! -nargs=0 Text call lib#UnstructuredText()
 command! -nargs=1 -complete=help H call lib#ShowHelp(<f-args>)
 
 command! -nargs=? OpenFileSettings call lib#OpenFileSettings(<f-args>)
+
+command! -nargs=0 TermVerticalSplit vspl|term
+command! -nargs=0 TermHorizontalSplit spl|term

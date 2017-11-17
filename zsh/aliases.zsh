@@ -18,5 +18,8 @@ alias pip="pip3"
 # ag
 alias agl="ag -l"
 
-# use nvr
+# nvr
 alias nvim="nvr"
+
+# git
+alias gs="git status"

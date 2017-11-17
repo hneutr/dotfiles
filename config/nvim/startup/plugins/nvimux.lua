@@ -15,7 +15,7 @@ nvimux.config.set_all{
 
 -- Nvimux custom bindings
 nvimux.bindings.bind_all{
-  {'s', ':NvimuxHorizontalSplit', {'n', 'v', 'i', 't'}},
-  {'v', ':NvimuxVerticalSplit', {'n', 'v', 'i', 't'}},
+  {'j', ':TermHorizontalSplit', {'n', 'v', 'i', 't'}},
+  {'l', ':TermVerticalSplit', {'n', 'v', 'i', 't'}},
 }
 EOF

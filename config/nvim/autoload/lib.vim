@@ -125,18 +125,20 @@ endfunction
 
 " Store visual selection marks, save, restore visual selection marks
 function! lib#SaveAndRestoreVisualSelectionMarks() abort
-	let start_mark = getpos("'[")
-	let end_mark = getpos("']")
+	let l:fname = expand("%")
+	if filereadable(l:fname) && match(readfile(l:fname), "text")
+		let start_mark = getpos("'[")
+		let end_mark = getpos("']")
 
-	try
-		silent write
-	catch
-	finally
-		call setpos("'[", start_mark)
-		call setpos("']", end_mark)
-	endtry
+		try
+			silent write
+		catch
+		finally
+			call setpos("'[", start_mark)
+			call setpos("']", end_mark)
+		endtry
+	endif
 endfunction
-
 
 " takes the filetype of the file I'm in and a single argument for 'plugin' or
 " 'detect' (defaults to 'plugin') and opens the ftplugin or ftdetect file for
