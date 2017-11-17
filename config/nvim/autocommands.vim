@@ -9,7 +9,8 @@ augroup startup
 	autocmd TextChanged,TextChangedI * call lib#SaveAndRestoreVisualSelectionMarks()
 
 	" turn off numbers in terminal mode
-	autocmd TermOpen * setlocal nonumber norelativenumber
+	autocmd TermOpen * setlocal nonumber
+	autocmd TermOpen * setlocal norelativenumber
 	autocmd TermOpen * setlocal scrolloff=0
 
 	" enter insert mode whenever we're in a terminal

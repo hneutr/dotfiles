@@ -14,8 +14,8 @@ nnoremap g* *
 nnoremap # g#
 nnoremap g# #
 
-" play last macro
-nnoremap Q @@
+" play 'q' macro (I mostly just use the 'q' macro)
+nnoremap Q @q
 
 " yank to end of line (match C/D)
 nnoremap Y y$
@@ -69,6 +69,10 @@ inoremap <c-c> <nop>
 
 " forward delete (consistent with osx)
 inoremap <c-d> <del>
+
+" change indent
+inoremap <c-h>  <c-d>
+inoremap <c-l>  <c-t>
 
 " close various structures automatically
 " newline triggered
@@ -144,6 +148,12 @@ vnoremap <cr> :
 nnoremap <M-cr> <cr>
 vnoremap <M-cr> <cr>
 
+" switch panes
+nnoremap <c-h> <c-w>h
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-l> <c-w>l
+
 "================================[ command mode ]===============================
 " make start of line and end of line movements match zsh/bash
 cnoremap <c-a> <home>
@@ -162,7 +172,7 @@ cnoremap <c-p> <up>
 tnoremap <esc> <c-\><c-n>
 tnoremap <c-[> <c-\><c-n>
 
-tnoremap <c-w>h <c-\><c-n><c-w>h
-tnoremap <c-w>j <c-\><c-n><c-w>j
-tnoremap <c-w>k <c-\><c-n><c-w>k
-tnoremap <c-w>l <c-\><c-n><c-w>l
+tnoremap <c-h> <c-\><c-n><c-w>h
+tnoremap <c-j> <c-\><c-n><c-w>j
+tnoremap <c-k> <c-\><c-n><c-w>k
+tnoremap <c-l> <c-\><c-n><c-w>l
