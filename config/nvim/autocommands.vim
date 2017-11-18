@@ -6,7 +6,7 @@ augroup startup
 	" autocmd BufLeave,FocusLost * call lib#NumberToggle(0)
 
 	" save whenever things change
-	autocmd TextChanged,TextChangedI * call lib#SaveAndRestoreVisualSelectionMarks()
+	autocmd TextChanged,InsertLeave * call lib#SaveAndRestoreVisualSelectionMarks()
 
 	" turn off numbers in terminal mode
 	autocmd TermOpen * setlocal nonumber
