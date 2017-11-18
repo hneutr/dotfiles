@@ -6,11 +6,8 @@
 - clean: ['~']
 
 - link:
-    ~/.bash_profile:
-    ~/.bashrc:
     ~/.dotfiles: ''
     ~/.gitconfig:
-    ~/.inputrc: 
     ~/.tmux.conf:
     ~/.config:
     ~/.tmux/plugins/tpm: tpm
