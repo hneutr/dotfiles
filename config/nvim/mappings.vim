@@ -54,6 +54,9 @@ nnoremap \ :Ag<SPACE>
 " grep for current word
 nnoremap <silent> K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
+" select what was last pasted/visually selected
+nnoremap gV `[v`]
+
 " 'do' mappings
 nnoremap <leader>df :FZF<cr>
 nnoremap <leader>dg :Goyo<cr>
@@ -62,6 +65,9 @@ nnoremap <silent> <leader>du :UltiSnipsEdit<cr>
 nnoremap <leader>dt :UndotreeToggle<cr>
 
 "================================[ insert mode ]================================
+" why would I want to delete only until the start of insert mode? why?
+inoremap <c-w> <c-\><c-o>dB
+
 " save the pinky
 inoremap jk <esc>
 inoremap jf <esc>
