@@ -9,6 +9,6 @@ function topdf() {
 # fuzzy find into vim (credit to "bag-man/dotfiles/bashrc")
 function fvim() {
   local IFS=$'\n'
-  local files=($(fzf --query="$1" --multi --select-1 --exit-0))
+  local files=($(fzf --reverse --query="$1" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && vim "${files[@]}"
 }

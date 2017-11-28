@@ -5,6 +5,10 @@ augroup startup
 	" autocmd BufEnter,FocusGained * call lib#NumberToggle(1)
 	" autocmd BufLeave,FocusLost * call lib#NumberToggle(0)
 
+	" turn off the status bar when fzf is running
+	autocmd FileType fzf set laststatus=0 | autocmd WinLeave <buffer> set laststatus=2
+
+
 	" save whenever things change
 	autocmd TextChanged,InsertLeave * call lib#SaveAndRestoreVisualSelectionMarks()
 
