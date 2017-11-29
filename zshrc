@@ -4,6 +4,7 @@
 
 export PATH=$PATH:/usr/local/bin
 export PATH=$PATH:/Users/hne/Library/Python/3.6/bin
+export PATH=$PATH:$HOME/.cargo/bin
 
 export EDITOR=nvim
 
@@ -45,3 +46,6 @@ export FZF_ALT_C_COMMAND="bfs -type d -nohidden"
 
 # local settings
 [ -f ~/.zshrc_local ]      && source ~/.zshrc_local
+
+# set the neovim-remote listening address
+export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket

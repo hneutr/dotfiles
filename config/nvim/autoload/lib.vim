@@ -158,5 +158,24 @@ function! lib#OpenFileSettings(...)
 	execute 'split ' l:file
 endfunction
 
-" select what was just pasted  (I think this is the same as gv?)
-" nnoremap gV `[v`]
+"==============================[ SetNumberDisplay ]=============================
+" Varies the display of numbers.
+"
+" This is not a 'mode' specific setting, so a simple autocommand won't work.
+" Numbers should not show up in a terminal buffer, regardless of if that
+" buffer is in terminal mode or not.
+"===============================================================================
+function! lib#SetNumberDisplay()
+	let l:buffername = @%
+	
+	if l:buffername =~ 'term://*'
+		setlocal nonumber
+		setlocal norelativenumber
+		setlocal scrolloff=0
+	else
+		setlocal number
+		setlocal relativenumber
+		setlocal scrolloff=10
+	endif
+endfunction
+

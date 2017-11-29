@@ -18,8 +18,9 @@ alias pip="pip3"
 # ag
 alias agl="ag -l"
 
-# nvr
-alias nvim="nvr"
+# use nvim from within neovim-remote. This command triggers the BufEnter
+# autocmd so that numbering can be displayed properly.
+alias nvim="nvr --remote -s -c 'doautocmd BufEnter'"
 
 # git
 alias gs="git status"

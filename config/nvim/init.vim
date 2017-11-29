@@ -57,7 +57,7 @@ augroup easy_close
 	autocmd FileType help,qf nnoremap <buffer> <Esc> :q<cr>
 	autocmd FileType help,qf nnoremap <buffer> <C-c> :q<cr>
 	" Undo <cr> -> : shortcut
-	autocmd FileType help,qf nnoremap <buffer> <cr> <cr>
+	" autocmd FileType help,qf nnoremap <buffer> <cr> <cr>
 augroup END
 
 " nnoremap <leader>w :w<cr>
