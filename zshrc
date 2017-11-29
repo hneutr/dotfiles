@@ -46,6 +46,3 @@ export FZF_ALT_C_COMMAND="bfs -type d -nohidden"
 
 # local settings
 [ -f ~/.zshrc_local ]      && source ~/.zshrc_local
-
-# set the neovim-remote listening address
-export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket

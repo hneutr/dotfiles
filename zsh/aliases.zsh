@@ -7,6 +7,10 @@ alias .....='cd ../../../..'
 # ls
 alias lsa='ls -la'
 
+# use nvim from within neovim-remote. This command triggers the BufEnter
+# autocmd so that numbering can be displayed properly.
+alias nvim="nvr -c 'doautocmd BufEnter'"
+
 # vim
 alias vi="nvim"
 alias vim="nvim"
@@ -17,10 +21,6 @@ alias pip="pip3"
 
 # ag
 alias agl="ag -l"
-
-# use nvim from within neovim-remote. This command triggers the BufEnter
-# autocmd so that numbering can be displayed properly.
-alias nvim="nvr --remote -s -c 'doautocmd BufEnter'"
 
 # git
 alias gs="git status"
