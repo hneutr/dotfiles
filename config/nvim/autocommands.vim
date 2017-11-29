@@ -8,7 +8,7 @@ augroup startup
 	autocmd TextChanged,InsertLeave * call lib#SaveAndRestoreVisualSelectionMarks()
 
 	" turn numbers on for normal buffers; turn them off for terminal buffers
-	autocmd TermOpen,BufEnter * call lib#SetNumberDisplay()
+	autocmd TermOpen,BufFilePost * call lib#SetNumberDisplay()
 
 	" use relative numbers for focused area (maybe turn this back on with a
 	" check for if number is turned on or not?)

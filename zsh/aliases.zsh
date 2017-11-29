@@ -7,9 +7,10 @@ alias .....='cd ../../../..'
 # ls
 alias lsa='ls -la'
 
-# use nvim from within neovim-remote. This command triggers the BufEnter
-# autocmd so that numbering can be displayed properly.
-alias nvim="nvr -c 'doautocmd BufEnter'"
+# use nvim from within neovim-remote. This command triggers the BufFilePost
+# autocmd so that numbering can be displayed properly. (and not conflict with
+# other things that use BufEnter/BufWinEnter)
+alias nvim="nvr -c 'doautocmd BufFilePost'"
 
 # vim
 alias vi="nvim"
