@@ -5,3 +5,6 @@ config/nvim/autoload/plug*
 config/nvim/undodir
 config/nvim/colors
 config/nvim/doc
+zplug/
+dotbot/
+tpm/
