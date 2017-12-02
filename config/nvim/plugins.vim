@@ -29,11 +29,11 @@ Plug 'wellle/targets.vim'          " more text objects
 Plug 'reedes/vim-textobj-sentence' " improved sentence object
 
 "====================================[ tmux ]===================================
-Plug 'christoomey/vim-tmux-navigator'     " move seamlessly between tmux/vim splits
-Plug 'christoomey/vim-tmux-runner'        " rerun tests
-Plug 'roxma/vim-tmux-clipboard'           " paste between vim windows across tmux
-Plug 'tmux-plugins/vim-tmux-focus-events' " focus events for tmux+vim
-Plug 'wellle/tmux-complete.vim'           " autocomplete across tmux panes
+" Plug 'christoomey/vim-tmux-navigator'     " move seamlessly between tmux/vim splits
+" Plug 'christoomey/vim-tmux-runner'        " rerun tests
+" Plug 'roxma/vim-tmux-clipboard'           " paste between vim windows across tmux
+" Plug 'tmux-plugins/vim-tmux-focus-events' " focus events for tmux+vim
+" Plug 'wellle/tmux-complete.vim'           " autocomplete across tmux panes
 
 "==============================[ language support ]=============================
 Plug 'Glench/Vim-Jinja2-Syntax', { 'for' : 'jinja' }                     " jinja...
@@ -54,13 +54,3 @@ call plug#end()
 if empty(s:plug_dir)
 	autocmd! VimEnter * PlugInstall
 endif
-
-" source plugin settings that must execute before the plugins load
-for plugin_setting in split(globpath(s:plugin_settings_dir, "*"), "\n")
-	if filereadable(plugin_setting)
-		try
-			execute "source" plugin_setting
-		catch
-		endtry
-	endif
-endfor

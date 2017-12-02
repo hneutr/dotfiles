@@ -1,3 +1,5 @@
+call lib#AddPluginMapping('l', ':LanguageClientStart<cr>')
+
 let g:LanguageClient_autoStart = 0
 let g:LanguageClient_serverCommands = {}
 let g:LanguageClient_windowLogMessageLevel = "Error"
@@ -45,17 +47,17 @@ augroup LanguageClientConfig
 	autocmd!
 
 	" <leader>ld to go to definition
-	autocmd FileType javascript,python nnoremap <buffer> <leader>ld :call LanguageClient_textDocument_definition()<cr>
+	autocmd FileType javascript,python nnoremap <buffer> <leader>dld :call LanguageClient_textDocument_definition()<cr>
 	" <leader>lf to autoformat document
-	autocmd FileType javascript,python nnoremap <buffer> <leader>lf :call LanguageClient_textDocument_formatting()<cr>
+	autocmd FileType javascript,python nnoremap <buffer> <leader>dlf :call LanguageClient_textDocument_formatting()<cr>
 	" <leader>lh for type info under cursor
-	autocmd FileType javascript,python nnoremap <buffer> <leader>lh :call LanguageClient_textDocument_hover()<cr>
+	autocmd FileType javascript,python nnoremap <buffer> <leader>dlh :call LanguageClient_textDocument_hover()<cr>
 	" <leader>lr to rename variable under cursor
-	autocmd FileType javascript,python nnoremap <buffer> <leader>lr :call LanguageClient_textDocument_rename()<cr>
+	autocmd FileType javascript,python nnoremap <buffer> <leader>dlr :call LanguageClient_textDocument_rename()<cr>
 	" <leader>lc to switch omnifunc to LanguageClient
-	autocmd FileType javascript,python nnoremap <buffer> <leader>lc :setlocal omnifunc=LanguageClient#complete<cr>
+	autocmd FileType javascript,python nnoremap <buffer> <leader>dlc :setlocal omnifunc=LanguageClient#complete<cr>
 	" <leader>ls to fuzzy find the symbols in the current document
-	autocmd FileType javascript,python nnoremap <buffer> <leader>ls :call LanguageClient_textDocument_documentSymbol()<cr>
+	autocmd FileType javascript,python nnoremap <buffer> <leader>dls :call LanguageClient_textDocument_documentSymbol()<cr>
 	" Use LanguageServer for omnifunc completion
 	autocmd FileType javascript,python setlocal omnifunc=LanguageClient#complete
 augroup END

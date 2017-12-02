@@ -1,5 +1,7 @@
 let mapleader = "\<space>"
 let maplocalleader = "\<space>"
+" this is the prefix I use to "namespace" plugin mappings
+let g:pluginleader = "<leader>d"
 
 "================================[ normal mode ]================================
 " alias of "verticalsplit" (for consistency with tmux)
@@ -57,16 +59,9 @@ nnoremap <silent> K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 " select what was last pasted/visually selected
 nnoremap gV `[v`]
 
-" 'do' mappings
-nnoremap <leader>df :FZF<cr>
-nnoremap <leader>dg :Goyo<cr>
-nnoremap <leader>dw :call lib#UnstructuredText()<cr>
-nnoremap <silent> <leader>du :UltiSnipsEdit<cr>
-nnoremap <leader>dt :UndotreeToggle<cr>
-
 "================================[ insert mode ]================================
 " why would I want to delete only until the start of insert mode? why?
-inoremap <c-w> <c-\><c-o>dB
+inoremap <c-w> <c-\><c-o>db
 
 " save the pinky
 inoremap jk <esc>
@@ -178,6 +173,7 @@ cnoremap <c-p> <up>
 tnoremap <esc> <c-\><c-n>
 tnoremap <c-[> <c-\><c-n>
 
+" consistent window movement commands
 tnoremap <c-h> <c-\><c-n><c-w>h
 tnoremap <c-j> <c-\><c-n><c-w>j
 tnoremap <c-k> <c-\><c-n><c-w>k

@@ -19,11 +19,12 @@ if executable('rg')
 endif
 
 " cursor magic:
-"	insert = block
-"	i = line
-set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,
-	\i-ci:ver25-Cursor/lCursor,
-	\r-cr:hor20-Cursor/lCursor
+" ----> normal, visual, command = block
+set guicursor=n-v-c:block-Cursor/lCursor-blinkon0
+" ----> insert = vertical
+set guicursor+=i-ci:ver25-Cursor/lCursor
+" ----> replace + command-replace = underscore
+set guicursor+=r-cr:hor20-Cursor/lCursor
 
 " show results of a command while typing
 set inccommand=nosplit
@@ -50,7 +51,7 @@ set scrolloff=10
 
 set sidescroll=1
 
-set sidescrolloff=5
+" set sidescrolloff=5
 
 " messages:
 " ----> shorten status updates

@@ -1,4 +1,4 @@
-"===============================================================================
+"==============================================================================
 "======================[ structure and guiding principles ]=====================
 "===============================================================================
 " 1. Be consistent
@@ -17,12 +17,8 @@ let g:vim_config = $HOME . "/.config/nvim/"
 
 let s:modules = [
 	\"settings",
-	\"plugins",
 	\"mappings",
-	\"autocommands",
-	\"commands",
-	\"abbreviations",
-	\"colors",
+	\"plugins",
 	\]
 
 for s:module in s:modules
@@ -38,13 +34,6 @@ endif
 "===============================================================================
 "==================================[ testing ]==================================
 "===============================================================================
-" autoformat paragraphs (see autoformat)
-" set formatoptions+=a
-
-" use the second line of the paragraph instead of the first for indent (should
-" prolly be in an augroup for markdown)
-" set formatoptions+=2
-
 " lookup whichwrap
 " make h/l move across beginning/end of line
 " set whichwrap+=hl
@@ -63,3 +52,7 @@ augroup END
 " nnoremap <leader>w :w<cr>
 nnoremap <leader>w :echoerr "stop it you have autosave"<cr>
 " cabbrev w echoerr "stop it you have autosave"
+
+" when would I want to reindent a line with ^F _after_ '!'? bizzare.
+" delete until the end of word
+inoremap <c-f> <c-\><c-o>de

@@ -171,11 +171,18 @@ function! lib#SetNumberDisplay()
 	if l:buffername =~ 'term://*'
 		setlocal nonumber
 		setlocal norelativenumber
-		setlocal scrolloff=0
+		" setlocal scrolloff=0
 	else
 		setlocal number
 		setlocal relativenumber
-		setlocal scrolloff=10
+		" setlocal scrolloff=10
 	endif
 endfunction
 
+"==============================[ AddPluginMapping ]=============================
+" Adds a plugin mapping to the normal-mode plugin mapping space
+"===============================================================================
+function! lib#AddPluginMapping(lhs, rhs)
+	let l:lhs = g:pluginleader.a:lhs
+	execute "nnoremap <silent> " l:lhs a:rhs
+endfunction

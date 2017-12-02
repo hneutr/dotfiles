@@ -1,3 +1,5 @@
+call lib#AddPluginMapping('g', ':Goyo<cr>')
+
 function! s:goyo_enter()
   setlocal noshowmode
   setlocal noshowcmd
