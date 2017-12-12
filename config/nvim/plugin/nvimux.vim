@@ -1,6 +1,13 @@
 lua << EOF
 local nvimux = require('nvimux')
 
+-- Nvimux custom bindings
+nvimux.bindings.bind_all{
+  {'j', ':TermHorizontalSplit', {'n', 'v', 'i', 't'}},
+  {'l', ':TermVerticalSplit', {'n', 'v', 'i', 't'}},
+  {'c', ':TermTab', {'n', 'v', 'i', 't'}},
+}
+
 -- Nvimux configuration
 nvimux.config.set_all{
   prefix = '<C-Space>',
@@ -13,9 +20,4 @@ nvimux.config.set_all{
   quickterm_size = '80',
 }
 
--- Nvimux custom bindings
-nvimux.bindings.bind_all{
-  {'j', ':TermHorizontalSplit', {'n', 'v', 'i', 't'}},
-  {'l', ':TermVerticalSplit', {'n', 'v', 'i', 't'}},
-}
 EOF
