@@ -74,13 +74,6 @@ function! lib#VisualSelection(direction, extra_filter) range
 	let @" = l:saved_reg
 endfunction
 
-function! lib#StripTrailingWhitespace()
-	normal mZ
-	%s/\s\+$//e
-	normal `Z
-	normal mZ
-endfunction
-
 " relative is a boolean indicating either
 " --> relativenumber (when true)
 " --> norelativenumber (when false)
@@ -167,15 +160,13 @@ endfunction
 "===============================================================================
 function! lib#SetNumberDisplay()
 	let l:buffername = @%
-	
+
 	if l:buffername =~ 'term://*'
-		setlocal nonumber
-		setlocal norelativenumber
-		" setlocal scrolloff=0
+		set nonumber
+		set norelativenumber
 	else
-		setlocal number
-		setlocal relativenumber
-		" setlocal scrolloff=10
+		set number
+		set relativenumber
 	endif
 endfunction
 
@@ -185,4 +176,34 @@ endfunction
 function! lib#AddPluginMapping(lhs, rhs)
 	let l:lhs = g:pluginleader.a:lhs
 	execute "nnoremap <silent> " l:lhs a:rhs
+endfunction
+
+"============================[ SplitWithoutNesting ]============================
+" When opening vim from within vim (eg, from a terminal split):
+" - open it as a split
+"	- set up numbering
+" - close the terminal
+"
+" (credit to justinmk)
+"===============================================================================
+function lib#SplitWithoutNesting()
+	if !empty($NVIM_LISTEN_ADDRESS) && $NVIM_LISTEN_ADDRESS !=# v:servername
+		" start a job with the source vim instance
+		let g:receiver = jobstart(['nc', '-U', $NVIM_LISTEN_ADDRESS], {'rpc': v:true})
+
+		" get the filename of the newly opened buffer
+		let g:filename = fnameescape(expand('%:p'))
+
+		" wipeout the buffer
+		noautocmd bwipeout
+
+		" open the buffer in the source vim instance
+		call rpcrequest(g:receiver, "nvim_command", "edit ".g:filename)
+
+		" set up numbering
+		call rpcrequest(g:receiver, "nvim_command", "call lib#SetNumberDisplay()")
+
+		" quit the "other" instance of vim
+		quitall
+	endif
 endfunction
