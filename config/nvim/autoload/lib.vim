@@ -162,8 +162,8 @@ function! lib#SetNumberDisplay()
 	let l:buffername = @%
 
 	if l:buffername =~ 'term://*'
-		set nonumber
-		set norelativenumber
+		setlocal nonumber
+		setlocal norelativenumber
 	else
 		set number
 		set relativenumber
@@ -181,7 +181,7 @@ endfunction
 "============================[ SplitWithoutNesting ]============================
 " When opening vim from within vim (eg, from a terminal split):
 " - open it as a split
-"	- set up numbering
+"	- call the autocommand that says we entered a window
 " - close the terminal
 "
 " (credit to justinmk)
@@ -200,8 +200,8 @@ function lib#SplitWithoutNesting()
 		" open the buffer in the source vim instance
 		call rpcrequest(g:receiver, "nvim_command", "edit ".g:filename)
 
-		" set up numbering
-		call rpcrequest(g:receiver, "nvim_command", "call lib#SetNumberDisplay()")
+		" call the autocommand to enter windows
+		call rpcrequest(g:receiver, "nvim_command", "doautocmd BufWinEnter")
 
 		" quit the "other" instance of vim
 		quitall
