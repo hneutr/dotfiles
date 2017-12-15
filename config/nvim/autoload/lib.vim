@@ -145,7 +145,7 @@ endfunction
 " Numbers should not show up in a terminal buffer, regardless of if that
 " buffer is in terminal mode or not.
 "===============================================================================
-function! lib#SetNumberDisplay
+function! lib#SetNumberDisplay()
 	if &buftype == 'terminal'
 		setlocal nonumber
 		setlocal norelativenumber
