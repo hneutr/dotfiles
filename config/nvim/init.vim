@@ -53,6 +53,3 @@ augroup END
 nnoremap <leader>w :echoerr "stop it you have autosave"<cr>
 " cabbrev w echoerr "stop it you have autosave"
 
-" when would I want to reindent a line with ^F _after_ '!'? bizzare.
-" delete until the end of word
-inoremap <c-f> <c-\><c-o>de

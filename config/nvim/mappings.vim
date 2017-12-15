@@ -63,6 +63,10 @@ nnoremap gV `[v`]
 " why would I want to delete only until the start of insert mode? why?
 inoremap <c-w> <c-\><c-o>db
 
+" when would I want to reindent a line with ^F _after_ '!'? bizzare.
+" delete until the end of word
+inoremap <c-f> <c-\><c-o>de
+
 " save the pinky
 inoremap jk <esc>
 inoremap jf <esc>
