@@ -52,4 +52,3 @@ augroup END
 " nnoremap <leader>w :w<cr>
 nnoremap <leader>w :echoerr "stop it you have autosave"<cr>
 " cabbrev w echoerr "stop it you have autosave"
-

@@ -74,19 +74,6 @@ function! lib#VisualSelection(direction, extra_filter) range
 	let @" = l:saved_reg
 endfunction
 
-" relative is a boolean indicating either
-" --> relativenumber (when true)
-" --> norelativenumber (when false)
-function! lib#NumberToggle(relative)
-	if (&number)
-		if (a:relative == 1)
-			set relativenumber
-		else
-			set norelativenumber
-		endif
-	endif
-endfunction
-
 function! lib#FoldDisplayText()                                                         
     let linecount = v:foldend - v:foldstart + 1
     let line = getline(v:foldstart)
@@ -158,10 +145,8 @@ endfunction
 " Numbers should not show up in a terminal buffer, regardless of if that
 " buffer is in terminal mode or not.
 "===============================================================================
-function! lib#SetNumberDisplay()
-	let l:buffername = @%
-
-	if l:buffername =~ 'term://*'
+function! lib#SetNumberDisplay
+	if &buftype == 'terminal'
 		setlocal nonumber
 		setlocal norelativenumber
 	else
