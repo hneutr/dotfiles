@@ -20,4 +20,5 @@ nvimux.config.set_all{
   quickterm_size = '80',
 }
 
+nvimux.bootstrap()
 EOF
