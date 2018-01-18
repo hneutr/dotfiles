@@ -1,3 +1,7 @@
 [user]
 	name = Hunter Wapman
 	email = hunter.wapman@gmail.com
+[credential]
+	helper = osxkeychain
+[core]
+	excludesfile = /Users/hne/.gitignore_global
