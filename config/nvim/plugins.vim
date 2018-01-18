@@ -27,13 +27,7 @@ Plug 'machakann/vim-sandwich'      " deal with pairs
 Plug 'tpope/vim-speeddating'       " smarter date logic
 Plug 'wellle/targets.vim'          " more text objects
 Plug 'reedes/vim-textobj-sentence' " improved sentence object
-
-"====================================[ tmux ]===================================
-" Plug 'christoomey/vim-tmux-navigator'     " move seamlessly between tmux/vim splits
-" Plug 'christoomey/vim-tmux-runner'        " rerun tests
-" Plug 'roxma/vim-tmux-clipboard'           " paste between vim windows across tmux
-" Plug 'tmux-plugins/vim-tmux-focus-events' " focus events for tmux+vim
-" Plug 'wellle/tmux-complete.vim'           " autocomplete across tmux panes
+Plug 'chaoren/vim-wordmotion'      " camelCaseMovements
 
 "==============================[ language support ]=============================
 Plug 'Glench/Vim-Jinja2-Syntax', { 'for' : 'jinja' }                     " jinja...
@@ -45,8 +39,9 @@ Plug 'w0rp/ale'                                                          " async
 Plug 'junegunn/goyo.vim' " distraction free + centered editing
 
 "==================================[ testing ]==================================
-Plug 'wellle/visual-split.vim' " opening specific-sized splits
-Plug 'hkupty/nvimux'           " tmux replacement
+Plug 'wellle/visual-split.vim'       " opening specific-sized splits
+Plug 'hneutr/nvimux'                 " tmux replacement
+Plug 'junegunn/vim-online-thesaurus' " thesaurus?
 
 call plug#end()
 

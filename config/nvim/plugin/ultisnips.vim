@@ -1,4 +1,4 @@
-call lib#AddPluginMapping('u', ':UltisnipsEdit<cr>')
+call lib#AddPluginMapping('u', ':UltiSnipsEdit<cr>')
 
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-f>"

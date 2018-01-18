@@ -81,6 +81,9 @@ set undodir=~/.config/nvim/undodir
 
 set undofile
 
+" make h/l wrap around lines
+" set whichwrap+=h,l
+
 " ignore file types in completion
 set wildignore+=.DS_Store,.git,*.tmp,*.swp,*.png,*.jpg,*.gif
 
@@ -100,13 +103,13 @@ set foldnestmax=1
 set foldtext=lib#FoldDisplayText()
 
 "================================[ indentation ]================================
-set smartindent
+set cindent
 
 set shiftwidth=4
 
 set softtabstop=4
 
-set tabstop=4
+set expandtab
 
 " if there are spaces when </>, round down
 set shiftround
