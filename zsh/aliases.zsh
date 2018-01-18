@@ -5,18 +5,20 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
 # ls
-alias lsa='ls -la'
+alias lsl='ls -l'
+alias lsla='ls -la'
 
 # vim
 alias vi="nvim"
 alias vim="nvim"
+# alias fvim='vim $(fzf -x)'
 
 # python
 alias python="python3"
 alias pip="pip3"
 
-# ag
-alias agl="ag -l"
+# rg
+alias rgl="rg -l"
 
 # git
 alias gs="git status"

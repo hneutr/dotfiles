@@ -1,10 +1,36 @@
 ################################################################################
+# Options
+################################################################################
+
+# show completions automatically
+setopt AUTO_LIST
+
+# remove extraneous blanks from history
+setopt HIST_REDUCE_BLANKS
+
+# add to history before shell exit
+setopt INC_APPEND_HISTORY
+
+# beep sucks
+setopt NO_BEEP
+
+# no beep for autocomplete
+setopt NO_LIST_BEEP
+
+# interactive prompt (changes on cd/etc)
+setopt PROMPT_SUBST
+
+# share history across shells
+setopt SHARE_HISTORY
+
+################################################################################
 # Exports
 ################################################################################
 
 export PATH=$PATH:/usr/local/bin
 export PATH=$PATH:/Users/hne/Library/Python/3.6/bin
 export PATH=$PATH:$HOME/.cargo/bin
+export PATH=$PATH:/Library/TeX/texbin
 
 export EDITOR=nvim
 
@@ -46,3 +72,9 @@ export FZF_ALT_C_COMMAND="bfs -type d -nohidden"
 
 # local settings
 [ -f ~/.zshrc_local ]      && source ~/.zshrc_local
+
+# open up a nvim terminal if it's not running
+# (would be sick but there's a weird shada error)
+# if ! [[ -v NVIM_LISTEN_ADDRESS ]]; then
+# 	nvim +term
+# fi
