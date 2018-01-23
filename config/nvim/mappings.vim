@@ -59,6 +59,9 @@ nnoremap <silent> K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 " select what was last pasted/visually selected
 nnoremap gV `[v`]
 
+" run last command easily
+nnoremap <leader>c :<c-p><cr>
+
 "================================[ insert mode ]================================
 " why would I want to delete only until the start of insert mode? why?
 inoremap <c-w> <c-\><c-o>db
@@ -112,6 +115,7 @@ inoremap _<tab> __<esc>i
 inoremap __<tab> ____<esc>hi
 inoremap *<tab> **<esc>i
 inoremap **<tab> ****<esc>hi
+inoremap $<tab> $$<esc>i
 
 "================================[ visual mode ]================================
 " unindent/indent
