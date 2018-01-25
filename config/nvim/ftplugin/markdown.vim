@@ -3,11 +3,11 @@
 set conceallevel=2
 set concealcursor="nvc"
 
-" wrap overlong lines (aka paragraphs)
-set wrap
-
 " break at words
 set linebreak
+
+" cindent isn't very useful in prose
+set nocindent
 
 "==================================[ mappings ]=================================
 " with markdown files I usually want to go to the end of the "visual" line,

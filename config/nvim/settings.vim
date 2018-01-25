@@ -91,6 +91,9 @@ set wildignorecase
 
 set wildmode=list:longest,full
 
+" visually wrap long lines
+set wrap
+
 "===================================[ folds ]===================================
 set nofoldenable
 
