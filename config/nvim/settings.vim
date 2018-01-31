@@ -81,9 +81,6 @@ set undodir=~/.config/nvim/undodir
 
 set undofile
 
-" make h/l wrap around lines
-" set whichwrap+=h,l
-
 " ignore file types in completion
 set wildignore+=.DS_Store,.git,*.tmp,*.swp,*.png,*.jpg,*.gif
 
@@ -95,6 +92,7 @@ set wildmode=list:longest,full
 set wrap
 
 "===================================[ folds ]===================================
+" turn off folds (for now at least)
 set nofoldenable
 
 set foldmethod=indent

@@ -62,6 +62,9 @@ nnoremap gV `[v`]
 " run last command easily
 nnoremap <leader>c :<c-p><cr>
 
+" restore cursor position after joining lines
+nnoremap J mjJ`j
+
 "================================[ insert mode ]================================
 " why would I want to delete only until the start of insert mode? why?
 inoremap <c-w> <c-\><c-o>db

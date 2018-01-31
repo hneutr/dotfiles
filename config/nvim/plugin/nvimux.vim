@@ -12,7 +12,6 @@ nvimux.bindings.bind_all{
 nvimux.config.set_all{
   prefix = '<C-Space>',
   open_term_by_default = true,
-  new_window_buffer = 'single',
   quickterm_direction = 'botright',
   quickterm_orientation = 'vertical',
   -- Use 'g' for global quickterm
@@ -21,4 +20,5 @@ nvimux.config.set_all{
 }
 
 nvimux.bootstrap()
+
 EOF
