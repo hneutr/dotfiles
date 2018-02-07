@@ -4,7 +4,7 @@ bindkey -s '^V' "fvim\n"
 # clear the screen
 bindkey '^X'    clear-screen
 
-# alt-. inserts last word
+# alt-.
 bindkey '\e.'   insert-last-word
 
 # use the contents of the current line to search forward/backward
@@ -18,5 +18,11 @@ bindkey '^E'    end-of-line
 
 bindkey '^D'    delete-char
 
-bindkey '\ef'   forward-word
-bindkey '\eb'   backward-word
+# alt-LeftArrow
+bindkey '^[[1;3D' backward-word
+# alt-RightArrow
+bindkey '^[[1;3C' forward-word
+
+if [ -z "$NVIM_LISTEN_ADDRESS" ]; then
+    bindkey -s '^T' "nvim -c 'terminal'\n"
+fi
