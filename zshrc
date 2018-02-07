@@ -5,12 +5,6 @@
 # show completions automatically
 setopt AUTO_LIST
 
-# remove extraneous blanks from history
-setopt HIST_REDUCE_BLANKS
-
-# add to history before shell exit
-setopt INC_APPEND_HISTORY
-
 # beep sucks
 setopt NO_BEEP
 
@@ -20,17 +14,15 @@ setopt NO_LIST_BEEP
 # interactive prompt (changes on cd/etc)
 setopt PROMPT_SUBST
 
-# share history across shells
-setopt SHARE_HISTORY
-
 ################################################################################
 # Exports
 ################################################################################
 
-export PATH=$PATH:/usr/local/bin
+export PATH=/usr/local/bin:$PATH
 export PATH=$PATH:/Users/hne/Library/Python/3.6/bin
 export PATH=$PATH:$HOME/.cargo/bin
 export PATH=$PATH:/Library/TeX/texbin
+export PATH=$PATH:/Users/hne/.bin
 
 export EDITOR=nvim
 
@@ -61,6 +53,9 @@ export FZF_ALT_C_COMMAND="bfs -type d -nohidden"
 # aliases
 [ -f ~/.zsh/aliases.zsh ]  && source ~/.zsh/aliases.zsh
 
+# history
+[ -f ~/.zsh/history.zsh ]  && source ~/.zsh/history.zsh
+
 # prompt
 [ -f ~/.zsh/prompt.zsh ]   && source ~/.zsh/prompt.zsh
 
@@ -78,3 +73,11 @@ export FZF_ALT_C_COMMAND="bfs -type d -nohidden"
 # if ! [[ -v NVIM_LISTEN_ADDRESS ]]; then
 # 	nvim +term
 # fi
+
+# testing
+# set it up so that neovim changes local working directory on cd
+# neovim_autocd() {
+#     [[ $NVIM_LISTEN_ADDRESS ]] && neovim-autocd.py
+# }
+
+# chpwd_functions+=( neovim_autocd )
