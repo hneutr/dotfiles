@@ -8,5 +8,4 @@ config/nvim/doc
 config/nvim/test
 config/configstore
 zplug/
-dotbot/
 tpm/

@@ -1,0 +1,8 @@
+fzf
+neovim
+pandoc
+reattach-to-user-namespace
+ripgrep
+tavianator/tap/bfs
+zplug
+zsh
