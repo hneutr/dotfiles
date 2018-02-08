@@ -2,17 +2,11 @@
 # Options
 ################################################################################
 
-# show completions automatically
-setopt AUTO_LIST
-
 # beep sucks
-setopt NO_BEEP
+setopt no_beep
 
 # no beep for autocomplete
-setopt NO_LIST_BEEP
-
-# interactive prompt (changes on cd/etc)
-setopt PROMPT_SUBST
+setopt no_list_beep
 
 ################################################################################
 # Exports
@@ -38,35 +32,42 @@ export FZF_ALT_C_COMMAND="bfs -type d -nohidden"
 ################################################################################
 
 # load plugins
-[ -f ~/.zsh/zplug.zsh ]    && source ~/.zsh/zplug.zsh
+[ -f ~/.zsh/zplug.zsh ] && source ~/.zsh/zplug.zsh
 
 # set up fzf
-[ -f ~/.fzf.zsh ]          && source ~/.fzf.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 ################################################################################
 # General
 ################################################################################
 
 # colors
-[ -f ~/.zsh/colors.zsh ]   && source ~/.zsh/colors.zsh
+[ -f ~/.zsh/colors.zsh ] && source ~/.zsh/colors.zsh
 
 # aliases
-[ -f ~/.zsh/aliases.zsh ]  && source ~/.zsh/aliases.zsh
+[ -f ~/.zsh/aliases.zsh ] && source ~/.zsh/aliases.zsh
 
 # history
-[ -f ~/.zsh/history.zsh ]  && source ~/.zsh/history.zsh
+[ -f ~/.zsh/history.zsh ] && source ~/.zsh/history.zsh
 
 # prompt
-[ -f ~/.zsh/prompt.zsh ]   && source ~/.zsh/prompt.zsh
+[ -f ~/.zsh/prompt.zsh ] && source ~/.zsh/prompt.zsh
 
 # bindings
 [ -f ~/.zsh/bindings.zsh ] && source ~/.zsh/bindings.zsh
 
+# completion
+[ -f ~/.zsh/completion.zsh ] && source ~/.zsh/completion.zsh
+
 # commands/lib
-[ -f ~/.zsh/lib.zsh ]      && source ~/.zsh/lib.zsh
+[ -f ~/.zsh/lib.zsh ] && source ~/.zsh/lib.zsh
 
 # local settings
-[ -f ~/.zshrc_local ]      && source ~/.zshrc_local
+[ -f ~/.zshrc_local ] && source ~/.zshrc_local
+
+################################################################################
+# Testing
+################################################################################
 
 # open up a nvim terminal if it's not running
 # (would be sick but there's a weird shada error)

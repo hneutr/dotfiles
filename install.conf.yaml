@@ -6,11 +6,10 @@
 - clean: ['~']
 
 - link:
+    ~/.bin: bin
     ~/.dotfiles: ''
     ~/.gitconfig:
-    ~/.tmux.conf:
     ~/.config:
-    ~/.tmux/plugins/tpm: tpm
     ~/.zshrc: zshrc
     ~/.zsh: zsh
     ~/.zplug:
