@@ -24,8 +24,8 @@ export EDITOR=nvim
 export KEYTIMEOUT=1
 
 # stupid fzf wouldn't search my documents directory
-[[ -z $(which rg) ]] && export FZF_DEFAULT_COMMAND='rg --files'
-[[ -z $(which bfs) ]] && export FZF_ALT_C_COMMAND="bfs -type d -nohidden"  
+[[ ! -z $(which rg) ]] && export FZF_DEFAULT_COMMAND='rg --files'
+[[ ! -z $(which bfs) ]] && export FZF_ALT_C_COMMAND="bfs -type d -nohidden"  
 
 ################################################################################
 # Plugin Setup
