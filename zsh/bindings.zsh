@@ -24,5 +24,5 @@ bindkey '^[[1;3D' backward-word
 bindkey '^[[1;3C' forward-word
 
 if [ -z "$NVIM_LISTEN_ADDRESS" ]; then
-    bindkey -s '^T' "nvim -c 'terminal'\n"
+    bindkey -s '^T' "nvim -c 'TwoVerticalTerminals'\n"
 fi

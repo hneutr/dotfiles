@@ -32,6 +32,9 @@ set inccommand=nosplit
 " redraw less
 set lazyredraw
 
+" break at words
+set linebreak
+
 set nocursorline
 
 set noerrorbells
@@ -67,6 +70,9 @@ set statusline=%.100F
 set statusline+=%=
 " ----> column
 set statusline+=%c
+
+" 80 is nice
+set textwidth=80
 
 " make ~ an operator
 set tildeop	

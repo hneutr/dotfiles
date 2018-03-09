@@ -199,3 +199,14 @@ function lib#SplitWithoutNesting()
         quitall
     endif
 endfunction
+
+"============================[ TwoVerticalTerminals ]===========================
+" Opens two vertical terminals
+" I use this from the shell
+"===============================================================================
+function! lib#TwoVerticalTerminals()
+    execute "silent! terminal"
+    execute "silent! <esc>"
+    execute "silent! vsplit"
+    execute "silent! terminal"
+endfunction
