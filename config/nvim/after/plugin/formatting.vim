@@ -1,14 +1,26 @@
 augroup formatting
     autocmd!
 
-    " continue comments on <cr>
-    autocmd FileType * setlocal formatoptions+=r
+    " reset formatting options
+    autocmd FileType * setlocal formatoptions=
+
+    " don't autoformat long lines in insert mode
+    autocmd FileType * setlocal formatoptions+=l
+
+    " allow formatting of comments with gq
+    autocmd FileType * setlocal formatoptions+=q
+
+    " remove comment leader when joining lines
+    autocmd FileType * setlocal formatoptions+=j
 
     " recognize numbered lists and wrap accordingly
     autocmd FileType * setlocal formatoptions+=n
 
-    " don't continue comments on o/O
-    autocmd FileType * setlocal formatoptions-=o
+    " continue comments on <cr>
+    autocmd FileType * setlocal formatoptions+=r
+
+    " continue comments on o/O
+    autocmd FileType * setlocal formatoptions+=o
 
     " autowrap comments
     autocmd FileType * setlocal formatoptions+=c

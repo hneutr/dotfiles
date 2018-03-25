@@ -39,6 +39,9 @@ set nocursorline
 
 set noerrorbells
 
+" don't move to start of line for some commands
+set nostartofline
+
 " don't clutter with .swp files
 set noswapfile
 
@@ -110,6 +113,9 @@ set foldnestmax=1
 set foldtext=lib#FoldDisplayText()
 
 "================================[ indentation ]================================
+" I like my comments to autowrap
+set autoindent
+
 set cindent
 
 set shiftwidth=4
