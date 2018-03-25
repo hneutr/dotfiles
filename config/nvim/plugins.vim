@@ -42,7 +42,7 @@ Plug 'junegunn/goyo.vim' " distraction free + centered editing
 Plug 'wellle/visual-split.vim'       " opening specific-sized splits
 Plug 'hneutr/nvimux'                 " tmux replacement
 Plug 'junegunn/vim-online-thesaurus' " thesaurus?
-Plug 'Osse/double-tap'               " annoying comments are annoying
+Plug 'hneutr/double-tap'             " annoying comments are annoying
 
 call plug#end()
 
