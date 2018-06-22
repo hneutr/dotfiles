@@ -13,10 +13,7 @@ setopt no_list_beep
 ################################################################################
 
 export PATH=/usr/local/bin:$PATH
-export PATH=$PATH:/Users/hne/Library/Python/3.6/bin
 export PATH=$PATH:$HOME/.cargo/bin
-export PATH=$PATH:/Library/TeX/texbin
-export PATH=$PATH:/Users/hne/.bin
 
 export EDITOR=nvim
 

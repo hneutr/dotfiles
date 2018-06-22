@@ -13,6 +13,8 @@ Don't reimplement something you don't want to turn into a personal project.
 - nvim:
     - do:
         - add in 'find to last in line' for f/F/t/T
+        - make it so that <tab> in insert mode in md files indents when in a list and there are no other characters
+            - same thing for <shift-tab>
     - learn:
         - matchpairs
         - text-objects

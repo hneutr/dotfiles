@@ -7,6 +7,8 @@ alias .....='cd ../../../..'
 # ls
 alias lsl='ls -l'
 alias lsla='ls -la'
+alias lsf='ls -p | grep -v /'
+alias lsfa='ls -pa | grep -v /'
 
 # vim
 alias vi="nvim"
