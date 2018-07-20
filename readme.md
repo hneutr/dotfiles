@@ -1,8 +1,9 @@
 # dotfiles
-Repeated actions should be easy.
-Be consistent.
-Name things reasonably.
-Don't reimplement something you don't want to turn into a personal project.
+- make repeated actions easy
+- be consistent
+- use clear names
+- don't abbreviate
+- don't reimplement what you don't want to make into a project
 
 # Tools:
 - nvim
