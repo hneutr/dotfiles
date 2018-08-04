@@ -188,4 +188,3 @@ endfunction
 
 " the fuck, why is my cwd not being set
 execute "chdir $PWD"
-"

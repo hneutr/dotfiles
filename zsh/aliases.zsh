@@ -13,7 +13,7 @@ alias lsfa='ls -pa | grep -v /'
 # vim
 alias vi="nvim"
 alias vim="nvim"
-# alias fvim='vim $(fzf -x)'
+alias gv="nvim -c 'Goyo' "
 
 # python
 alias python="python3"

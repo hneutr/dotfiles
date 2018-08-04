@@ -65,17 +65,3 @@ export KEYTIMEOUT=1
 ################################################################################
 # Testing
 ################################################################################
-
-# open up a nvim terminal if it's not running
-# (would be sick but there's a weird shada error)
-# if ! [[ -v NVIM_LISTEN_ADDRESS ]]; then
-# 	nvim +term
-# fi
-
-# testing
-# set it up so that neovim changes local working directory on cd
-# neovim_autocd() {
-#     [[ $NVIM_LISTEN_ADDRESS ]] && neovim-autocd.py
-# }
-
-# chpwd_functions+=( neovim_autocd )
