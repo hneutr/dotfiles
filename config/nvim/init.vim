@@ -49,30 +49,6 @@ augroup easy_close
 	" autocmd FileType help,qf nnoremap <buffer> <cr> <cr>
 augroup END
 
-" nnoremap <leader>w :w<cr>
-nnoremap <leader>w :echoerr "stop it you have autosave"<cr>
-" cabbrev w echoerr "stop it you have autosave"
-
-" testing python....... to get the cwd of a terminal buffer...
-" function! TestingCWD()
-" " from neovim import attach
-" python3 << EOF
-" import os
-" os.environ['HNENE'] = os.getcwd()
-" EOF
-" " nvim = attach('socket', path=os.environ['NVIM_LISTEN_ADDRESS'])
-" " nvim.command("let actual_cwd = %s" % os.getcwd())
-" endfunction
-
-" function! Test()
-"     if exists(g:__autocd_cwd)
-"         execute "lcd" fnameescape(g:__autocd_cwd)
-"         unlet g:__autocd_cwd
-"     endif
-" endfunction
-
-" autocmd User * Test()
-
 " testing mapping of <c-t>
 " nnoremap <c-t> :terminal<cr>
 
@@ -188,3 +164,6 @@ endfunction
 
 " the fuck, why is my cwd not being set
 execute "chdir $PWD"
+
+" open file at last point
+autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif

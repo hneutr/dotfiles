@@ -25,7 +25,7 @@ function! lib#ModifyLineEndDelimiter(character)
             " delete the character that matches:
 
             " reverse the line so that the last instance of the character on the
-            " line is the first instance
+            " line is the first character
             let newline = join(reverse(split(line, '.\zs')), '')
 
             " delete the instance of the character
