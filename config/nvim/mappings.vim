@@ -68,6 +68,8 @@ nnoremap J mjJ`j
 " quit with an arpeggiation (save the pinky)
 nnoremap <leader>q :q<cr>
 
+" switch buffers with tab
+nnoremap <tab> :bn<cr>
 "================================[ insert mode ]================================
 " why would I want to delete only until the start of insert mode? why?
 inoremap <c-w> <c-\><c-o>db

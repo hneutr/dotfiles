@@ -2,3 +2,13 @@ snippet die "die statement"
 import sys
 sys.exit()
 endsnippet
+
+snippet file "open a file for reading or writing"
+with open("$1", "$2") as f:
+    $3
+endsnippet
+
+snippet main "write the boilerplate for a main"
+if __name__ == '__main__':
+    $1
+endsnippet
