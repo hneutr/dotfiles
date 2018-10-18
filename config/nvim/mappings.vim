@@ -68,6 +68,9 @@ nnoremap J mjJ`j
 " quit with an arpeggiation (save the pinky)
 nnoremap <leader>q :q<cr>
 
+" kill the buffer with an arpeggiation (stp)
+nnoremap <silent> <leader>k :call lib#KillBufferAndGoToNext()<cr>
+
 " switch buffers with tab
 nnoremap <tab> :bn<cr>
 "================================[ insert mode ]================================

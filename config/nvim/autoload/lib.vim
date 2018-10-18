@@ -210,3 +210,15 @@ function! lib#TwoVerticalTerminals()
     execute "silent! vsplit"
     execute "silent! terminal"
 endfunction
+
+"===========================[ KillBufferAndGoToNext ]===========================
+" does what it says, in a specific order so that Goyo works:
+" 1. get current buffer's number
+" 2. :bnext
+" 3. :bdelete that the previous buffer number
+"===============================================================================
+function! lib#KillBufferAndGoToNext()
+    let l:buffer_number = bufnr('%')
+    silent! execute ":bnext"
+    silent! execute ":bdelete " . l:buffer_number
+endfunction

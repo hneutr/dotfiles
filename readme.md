@@ -13,13 +13,10 @@
 ## Todos:
 - nvim:
     - do:
-        - add in 'find to last in line' for f/F/t/T
+        - make "left-operators" all inclusive
+            - eg "dvb"
         - make it so that <tab> in insert mode in md files indents when in a list and there are no other characters
             - same thing for <shift-tab>
-    - learn:
-        - matchpairs
-        - text-objects
-        - viminfo settings?
     - writing:
         - learn about 'spell'
             - how to add words
@@ -31,8 +28,6 @@
 - zsh:
     - fix function loading so I can use 'settex' from within vim
     - fix `fvim` command so that it outputs last line to commandline for repetition
-- meta:
-    - make 'bootstrap.zsh' or something and get rid of dotbot because it's overkill
 
 ### terminal problems exploration
 a running list of things that are annoying about not using tmux:

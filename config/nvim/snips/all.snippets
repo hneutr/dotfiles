@@ -22,3 +22,14 @@ now = datetime.now()
 snip.rv = "%d%d%d" % (now.year, now.month, now.day)
 `
 endsnippet
+
+snippet td "output sysdate in yyyymmdd format (the best format)"
+`!p
+from datetime import datetime
+now = datetime.now()
+day = str(now.day)
+if len(day) == 1:
+    day = f"0{day}"
+snip.rv = "%s%s%s " % (now.year, now.month, day)
+`
+endsnippet
