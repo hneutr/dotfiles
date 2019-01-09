@@ -71,8 +71,9 @@ nnoremap <leader>q :q<cr>
 " kill the buffer with an arpeggiation (stp)
 nnoremap <silent> <leader>k :call lib#KillBufferAndGoToNext()<cr>
 
-" switch buffers with tab
+" switch buffers with tab/s-tab
 nnoremap <tab> :bn<cr>
+nnoremap <s-tab> :bp<cr>
 "================================[ insert mode ]================================
 " why would I want to delete only until the start of insert mode? why?
 inoremap <c-w> <c-\><c-o>db

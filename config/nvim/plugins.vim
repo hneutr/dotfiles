@@ -22,11 +22,8 @@ Plug 'vim-scripts/ReplaceWithRegister' " (without overwriting)
 Plug 'zirrostig/vim-schlepp'           " move things up and down
 
 "============================[ text editing/objects ]===========================
-Plug 'AndrewRadev/splitjoin.vim'   " join/split lines
 Plug 'machakann/vim-sandwich'      " deal with pairs
-Plug 'tpope/vim-speeddating'       " smarter date logic
 Plug 'wellle/targets.vim'          " more text objects
-Plug 'reedes/vim-textobj-sentence' " improved sentence object
 Plug 'chaoren/vim-wordmotion'      " camelCaseMovements
 
 "==============================[ language support ]=============================
@@ -43,6 +40,8 @@ Plug 'wellle/visual-split.vim'       " opening specific-sized splits
 Plug 'hneutr/nvimux'                 " tmux replacement
 Plug 'junegunn/vim-online-thesaurus' " thesaurus?
 Plug 'hneutr/double-tap'             " annoying comments are annoying
+
+Plug 'romainl/vim-cool'             " annoying comments are annoying
 
 call plug#end()
 

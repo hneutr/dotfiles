@@ -13,6 +13,7 @@ setopt no_list_beep
 ################################################################################
 
 export PATH=/usr/local/bin:$PATH
+export PATH=/usr/local/bin/python:$PATH
 export PATH=$PATH:$HOME/.cargo/bin
 
 export EDITOR=nvim
@@ -21,8 +22,9 @@ export EDITOR=nvim
 export KEYTIMEOUT=1
 
 # stupid fzf wouldn't search my documents directory
-[[ ! -z $(which rg) ]] && export FZF_DEFAULT_COMMAND='rg --files'
-[[ ! -z $(which bfs) ]] && export FZF_ALT_C_COMMAND="bfs -type d -nohidden"  
+[[ ! -z $(which rg) ]] && export FZF_DEFAULT_COMMAND='rg --files --hidden'
+[[ ! -z $(which bfs) ]] && export FZF_ALT_C_COMMAND="bfs -type d -nohidden"  # maybe -hidden?
+# [[ ! -z $(which blsd) ]] && export FZF_ALT_C_COMMAND='blsd'
 
 ################################################################################
 # Plugin Setup
