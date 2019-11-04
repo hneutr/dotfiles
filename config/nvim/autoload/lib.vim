@@ -12,12 +12,13 @@
 " Delimiters:
 " - ","
 " - ";"
+" - ":"
 "==========================================
 function! lib#ModifyLineEndDelimiter(character)
     let line_modified = 0
     let line = getline('.')
 
-    for character in [',', ';']
+    for character in [',', ';', ':']
         " check if the line ends in a trailing character
         if line =~ character . '$'
             let line_modified = 1

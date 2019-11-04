@@ -78,7 +78,7 @@ set statusline+=%c
 set textwidth=80
 
 " make ~ an operator
-set tildeop	
+" set tildeop	
 
 " extend mapping timeout time
 set timeoutlen=1000

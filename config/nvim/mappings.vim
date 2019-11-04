@@ -98,38 +98,38 @@ inoremap <c-l>  <c-t>
 
 " " close various structures automatically
 " " newline triggered
-" inoremap (<cr> (<cr>)<esc>O
-" inoremap [<cr> [<cr>]<esc>O
-" inoremap {<cr> {<cr>}<esc>O
-" inoremap <<cr> <<cr>><esc>O
-" inoremap """<cr> """<cr>"""<esc>O
+inoremap (<cr> (<cr>)<esc>O
+inoremap [<cr> [<cr>]<esc>O
+inoremap {<cr> {<cr>}<esc>O
+inoremap <<cr> <<cr>><esc>O
+inoremap """<cr> """<cr>"""<esc>O
 
 " " semicolon triggered
-" inoremap (; ();<esc>hi
-" inoremap [; [];<esc>hi
-" inoremap {; {};<esc>hi
+inoremap (; ();<esc>hi
+inoremap [; [];<esc>hi
+inoremap {; {};<esc>hi
 
 " " comma triggered
-" inoremap (, (),<esc>hi
-" inoremap {, {},<esc>hi
-" inoremap [, [],<esc>hi
-" inoremap ', '',<esc>hi
-" inoremap ", "",<esc>hi
-" inoremap `, ``,<esc>hi
+inoremap (, (),<esc>hi
+inoremap {, {},<esc>hi
+inoremap [, [],<esc>hi
+inoremap ', '',<esc>hi
+inoremap ", "",<esc>hi
+inoremap `, ``,<esc>hi
 
 " " tab triggered
-" inoremap (<tab> ()<esc>i
-" inoremap [<tab> []<esc>i
-" inoremap {<tab> {}<esc>i
-" inoremap <<tab> <><esc>i
-" inoremap '<tab> ''<esc>i
-" inoremap "<tab> ""<esc>i
-" inoremap `<tab> ``<esc>i
-" inoremap _<tab> __<esc>i
-" inoremap __<tab> ____<esc>hi
-" inoremap *<tab> **<esc>i
-" inoremap **<tab> ****<esc>hi
-" inoremap $<tab> $$<esc>i
+inoremap (<tab> ()<esc>i
+inoremap [<tab> []<esc>i
+inoremap {<tab> {}<esc>i
+inoremap <<tab> <><esc>i
+inoremap '<tab> ''<esc>i
+inoremap "<tab> ""<esc>i
+inoremap `<tab> ``<esc>i
+inoremap _<tab> __<esc>i
+inoremap __<tab> ____<esc>hi
+inoremap *<tab> **<esc>i
+inoremap **<tab> ****<esc>hi
+inoremap $<tab> $$<esc>i
 
 "================================[ visual mode ]================================
 " unindent/indent
