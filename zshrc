@@ -24,7 +24,6 @@ export KEYTIMEOUT=1
 # stupid fzf wouldn't search my documents directory
 [[ ! -z $(which rg) ]] && export FZF_DEFAULT_COMMAND='rg --files --hidden'
 [[ ! -z $(which bfs) ]] && export FZF_ALT_C_COMMAND="bfs -type d -nohidden"  # maybe -hidden?
-# [[ ! -z $(which blsd) ]] && export FZF_ALT_C_COMMAND='blsd'
 
 ################################################################################
 # Plugin Setup
@@ -64,6 +63,16 @@ export KEYTIMEOUT=1
 # local settings
 [ -f ~/.zshrc_local ] && source ~/.zshrc_local
 
+# hook direnv into zsh
+eval "$(direnv hook zsh)"
+export DIRENV_LOG_FORMAT=""
+
 ################################################################################
 # Testing
 ################################################################################
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/hne/Desktop/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/hne/Desktop/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/hne/Desktop/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/hne/Desktop/google-cloud-sdk/completion.zsh.inc'; fi

@@ -1,0 +1,11 @@
+2019-09-01 13:01:06,210 DEBUG    root            Loaded Command Group: [u'gcloud', u'auth']
+2019-09-01 13:01:06,213 DEBUG    root            Loaded Command Group: [u'gcloud', u'auth', u'application_default']
+2019-09-01 13:01:06,221 DEBUG    root            Loaded Command Group: [u'gcloud', u'auth', u'application-default', u'print_access_token']
+2019-09-01 13:01:06,224 DEBUG    root            Running [gcloud.auth.application-default.print-access-token] with arguments: []
+2019-09-01 13:01:06,403 DEBUG    oauth2client.crypt ['eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjU1ZWEyNDg1M2E3ZDVmYzczMGRmYjlkMzFkMGMxZTI4ODk1MWJhYWUifQ', 'eyJpc3MiOiJzdGFydGluZy1hY2NvdW50LTg2aWx6aWJyNWUyZ0Bib3NjaGRvYy0xNTY3Mjc1MjEwNzMxLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwic2NvcGUiOiJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9hdXRoL2Nsb3VkLXBsYXRmb3JtIiwiYXVkIjoiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vb2F1dGgyL3Y0L3Rva2VuIiwiZXhwIjoxNTY3MzY4MDY2LCJpYXQiOjE1NjczNjQ0NjZ9', 'Q2KblYv2hSlMyqJY5ZfcXxzMk6pSB3Ew2Puq8lZzgkzNrSsXK2HGI55LC2IYbd3YZN8Mjf4eV3L_Hna12CbVQfFvLgYg3nEOL1TZjU8EgasZGBLBZBUKnnG5Kb6sYztHKGHpBYWAc9R0S45BCjh2KSllXB_t7kVGOSUjmWOFDTt6FFjo2JmWvxX8DcQw5srLdthqCUGp074bJD2NWjF0pESY31cZ3SHkvfGZ8jzEqDLALVG_uHn4XNmdf4upIi211O-oMQLzFN-hHD06-LP3MSwdJjh7AVVsEK5ROTqKxAFdIiHFa8JNnnM5lKiBzZbVqnKkYvVmfoa4kl3UW-CYjA']
+2019-09-01 13:01:06,403 INFO     oauth2client.client Refreshing access_token
+2019-09-01 13:01:06,548 INFO     root            Display format: "value(access_token)"
+2019-09-01 13:01:06,549 INFO     ___FILE_ONLY___ ya29.c.Elp2B35euuhq825GOCRlL4e-0zVG4naRvB3rrwrqmmlw9wEpPyI6YwDSUaLPoHFKaAmKDtr9EEAYuUN1J64IwA5M4x7BWQXkmbCFlkKTgIsSAFjj6ZjyN36_GoM
+
+2019-09-01 13:01:06,550 DEBUG    root            Checking for updates...
+2019-09-01 13:01:06,728 DEBUG    root            Updating notification cache...

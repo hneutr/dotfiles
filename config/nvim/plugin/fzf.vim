@@ -15,3 +15,26 @@ augroup user:autocmd:fzf
 	au TermOpen term://*FZF tnoremap <silent> <buffer> <nowait> <c-j> <c-x>
 	au TermOpen term://*FZF tnoremap <silent> <buffer> <nowait> <c-l> <c-v>
 augroup END
+
+let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+
+function! FloatingFZF()
+  let buf = nvim_create_buf(v:false, v:true)
+  call setbufvar(buf, '&signcolumn', 'no')
+
+  let height = float2nr(10)
+  let width = float2nr(80)
+  let horizontal = float2nr((&columns - width) / 2)
+  let vertical = float2nr((&lines - height) / 2)
+
+  let opts = {
+        \ 'relative': 'editor',
+        \ 'row': vertical,
+        \ 'col': horizontal,
+        \ 'width': width,
+        \ 'height': height,
+        \ 'style': 'minimal'
+        \ }
+
+  call nvim_open_win(buf, v:true, opts)
+endfunction
