@@ -60,7 +60,7 @@ function! s:GetJumps()
     redir END
 
     " The first line contains the header.
-    let l:jumps = split(l:raw_jumps, "\n")[1:] 
+    let l:jumps = split(l:raw_jumps, "\n")[1:]
 
     let l:parsed = []
     for l:line in l:jumps

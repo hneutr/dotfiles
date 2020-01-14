@@ -14,6 +14,7 @@ alias lsfa='ls -pa | grep -v /'
 alias vi="nvim"
 alias vim="nvim"
 alias gv="nvim -c 'Goyo' "
+alias gvt="nvim -c 'Goyo' text.md"
 
 # python
 alias python="python3"
@@ -34,4 +35,4 @@ alias gs="git status"
 [[ ! -z $(which fd) ]] && alias find='fd'
 
 # bat
-[[ ! -z $(which bat) ]] && alias cat='bat'
+# [[ ! -z $(which bat) ]] && alias cat='bat'

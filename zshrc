@@ -76,3 +76,5 @@ if [ -f '/Users/hne/Desktop/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/hne
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/hne/Desktop/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/hne/Desktop/google-cloud-sdk/completion.zsh.inc'; fi
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:/usr/local/lib/fst
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:/usr/local/lib/fst

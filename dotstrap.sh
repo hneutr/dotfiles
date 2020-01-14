@@ -8,7 +8,10 @@ declare -a dots=(
     "zplug"
     "zsh"
     "zshrc"
+    "zshenv"
 )
+
+export DOTFILES=$HOME/dotfiles
 
 # symlink them
 for dot in "${dots[@]}"; do

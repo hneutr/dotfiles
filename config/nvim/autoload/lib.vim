@@ -223,3 +223,16 @@ function! lib#KillBufferAndGoToNext()
     silent! execute ":bnext"
     silent! execute ":bdelete " . l:buffer_number
 endfunction
+
+"==============================[ StripWhitespace ]==============================
+" does what it says
+"===============================================================================
+function lib#StripWhitespace() range
+  let @/='\v(\s+$)|( +\ze\t)'
+  let oldhlsearch = &hlsearch
+  let &hlsearch = 1
+  %s/\s\+$//e
+  " execute a:firstline.",".a:lastline."substitute ///gec"
+  let &hlsearch = oldhlsearch
+endfunction
+

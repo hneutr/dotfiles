@@ -4,12 +4,6 @@ let maplocalleader = "\<space>"
 let g:pluginleader = "<leader>d"
 
 "================================[ normal mode ]================================
-" alias of "verticalsplit" (for consistency with tmux)
-nnoremap <c-w>1 <c-w>H
-
-" alias of "split" (for consistency with tmux)
-nnoremap <c-w>2 <c-w>K
-
 " swap */# (match _W_ord) and g*/g# (match _w_ord)
 nnoremap * g*
 nnoremap g* *
@@ -21,9 +15,6 @@ nnoremap Q @q
 
 " yank to end of line (match C/D)
 nnoremap Y y$
-
-" change case of character under cursor
-nnoremap ~~ ~l
 
 " stop highlighting searched terms
 nnoremap <silent> <leader><space> :nohlsearch<cr>
@@ -49,9 +40,6 @@ nnoremap <space>h ^
 " Conditionally modify character at end of line
 nnoremap <silent> <leader>, :call lib#ModifyLineEndDelimiter(',')<cr>
 nnoremap <silent> <leader>; :call lib#ModifyLineEndDelimiter(';')<cr>
-
-" search files more easily
-nnoremap \ :Ag<SPACE>
 
 " grep for current word
 nnoremap <silent> K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
@@ -98,38 +86,38 @@ inoremap <c-l>  <c-t>
 
 " " close various structures automatically
 " " newline triggered
-inoremap (<cr> (<cr>)<esc>O
-inoremap [<cr> [<cr>]<esc>O
-inoremap {<cr> {<cr>}<esc>O
-inoremap <<cr> <<cr>><esc>O
-inoremap """<cr> """<cr>"""<esc>O
+" inoremap (<cr> (<cr>)<esc>O
+" inoremap [<cr> [<cr>]<esc>O
+" inoremap {<cr> {<cr>}<esc>O
+" inoremap <<cr> <<cr>><esc>O
+" inoremap """<cr> """<cr>"""<esc>O
 
 " " semicolon triggered
-inoremap (; ();<esc>hi
-inoremap [; [];<esc>hi
-inoremap {; {};<esc>hi
+" inoremap (; ();<esc>hi
+" inoremap [; [];<esc>hi
+" inoremap {; {};<esc>hi
 
 " " comma triggered
-inoremap (, (),<esc>hi
-inoremap {, {},<esc>hi
-inoremap [, [],<esc>hi
-inoremap ', '',<esc>hi
-inoremap ", "",<esc>hi
-inoremap `, ``,<esc>hi
+" inoremap (, (),<esc>hi
+" inoremap {, {},<esc>hi
+" inoremap [, [],<esc>hi
+" inoremap ', '',<esc>hi
+" inoremap ", "",<esc>hi
+" inoremap `, ``,<esc>hi
 
 " " tab triggered
-inoremap (<tab> ()<esc>i
-inoremap [<tab> []<esc>i
-inoremap {<tab> {}<esc>i
-inoremap <<tab> <><esc>i
-inoremap '<tab> ''<esc>i
-inoremap "<tab> ""<esc>i
-inoremap `<tab> ``<esc>i
-inoremap _<tab> __<esc>i
+" inoremap (<tab> ()<esc>i
+" inoremap [<tab> []<esc>i
+" inoremap {<tab> {}<esc>i
+" inoremap <<tab> <><esc>i
+" inoremap '<tab> ''<esc>i
+" inoremap "<tab> ""<esc>i
+" inoremap `<tab> ``<esc>i
+" inoremap _<tab> __<esc>i
 inoremap __<tab> ____<esc>hi
-inoremap *<tab> **<esc>i
-inoremap **<tab> ****<esc>hi
-inoremap $<tab> $$<esc>i
+" inoremap *<tab> **<esc>i
+" inoremap **<tab> ****<esc>hi
+" inoremap $<tab> $$<esc>i
 
 "================================[ visual mode ]================================
 " unindent/indent

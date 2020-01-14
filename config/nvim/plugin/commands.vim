@@ -11,3 +11,5 @@ command! -nargs=0 TermHorizontalSplit spl|term
 command! -nargs=0 TermTab tabnew|term
 
 command! -nargs=0 TwoVerticalTerminals call lib#TwoVerticalTerminals()
+
+command -bar -nargs=0 -range=% StripWhitespace <line1>,<line2>call lib#StripWhitespace()
