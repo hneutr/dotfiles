@@ -34,6 +34,8 @@ endif
 "===============================================================================
 "==================================[ testing ]==================================
 "===============================================================================
+let g:python3_host_prog = '/usr/local/bin/python3'
+
 " lookup whichwrap
 " make h/l move across beginning/end of line
 " set whichwrap+=hl
@@ -167,3 +169,5 @@ execute "chdir $PWD"
 
 " open file at last point
 autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+
+set updatetime=300

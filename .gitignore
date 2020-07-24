@@ -9,3 +9,4 @@ config/nvim/test
 config/configstore
 zplug/
 tpm/
+config/coc/extensions/node_modules

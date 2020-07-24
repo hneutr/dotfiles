@@ -22,3 +22,8 @@ nnoremap $ g$
 
 nnoremap <leader>h g^
 nnoremap <leader>l g$
+
+"==================================[ plugins ]==================================
+silent! execute "CocDisable"
+
+let g:vim_markdown_no_default_key_mappings = 1

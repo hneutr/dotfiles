@@ -16,7 +16,6 @@ alias vim="nvim"
 alias gv="nvim -c 'Goyo' "
 alias gvt="nvim -c 'Goyo' text.md"
 
-# python
 alias python="python3"
 alias pip="pip3"
 
@@ -36,3 +35,5 @@ alias gs="git status"
 
 # bat
 # [[ ! -z $(which bat) ]] && alias cat='bat'
+
+alias po="popen"

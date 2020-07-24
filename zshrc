@@ -14,6 +14,7 @@ setopt no_list_beep
 
 export PATH=/usr/local/bin:$PATH
 export PATH=/usr/local/bin/python:$PATH
+export PATH=$HOME/bin:$PATH
 export PATH=$PATH:$HOME/.cargo/bin
 
 export EDITOR=nvim
@@ -70,6 +71,11 @@ export DIRENV_LOG_FORMAT=""
 ################################################################################
 # Testing
 ################################################################################
+cd_and_venv
+
+function chpwd {
+  cd_and_venv
+}
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/hne/Desktop/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/hne/Desktop/google-cloud-sdk/path.zsh.inc'; fi
@@ -78,3 +84,8 @@ if [ -f '/Users/hne/Desktop/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/hne
 if [ -f '/Users/hne/Desktop/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/hne/Desktop/google-cloud-sdk/completion.zsh.inc'; fi
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:/usr/local/lib/fst
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:/usr/local/lib/fst
+
+export XDG_CONFIG_HOME=$HOME/.config
+export MPLCONFIGDIR=$XDG_CONFIG_HOME/matplotlib
+
+# alias python=/usr/local/bin/python

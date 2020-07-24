@@ -30,7 +30,8 @@ Plug 'chaoren/vim-wordmotion'      " camelCaseMovements
 Plug 'Glench/Vim-Jinja2-Syntax', { 'for' : 'jinja' }                     " jinja...
 Plug 'autozimu/LanguageClient-neovim', { 'do' : ':UpdateRemotePlugins' } " LSP
 Plug 'sheerun/vim-polyglot'                                              " many languages
-Plug 'dense-analysis/ale'                                                " asynchronous lint engine
+" Plug 'dense-analysis/ale'                                                " asynchronous lint engine
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 "==================================[ writing ]==================================
 Plug 'junegunn/goyo.vim' " distraction free + centered editing
@@ -40,10 +41,11 @@ Plug 'wellle/visual-split.vim'       " opening specific-sized splits
 Plug 'hneutr/nvimux'                 " tmux replacement
 Plug 'junegunn/vim-online-thesaurus' " thesaurus?
 " Plug 'hneutr/double-tap'             " annoying comments are annoying
-" Plug 'jeetsukumaran/vim-pythonsense'
-Plug 'jiangmiao/auto-pairs'
+Plug 'jeetsukumaran/vim-pythonsense'
 
 Plug 'romainl/vim-cool'
+Plug 'plasticboy/vim-markdown'
+
 
 call plug#end()
 

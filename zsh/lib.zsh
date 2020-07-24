@@ -22,3 +22,22 @@ function fvim() {
     local files=($(fzf --reverse --query="$1" --multi --select-1 --exit-0))
     [[ -n "$files" ]] && vim "${files[@]}"
 }
+
+# refresh the virtual environment if its there
+function cd_and_venv() {
+  if [ -f $PWD/env/bin/activate ]; then
+    type deactivate > /dev/null && deactivate
+    source $PWD/env/bin/activate
+  fi
+}
+
+function popen() {
+    local filename="${1:r}.pdf"
+    open $filename
+}
+
+function gmd() {
+    local directory="${1}"
+    mkdir ${directory}
+    touch "${directory}/.gitignore"
+}

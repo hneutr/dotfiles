@@ -1,0 +1,33 @@
+# This was built Sam F Way and modified by hne
+
+# https://en.wikipedia.org/wiki/PostScript_fonts
+# Real reason: some journals/conferences won't accept Type 3 fonts (i.e., the default)
+# because they don't allow for hinting/selecting/searching. Avoid.
+pdf.use14corefonts: True
+ps.useafm: True
+pdf.fonttype: 42
+ps.fonttype: 42
+text.color: 191414 # Spotify's blackish color
+axes.unicode_minus: False
+
+lines.linewidth   : 2
+lines.color       : 191414
+
+xtick.major.pad: 8
+axes.edgecolor : 191414
+axes.labelcolor: 191414
+xtick.color    : 191414
+ytick.color    : 191414
+lines.solid_capstyle: butt
+
+axes.spines.top    : False
+axes.spines.right  : False
+legend.frameon     : False
+
+figure.dpi       : 400.
+figure.figsize   : 5, 3
+
+# Default to Spotify colors
+axes.prop_cycle: cycler('color', ['4B917D', 'FF6437', '509BF5', 'F037A5', '2EBD59', 'FFC864', 'C87D55', '1E3264'])
+
+font.sans-serif     : Helvetica Neue, Bitstream Vera Sans, Lucida Grande, Verdana, Geneva, Lucid, Arial, Avant Garde, sans-serif
