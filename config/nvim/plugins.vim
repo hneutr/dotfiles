@@ -24,7 +24,6 @@ Plug 'zirrostig/vim-schlepp'           " move things up and down
 "============================[ text editing/objects ]===========================
 Plug 'machakann/vim-sandwich'      " deal with pairs
 Plug 'wellle/targets.vim'          " more text objects
-Plug 'chaoren/vim-wordmotion'      " camelCaseMovements
 
 "==============================[ language support ]=============================
 Plug 'Glench/Vim-Jinja2-Syntax', { 'for' : 'jinja' }                     " jinja...
@@ -45,6 +44,8 @@ Plug 'jeetsukumaran/vim-pythonsense'
 
 Plug 'romainl/vim-cool'
 Plug 'plasticboy/vim-markdown'
+Plug 'tpope/vim-repeat'
+" Plug 'chaoren/vim-wordmotion'      " camelCaseMovements
 
 
 call plug#end()

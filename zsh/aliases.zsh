@@ -37,3 +37,4 @@ alias gs="git status"
 # [[ ! -z $(which bat) ]] && alias cat='bat'
 
 alias po="popen"
+alias ipy="ipython"

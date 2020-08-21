@@ -13,6 +13,9 @@ set dictionary="/usr/dict/words"
 
 set fileformats=unix,dos,mac
 
+" make substitutions global by default
+set gdefault
+
 " use rg if it is available
 if executable('rg')
 	set grepprg=rg\ --vimgrep
