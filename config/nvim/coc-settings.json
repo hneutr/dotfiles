@@ -2,5 +2,8 @@
   "python.linting.flake8Args": ["--max-line-length=112", "--ignore=F403,F405,E402,E305,E741,E722,W503,W504,E303"],
   "python.linting.enabled": false,
   "python.linting.flake8Enabled": false,
-  "python.analysis.diagnosticEnabled": false
+  "python.analysis.diagnosticEnabled": false,
+  "coc.source.file.priority": 100,
+  "coc.source.buffer.priority": 100,
+  "coc.source.around.priority": 100
 }

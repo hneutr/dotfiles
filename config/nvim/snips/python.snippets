@@ -34,6 +34,14 @@ snippet idefd "import defaultdict"
 from collections import defaultdict
 endsnippet
 
+snippet icol "import collections"
+from collections import *
+endsnippet
+
+snippet iarg "import argparse"
+import argparse
+endsnippet
+
 snippet ipath "import path"
 from pathlib import Path
 endsnippet
@@ -50,12 +58,9 @@ snippet iplt "import matplotlib"
 import matplotlib.pyplot as plt
 endsnippet
 
-snippet argp "argparse snipper"
+snippet argp "argparse init"
 parser = argparse.ArgumentParser()
-parser.add_argument(
-    "$1",
-    help="$2",
-)
+parser.add_argument("$2", help="$3")
 
 args = parser.parse_args()
 endsnippet
