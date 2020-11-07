@@ -1,6 +1,6 @@
 .gitmodules
 config/nvim/.netrwhist
-config/nvim/plugged
+config/nvim/.plugged
 config/nvim/autoload/plug*
 config/nvim/undodir
 config/nvim/colors

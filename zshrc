@@ -1,37 +1,68 @@
-################################################################################
-# Options
-################################################################################
-
-# beep sucks
-setopt no_beep
-
-# no beep for autocomplete
-setopt no_list_beep
+[ -f ~/.zsh/settings.zsh ] && source ~/.zsh/settings.zsh
 
 ################################################################################
 # Exports
 ################################################################################
-
 export PATH=/usr/local/bin:$PATH
 export PATH=/usr/local/bin/python:$PATH
 export PATH=$HOME/bin:$PATH
 export PATH=$PATH:$HOME/.cargo/bin
+
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:/usr/local/lib/fst
+
+export XDG_CONFIG_HOME=$HOME/.config
+export MPLCONFIGDIR=$XDG_CONFIG_HOME/matplotlib
 
 export EDITOR=nvim
 
 # set bindkey delay to 10ms
 export KEYTIMEOUT=1
 
+# make a history file if there isn't one
+if [ -z "$HISTFILE" ]; then
+    HISTFILE=$HOME/.zsh_history
+fi
+
 # stupid fzf wouldn't search my documents directory
 [[ ! -z $(which rg) ]] && export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git/*'"
-[[ ! -z $(which bfs) ]] && export FZF_ALT_C_COMMAND="bfs -type d -nohidden"  # maybe -hidden?
+[[ ! -z $(which bfs) ]] && export FZF_ALT_C_COMMAND="bfs -type d -nohidden 2>/dev/null"  # maybe -hidden?
+
+################################################################################
+# Zinit
+################################################################################
+if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
+    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+fi
+
+source "$HOME/.zinit/bin/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zinit-zsh/z-a-rust \
+    zinit-zsh/z-a-as-monitor \
+    zinit-zsh/z-a-patch-dl \
+    zinit-zsh/z-a-bin-gem-node
 
 ################################################################################
 # Plugin Setup
 ################################################################################
 
 # load plugins
-[ -f ~/.zsh/zplug.zsh ] && source ~/.zsh/zplug.zsh
+zinit ice from"gh-r" as"program"
+zinit load junegunn/fzf-bin
+
+zinit light zsh-users/zsh-completions
+zinit light zdharma/fast-syntax-highlighting
+zinit load zdharma/history-search-multi-word
+
+zinit light seebi/dircolors-solarized
+zinit snippet OMZL::git.zsh
 
 # set up fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -46,46 +77,14 @@ export KEYTIMEOUT=1
 # aliases
 [ -f ~/.zsh/aliases.zsh ] && source ~/.zsh/aliases.zsh
 
-# history
-[ -f ~/.zsh/history.zsh ] && source ~/.zsh/history.zsh
-
 # prompt
 [ -f ~/.zsh/prompt.zsh ] && source ~/.zsh/prompt.zsh
 
 # bindings
 [ -f ~/.zsh/bindings.zsh ] && source ~/.zsh/bindings.zsh
 
-# completion
-[ -f ~/.zsh/completion.zsh ] && source ~/.zsh/completion.zsh
-
 # commands/lib
 [ -f ~/.zsh/lib.zsh ] && source ~/.zsh/lib.zsh
 
 # local settings
 [ -f ~/.zshrc_local ] && source ~/.zshrc_local
-
-# hook direnv into zsh
-eval "$(direnv hook zsh)"
-export DIRENV_LOG_FORMAT=""
-
-################################################################################
-# Testing
-################################################################################
-cd_and_venv
-
-function chpwd {
-  cd_and_venv
-}
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/hne/Desktop/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/hne/Desktop/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/hne/Desktop/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/hne/Desktop/google-cloud-sdk/completion.zsh.inc'; fi
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:/usr/local/lib/fst
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:/usr/local/lib/fst
-
-export XDG_CONFIG_HOME=$HOME/.config
-export MPLCONFIGDIR=$XDG_CONFIG_HOME/matplotlib
-
-# alias python=/usr/local/bin/python

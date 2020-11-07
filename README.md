@@ -3,7 +3,7 @@
 - be consistent
 - use clear names
 - don't abbreviate
-- don't reimplement what you don't want to make into a project
+- don't implement what you don't want to make into a project
 
 # Tools:
 - nvim
@@ -21,10 +21,6 @@
         - learn about 'spell'
             - how to add words
             - local to project (eg character names)
-    - noodle on:
-        - default vi bindings
-            - and what can be changed from vim
-            - i.e. q has a lot of open real estate
 - zsh:
     - fix function loading so I can use 'settex' from within vim
     - fix `fvim` command so that it outputs last line to commandline for repetition

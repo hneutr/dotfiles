@@ -31,6 +31,14 @@ function cd_and_venv() {
   fi
 }
 
+# set the change directory function to cd_and_venv
+function chpwd {
+  cd_and_venv
+}
+
+# call the change directory function
+cd_and_venv
+
 function popen() {
     local filename="${1:r}.pdf"
     open $filename

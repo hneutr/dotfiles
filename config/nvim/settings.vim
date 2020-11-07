@@ -9,6 +9,8 @@ set complete-=i
 " ----> don't scan tags
 set complete-=t
 
+set completeopt=menuone,noinsert,noselect
+
 set dictionary="/usr/dict/words"
 
 set fileformats=unix,dos,mac
@@ -94,7 +96,7 @@ set undodir=~/.config/nvim/undodir
 set undofile
 
 " ignore file types in completion
-set wildignore+=.DS_Store,.git,*.tmp,*.swp,*.png,*.jpg,*.gif
+set wildignore+=.DS_Store,.git,*.tmp,*.swp,*.png,*.jpg,*.gif,*.gz
 
 set wildignorecase
 
