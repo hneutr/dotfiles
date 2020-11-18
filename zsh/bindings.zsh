@@ -24,5 +24,5 @@ bindkey '^[[1;3D' backward-word
 bindkey '^[[1;3C' forward-word
 
 if [ -z "$NVIM_LISTEN_ADDRESS" ]; then
-    bindkey -s '^[t' "nvim -c 'TwoVerticalTerminals'\n"
+    bindkey -s '^[t' "deactivate_env && nvim -c 'TwoVerticalTerminals'\n"
 fi

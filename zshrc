@@ -63,6 +63,7 @@ zinit load zdharma/history-search-multi-word
 
 zinit light seebi/dircolors-solarized
 zinit snippet OMZL::git.zsh
+zinit snippet OMZP::git
 
 # set up fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

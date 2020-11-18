@@ -26,6 +26,8 @@ alias rgl="rg -l"
 alias gs="git status"
 alias ga="git add"
 alias gc="git commit"
+alias gp="git push"
+alias gd="git diff"
 
 # exa
 [[ ! -z $(which exa) ]] && alias ls='exa --git --header --group'

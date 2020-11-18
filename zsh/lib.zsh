@@ -31,6 +31,12 @@ function cd_and_venv() {
   fi
 }
 
+function deactivate_env() {
+  if [ -f $PWD/env/bin/activate ]; then
+    type deactivate > /dev/null && deactivate
+  fi
+}
+
 # set the change directory function to cd_and_venv
 function chpwd {
   cd_and_venv
