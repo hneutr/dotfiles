@@ -66,3 +66,6 @@ fi
 
 # add a space on tab complete. not really doing what I want yet
 zstyle ':completion:*' add-space true
+
+# interactive prompt (changes on cd/etc)
+setopt prompt_subst

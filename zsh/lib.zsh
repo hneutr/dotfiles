@@ -28,6 +28,7 @@ function cd_and_venv() {
   if [ -f $PWD/env/bin/activate ]; then
     type deactivate > /dev/null && deactivate
     source $PWD/env/bin/activate
+    # PROMPT='(env) $(set_prompt)'
   fi
 }
 

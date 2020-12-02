@@ -16,11 +16,10 @@ alias vim="nvim"
 alias gv="nvim -c 'Goyo' "
 alias gvt="nvim -c 'Goyo' text.md"
 
+# python
 alias python="python3"
 alias pip="pip3"
-
-# rg
-alias rgl="rg -l"
+alias ipy="ipython"
 
 # git
 alias gs="git status"
@@ -28,6 +27,9 @@ alias ga="git add"
 alias gc="git commit"
 alias gp="git push"
 alias gd="git diff"
+
+# misc
+alias po="popen"
 
 # exa
 [[ ! -z $(which exa) ]] && alias ls='exa --git --header --group'
@@ -37,8 +39,5 @@ alias gd="git diff"
 # fd
 [[ ! -z $(which fd) ]] && alias find='fd'
 
-# bat
-# [[ ! -z $(which bat) ]] && alias cat='bat'
-
-alias po="popen"
-alias ipy="ipython"
+# rg
+[[ ! -z $(which rg) ]] && alias rgl="rg -l"

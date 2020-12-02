@@ -34,7 +34,7 @@ endif
 "===============================================================================
 "==================================[ testing ]==================================
 "===============================================================================
-let g:python3_host_prog = '/usr/local/bin/python3'
+let g:python3_host_prog = '/Users/hne/.pyenv/shims/python3'
 
 " lookup whichwrap
 " make h/l move across beginning/end of line
