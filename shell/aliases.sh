@@ -15,6 +15,7 @@ alias vi="nvim"
 alias vim="nvim"
 alias gv="nvim -c 'Goyo' "
 alias gvt="nvim -c 'Goyo' text.md"
+alias wr="nvim text.md scratch-text.md -c 'Goyo'"
 
 # python
 alias python="python3"

@@ -1,5 +1,7 @@
 call lib#AddPluginMapping('g', ':Goyo<cr>')
 
+let g:goyo_height=90
+
 " set a variable to later restore the <leader>q command from
 let g:previous_leader_q_command_rhs = ''
 

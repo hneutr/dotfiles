@@ -16,15 +16,6 @@ nnoremap Q @q
 " yank to end of line (match C/D)
 nnoremap Y y$
 
-" stop highlighting searched terms
-nnoremap <silent> <leader><space> :nohlsearch<cr>
-
-" edit vimrc
-nnoremap <leader>vv :sp $MYVIMRC<cr>
-
-" source vimrc
-nnoremap <leader>vs :source $MYVIMRC<cr>:nohlsearch<cr>
-
 " don't store "{"/"}" motions in jump list
 nnoremap <silent> } :<c-u>execute "keepjumps normal! " . v:count1 . "}"<cr>
 nnoremap <silent> { :<c-u>execute "keepjumps normal! " . v:count1 . "{"<cr>
@@ -33,16 +24,13 @@ nnoremap <silent> { :<c-u>execute "keepjumps normal! " . v:count1 . "{"<cr>
 nnoremap / ms/
 nnoremap ? ms?
 
-" move to end/start of line more easily
+" move to end/start of line easily
 nnoremap <space>l $
 nnoremap <space>h ^
 
 " Conditionally modify character at end of line
 nnoremap <silent> <leader>, :call lib#ModifyLineEndDelimiter(',')<cr>
 nnoremap <silent> <leader>; :call lib#ModifyLineEndDelimiter(';')<cr>
-
-" grep for current word
-nnoremap <silent> K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 " select what was last pasted/visually selected
 nnoremap gV `[v`]
@@ -73,7 +61,6 @@ inoremap <c-s> <c-\><c-o>de
 
 " save the pinky
 inoremap jk <esc>
-inoremap jf <esc>
 inoremap <c-c> <nop>
 
 " forward delete (consistent with osx)
@@ -142,11 +129,9 @@ vnoremap <c-f> <c-f>zz
 nnoremap <c-b> <c-b>zz
 vnoremap <c-b> <c-b>zz
 
-" make n always go forward; recenter after jumping
+" make n (N) always go forward (backward); recenter after jumping
 nnoremap <expr> n 'Nn'[v:searchforward].'zz'
 vnoremap <expr> n 'Nn'[v:searchforward].'zz'
-
-" make N always go back; recenter after jumping
 nnoremap <expr> N 'nN'[v:searchforward].'zz'
 vnoremap <expr> N 'nN'[v:searchforward].'zz'
 
