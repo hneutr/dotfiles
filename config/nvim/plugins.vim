@@ -34,17 +34,16 @@ Plug 'jeetsukumaran/vim-pythonsense'
 " Plug 'nvim-lua/completion-nvim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'mattn/vim-lsp-settings'
+Plug 'chrisbra/Colorizer'
+Plug 'AndrewRadev/splitjoin.vim'
 
-
-
-
-let g:polyglot_disabled = ['markdown']
+let g:colorizer_colornames = 0
 
 call plug#end()
 
 " if the plug dir is empty, install
 if empty(s:plug_dir)
-	autocmd! VimEnter * PlugInstall
+    autocmd! VimEnter * PlugInstall
 endif
 
 if executable('pyls')

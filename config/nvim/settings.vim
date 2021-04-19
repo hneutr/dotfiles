@@ -1,5 +1,5 @@
 " write even more
-set autowriteall
+" set autowriteall
 
 set background=dark
 

@@ -2,6 +2,7 @@
 # Exports
 ################################################################################
 export PATH="$(pyenv root)/shims:$PATH"
+export PATH="${HOME}/.bin:$PATH"
 
 # I hate everything
 export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/sqlite/lib -L/usr/local/opt/bzip2/lib"

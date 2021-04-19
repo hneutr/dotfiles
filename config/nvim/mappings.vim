@@ -4,25 +4,31 @@ let maplocalleader = "\<space>"
 let g:pluginleader = "<leader>d"
 
 "================================[ normal mode ]================================
+" yank to end of line (match C/D)
+nnoremap Y y$
+
+" select what was last pasted/visually selected
+nnoremap gV `[v`]
+
 " swap */# (match _W_ord) and g*/g# (match _w_ord)
 nnoremap * g*
 nnoremap g* *
 nnoremap # g#
 nnoremap g# #
 
+" restore cursor position after joining lines
+nnoremap J mjJ`j
+
 " play 'q' macro (I mostly just use the 'q' macro)
 nnoremap Q @q
-
-" yank to end of line (match C/D)
-nnoremap Y y$
 
 " don't store "{"/"}" motions in jump list
 nnoremap <silent> } :<c-u>execute "keepjumps normal! " . v:count1 . "}"<cr>
 nnoremap <silent> { :<c-u>execute "keepjumps normal! " . v:count1 . "{"<cr>
 
-" mark before searching
-nnoremap / ms/
-nnoremap ? ms?
+" mark before searching (p = "previous")
+nnoremap / mp/
+nnoremap ? mp?
 
 " move to end/start of line easily
 nnoremap <space>l $
@@ -32,14 +38,8 @@ nnoremap <space>h ^
 nnoremap <silent> <leader>, :call lib#ModifyLineEndDelimiter(',')<cr>
 nnoremap <silent> <leader>; :call lib#ModifyLineEndDelimiter(';')<cr>
 
-" select what was last pasted/visually selected
-nnoremap gV `[v`]
-
 " run last command easily
 nnoremap <leader>c :<c-p><cr>
-
-" restore cursor position after joining lines
-nnoremap J mjJ`j
 
 " quit with an arpeggiation (save the pinky)
 nnoremap <leader>q :q<cr>
@@ -50,25 +50,26 @@ nnoremap <silent> <leader>k :call lib#KillBufferAndGoToNext()<cr>
 " switch buffers with tab/s-tab
 nnoremap <tab> :bn<cr>
 nnoremap <s-tab> :bp<cr>
+
 "================================[ insert mode ]================================
 inoremap <nowait> <esc> <esc>
-
-" why would I want to delete only until the start of insert mode? why?
-inoremap <c-w> <c-\><c-o>db
-
-" delete until the end of word
-inoremap <c-s> <c-\><c-o>de
 
 " save the pinky
 inoremap jk <esc>
 inoremap <c-c> <nop>
 
+" why would I want to delete only until the start of insert mode? why?
+inoremap <c-w> <c-\><c-o>db
+
+" forward delete to end of word
+inoremap <c-s> <c-\><c-o>de
+
 " forward delete (consistent with osx)
 inoremap <c-d> <del>
 
 " change indent
-inoremap <c-h>  <c-d>
-inoremap <c-l>  <c-t>
+inoremap <c-h> <c-d>
+inoremap <c-l> <c-t>
 
 " close various structures automatically
 " newline triggered
@@ -106,11 +107,17 @@ inoremap **<tab> ****<esc>hi
 inoremap $<tab> $$<esc>i
 
 "================================[ visual mode ]================================
-" unindent/indent
+" keep visual selection after indent/unindent
 vnoremap > >gv
 vnoremap < <gv
 
 "==========================[ normal and visual modes ]==========================
+" switch panes
+nnoremap <c-h> <c-w>h
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-l> <c-w>l
+
 " bind easy align keys
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
@@ -139,16 +146,6 @@ vnoremap <expr> N 'nN'[v:searchforward].'zz'
 nnoremap <cr> :
 vnoremap <cr> :
 
-" meta enter for real <cr>
-nnoremap <M-cr> <cr>
-vnoremap <M-cr> <cr>
-
-" switch panes
-nnoremap <c-h> <c-w>h
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-l> <c-w>l
-
 "================================[ command mode ]===============================
 " make start of line and end of line movements match zsh/bash
 cnoremap <c-a> <home>
@@ -172,3 +169,9 @@ tnoremap <c-h> <c-\><c-n><c-w>h
 tnoremap <c-j> <c-\><c-n><c-w>j
 tnoremap <c-k> <c-\><c-n><c-w>k
 tnoremap <c-l> <c-\><c-n><c-w>l
+
+"==================================[ operator ]=================================
+
+" visually select the whole buffer
+onoremap A :<C-U>normal! mzggVG<CR>`z
+xnoremap A :<C-U>normal! mzggVG<CR>`z

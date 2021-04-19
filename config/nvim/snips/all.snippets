@@ -27,9 +27,17 @@ snippet td "output sysdate in yyyymmdd format (the best format)"
 `!p
 from datetime import datetime
 now = datetime.now()
+
 day = str(now.day)
+month = str(now.month)
+year = str(now.year)
+
 if len(day) == 1:
     day = f"0{day}"
-snip.rv = "%s%s%s" % (now.year, now.month, day)
+
+if len(month) == 1:
+    month = f"0{month}"
+
+snip.rv = "%s%s%s" % (year, month, day)
 `
 endsnippet

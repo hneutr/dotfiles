@@ -27,7 +27,7 @@ legend.frameon     : False
 figure.dpi       : 400.
 figure.figsize   : 5, 3
 
-# Default to Spotify colors
-axes.prop_cycle: cycler('color', ['4B917D', 'FF6437', '509BF5', 'F037A5', '2EBD59', 'FFC864', 'C87D55', '1E3264'])
+# Default to Spotify colors (sam), but put a nice blue first (hunter)
+axes.prop_cycle: cycler('color', ['45A1F8', 'FF6437', '4B917D', 'F037A5', '2EBD59', 'FFC864', 'C87D55', '1E3264'])
 
 font.sans-serif     : Helvetica Neue, Bitstream Vera Sans, Lucida Grande, Verdana, Geneva, Lucid, Arial, Avant Garde, sans-serif
