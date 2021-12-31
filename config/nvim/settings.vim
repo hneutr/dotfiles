@@ -1,5 +1,5 @@
 " write even more
-" set autowriteall
+set autowriteall
 
 set background=dark
 
@@ -33,6 +33,9 @@ set guicursor+=r-cr:hor20-Cursor/lCursor
 
 " show results of a command while typing
 set inccommand=nosplit
+
+" don't add a space after periods
+set nojoinspaces
 
 " redraw less
 set lazyredraw

@@ -1,0 +1,68 @@
+snippet h1 "function block for top-level stuff"
+`!p
+header_content = snip.v.text.rstrip()
+header_len = len(header_content)
+
+# build the string to return
+to_return = '"'
+
+if header_len > 75:
+	to_return += ' '
+	to_return += header_content
+else:
+	to_fill = 75 - header_len
+
+	left_len = 0
+
+	# the fill length is odd, add 1 to the left side
+	if to_fill % 2:
+		to_fill -= 1
+		left_len += 1
+		
+	left_len += to_fill // 2
+	right_len = to_fill // 2
+
+	left = left_len * '-'
+	right = right_len * '-'
+
+	to_return += str(left) + '[ ' + header_content + ' ]' + str(right) + "\n"
+
+blockline = str(80 * '-') + "\n"
+
+snip.rv = blockline + to_return + blockline
+`
+endsnippet
+
+snippet h2 "function block for mid-level stuff"
+`!p
+header_content = snip.v.text.rstrip()
+header_len = len(header_content)
+
+# build the string to return
+to_return = '"'
+
+if header_len > 75:
+	to_return += ' '
+	to_return += header_content
+else:
+	to_fill = 75 - header_len
+
+	left_len = 0
+
+	# the fill length is odd, add 1 to the left side
+	if to_fill % 2:
+		to_fill -= 1
+		left_len += 1
+		
+	left_len += to_fill // 2
+	right_len = to_fill // 2
+
+	left = left_len * '-'
+	right = right_len * '-'
+
+	to_return += str(left) + '[ ' + header_content + ' ]' + str(right)
+
+snip.rv = to_return
+`
+
+endsnippet
