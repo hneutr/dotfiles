@@ -30,49 +30,19 @@ Plug 'sheerun/vim-polyglot'
 Plug 'jeetsukumaran/vim-pythonsense'
 
 "==================================[ testing ]==================================
-" Plug 'neovim/nvim-lspconfig'
-" Plug 'nvim-lua/completion-nvim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'mattn/vim-lsp-settings'
+Plug 'neovim/nvim-lspconfig'
 Plug 'chrisbra/Colorizer'
-Plug 'AndrewRadev/splitjoin.vim'
+" Plug 'nvim-lua/completion-nvim'
+" Plug 'prabirshrestha/vim-lsp'
+" Plug 'mattn/vim-lsp-settings'
 
 let g:colorizer_colornames = 0
 
 call plug#end()
 
-" if the plug dir is empty, install
 if empty(s:plug_dir)
     autocmd! VimEnter * PlugInstall
 endif
 
-if executable('pyls')
-    " pip install python-language-server
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': {server_info->['pyls']},
-        \ 'allowlist': ['python'],
-        \ })
-endif
-
-let g:lsp_diagnostics_enabled = 0         " disable diagnostics support
-
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    " setlocal signcolumn=yes
-    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-    nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gi <plug>(lsp-implementation)
-    nmap <buffer> <leader>rn <plug>(lsp-rename)
-    nmap <buffer> [g <Plug>(lsp-previous-diagnostic)
-    nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
-    nmap <buffer> K <plug>(lsp-hover)
-    
-    " refer to doc to add more commands
-endfunction
-
-augroup lsp_install
-    au!
-    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
+" disable diagnostics support, fucking hate diagnostics
+autocmd BufEnter * lua vim.diagnostic.disable()

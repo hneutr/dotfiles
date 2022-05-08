@@ -5,3 +5,5 @@
 	helper = osxkeychain
 [core]
 	excludesfile = /Users/hne/.gitignore_global
+[init]
+	defaultBranch = main

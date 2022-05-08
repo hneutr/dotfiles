@@ -172,6 +172,6 @@ autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 
 
 set updatetime=300
 
-lua << EOF
-require('mappings')
-EOF
+" lua << EOF
+" require('settings')
+" EOF

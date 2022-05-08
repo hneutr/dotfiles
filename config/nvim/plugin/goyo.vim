@@ -8,7 +8,7 @@ let g:previous_leader_q_command_rhs = ''
 function! s:goyo_enter()
     setlocal noshowmode
     setlocal noshowcmd
-    setlocal scrolloff=999
+    " setlocal scrolloff=999
     setlocal sidescroll=0
     setlocal spell
 

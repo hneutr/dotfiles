@@ -51,6 +51,9 @@ nnoremap <silent> <leader>k :call lib#KillBufferAndGoToNext()<cr>
 nnoremap <tab> :bn<cr>
 nnoremap <s-tab> :bp<cr>
 
+" <BS> is useless in normal mode; map it to gE
+nnoremap <BS> gE
+
 "================================[ insert mode ]================================
 inoremap <nowait> <esc> <esc>
 
