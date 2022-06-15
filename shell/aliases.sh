@@ -42,3 +42,7 @@ alias po="popen"
 
 # rg
 [[ ! -z $(which rg) ]] && alias rgl="rg -l"
+
+# writing stuff
+alias wrj="writing_journal"
+alias cdwrj="cd /Users/hne/Documents/text/written/nonfiction/on-writing/journals"

@@ -33,3 +33,9 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 source ~/dotfiles/shell/prompt.sh
 source ~/dotfiles/shell/aliases.sh
+
+# year month
+export YM="$(date +20%y%m)"
+
+# today
+export TD="$(date +20%y%m%d)"

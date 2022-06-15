@@ -1,0 +1,4 @@
+#!/usr/local/bin/zsh
+git add $PWD
+git commit -m "$TD"
+git push

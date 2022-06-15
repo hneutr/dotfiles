@@ -1,29 +1,25 @@
-"==================================[ settings ]=================================
-" magic to make italics and bold show up
-set conceallevel=2
-set concealcursor="nvc"
+"===================================[ marks ]===================================
 
-" break at words
-set linebreak
+" "marker-/" search for a marker
+nnoremap <silent> <leader>m/ :call writing#markers#GoToMarkerReference("edit")<cr>
+nnoremap <silent> <leader>ml :call writing#markers#GoToMarkerReference("vsplit")<cr>
+nnoremap <silent> <leader>mj :call writing#markers#GoToMarkerReference("split")<cr>
 
-" cindent isn't very useful in prose
-set nocindent
+" "marker-reference" create a cross-file reference to the mark on the current line.
+nnoremap <silent> <leader>mc :call writing#markers#MakeMarkerReference()<cr>
 
-" I don't want linebreaks in markdown files
-set textwidth=0
+" "path-marker-reference" create a file-reference to the current file
+nnoremap <silent> <leader>mf :call writing#markers#MakeFileReference()<cr>
 
-"==================================[ mappings ]=================================
-" with markdown files I usually want to go to the end of the "visual" line,
-" not the end of the wrapped line
-nnoremap g^ ^
-nnoremap g$ $
-nnoremap ^ g^
-nnoremap $ g$
+"==================================[ scratch ]==================================
 
-nnoremap <leader>h g^
-nnoremap <leader>l g$
+" "scratch-open" open the scratch file (if in the non-scratch file) or open
+" the non-scratch file (if in the scratch file)
+nnoremap <silent> <leader>so :call writing#scratch#openScratchFile("edit")<cr>
+nnoremap <silent> <leader>sl :call writing#scratch#openScratchFile("vsplit")<cr>
+nnoremap <silent> <leader>sj :call writing#scratch#openScratchFile("split")<cr>
 
-"==================================[ plugins ]==================================
-silent! execute "CocDisable"
-
-let g:vim_markdown_no_default_key_mappings = 1
+" "scratch-move" delete the currently selected lines and move them to the
+" scratch file
+nnoremap <silent> <leader>sm :call writing#scratch#moveToScratchFile()<cr>
+vnoremap <silent> <leader>sm :'<,'>call writing#scratch#moveToScratchFile()<cr>

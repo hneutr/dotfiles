@@ -109,6 +109,10 @@ inoremap *<tab> **<esc>i
 inoremap **<tab> ****<esc>hi
 inoremap $<tab> $$<esc>i
 
+" digraphs are good
+inoremap <M--> —
+inoremap <M-=> ≠
+
 "================================[ visual mode ]================================
 " keep visual selection after indent/unindent
 vnoremap > >gv

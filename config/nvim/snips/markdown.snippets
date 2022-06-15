@@ -1,17 +1,7 @@
-snippet -- "endash"
-–
-endsnippet
-
-snippet --- "emdash"
-—
-endsnippet
-
 snippet head "header"
---------------------------------------------------------------------------------
->
+#-------------------------------------------------------------------------------
 # $1
->
---------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 endsnippet
 
@@ -19,6 +9,62 @@ snippet shead "small header"
 ----------------------------------------
 > $1
 ----------------------------------------
+
+endsnippet
+
+snippet smh "small marker header"
+----------------------------------------
+> [$1]()
+----------------------------------------
+
+endsnippet
+
+snippet line "line"
+--------------------------------------------------------------------------------
+
+endsnippet
+
+snippet mline "medium line"
+----------------------------------------
+
+endsnippet
+
+snippet mtd "medium todo"
+>---------------- todo -----------------
+
+endsnippet
+
+snippet mch "medium comment header"
+`!p
+text = snip.v.text.rstrip()
+
+start = '>'
+pad = ' '
+fill = '-'
+
+line_length = 40
+
+available_length = line_length
+available_length -= len(start)
+available_length -= 2 * len(pad)
+
+if len(text) > available_length:
+    string = f"{start}{pad}{text}"
+else:
+    fill_length = available_length - len(text)
+    half_fill_length = fill_length // 2
+
+    left_fill = fill * half_fill_length
+    right_fill = fill * half_fill_length
+
+    # if the fill length is odd, add 1 to the right side
+    if fill_length % 2:
+        right_fill += fill
+
+    string = f"{start}{left_fill}{pad}{text}{pad}{right_fill}"
+
+snip.rv = string
+`
 
 endsnippet
 
@@ -101,4 +147,12 @@ snippet tbcharacter "template for notes on a character from 'The Burnt'"
 >
 --------------------------------------------------------------------------------
 
+endsnippet
+
+snippet mc "make a mark"
+[$1]()
+endsnippet
+
+snippet mr "make a reference to a mark"
+[$1](\[${VISUAL}\[)
 endsnippet

@@ -232,7 +232,52 @@ function lib#StripWhitespace() range
   let oldhlsearch = &hlsearch
   let &hlsearch = 1
   %s/\s\+$//e
-  " execute a:firstline.",".a:lastline."substitute ///gec"
   let &hlsearch = oldhlsearch
 endfunction
 
+"=============================[ lib#setProjectRoot ]============================
+" looks for a `.git` directory in the current directory and parent directories.
+"
+" if it finds it in a directory, it sets `g:projectRoot` to that directory
+" otherwise, it sets `g:projectRoot` to the directory of the file.
+"===============================================================================
+function lib#setProjectRoot()
+    " let projectFileName = '.project'
+    let projectFileName = '.git'
+
+    let directory = expand('%:p:h')
+
+    let g:projectRoot = directory
+
+    let directoryParts = split(directory, '/')
+
+    while len(directoryParts) > 0
+        let directory = '/' . join(directoryParts, '/')
+        let possibleProjectRootFile = directory . '/' . projectFileName
+
+        " if filereadable (possibleProjectRootFile)
+        if isdirectory(possibleProjectRootFile)
+            let g:projectRoot = directory
+            break
+        else
+            call remove(directoryParts, len(directoryParts) - 1)
+        endif
+    endwhile
+endfunction
+
+"==============================[ makeDirectories ]==============================
+" makes directories for a given path
+"===============================================================================
+function lib#makeDirectories(path)
+    let directoryParts = split(a:path, '/')
+
+    let currentPath = ''
+
+    for part in directoryParts
+        let currentPath = currentPath . '/' . part
+
+        if !isdirectory(currentPath)
+            silent execute "!mkdir " . currentPath
+        endif
+    endfor
+endfunction
