@@ -242,8 +242,7 @@ endfunction
 " otherwise, it sets `g:projectRoot` to the directory of the file.
 "===============================================================================
 function lib#setProjectRoot()
-    " let projectFileName = '.project'
-    let projectFileName = '.git'
+    let projectFileName = '.project'
 
     let directory = expand('%:p:h')
 
@@ -255,8 +254,8 @@ function lib#setProjectRoot()
         let directory = '/' . join(directoryParts, '/')
         let possibleProjectRootFile = directory . '/' . projectFileName
 
-        " if filereadable (possibleProjectRootFile)
-        if isdirectory(possibleProjectRootFile)
+        if filereadable (possibleProjectRootFile)
+            let g:projectConfig = directory . '/.project'
             let g:projectRoot = directory
             break
         else

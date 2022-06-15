@@ -1,3 +1,5 @@
+let g:journalFilePath = writing#journals#getJournalFilePath()
+
 "===================================[ marks ]===================================
 
 " "marker-/" search for a marker
@@ -23,3 +25,8 @@ nnoremap <silent> <leader>sj :call writing#scratch#openScratchFile("split")<cr>
 " scratch file
 nnoremap <silent> <leader>sm :call writing#scratch#moveToScratchFile()<cr>
 vnoremap <silent> <leader>sm :'<,'>call writing#scratch#moveToScratchFile()<cr>
+
+"==================================[ journals ]=================================
+nnoremap <silent> <leader>jo :call writing#journals#openJournal("edit")<cr>
+nnoremap <silent> <leader>jl :call writing#journals#openJournal("vsplit")<cr>
+nnoremap <silent> <leader>jj :call writing#journals#openJournal("split")<cr>
