@@ -5,9 +5,9 @@ function writing#scratch#getScratchFile()
     let filename = expand('%:t')
     let directory = expand('%:p:h')
 
-    let scratchDirectory = substitute(directory, g:projectRoot, '', '')
+    let scratchDirectory = substitute(directory, b:projectRoot, '', '')
     let scratchDirectory = '/scratch' . scratchDirectory
-    let scratchDirectory = g:projectRoot . scratchDirectory
+    let scratchDirectory = b:projectRoot . scratchDirectory
     call lib#makeDirectories(scratchDirectory)
 
     let scratchFilename = scratchDirectory . '/' . filename
@@ -16,7 +16,7 @@ endfunction
 
 function writing#scratch#isScratchFile()
     let directory = expand('%:p:h')
-    let directory = substitute(directory, g:projectRoot . '/', '', '')
+    let directory = substitute(directory, b:projectRoot . '/', '', '')
 
     return stridx(directory, 'scratch') == 0
 endfunction
@@ -25,9 +25,9 @@ function writing#scratch#getNonScratchFile()
     let filename = expand('%:t')
     let scratchDirectory = expand('%:p:h')
 
-    let directory = substitute(scratchDirectory, g:projectRoot, '', '')
+    let directory = substitute(scratchDirectory, b:projectRoot, '', '')
     let directory = substitute(directory, 'scratch/', '', '')
-    let directory = g:projectRoot . directory
+    let directory = b:projectRoot . directory
 
     let filename = directory . '/' . filename
     return filename

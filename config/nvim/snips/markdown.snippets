@@ -1,3 +1,11 @@
+snippet mc "create a mark (mark-create)"
+[$1]()
+endsnippet
+
+snippet mr "make a reference to a mark (mark-reference)"
+[$1](\[${VISUAL}\[)
+endsnippet
+
 snippet head "header"
 #-------------------------------------------------------------------------------
 # $1
@@ -9,6 +17,13 @@ snippet shead "small header"
 ----------------------------------------
 > $1
 ----------------------------------------
+
+endsnippet
+
+snippet mh "marker header"
+#-------------------------------------------------------------------------------
+# [$1]()
+#-------------------------------------------------------------------------------
 
 endsnippet
 
@@ -147,12 +162,4 @@ snippet tbcharacter "template for notes on a character from 'The Burnt'"
 >
 --------------------------------------------------------------------------------
 
-endsnippet
-
-snippet mc "make a mark"
-[$1]()
-endsnippet
-
-snippet mr "make a reference to a mark"
-[$1](\[${VISUAL}\[)
 endsnippet

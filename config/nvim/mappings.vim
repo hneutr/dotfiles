@@ -177,6 +177,9 @@ tnoremap <c-j> <c-\><c-n><c-w>j
 tnoremap <c-k> <c-\><c-n><c-w>k
 tnoremap <c-l> <c-\><c-n><c-w>l
 
+" make <c-r> work like in insert mode
+tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+
 "==================================[ operator ]=================================
 
 " visually select the whole buffer

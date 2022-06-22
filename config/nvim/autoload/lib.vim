@@ -238,15 +238,15 @@ endfunction
 "=============================[ lib#setProjectRoot ]============================
 " looks for a `.git` directory in the current directory and parent directories.
 "
-" if it finds it in a directory, it sets `g:projectRoot` to that directory
-" otherwise, it sets `g:projectRoot` to the directory of the file.
+" if it finds it in a directory, it sets `b:projectRoot` to that directory
+" otherwise, it sets `b:projectRoot` to the directory of the file.
 "===============================================================================
 function lib#setProjectRoot()
     let projectFileName = '.project'
 
     let directory = expand('%:p:h')
 
-    let g:projectRoot = directory
+    let b:projectRoot = directory
 
     let directoryParts = split(directory, '/')
 
@@ -255,8 +255,8 @@ function lib#setProjectRoot()
         let possibleProjectRootFile = directory . '/' . projectFileName
 
         if filereadable (possibleProjectRootFile)
-            let g:projectConfig = directory . '/.project'
-            let g:projectRoot = directory
+            let b:projectConfig = directory . '/.project'
+            let b:projectRoot = directory
             break
         else
             call remove(directoryParts, len(directoryParts) - 1)
@@ -279,4 +279,68 @@ function lib#makeDirectories(path)
             silent execute "!mkdir " . currentPath
         endif
     endfor
+endfunction
+
+function lib#findNearestInstanceOfString(string)
+    let line = getline('.')
+
+    let col = getcurpos()[2]
+
+    let lineUpToCursor = line[:col - 1]
+    let lineAfterCursor = line[col:]
+
+    let indexBeforeCursor = strridx(lineUpToCursor, a:string)
+    let indexAfterCursor = stridx(lineAfterCursor, a:string)
+
+    let foundBefore = indexBeforeCursor != -1 ? 1 : 0
+    let foundAfter = indexAfterCursor != -1 ? 1 : 0
+
+    if col
+        let indexAfterCursor = indexAfterCursor + 1
+        let indexBeforeCursor = indexBeforeCursor + 1
+    endif
+
+    let indexBeforeCursor = -1 * (col - indexBeforeCursor)
+
+    if foundBefore && foundAfter
+        if abs(indexBeforeCursor) <= abs(indexAfterCursor)
+            return indexBeforeCursor
+        else
+            return indexAfterCursor
+        endif
+    elseif foundBefore
+        return indexBeforeCursor
+    elseif foundAfter
+        return indexAfterCursor
+    endif
+endfunction
+
+function lib#getTextInsideNearestParenthesis()
+    let pos = getcurpos()
+    let col = pos[2]
+
+    let distFromOpen = lib#findNearestInstanceOfString('(')
+    let distFromClosed = lib#findNearestInstanceOfString(')')
+
+    if abs(distFromOpen) <= abs(distFromClosed)
+        let parensCol = col + distFromOpen
+    else
+        let parensCol = col + distFromClosed
+    endif
+
+    let newpos = deepcopy(pos)
+    let newpos[2] = parensCol
+
+    call setpos('.', newpos)
+    execute ":normal %"
+    let otherParensCol = getcurpos()[2]
+
+    call setpos('.', pos)
+
+    let startParensCol = min([parensCol, otherParensCol])
+    let endParensCol = max([parensCol, otherParensCol]) - 2 " no idea why it's 2
+
+    let text = getline('.')[startParensCol:endParensCol]
+
+    return text
 endfunction

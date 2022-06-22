@@ -5,7 +5,7 @@
 "===============================================================================
 function writing#markers#MakeMarkerReference()
     let path = expand('%:p')
-    let path = substitute(path, g:projectRoot, '.', '')
+    let path = substitute(path, b:projectRoot, '.', '')
 
     let line = getline('.')
     let line = substitute(line, '^.*[', '', '')
@@ -29,7 +29,7 @@ endfunction
 "===============================================================================
 function writing#markers#MakeFileReference()
     let path = expand('%:p')
-    let path = substitute(path, g:projectRoot, '.', '')
+    let path = substitute(path, b:projectRoot, '.', '')
 
     let register = @a
     let @a = path
@@ -44,10 +44,7 @@ endfunction
 " navigates to a marker.
 "===============================================================================
 function writing#markers#GoToMarkerReference(openCommand)
-    " currently will just take first marker on line
-    let line = getline('.')
-    let line = substitute(line, '^.*(', '', '')
-    let marker = substitute(line, ').*$', '', '')
+    let marker = lib#getTextInsideNearestParenthesis()
 
     if stridx(marker, ':') != -1
         let path = substitute(marker, ':.*$', '', '')
@@ -55,10 +52,18 @@ function writing#markers#GoToMarkerReference(openCommand)
 
         if path =~ '^\.'
             let path = substitute(path, '.', '', '')
-            let path = g:projectRoot . path
+            let path = b:projectRoot . path
         endif
 
-        execute ":" . a:openCommand . " " . fnameescape(path)
+        if filereadable(path)
+            execute ":" . a:openCommand . " " . fnameescape(path)
+        elseif isdirectory(path)
+            " if it's a directory, open a terminal at that directory
+            execute ":" . a:openCommand
+            execute ":terminal"
+            execute ":call chansend(" . b:terminal_job_id . ", 'cd " . fnameescape(path) . "')"
+            execute ":call chansend(" . b:terminal_job_id . ", 'clear')"
+        endif
     endif
 
     if len(marker) > 0

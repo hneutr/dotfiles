@@ -31,7 +31,7 @@ if filereadable(s:local_vimrc)
 	execute 'source' s:local_vimrc
 endif
 
-call lib#setProjectRoot()
+" call lib#setProjectRoot()
 
 "===============================================================================
 "==================================[ testing ]==================================
