@@ -235,40 +235,16 @@ function lib#StripWhitespace() range
   let &hlsearch = oldhlsearch
 endfunction
 
-"=============================[ lib#setProjectRoot ]============================
-" looks for a `.git` directory in the current directory and parent directories.
-"
-" if it finds it in a directory, it sets `b:projectRoot` to that directory
-" otherwise, it sets `b:projectRoot` to the directory of the file.
-"===============================================================================
-function lib#setProjectRoot()
-    let projectFileName = '.project'
-
-    let directory = expand('%:p:h')
-
-    let b:projectRoot = directory
-
-    let directoryParts = split(directory, '/')
-
-    while len(directoryParts) > 0
-        let directory = '/' . join(directoryParts, '/')
-        let possibleProjectRootFile = directory . '/' . projectFileName
-
-        if filereadable (possibleProjectRootFile)
-            let b:projectConfig = directory . '/.project'
-            let b:projectRoot = directory
-            break
-        else
-            call remove(directoryParts, len(directoryParts) - 1)
-        endif
-    endwhile
-endfunction
-
 "==============================[ makeDirectories ]==============================
 " makes directories for a given path
 "===============================================================================
-function lib#makeDirectories(path)
+function lib#makeDirectories(path, endsInFile=0)
     let directoryParts = split(a:path, '/')
+
+    if a:endsInFile
+        let lastElementIndex = len(directoryParts) - 1
+        let directoryParts = directoryParts[:lastElementIndex - 1]
+    endif
 
     let currentPath = ''
 

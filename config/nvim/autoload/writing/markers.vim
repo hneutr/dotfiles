@@ -31,13 +31,18 @@ function writing#markers#MakeFileReference()
     let path = expand('%:p')
     let path = substitute(path, b:projectRoot, '.', '')
 
-    let register = @a
-    let @a = path
+    let filename = expand('%:t:r')
 
-    execute "normal! o[a](a:)"
+    let registerA = @a
+    let registerB = @b
+    let @a = filename
+    let @b = path
+
+    execute "normal! o[a](b:)"
     execute "normal! ^"
 
-    let @a = register
+    let @a = registerA
+    let @b = registerB
 endfunction
 
 "============================[ GoToMarkerReference ]============================

@@ -9,6 +9,8 @@ import argparse
 class Marker(object):
     TAB = '  '
 
+    STARTSTR = '-'
+
     STARTCHARS = ['#', '>']
 
     STARTCHAR_TO_LEVEL = {
@@ -16,16 +18,20 @@ class Marker(object):
         '>': 1,
     }
 
-    def __init__(self, text='', reference='', level=0, startstr='-', endstr='\n'):
+    def __init__(self, text='', reference='', level=0, startstr=None, endstr='\n', indent=True):
         self.text = text
         self.reference = reference
         self.level = level
-        self.startstr = startstr
+        self.startstr = self.STARTSTR if startstr == None else startstr
         self.endstr = endstr
+        self.indent = indent
 
     def __str__(self):
-        indent = self.level * self.TAB
-        return f"{indent}{self.startstr} {self.link}{self.endstr}"
+        return f"{self.lpad}{self.startstr} {self.link}{self.endstr}"
+
+    @property
+    def lpad(self):
+        return self.level * self.TAB if self.indent else ''
 
     @property
     def link(self):
@@ -41,7 +47,7 @@ class Marker(object):
         return re.match(cls.regex(), line)
 
     @classmethod
-    def create_marker_from_line(cls, line, file=''):
+    def from_line(cls, line, file=''):
         match = re.search(cls.regex(), line)
         startchar, text = match.groups()
 
@@ -53,32 +59,7 @@ class Marker(object):
             level=level,
         )
 
-
-class FileIndex(object):
-    def __init__(self, file):
-        self.file = Path(file)
-        self.project = Project(file)
-        self.markers = self.find_markers()
-
-    @cached_property
-    def short_path(self):
-        return self.project.shorten_project_path(self.file)
-
-    def find_markers(self):
-        lines = self.file.read_text().split("\n")
-        markers = []
-        for line in lines:
-            if Marker.is_marker(line):
-                markers.append(Marker.create_marker_from_line(line, self.short_path))
-
-        return markers
-
-    @property
-    def index(self):
-        return "".join([str(marker) for marker in self.markers])
-
-
-class DirectoryIndex(object):
+class Index(object):
     FILE_EXCLUSIONS = [
         '.project',
         'index.md',
@@ -86,100 +67,128 @@ class DirectoryIndex(object):
         'definition.md',
     ]
 
-    def __init__(self, directory, max_depth=None):
-        self.directory = Path(directory)
-        self.project = Project(directory)
+    FILE_SUFFIXES = [
+        '.md',
+    ]
+
+    def __init__(self, path, project, max_depth=None):
+        self.path = Path(path)
+        self.project = project
         self.max_depth = max_depth
-        self.markers = self.find_markers(self.directory)
-        print(self.index)
 
     @property
-    def index(self):
-        return "".join([str(m) for m in self.markers]).strip()
+    def index_path(self):
+        path = self.project.add_prefix_to_path(self.path, self.project.INDEXES_DIRECTORY)
 
-    def save(self, path=None):
-        if not path:
-            path = self.directory.joinpath('.index.md')
+        if self.path.is_dir():
+            path = path.joinpath('index.md')
 
-        path.write_text(self.index)
+        return path
+
+    @property
+    def content(self):
+        return "".join([str(m) for m in self.markers]).rstrip()
+
+    def exclude_path_markers(self, path):
+        """
+        TODO: also exclude gitignored things
+        """
+        if path.is_file():
+            return any([
+                path.name in self.FILE_EXCLUSIONS,
+                path.suffix not in self.FILE_SUFFIXES,
+            ])
+        else:
+            return any([
+                path.stem.startswith('.')
+            ])
 
     @cached_property
-    def short_path(self):
-        return self.project.shorten_project_path(self.directory)
+    def markers(self):
+        if self.path.is_file():
+            markers = self.get_text_markers(self.path)
+        else:
+            markers = self.get_markers(self.path)
 
-    def exclude_path(self, path):
-        return path.name in self.FILE_EXCLUSIONS
+        min_level = min([m.level for m in markers])
 
-    def find_markers(self, directory, level=0):
+        for marker in markers:
+            marker.level -= min_level
+
+        return markers
+
+    def get_markers(self, path, level=0):
         markers = []
 
         if self.max_depth and level == self.max_depth:
             return markers
 
-        if not level:
-            definition_marker = self.get_directory_definition_marker(
-                directory,
-                directory_text=False,
-                level=level,
-            )
+        if self.exclude_path_markers(path):
+            return markers
 
-            if definition_marker:
-                markers.append(definition_marker)
-
-        for path in directory.glob('*'):
-            if self.exclude_path(path):
-                continue
-
-            if path.is_dir():
-                markers += self.get_directory_markers(path, level)
-                markers += self.find_markers(path, level=level + 1)
-
-            elif path.is_file() and path.suffix == '.md':
-                short_path = self.project.shorten_project_path(path)
-
-                markers.append(Marker(
-                    text=path.stem,
-                    reference=f"{short_path}:",
-                    level=level,
-                ))
+        if path.is_file():
+            markers.append(self.get_file_marker(path, level=level))
+        elif path.is_dir():
+            markers += self.get_directory_markers(path, level=level)
 
         return markers
 
-    def get_directory_definition_marker(self, directory, directory_text=True, **kwargs):
-        definition_path = directory.joinpath('definition.md')
+    def get_text_markers(self, path):
+        lines = path.read_text().split("\n")
 
-        if definition_path.exists():
-            short_definition_path = self.project.shorten_project_path(definition_path)
+        short_path = self.project.get_short_path(path)
+        return [Marker.from_line(l, short_path) for l in lines if Marker.is_marker(l)]
 
-            return Marker(
-                text=directory.stem if directory_text else 'definition',
-                reference=f"{short_definition_path}:",
-                **kwargs,
-            )
+    def get_file_marker(self, path, text=None, **kwargs):
+        if not text:
+            text = path.stem 
 
-    def get_directory_markers(self, directory, level):
-        marker = Marker(
-            text=directory.stem,
-            reference=f"{self.project.shorten_project_path(directory)}:",
-            level=level,
+        return Marker(
+            text=text,
+            reference=f"{self.project.get_short_path(path)}:",
+            **kwargs,
         )
 
-        definition_marker = self.get_directory_definition_marker(
-            directory,
-            level=0,
-            directory_text=False,
-            startstr=':',
-        )
+    def get_directory_markers(self, path, level=0):
+        markers = []
 
-        if definition_marker:
-            marker.endstr = ''
-            return [marker, definition_marker]
-        else:
-            return [marker]
+        if level:
+            markers.append(self.get_file_marker(path, level=level))
+
+        markers = self.add_directory_definition_marker(markers, path, level)
+
+        for subpath in sorted(path.glob('*')):
+            markers += self.get_markers(subpath, level=level + 1)
+
+        return markers
+
+    def add_directory_definition_marker(self, markers, directory_path, level=0):
+        path = directory_path.joinpath('definition.md')
+
+        if path.exists():
+            kwargs = {
+                'path': path,
+                'text': 'definition',
+                'level': level,
+            }
+
+            # we inline the directory definition marker with the directory
+            # marker if we're not at the first level 
+            if level:
+                markers[-1].endstr = ''
+                kwargs['startstr'] = ':'
+                kwargs['indent'] = False
+
+            markers.append(self.get_file_marker(**kwargs))
+
+        return markers
+
 
 
 class Project(object):
     PROJECT_FILENAME = '.project'
+    SCRATCH_DIRECTORY = 'scratch'
+    INDEXES_DIRECTORY = '.indexes'
     DELIMITER = '='
 
     def __init__(self, path):
@@ -215,14 +224,29 @@ class Project(object):
 
         return config
 
-    def shorten_project_path(self, path):
-        path_string = str(path)
-        directory_string = str(self.directory)
+    def remove_project_path(self, path):
+        path = str(path).replace(str(self.directory), '')
 
-        if path_string.startswith(directory_string):
-            path_string = path_string.replace(directory_string, '.')
+        if path.startswith('/'):
+            path = path.replace('/', '', 1)
 
-        return path_string
+        return path
+
+    def get_short_path(self, path):
+        return './' + self.remove_project_path(path)
+
+    def get_project_path(self, path, prefix=None):
+        full_path = self.directory
+
+        if prefix:
+            full_path = full_path.joinpath(prefix)
+
+        full_path = full_path.joinpath(path)
+
+        return full_path
+
+    def add_prefix_to_path(self, path, prefix):
+        return self.directory.joinpath(prefix, self.remove_project_path(path))
 
 
 if __name__ == '__main__':
@@ -237,14 +261,20 @@ if __name__ == '__main__':
     - taking a "meta" index (index of file paths) and filling it out with the
       indexes found in the referenced files
     """
-    parser = argparse.ArgumentParser(description='index')
-    parser.add_argument('--file', '-f', help='file to generate index for')
-    parser.add_argument('--directory', '-d', help='directory to generate index for')
+    parser = argparse.ArgumentParser(description='makes indexes for things')
+    parser.add_argument('--source', '-s', help='what to generate the index from (file/directory)')
     parser.add_argument('--max_depth', '-m', default=None, help='max depth for a directory index')
+    parser.add_argument('--save', default=True, action='store_false', help='whether to save the file')
 
     args = parser.parse_args()
 
-    if args.file:
-        index = FileIndex(args.file)
-    elif args.directory:
-        index = DirectoryIndex(args.directory, max_depth=args.max_depth)
+    project = Project(args.source)
+
+    source_path = project.get_project_path(args.source)
+
+    index = Index(source_path, project=project, max_depth=args.max_depth)
+
+    if args.save:
+        outpath = index.index_path
+        outpath.parent.mkdir(parents=True, exist_ok=True)
+        outpath.write_text(index.content)
