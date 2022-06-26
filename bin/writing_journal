@@ -1,3 +1,0 @@
-#!/usr/local/bin/zsh
-result=`python /Users/hne/dotfiles/scripts/python/writing_journal_path.py $@`
-nvim -c 'Goyo' $result

@@ -113,6 +113,9 @@ inoremap $<tab> $$<esc>i
 inoremap <M--> —
 inoremap <M-=> ≠
 
+" move to end of line
+inoremap <c-a> <c-o>A
+
 "================================[ visual mode ]================================
 " keep visual selection after indent/unindent
 vnoremap > >gv

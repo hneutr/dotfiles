@@ -1,65 +1,15 @@
 #!/usr/local/bin/python3
-import re
 from functools import cached_property
-
 from pathlib import Path
 import argparse
 
+from project import Project 
+from marker import Marker
 
-class Marker(object):
-    TAB = '  '
-
-    STARTSTR = '-'
-
-    STARTCHARS = ['#', '>']
-
-    STARTCHAR_TO_LEVEL = {
-        '#': 0,
-        '>': 1,
-    }
-
-    def __init__(self, text='', reference='', level=0, startstr=None, endstr='\n', indent=True):
-        self.text = text
-        self.reference = reference
-        self.level = level
-        self.startstr = self.STARTSTR if startstr == None else startstr
-        self.endstr = endstr
-        self.indent = indent
-
-    def __str__(self):
-        return f"{self.lpad}{self.startstr} {self.link}{self.endstr}"
-
-    @property
-    def lpad(self):
-        return self.level * self.TAB if self.indent else ''
-
-    @property
-    def link(self):
-        return f"[{self.text}]({self.reference})"
-
-    @classmethod
-    def regex(cls):
-        startchars_string = "".join(cls.STARTCHARS)
-        return f"^([{startchars_string}]) \[(.*)\]\(\)"
-
-    @classmethod
-    def is_marker(cls, line):
-        return re.match(cls.regex(), line)
-
-    @classmethod
-    def from_line(cls, line, file=''):
-        match = re.search(cls.regex(), line)
-        startchar, text = match.groups()
-
-        level = cls.STARTCHAR_TO_LEVEL[startchar]
-
-        return Marker(
-            text=text,
-            reference=f"{file}:{text}",
-            level=level,
-        )
 
 class Index(object):
+    INDEX_DIRECTORY = '.indexes'
+
     FILE_EXCLUSIONS = [
         '.project',
         'index.md',
@@ -67,18 +17,22 @@ class Index(object):
         'definition.md',
     ]
 
+    DIRECTORY_EXCLUSIONS = [
+        'outlines',
+    ]
+
     FILE_SUFFIXES = [
         '.md',
     ]
 
-    def __init__(self, path, project, max_depth=None):
+    def __init__(self, path, max_depth=None):
         self.path = Path(path)
-        self.project = project
+        self.project = Project(self.path)
         self.max_depth = max_depth
 
     @property
     def index_path(self):
-        path = self.project.add_prefix_to_path(self.path, self.project.INDEXES_DIRECTORY)
+        path = self.project.add_prefix_to_path(self.path, self.INDEX_DIRECTORY)
 
         if self.path.is_dir():
             path = path.joinpath('index.md')
@@ -101,6 +55,7 @@ class Index(object):
         else:
             return any([
                 path.stem.startswith('.')
+                path.name in self.DIRECTORY_EXCLUSIONS,
             ])
 
     @cached_property
@@ -184,71 +139,6 @@ class Index(object):
         return markers
 
 
-
-class Project(object):
-    PROJECT_FILENAME = '.project'
-    SCRATCH_DIRECTORY = 'scratch'
-    INDEXES_DIRECTORY = '.indexes'
-    DELIMITER = '='
-
-    def __init__(self, path):
-        self.set_config(Path(path))
-
-    def set_config(self, path):
-        if path.is_file():
-            directory = Path(path).parent
-        else:
-            directory = path
-
-        self.config = {}
-
-        while directory != Path('/'):
-            config_path = directory.joinpath(self.PROJECT_FILENAME)
-            if config_path.exists():
-                self.directory = directory
-                self.config = self.read_config(config_path)
-                return
-            else:
-                directory = directory.parent
-
-    def read_config(self, path):
-        lines = path.read_text().split('\n')
-
-        config = {}
-        for line in lines:
-            line = line.strip()
-
-            if line:
-                key, value = line.split(self.DELIMITER)
-                config[key] = value
-
-        return config
-
-    def remove_project_path(self, path):
-        path = str(path).replace(str(self.directory), '')
-
-        if path.startswith('/'):
-            path = path.replace('/', '', 1)
-
-        return path
-
-    def get_short_path(self, path):
-        return './' + self.remove_project_path(path)
-
-    def get_project_path(self, path, prefix=None):
-        full_path = self.directory
-
-        if prefix:
-            full_path = full_path.joinpath(prefix)
-
-        full_path = full_path.joinpath(path)
-
-        return full_path
-
-    def add_prefix_to_path(self, path, prefix):
-        return self.directory.joinpath(prefix, self.remove_project_path(path))
-
-
 if __name__ == '__main__':
     """
     currently supports:
@@ -268,11 +158,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    project = Project(args.source)
-
-    source_path = project.get_project_path(args.source)
-
-    index = Index(source_path, project=project, max_depth=args.max_depth)
+    index = Index(args.source, max_depth=args.max_depth)
 
     if args.save:
         outpath = index.index_path

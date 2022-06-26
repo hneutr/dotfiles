@@ -1,11 +1,11 @@
 function writing#index#create(path=expand('%:p'))
-    let command = "!python3 /Users/hne/dotfiles/scripts/python/writing_index.py --source "
+    let command = "!python3 /Users/hne/dotfiles/scripts/python/writing/index.py --source "
     silent execute command . fnameescape(a:path)
 endfunction
 
 function writing#index#toggleIndex(openCommand='edit', path=expand('%:p'))
     if ! writing#project#pathIsPrefixed(g:indexPrefix, a:path)
-        call writing#index#create(a:path)
+        silent call writing#index#create(a:path)
     endif
 
     silent call writing#project#switchBetweenPathAndPrefixedPath(g:indexPrefix, a:openCommand, a:path)
@@ -13,7 +13,7 @@ endfunction
 
 function writing#index#toggleDirectoryIndex(openCommand='edit', path=expand('%:p:h'))
     if ! writing#project#pathIsPrefixed(g:indexPrefix, a:path)
-        call writing#index#create(a:path)
+        silent call writing#index#create(a:path)
         let path = a:path . '/index.md'
     else
         let path = a:path
@@ -57,7 +57,7 @@ endfunction
 
 function writing#index#insertIndex(indexType='file')
     if writing#index#fileHasIndex()
-        call writing#index#deleteFileIndex()
+        silent call writing#index#deleteFileIndex()
     endif
 
     let indexContent = writing#index#fileIndexHeader() + ['']
@@ -76,9 +76,9 @@ function writing#index#insertIndex(indexType='file')
 
     let indexContent += ['']
 
-    execute "normal! gg"
+    silent execute "normal! gg"
 
-    call nvim_put(indexContent, 'l', 0, 0)
+    silent call nvim_put(indexContent, 'l', 0, 0)
 endfunction
 
 function writing#index#getIndexContent(indexType='file')
@@ -90,7 +90,7 @@ function writing#index#getIndexContent(indexType='file')
         let indexFile = indexSourceFile . '/index.md'
     endif
 
-    call writing#index#create(indexSourceFile)
+    silent call writing#index#create(indexSourceFile)
     let indexFile = writing#project#getPrefixedVersionOfPath(g:indexPrefix, indexFile)
 
     return readfile(fnameescape(indexFile))

@@ -1,6 +1,8 @@
 let g:projectFileName = '.project'
 let g:scratchPrefix = '.scratch'
 let g:indexPrefix = '.indexes'
+let g:outlinesPrefix = 'outlines'
+let g:goalsPrefix = '.goals'
 
 "===============================[ setProjectRoot ]==============================
 " looks for a `.project` file in the current directory and parent directories.
@@ -45,7 +47,7 @@ function writing#project#getPrefixedVersionOfPath(prefix, path=expand('%:p'))
     let newPath = substitute(a:path, b:projectRoot, '', '')
     let newPath = '/' . a:prefix . newPath
     let newPath = b:projectRoot . newPath
-    call lib#makeDirectories(newPath, 1)
+    silent call lib#makeDirectories(newPath, 1)
 
     return newPath
 endfunction
@@ -98,7 +100,18 @@ function writing#project#switchBetweenPathAndPrefixedPath(prefix, openCommand='e
         let newPath = writing#project#getPrefixedVersionOfPath(a:prefix, a:path)
     endif
 
-    execute ":" . a:openCommand . " " . fnameescape(newPath)
+    silent execute ":" . a:openCommand . " " . fnameescape(newPath)
+endfunction
+
+function writing#project#switchTest(prefix, path=expand('%:p'))
+    if writing#project#pathIsPrefixed(a:prefix, a:path)
+        let newPath = writing#project#getUnprefixedVersionOfPath(a:prefix, a:path)
+    else
+        let newPath = writing#project#getPrefixedVersionOfPath(a:prefix, a:path)
+    endif
+
+    echo fnameescape(newPath)
+    " return fnameescape(newPath)
 endfunction
 
 "================================[ pushChanges ]================================
@@ -108,4 +121,14 @@ function writing#project#pushChanges()
     silent execute ":!git add " . b:projectRoot
     silent execute ":!git commit -m ${TD}"
     silent execute ":!git push"
+endfunction
+
+"===========================[ addFileOpeningMappings ]==========================
+" adds mappings to toggle between project files
+"===============================================================================
+function writing#project#addFileOpeningMappings(mappingPrefix, directoryPrefix)
+    let fn = "writing#project#switchBetweenPathAndPrefixedPath"
+    let args = '"' . a:directoryPrefix . '"'
+
+    call lib#mapPrefixedFileOpeningActions(a:mappingPrefix, fn, args)
 endfunction

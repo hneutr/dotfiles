@@ -1,14 +1,14 @@
 function writing#journals#getJournalFilePath()
     if exists("g:projectConfig")
-        let journalString = system("grep journal= " . g:projectConfig)
+        let journalString = system("grep name= " . g:projectConfig)
     else
         let journalString = ''
     endif
 
-    let journalPathCmd = "python /Users/hne/dotfiles/scripts/python/writing_journal_path.py "
+    let journalPathCmd = "python /Users/hne/dotfiles/scripts/python/writing/journaler.py "
 
     if len(journalString)
-        let journalString = substitute(journalString, 'journal=', '', '')
+        let journalString = substitute(journalString, 'name=', '', '')
         let journalPathCmd = journalPathCmd . journalString
     endif
 
@@ -16,8 +16,4 @@ function writing#journals#getJournalFilePath()
     let journalFilePath = trim(journalFilePath)
 
     return journalFilePath
-endfunction
-
-function writing#journals#openJournal(openCommand)
-    execute ":" . a:openCommand . " " . fnameescape(g:journalFilePath)
 endfunction
