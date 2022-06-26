@@ -19,6 +19,8 @@ class Index(object):
 
     DIRECTORY_EXCLUSIONS = [
         'outlines',
+        'goals',
+        "other's-ideas"
     ]
 
     FILE_SUFFIXES = [
@@ -54,7 +56,7 @@ class Index(object):
             ])
         else:
             return any([
-                path.stem.startswith('.')
+                path.stem.startswith('.'),
                 path.name in self.DIRECTORY_EXCLUSIONS,
             ])
 
@@ -107,36 +109,34 @@ class Index(object):
     def get_directory_markers(self, path, level=0):
         markers = []
 
-        if level:
-            markers.append(self.get_file_marker(path, level=level))
-
-        markers = self.add_directory_definition_marker(markers, path, level)
+        markers.append(self.get_directory_marker(path, level))
 
         for subpath in sorted(path.glob('*')):
             markers += self.get_markers(subpath, level=level + 1)
 
         return markers
 
-    def add_directory_definition_marker(self, markers, directory_path, level=0):
+    def get_directory_marker(self, directory_path, level=0):
+        """
+        if the directory has a `definition.md` file, use that as the path for
+        the marker. Otherwise, just make a directory marker.
+        """
         path = directory_path.joinpath('definition.md')
 
         if path.exists():
             kwargs = {
-                'path': path,
                 'text': 'definition',
                 'level': level,
             }
 
-            # we inline the directory definition marker with the directory
-            # marker if we're not at the first level 
             if level:
-                markers[-1].endstr = ''
-                kwargs['startstr'] = ':'
-                kwargs['indent'] = False
+                kwargs['text'] = directory_path.name
+            else:
+                kwargs['level'] = 1
 
-            markers.append(self.get_file_marker(**kwargs))
-
-        return markers
+            return self.get_file_marker(path, **kwargs)
+        else:
+            return self.get_file_marker(directory_path, level=level)
 
 
 if __name__ == '__main__':
