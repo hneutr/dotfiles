@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3
 from pathlib import Path
 from datetime import datetime
 import argparse
@@ -5,50 +6,58 @@ import argparse
 from project import Project
 import sections
 
+GOALS_DIRECTORY = Path('/Users/hne/Documents/text/written/nonfiction/on-writing/goals')
+
 
 CURRENT_YEAR = datetime.today().strftime('%Y')
 CURRENT_MONTH = datetime.today().strftime('%m')
 
 
 class Goals(object):
-    GOALS_DIRECTORY = 'goals'
+    def __init__(self, year, month, directory=GOALS_DIRECTORY):
+        self.year = year
+        self.month = month
+        self.directory = directory
 
-    def __init__(self):
-        self.project = Project(Path.cwd())
-        self.directory.mkdir(exist_ok=True)
-        self.initialize_current_goals()
-
-    @property
-    def directory(self):
-        return self.project.directory.joinpath('goals')
+        self.set_up()
 
     @property
-    def current_goals_path(self):
-        return self.directory.joinpath(f"{CURRENT_YEAR}{CURRENT_MONTH}.md")
+    def path(self):
+        return self.directory.joinpath(f"{self.year}{self.month}.md")
 
     @property
-    def goal_page_content(self):
+    def content(self):
         spacer = "\n\n"
 
         content = [
-            sections.get_heading("[monthly]()"),
+            sections.Heading("monthly"),
             spacer,
-            sections.get_heading("[weekly]()"),
+            sections.Heading("weekly"),
             spacer,
-            sections.get_heading("[daily]()"),
+            sections.Heading("daily"),
             spacer,
         ]
 
-        return "\n".join(content)
+        return "\n".join([str(s) for s in content])
 
-    def initialize_current_goals(self):
-        if self.current_goals_path.exists():
-            return
+    def set_up(self):
+        self.directory.mkdir(exist_ok=True)
 
-        self.current_goals_path.write_text(self.goal_page_content)
+        if not self.path.exists():
+            self.path.write_text(self.content)
 
 
 if __name__ == '__main__':
-    goals = Goals()
+    parser = argparse.ArgumentParser(description='goals locator')
+    parser.add_argument('--year', '-y', default=CURRENT_YEAR, help='month of goals')
+    parser.add_argument('--month', '-m', default=CURRENT_MONTH, help='year of goals')
 
-    print(goals.current_goals_path)
+    args = parser.parse_args()
+
+    goals = Goals(
+        year=args.year,
+        month=args.month,
+        directory=GOALS_DIRECTORY,
+    )
+
+    print(goals.path)

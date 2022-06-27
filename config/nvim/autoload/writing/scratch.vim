@@ -5,27 +5,20 @@ function writing#scratch#moveToScratchFile() range
     if a:firstline == a:lastline
         let lines = [getline(".")]
     else
-        let [line_start, column_start] = getpos("'<")[1:2]
-        let [line_end, column_end] = getpos("'>")[1:2]
-        let lines = getline(line_start, line_end)
-        if len(lines) == 0
-            return ''
-        endif
+        let startLine = getpos("'<")[1]
+        let endLine = getpos("'>")[1]
 
-        let lines[-1] = lines[-1][: column_end - (&selection == 'inclusive' ? 1 : 2)]
-
-        let lines[0] = lines[0][column_start - 1:]
+        let lines = getline(startLine, endLine)
     endif
+
     if lines[-1] != ""
-        let lines = lines + ['']
+        let lines += ['']
     endif
 
     let tempFile = '/tmp/move-to-scratch-file.md'
     let scratchFile = writing#project#getPrefixedVersionOfPath(g:scratchPrefix)
 
-    for line in lines
-        silent execute "!echo '" . line . "' >> " . tempFile
-    endfor
+    call writefile(lines, tempFile)
 
     silent execute "!cat " . scratchFile . " >> " . tempFile
     silent execute "!mv " . tempFile . " " . scratchFile

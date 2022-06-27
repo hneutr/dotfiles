@@ -2,6 +2,7 @@ let g:projectFileName = '.project'
 let g:scratchPrefix = '.scratch'
 let g:indexPrefix = '.indexes'
 let g:outlinesPrefix = 'outlines'
+let g:possibilitiesPrefix = 'possibilities'
 let g:goalsPrefix = '.goals'
 
 "===============================[ setProjectRoot ]==============================
