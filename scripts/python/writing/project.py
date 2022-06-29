@@ -1,63 +1,71 @@
 from pathlib import Path
+import yaml
+import json
+import argparse
+from functools import cached_property
+
+
+JOURNALS_DIRECTORY = Path('/Users/hne/Documents/text/written/journals/content')
 
 
 class Project(object):
     PROJECT_FILENAME = '.project'
-    DELIMITER = '='
 
     def __init__(self, path):
-        self.set_config(Path(path))
+        path = Path(path)
+        self.config_dir = path if path.is_dir() else path.parent
 
-    def set_config(self, path):
-        if path.is_file():
-            directory = Path(path).parent
-        else:
-            directory = path
-
-        self.config = {}
+    @cached_property
+    def config(self):
+        directory = self.config_dir
 
         while directory != Path('/'):
             config_path = directory.joinpath(self.PROJECT_FILENAME)
             if config_path.exists():
-                self.directory = directory
-                self.config = self.read_config(config_path)
-                return
+                self.config_dir = directory
+                self.config_path = config_path
+                return yaml.load(self.config_path.read_text(), Loader=yaml.BaseLoader)
             else:
                 directory = directory.parent
 
-    def read_config(self, path):
-        lines = path.read_text().split('\n')
+        return {}
 
-        config = {}
-        for line in lines:
-            line = line.strip()
+    @property
+    def journals_directory(self):
+        directory = JOURNALS_DIRECTORY
 
-            if line:
-                key, value = line.split(self.DELIMITER)
-                config[key] = value
+        if self.config.get('name'):
+            directory = directory.joinpath(self.config['name'].replace(' ', '-'))
 
-        return config
+        directory.mkdir(exist_ok=True)
 
-    def remove_project_path(self, path):
-        path = str(path).replace(str(self.directory), '')
+        return directory
+
+    def shorten_path(self, path):
+        path = str(path).replace(str(self.config_dir), '')
 
         if path.startswith('/'):
             path = path.replace('/', '', 1)
 
-        return path
+        return f'./{path}'
 
-    def get_short_path(self, path):
-        return './' + self.remove_project_path(path)
+    def prefix_path(self, path, prefix):
+        new_path = self.shorten_path(path).replace('.', prefix, 1)
+        return self.config_dir.joinpath(new_path)
 
-    def get_project_path(self, path, prefix=None):
-        full_path = self.directory
+    # @property
+    # def journal_name(self):
 
-        if prefix:
-            full_path = full_path.joinpath(prefix)
 
-        full_path = full_path.joinpath(path)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='project handler')
+    parser.add_argument('--source', '-s', default=Path.cwd(), help='where to look for the project file')
+    parser.add_argument('--save_json', default=False, action='store_true', help='if true, save the json somewhere')
+    parser.add_argument('--json_destination', default='/tmp/project-json.json', help='where to save json')
 
-        return full_path
+    args = parser.parse_args()
 
-    def add_prefix_to_path(self, path, prefix):
-        return self.directory.joinpath(prefix, self.remove_project_path(path))
+    project = Project(Path(args.source))
+
+    if args.save_json:
+        Path(args.json_destination).write_text(json.dumps(project.config))

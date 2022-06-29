@@ -13,20 +13,14 @@ CURRENT_MONTH = datetime.today().strftime('%m')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='writing journaler')
+    parser.add_argument('--source', '-s', default=Path.cwd(), help='what to generate the index from (file/directory)')
     parser.add_argument('--year', '-y', default=CURRENT_YEAR, help='month of journal')
     parser.add_argument('--month', '-m', default=CURRENT_MONTH, help='year of journal')
 
     args = parser.parse_args()
 
-    project = Project(Path.cwd())
+    project = Project(args.source)
 
-    directory = JOURNALS_DIRECTORY
-
-    if project.config.get('name'):
-        directory = directory.joinpath(project.config.get('name'))
-
-    directory.mkdir(exist_ok=True)
-
-    journal_path = directory.joinpath(f"{args.year}{args.month}.md")
+    journal_path = project.journals_directory.joinpath(f"{args.year}{args.month}.md")
 
     print(journal_path)

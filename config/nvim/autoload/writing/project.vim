@@ -25,13 +25,30 @@ function writing#project#setProjectRoot()
         let possibleProjectRootFile = directory . '/' . g:projectFileName
 
         if filereadable (possibleProjectRootFile)
-            let b:projectConfig = directory . '/' . g:projectFileName
+            let b:projectConfigFile = possibleProjectRootFile
             let b:projectRoot = directory
+
+            let b:configLoaded = 0
             break
         else
             call remove(directoryParts, len(directoryParts) - 1)
         endif
     endwhile
+endfunction
+
+function writing#project#getConfig()
+    if b:configLoaded == 1
+        return b:projectConfig
+    else
+        let b:projectConfig = writing#project#readConfig(b:projectConfigFile)
+        let b:configLoaded = 1
+    endif
+endfunction
+
+function writing#project#readConfig(path)
+    let command = "python /Users/hne/dotfiles/scripts/python/writing/project.py -s " . a:path . " --save_json"
+    call system(command)
+    return json_decode(readfile(fnameescape('/tmp/project-json.json')))
 endfunction
 
 "==========================[ getPrefixedVersionOfPath ]=========================
@@ -104,17 +121,6 @@ function writing#project#switchBetweenPathAndPrefixedPath(prefix, openCommand='e
     endif
 
     silent execute ":" . a:openCommand . " " . fnameescape(newPath)
-endfunction
-
-function writing#project#switchTest(prefix, path=expand('%:p'))
-    if writing#project#pathIsPrefixed(a:prefix, a:path)
-        let newPath = writing#project#getUnprefixedVersionOfPath(a:prefix, a:path)
-    else
-        let newPath = writing#project#getPrefixedVersionOfPath(a:prefix, a:path)
-    endif
-
-    echo fnameescape(newPath)
-    " return fnameescape(newPath)
 endfunction
 
 "================================[ pushChanges ]================================

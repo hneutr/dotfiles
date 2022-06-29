@@ -36,7 +36,7 @@ class Index(object):
 
     @property
     def index_path(self):
-        path = self.project.add_prefix_to_path(self.path, self.INDEX_DIRECTORY)
+        path = self.project.prefix_path(self.path, self.INDEX_DIRECTORY)
 
         if self.path.is_dir():
             path = path.joinpath('index.md')
@@ -95,7 +95,7 @@ class Index(object):
     def get_text_markers(self, path):
         lines = path.read_text().split("\n")
 
-        short_path = self.project.get_short_path(path)
+        short_path = self.project.shorten_path(path)
         return [Marker.from_line(l, short_path) for l in lines if Marker.is_marker(l)]
 
     def get_file_marker(self, path, text=None, **kwargs):
@@ -104,7 +104,7 @@ class Index(object):
 
         return Marker(
             text=text,
-            reference=f"{self.project.get_short_path(path)}:",
+            reference=f"{self.project.shorten_path(path)}:",
             **kwargs,
         )
 
