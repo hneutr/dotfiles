@@ -1,0 +1,5 @@
+touch notes.md
+touch text.md
+touch .project
+git init
+cp /Users/hne/dotfiles/writing-project-gitignore .gitignore

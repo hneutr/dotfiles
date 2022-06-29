@@ -18,9 +18,11 @@ class Index(object):
     ]
 
     DIRECTORY_EXCLUSIONS = [
+        "changes",
         'outlines',
         'goals',
         "other's-ideas"
+        "possibilities",
     ]
 
     FILE_SUFFIXES = [

@@ -1,9 +1,11 @@
 let g:projectFileName = '.project'
-let g:scratchPrefix = '.scratch'
-let g:indexPrefix = '.indexes'
+let g:changesPrefix = 'changes'
+let g:goalsPrefix = 'goals'
 let g:outlinesPrefix = 'outlines'
 let g:possibilitiesPrefix = 'possibilities'
-let g:goalsPrefix = '.goals'
+let g:indexPrefix = '.indexes'
+let g:fragmentsPrefix = '.fragments'
+let g:scratchPrefix = '.scratch'
 
 "===============================[ setProjectRoot ]==============================
 " looks for a `.project` file in the current directory and parent directories.

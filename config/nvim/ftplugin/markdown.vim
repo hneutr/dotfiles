@@ -10,6 +10,12 @@ call writing#project#addFileOpeningMappings('o', g:outlinesPrefix)
 "===============================[ possibilities ]===============================
 call writing#project#addFileOpeningMappings('p', g:possibilitiesPrefix)
 
+"==================================[ changes ]==================================
+call writing#project#addFileOpeningMappings('c', g:changesPrefix)
+
+"=================================[ fragments ]=================================
+call writing#project#addFileOpeningMappings('f', g:fragmentsPrefix)
+
 "==================================[ scratch ]==================================
 call writing#project#addFileOpeningMappings('s', g:scratchPrefix)
 
