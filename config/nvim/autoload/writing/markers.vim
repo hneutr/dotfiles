@@ -1,11 +1,23 @@
+"=============================[ shortenMarkerPath ]=============================
+" takes a path and abbreviates the project root as `.`
+"===============================================================================
+function writing#markers#shortenMarkerPath(path=expand('%:p'))
+    return substitute(a:path, b:projectRoot, '.', '')
+endfunction
+
+"==============================[ expandMarkerPath ]=============================
+" expands a marker path (from `writing#markers#expandMarkerPath`) into a full
+" path
+"===============================================================================
+function writing#markers#expandMarkerPath(path)
+    return substitute(a:path, '.', b:projectRoot, '')
+endfunction
+
 "============================[ MakeMarkerReference ]============================
 " makes a reference to a marker
-"
-" if `crossFile` is 1, it'll make it a cross file reference.
 "===============================================================================
 function writing#markers#MakeMarkerReference()
-    let path = expand('%:p')
-    let path = substitute(path, b:projectRoot, '.', '')
+    let path = writing#markers#shortenMarkerPath()
 
     let line = getline('.')
     let line = substitute(line, '^.*[', '', '')
@@ -28,8 +40,7 @@ endfunction
 " makes a reference to a path
 "===============================================================================
 function writing#markers#MakeFileReference()
-    let path = expand('%:p')
-    let path = substitute(path, b:projectRoot, '.', '')
+    let path = writing#markers#shortenMarkerPath()
 
     let filename = expand('%:t:r')
 
@@ -45,38 +56,58 @@ function writing#markers#MakeFileReference()
     let @b = registerB
 endfunction
 
+"============================[ parseMarkerReference ]===========================
+" parses a marker reference.
+"
+" A marker has the following structure:
+" - a full marker: `[label](path:text?=flags)`
+" - without flags: `[label](path:text)`
+" - without a reference: `[label](path)`
+"
+" However, only content within the parentheses should be passed to this function
+"===============================================================================
+function writing#markers#parseMarkerReference(marker)
+    let text = ''
+    let flags = []
+
+    if stridx(a:marker, ':') != -1
+        let [shortPath, text] = split(a:marker, ':')
+    else
+        let shortPath = a:marker
+    endif
+    
+    let path = writing#markers#expandMarkerPath(shortPath)
+
+    if stridx(text, '?=') != -1
+        let [text, flagsString] = split(text, '?=')
+
+        for i in range(len(flagsString))
+            call add(flags, flagsString[i])
+        endfor
+    endif
+
+    return [path, text, flags]
+endfunction
+
 "============================[ GoToMarkerReference ]============================
 " navigates to a marker.
 "===============================================================================
 function writing#markers#GoToMarkerReference(openCommand)
     let marker = lib#getTextInsideNearestParenthesis()
 
-    if stridx(marker, ':') != -1
-        let path = substitute(marker, ':.*$', '', '')
-        let marker = substitute(marker, '^.*:', '', '')
+    let [path, text, flags] = writing#markers#parseMarkerReference(marker)
 
-        if path =~ '^\.'
-            let path = substitute(path, '.', '', '')
-            let path = b:projectRoot . path
-        endif
-
-        if filereadable(path)
-            execute ":" . a:openCommand . " " . fnameescape(path)
-        elseif isdirectory(path)
-            " if it's a directory, open a terminal at that directory
-            execute ":" . a:openCommand
-            execute ":terminal"
-            execute ":call chansend(" . b:terminal_job_id . ", 'cd " . fnameescape(path) . "')"
-            execute ":call chansend(" . b:terminal_job_id . ", 'clear')"
-        endif
+    " if the file isn't the one we're currently editing, open it
+    if path != expand('%:p')
+        call lib#openPath(path, a:openCommand)
     endif
 
-    if len(marker) > 0
-        let search = '[#>] \[' . marker . '\]'
+    if len(text)
+        let search = '[#>] \[' . text . '\]'
 
         let @/ = search
         try
-            execute "normal! nzz"
+            silent execute "normal! nzz"
         catch
         endtry
     endif

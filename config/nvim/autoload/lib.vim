@@ -341,5 +341,14 @@ function lib#mapPrefixedFileOpeningActions(mappingPrefix, functionName, otherArg
 endfunction
 
 function lib#openPath(path, openCommand)
-    execute ":" . a:openCommand . " " . fnameescape(a:path)
+
+    if filereadable(a:path)
+        execute ":" . a:openCommand . " " . fnameescape(a:path)
+    elseif isdirectory(a:path)
+        " if it's a directory, open a terminal at that directory
+        execute ":" . a:openCommand
+        execute ":terminal"
+        execute ":call chansend(" . b:terminal_job_id . ", 'cd " . fnameescape(a:path) . "')"
+        execute ":call chansend(" . b:terminal_job_id . ", 'clear')"
+    endif
 endfunction

@@ -4,7 +4,92 @@ from pathlib import Path
 import argparse
 
 from project import Project 
-from marker import Marker
+from marker import Marker, Reference
+import sections
+
+
+class Entry(object):
+    TAB = '  '
+
+    STARTSTR = '-'
+    ENDSTR = '\n'
+
+    MARKER_STARTCHAR_TO_LEVEL = {
+        '#': 0,
+        '>': 1,
+    }
+
+    def __init__(
+        self,
+        item,
+        level=0,
+        startstr=None,
+        endstr=None,
+        indent=True,
+    ):
+        self.item = item
+        self.level = level
+        self.startstr = self.STARTSTR if startstr == None else startstr
+        self.endstr = self.ENDSTR if endstr == None else endstr
+        self.indent = indent
+
+    def __str__(self):
+        return f"{self.lpad}{self.STARTSTR} {str(self.item)}{self.ENDSTR}"
+
+    @property
+    def lpad(self):
+        return self.level * self.TAB if self.indent else ''
+
+    @classmethod
+    def from_file_marker(cls, string, project, path, level=0, **kwargs):
+        level += cls.STARTCHAR_TO_LEVEL[string[0]]
+
+        reference = Marker.get_reference_from_string(
+            string=string,
+            project=project,
+            path=path,
+            **kwargs,
+        )
+
+        return Entry(
+            item=reference,
+            level=level,
+        )
+
+    @classmethod
+    def from_path(cls, project, path, level, label=''):
+        reference = Reference(
+            project=project,
+            label=label if label else path.stem,
+            path=path,
+        )
+
+        return Entry(
+            item=reference,
+            level=level,
+        )
+
+
+class MultiIndex(object):
+    def __init__(self, path, max_depth=None):
+        path = Path(path)
+        self.file_index = Index(path, max_depth=max_depth)
+        self.directory_index = Index(path.parent, max_depth=max_depth)
+
+    @property
+    def content(self):
+        content = [
+            sections.Heading("dir"),
+            self.directory_index.content,
+            sections.Heading("file"),
+            self.file_index.content,
+        ]
+
+        return "\n\n".join([str(s) for s in content])
+
+    @property
+    def index_path(self):
+        return self.file_index.index_path
 
 
 class Index(object):
@@ -45,9 +130,9 @@ class Index(object):
 
     @property
     def content(self):
-        return "".join([str(m) for m in self.markers]).rstrip()
+        return "".join([str(e) for e in self.entries]).rstrip()
 
-    def exclude_path_markers(self, path):
+    def exclude_entries_by_path(self, path):
         """
         TODO: also exclude gitignored things
         """
@@ -63,82 +148,89 @@ class Index(object):
             ])
 
     @cached_property
-    def markers(self):
+    def entries(self):
         if self.path.is_file():
-            markers = self.get_text_markers(self.path)
+            entries = self.get_entries_from_file(self.path)
         else:
-            markers = self.get_markers(self.path)
+            entries = self.get_entries(self.path)
 
-        min_level = min([m.level for m in markers])
+        min_level = min([e.level for e in entries])
 
-        for marker in markers:
-            marker.level -= min_level
+        for entry in entries:
+            entry.level -= min_level
 
-        return markers
+        return entries
 
-    def get_markers(self, path, level=0):
-        markers = []
+    def get_entries(self, path, level=0):
+        entries = []
 
         if self.max_depth and level == self.max_depth:
-            return markers
+            return entries
 
-        if self.exclude_path_markers(path):
-            return markers
+        if self.exclude_entries_by_path(path):
+            return entries
 
         if path.is_file():
-            markers.append(self.get_file_marker(path, level=level))
+            entries.append(Entry.from_path(
+                project=self.project,
+                path=path,
+                level=level,
+            ))
         elif path.is_dir():
-            markers += self.get_directory_markers(path, level=level)
+            entries += self.get_directory_entries(path, level=level)
 
-        return markers
+        return entries
 
-    def get_text_markers(self, path):
-        lines = path.read_text().split("\n")
+    def get_entries_from_file(self, path, level=0):
+        entries = []
+        for line in path.read_text().split("\n"):
+            if Marker.is_marker(line):
+                entries.append(Entry.from_file_marker(
+                    string=line,
+                    project=self.project,
+                    path=path,
+                    level=level,
+                ))
 
-        short_path = self.project.shorten_path(path)
-        return [Marker.from_line(l, short_path) for l in lines if Marker.is_marker(l)]
+        return entries
 
-    def get_file_marker(self, path, text=None, **kwargs):
-        if not text:
-            text = path.stem 
+    def get_directory_entries(self, path, level=0):
+        entries = []
 
-        return Marker(
-            text=text,
-            reference=f"{self.project.shorten_path(path)}:",
-            **kwargs,
-        )
-
-    def get_directory_markers(self, path, level=0):
-        markers = []
-
-        markers.append(self.get_directory_marker(path, level))
+        if self.include_directory_entry(path, level):
+            entries.append(self.get_directory_entry(path, level))
 
         for subpath in sorted(path.glob('*')):
-            markers += self.get_markers(subpath, level=level + 1)
+            entries += self.get_entries(subpath, level=level + 1)
 
-        return markers
+        return entries
 
-    def get_directory_marker(self, directory_path, level=0):
+    def include_directory_entry(self, path, level=0):
+        return level or path.joinpath('definition.md').exists()
+
+    def get_directory_entry(self, path, level=0):
         """
         if the directory has a `definition.md` file, use that as the path for
         the marker. Otherwise, just make a directory marker.
         """
-        path = directory_path.joinpath('definition.md')
+        definition_path = path.joinpath('definition.md')
 
-        if path.exists():
-            kwargs = {
-                'text': 'definition',
-                'level': level,
-            }
+        label = path.name
 
-            if level:
-                kwargs['text'] = directory_path.name
-            else:
-                kwargs['level'] = 1
+        if definition_path.exists():
+            path = definition_path
 
-            return self.get_file_marker(path, **kwargs)
-        else:
-            return self.get_file_marker(directory_path, level=level)
+            if not level:
+                label = 'definition'
+                level = 1
+
+        return Entry.from_path(
+            project=self.project,
+            label=label,
+            path=path,
+            level=level,
+        )
+
 
 
 if __name__ == '__main__':
@@ -160,7 +252,10 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    index = Index(args.source, max_depth=args.max_depth)
+    if Path(args.source).name == 'definition.md':
+        index = MultiIndex(args.source, max_depth=args.max_depth)
+    else:
+        index = Index(args.source, max_depth=args.max_depth)
 
     if args.save:
         outpath = index.index_path

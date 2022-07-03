@@ -1,3 +1,5 @@
+let g:vim_markdown_no_default_key_mappings = 1
+
 let g:journalFilePath = writing#journals#getJournalFilePath()
 let g:goalsFilePath = writing#goals#getGoalsFilePath()
 
@@ -41,7 +43,7 @@ nnoremap <silent> <leader>if :call writing#index#insertIndex()<cr>
 nnoremap <silent> <leader>idf :call writing#index#insertIndex("directory")<cr>
 nnoremap <silent> <leader>ib :call writing#index#insertIndex("both")<cr>
 
-"===================================[ marks ]===================================
+"==================================[ markers ]==================================
 " "marker-/" search for a marker
 nnoremap <silent> <leader>m/ :call writing#markers#GoToMarkerReference("edit")<cr>
 call lib#mapPrefixedFileOpeningActions("m", "writing#markers#GoToMarkerReference")
