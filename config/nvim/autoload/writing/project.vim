@@ -1,8 +1,7 @@
 let g:projectFileName = '.project'
 let g:changesPrefix = 'changes'
-let g:goalsPrefix = 'goals'
 let g:outlinesPrefix = 'outlines'
-let g:possibilitiesPrefix = 'possibilities'
+let g:possibilitiesPrefix = '.possibilities'
 let g:indexPrefix = '.indexes'
 let g:fragmentsPrefix = '.fragments'
 let g:scratchPrefix = '.scratch'
@@ -49,6 +48,22 @@ function writing#project#readConfig(path)
     let command = "python /Users/hne/dotfiles/scripts/python/writing/project.py -s " . a:path . " --save_json"
     call system(command)
     return json_decode(readfile(fnameescape('/tmp/project-json.json')))
+endfunction
+
+"================================[ shortenPath ]================================
+" takes a path and abbreviates the project root as `.`
+"===============================================================================
+function writing#project#shortenMarkerPath(path=expand('%'))
+    let path = fnamemodify(a:path, ':p')
+    return substitute(path, b:projectRoot, '.', '')
+endfunction
+
+"=================================[ expandPath ]================================
+" expands a marker path (from `writing#project#shortenPath`) into a full
+" path
+"===============================================================================
+function writing#project#expandMarkerPath(path)
+    return substitute(a:path, '.', b:projectRoot, '')
 endfunction
 
 "==========================[ getPrefixedVersionOfPath ]=========================

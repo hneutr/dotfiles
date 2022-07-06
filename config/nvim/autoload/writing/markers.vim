@@ -1,59 +1,92 @@
-"=============================[ shortenMarkerPath ]=============================
-" takes a path and abbreviates the project root as `.`
+"==================================[ makeLink ]=================================
+" creates a markdown link string: [label](reference)
 "===============================================================================
-function writing#markers#shortenMarkerPath(path=expand('%:p'))
-    return substitute(a:path, b:projectRoot, '.', '')
+function s:makeLink(label, reference)
+    return "[" . a:label . "](" . a:reference . ")"
 endfunction
 
-"==============================[ expandMarkerPath ]=============================
-" expands a marker path (from `writing#markers#expandMarkerPath`) into a full
-" path
-"===============================================================================
-function writing#markers#expandMarkerPath(path)
-    return substitute(a:path, '.', b:projectRoot, '')
+function writing#markers#getFileMarkers(path=expand('%'))
+    let path = fnamemodify(a:path, ':p')
+
+    let labels = []
+    for line in reverse(readfile(path))
+        let isMarkerStart = match(line, '[#>] \[') != -1
+        let isMarkerEnd = match(line, '.*[\(\)') != -1
+
+        if isMarkerStart && isMarkerEnd
+            call add(labels, writing#markers#parseLabel(line))
+        endif
+    endfor
+
+    return labels
 endfunction
 
-"============================[ MakeMarkerReference ]============================
+function writing#markers#parseLabel(string=getline('.'))
+    let string = substitute(a:string, '^.*[', '', '')
+    let label = substitute(string, ']().*$', '', '')
+    return label
+endfunction
+
+"================================[ getReference ]===============================
 " makes a reference to a marker
 "===============================================================================
-function writing#markers#MakeMarkerReference()
-    let path = writing#markers#shortenMarkerPath()
+function writing#markers#getReference(label=writing#markers#parseLabel(), path=expand('%'), copy=1)
+    let reference = writing#project#shortenMarkerPath(a:path)
 
-    let line = getline('.')
-    let line = substitute(line, '^.*[', '', '')
-    let markerText = substitute(line, ']()$', '', '')
-    let marker = path . ':' . markerText
+    if len(a:label)
+        let reference .= ':' . a:label
+    endif
 
-    let a = @a
-    let b = @b
-    let @a = markerText
-    let @b = marker
+    let link = s:makeLink(a:label, reference)
 
-    execute "normal! o[a](b)"
-    execute "normal! ^"
+    if a:copy
+        let @" = 
+    endif
 
-    let @a = a
-    let @b = b
+    return link
 endfunction
 
-"=============================[ MakeFileReference ]=============================
-" makes a reference to a path
+"==============================[ getFileReference ]=============================
+" makes a reference to a path and puts it in the " register
 "===============================================================================
-function writing#markers#MakeFileReference()
-    let path = writing#markers#shortenMarkerPath()
+function writing#markers#getFileReference(path=expand('%'), copy=1)
+    let path = writing#project#shortenMarkerPath(a:path)
 
-    let filename = expand('%:t:r')
+    let filename = fnamemodify(a:path, ':t:r')
 
-    let registerA = @a
-    let registerB = @b
-    let @a = filename
-    let @b = path
+    let link = s:makeLink(filename, path)
 
-    execute "normal! o[a](b:)"
-    execute "normal! ^"
+    if a:copy
+        let @" = link
+    endif
 
-    let @a = registerA
-    let @b = registerB
+    return link
+endfunction
+
+
+"===========================[ fuzzy-find references ]===========================
+function writing#markers#pickFileReference(path='')
+    if ! len(a:path)
+        call fzf#run(fzf#wrap({'sink': function('writing#markers#pickFileReference')}))
+    else
+        let reference = writing#markers#getFileReference(a:path, 0)
+        silent call nvim_put([reference], 'l', 0, 0)
+    endif
+endfunction
+
+function writing#markers#pickReference(pick='')
+    if ! len(a:pick)
+        let g:markerPathChoice = ''
+        call fzf#run(fzf#wrap({'sink': function('writing#markers#pickReference')}))
+    elseif ! len(g:markerPathChoice)
+        let g:markerPathChoice = a:pick
+        let labels = writing#markers#getFileMarkers(a:pick)
+        call fzf#run(fzf#wrap({'sink': function('writing#markers#pickReference'), 'source': labels}))
+    else
+        let reference = writing#markers#getReference(a:pick, g:markerPathChoice, 0)
+        call nvim_put([reference], 'l', 0, 0)
+        let g:markerPathChoice = ''
+    endif
 endfunction
 
 "============================[ parseMarkerReference ]===========================
@@ -76,7 +109,7 @@ function writing#markers#parseMarkerReference(marker)
         let shortPath = a:marker
     endif
     
-    let path = writing#markers#expandMarkerPath(shortPath)
+    let path = writing#project#expandMarkerPath(shortPath)
 
     if stridx(text, '?=') != -1
         let [text, flagsString] = split(text, '?=')
@@ -99,6 +132,8 @@ function writing#markers#GoToMarkerReference(openCommand)
 
     " if the file isn't the one we're currently editing, open it
     if path != expand('%:p')
+        " make the directories leading up to the file if it doesn't exist
+        call lib#makeDirectories(path, path[-3:] == '.md')
         call lib#openPath(path, a:openCommand)
     endif
 
@@ -111,4 +146,15 @@ function writing#markers#GoToMarkerReference(openCommand)
         catch
         endtry
     endif
+endfunction
+
+"================================[ renameMarker ]===============================
+" change a marker's text
+"===============================================================================
+function writing#markers#renameMarker(new, old=writing#markers#parseLabel(), path=expand('%'))
+    let cmd = "writing-project-update --old_path " . a:path
+    let cmd .= ' --old_text "' . a:old  . '"'
+    let cmd .= ' --new_text "' . a:new  . '"'
+
+    silent call system(cmd)
 endfunction

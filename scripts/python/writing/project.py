@@ -3,35 +3,37 @@ import yaml
 import json
 import argparse
 from functools import cached_property
+import distutils.dir_util
+
 
 from marker import Marker, Reference
 
 
+JSON_TEMP_PATH = Path('/tmp/project-json.json')
 JOURNALS_DIRECTORY = Path('/Users/hne/Documents/text/written/journals/content')
-
 
 class Project(object):
     PROJECT_FILENAME = '.project'
 
     def __init__(self, path):
-        self.start_path = Path(path)
+        self.start_path = Path(path).resolve()
         self.start_dir = self.start_path if self.start_path.is_dir() else self.start_path.parent
         self.find_config()
 
     def find_config(self):
-        self.root_dir = self.start_dir
+        self.root = self.start_dir
 
-        while self.root_dir != Path('/'):
+        while self.root != Path('/'):
             if self.config_path.exists():
                 return
             else:
-                self.root_dir = self.root_dir.parent
+                self.root = self.root.parent
 
-        self.root_dir = self.start_dir
+        self.root = self.start_dir
 
     @property
     def config_path(self):
-        return self.root_dir.joinpath(self.PROJECT_FILENAME)
+        return self.root.joinpath(self.PROJECT_FILENAME)
 
     @cached_property
     def config(self):
@@ -44,7 +46,7 @@ class Project(object):
     def journals_directory(self):
         directory = JOURNALS_DIRECTORY
 
-        if self.config.get('name'):
+        if 'name' in self.config:
             directory = directory.joinpath(self.config['name'].replace(' ', '-'))
 
         directory.mkdir(exist_ok=True)
@@ -52,15 +54,21 @@ class Project(object):
         return directory
 
     def shorten_path(self, path):
-        return str(path).replace(str(self.root_dir), '.')
+        return str(path).replace(str(self.root), '.')
 
     def expand_path(self, path):
-        path = str(path).replace('.', str(self.root_dir), 1)
+        path = str(path).replace('.', str(self.root), 1)
         return Path(path)
 
     def prefix_path(self, path, prefix):
         prefixed_path = self.shorten_path(path).replace('.', prefix, 1)
-        return self.root_dir.joinpath(prefixed_path)
+        return self.root.joinpath(prefixed_path)
+
+    def get_project_absolute_path(self, path):
+        if not path.startswith(str(self.root)):
+            path = self.root.joinpath(path)
+
+        return Path(path)
 
     ################################################################################
     # updating markers:
@@ -80,20 +88,26 @@ class Project(object):
         3. directory changes. In this case:
             1. move mirrored directories
             2. find all references to updated directories and update the path
+
+        todo:
+        - we prolly have to be careful about multi-named files (eg `definition.md`)
         """
-        old_path = Path(old_path)
+        old_path = self.get_project_absolute_path(old_path)
+
+        if new_path:
+            new_path = self.get_project_absolute_path(new_path)
+        else:
+            new_path = old_path
 
         if old_text != new_text:
             Marker.update_file_markers(old_path, old_text, new_text)
-
-        if not new_path:
-            return
 
         if old_path != new_path:
             updates = self.get_paths_to_update(old_path, new_path)
         else:
             updates = [{
-                'old_path': Path(old_path),
+                'old_path': old_path,
+                'new_path': old_path,
             }]
 
         if old_text:
@@ -139,7 +153,7 @@ class Project(object):
             short_new = short_new.rstrip('/')
 
         mirrors = []
-        for other in self.root_dir.rglob('*'):
+        for other in self.root.rglob('*'):
             short_other = self.shorten_path(other).replace('./', '', 1)
 
             if short_other.endswith(short_old):
@@ -147,7 +161,7 @@ class Project(object):
 
                 mirrors.append({
                     'old_path': other,
-                    'new_path': self.root_dir.joinpath(short_new_other),
+                    'new_path': self.root.joinpath(short_new_other),
                 })
 
         return mirrors
@@ -157,12 +171,20 @@ class Project(object):
             old = update['old_path']
             new = update['new_path']
 
-            target_dir = new if new.is_dir() else new.parent
-            target_dir.mkdir(exist_ok=True, parents=True)
+            if new.exists() and new.is_dir():
+                distutils.dir_util.copy_tree(str(old), str(new))
+                for path in old.rglob('*'):
+                    if path.is_dir():
+                        path.rmdir()
+                    elif path.is_file():
+                        path.unlink()
+            else:
+                target_dir = new if new.is_dir() else new.parent
+                target_dir.mkdir(exist_ok=True, parents=True)
 
-            old.rename(new)
+                old.rename(new)
 
-        for path in self.root_dir.rglob('*'):
+        for path in self.root.rglob('*'):
             if path.is_dir() and not len(list(path.rglob('*'))):
                 path.rmdir()
 
@@ -172,7 +194,7 @@ class Project(object):
         - whenever you find a line that matches one of the things to change
             (will need to look recursively within a line)
         """
-        for path in self.root_dir.rglob('*.md'):
+        for path in self.root.rglob('*.md'):
             old_content = path.read_text()
 
             new_content = Reference.update_references_in_string(
@@ -189,10 +211,17 @@ class Project(object):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='project handler')
     parser.add_argument('--source', '-s', default=Path.cwd(), help='where to look for the project file')
-    parser.add_argument('--save_json', default=False, action='store_true', help='if true, save the json somewhere')
-    parser.add_argument('--json_destination', default='/tmp/project-json.json', help='where to save json')
 
-    parser.add_argument('--update', '-u', default=False, action='store_true', help='update markers/references')
+    # json
+    parser.add_argument('--save_json', default=False, action='store_true', help='whether to save project json')
+    parser.add_argument('--json_path', default=JSON_TEMP_PATH, help='where to save json')
+
+    # get mirrored path
+    parser.add_argument('--print_mirror_path', default=False, action='store_true', help="print a mirror's path")
+    parser.add_argument('--mirror', type=str, help='which mirror')
+
+    # project file updating
+    parser.add_argument('--update', default=False, action='store_true', help='update markers/references')
     parser.add_argument('--old_path', type=str, help='path to update from')
     parser.add_argument('--new_path', type=str, help='path to update to')
     parser.add_argument('--old_text', type=str, help='text to update from')
@@ -200,12 +229,13 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    source = args.source
+    project = Project(args.source)
 
-    if not source.startswith('/'):
-        source = Path.cwd().joinpath(source)
+    if args.save_json:
+        Path(args.json_path).write_text(json.dumps(project.config))
 
-    project = Project(source)
+    if args.print_mirror_path:
+        print(project.prefix_path(project.start_path, args.mirror))
 
     if args.update:
         project.execute_update(
@@ -214,22 +244,3 @@ if __name__ == '__main__':
             old_text=args.old_text,
             new_text=args.new_text,
         )
-
-    """
-    todo:
-    - make paths relative paths absolute 
-    - we prolly have to be careful about multi-named files (eg `definition.md`)
-
-    tested:
-    - marker text changes
-    - file change results in change
-    - file change produces reference updates
-    - directory changes effects mirrors
-    - directory change results in updates to mirror references
-
-    still to test:
-    """
-    import sys; sys.exit()
-
-    if args.save_json:
-        Path(args.json_destination).write_text(json.dumps(project.config))

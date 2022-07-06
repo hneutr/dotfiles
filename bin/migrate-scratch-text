@@ -1,3 +1,0 @@
-tail -r scratch-text.md >> old-scratch-text.md
-rm scratch-text.md
-touch scratch-text.md

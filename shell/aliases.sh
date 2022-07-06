@@ -15,7 +15,6 @@ alias vi="nvim"
 alias vim="nvim"
 alias gv="nvim -c 'Goyo' "
 alias gvt="nvim -c 'Goyo' text.md"
-alias wr="nvim text.md scratch-text.md -c 'Goyo'"
 
 # python
 alias python="python3"
@@ -44,4 +43,7 @@ alias po="popen"
 [[ ! -z $(which rg) ]] && alias rgl="rg -l"
 
 # writing stuff
-alias j="journal"
+alias wr=edit-file-and-outline
+alias j=open-writing-journal
+alias J="open-writing-journal -j on-writing"
+alias pmv=writing-project-move

@@ -10,7 +10,5 @@ config/configstore
 zplug/
 tpm/
 config/coc/extensions/node_modules
-*/~
-config/nvim/~
 __pycache__
 scripts/python/writing/tests/

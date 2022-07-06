@@ -112,6 +112,8 @@ inoremap $<tab> $$<esc>i
 " digraphs are good
 inoremap <M--> —
 inoremap <M-=> ≠
+inoremap <M-Left> ←
+inoremap <M-Right> →
 
 " move to end of line
 inoremap <c-a> <c-o>A

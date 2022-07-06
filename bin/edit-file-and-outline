@@ -1,0 +1,7 @@
+#!/usr/local/bin/zsh
+
+function () {
+  local file=$1
+  local outline=$(writing-project -s $1 --print_mirror_path --mirror outlines)
+  nvim $file $outline -c 'Goyo'
+} $@

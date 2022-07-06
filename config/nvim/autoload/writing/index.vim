@@ -22,13 +22,12 @@ function writing#index#toggleDirectoryIndex(openCommand='edit', path=expand('%:p
     silent call writing#project#switchBetweenPathAndPrefixedPath(g:indexPrefix, a:openCommand, path)
 endfunction
 
-function writing#index#fileIndexHeader()
-    let headerLine = "#-------------------------------------------------------------------------------"
-    return [headerLine, '# index', headerLine]
+function s:getIndexHeader()
+    return writing#dividers#getHeader('index', 'big')
 endfunction
 
 function writing#index#fileHasIndex()
-    let indexHeader = writing#index#fileIndexHeader()
+    let indexHeader = s:getIndexHeader()
     for i in range(len(indexHeader))
         if getline(i + 1) != indexHeader[i]
             return 0
@@ -60,7 +59,7 @@ function writing#index#insertIndex(indexType='file')
         silent call writing#index#deleteFileIndex()
     endif
 
-    let indexContent = writing#index#fileIndexHeader() + ['']
+    let indexContent = s:getIndexHeader() + ['']
 
     if (a:indexType == 'directory') || (a:indexType == 'both')
         let indexContent += writing#index#getIndexContent('directory')

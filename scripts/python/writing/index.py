@@ -42,7 +42,7 @@ class Entry(object):
 
     @classmethod
     def from_file_marker(cls, string, project, path, level=0, **kwargs):
-        level += cls.STARTCHAR_TO_LEVEL[string[0]]
+        level += cls.MARKER_STARTCHAR_TO_LEVEL[string[0]]
 
         reference = Marker.get_reference_from_string(
             string=string,
@@ -184,7 +184,7 @@ class Index(object):
     def get_entries_from_file(self, path, level=0):
         entries = []
         for line in path.read_text().split("\n"):
-            if Marker.is_marker(line):
+            if Marker.string_contains_instance(line):
                 entries.append(Entry.from_file_marker(
                     string=line,
                     project=self.project,

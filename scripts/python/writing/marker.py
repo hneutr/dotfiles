@@ -184,6 +184,7 @@ class Marker(object):
             flags=flags,
         )
 
+    @classmethod
     def get_reference_from_string(cls, string, project, path, label=None, flags=None):
         marker = Marker.from_string(string)
 

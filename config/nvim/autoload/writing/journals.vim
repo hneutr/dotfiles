@@ -1,12 +1,21 @@
-function writing#journals#getJournalFilePath()
-    let journalPathCmd = "python /Users/hne/dotfiles/scripts/python/writing/journaler.py "
+let g:onWritingJournal = 'on-writing'
+
+function writing#journals#getJournalFilePath(journal="")
+    let cmd = "writing-journal"
 
     if exists("b:projectRoot")
-        let journalPathCmd = journalPathCmd . '-s ' . b:projectRoot
+        let cmd = cmd . ' -s ' . b:projectRoot
     endif
 
-    let journalFilePath = system(journalPathCmd)
-    let journalFilePath = trim(journalFilePath)
+    if a:journal != ""
+        let cmd = cmd . ' -j ' . a:journal
+    endif
 
-    return journalFilePath
+    let path = system(cmd)
+    let path = trim(path)
+    return path
+endfunction
+
+function writing#journals#openJournal(openCommand)
+    call lib#openPath(writing#journals#getJournalFilePath(), a:openCommand)
 endfunction

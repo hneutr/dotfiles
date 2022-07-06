@@ -1,0 +1,6 @@
+#!/usr/local/bin/zsh
+
+function () {
+  local journal=$(writing-journal $@)
+  nvim $journal -c 'Goyo'
+} $@

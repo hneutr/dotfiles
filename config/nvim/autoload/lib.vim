@@ -342,13 +342,13 @@ endfunction
 
 function lib#openPath(path, openCommand)
 
-    if filereadable(a:path)
-        execute ":" . a:openCommand . " " . fnameescape(a:path)
-    elseif isdirectory(a:path)
+    if isdirectory(a:path)
         " if it's a directory, open a terminal at that directory
         execute ":" . a:openCommand
         execute ":terminal"
         execute ":call chansend(" . b:terminal_job_id . ", 'cd " . fnameescape(a:path) . "')"
         execute ":call chansend(" . b:terminal_job_id . ", 'clear')"
+    else
+        execute ":" . a:openCommand . " " . fnameescape(a:path)
     endif
 endfunction

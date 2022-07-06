@@ -1,5 +1,12 @@
+#!/usr/local/bin/zsh
+
 touch notes.md
 touch text.md
 touch .project
 git init
 cp /Users/hne/dotfiles/writing-project-gitignore .gitignore
+
+# if an argument was supplied, set the project name to that
+if [[ $# -gt 0 ]]; then
+  echo "name: $1" >> .project
+fi

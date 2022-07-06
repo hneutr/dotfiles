@@ -1,7 +1,10 @@
-function writing#goals#getGoalsFilePath()
-    let pathCmd = "python /Users/hne/dotfiles/scripts/python/writing/goals.py"
-    let filePath = system(pathCmd)
-    let filePath = trim(filePath)
+function writing#goals#getGoalsPath()
+    let cmd = "python /Users/hne/dotfiles/scripts/python/writing/goals.py"
+    let path = system(cmd)
+    let path = trim(path)
+    return path
+endfunction
 
-    return filePath
+function writing#goals#openGoals(openCommand)
+    call lib#openPath(writing#goals#getGoalsPath(), a:openCommand)
 endfunction
