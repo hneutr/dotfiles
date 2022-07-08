@@ -45,17 +45,17 @@ function writing#project#getConfig()
 endfunction
 
 function writing#project#readConfig(path)
-    let command = "python /Users/hne/dotfiles/scripts/python/writing/project.py -s " . a:path . " --save_json"
-    call system(command)
+    let cmd = "hnetext json -s " . a:path
+    silent call system(cmd)
     return json_decode(readfile(fnameescape('/tmp/project-json.json')))
 endfunction
 
 "================================[ shortenPath ]================================
 " takes a path and abbreviates the project root as `.`
 "===============================================================================
-function writing#project#shortenMarkerPath(path=expand('%'))
+function writing#project#shortenMarkerPath(path=expand('%'), substituteChar='.')
     let path = fnamemodify(a:path, ':p')
-    return substitute(path, b:projectRoot, '.', '')
+    return substitute(path, b:projectRoot, a:substituteChar, '')
 endfunction
 
 "=================================[ expandPath ]================================
@@ -63,7 +63,13 @@ endfunction
 " path
 "===============================================================================
 function writing#project#expandMarkerPath(path)
-    return substitute(a:path, '.', b:projectRoot, '')
+    if stridx(a:path, '.') == 0
+        let path = a:path[1:]
+    else
+        let path = a:path
+    endif
+
+    return b:projectRoot . path
 endfunction
 
 "==========================[ getPrefixedVersionOfPath ]=========================

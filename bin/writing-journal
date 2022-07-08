@@ -1,3 +1,0 @@
-#!/usr/local/bin/zsh
-
-python /Users/hne/dotfiles/scripts/python/writing/journaler.py $@

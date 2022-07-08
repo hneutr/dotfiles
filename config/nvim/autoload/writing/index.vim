@@ -1,6 +1,6 @@
 function writing#index#create(path=expand('%:p'))
-    let command = "!python3 /Users/hne/dotfiles/scripts/python/writing/index.py --source "
-    silent execute command . fnameescape(a:path)
+    let cmd = "hnetext index --source " . fnameescape(a:path)
+    call system(cmd)
 endfunction
 
 function writing#index#toggleIndex(openCommand='edit', path=expand('%:p'))

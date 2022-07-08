@@ -23,8 +23,18 @@ endfunction
 
 function writing#markers#parseLabel(string=getline('.'))
     let string = substitute(a:string, '^.*[', '', '')
-    let label = substitute(string, ']().*$', '', '')
-    return label
+    return substitute(string, '](.*).*$', '', '')
+endfunction
+
+function writing#markers#parsePath(string=getline(''))
+    let string = substitute(a:string, '^.*](', '', '')
+    let path = substitute(string, ').*$', '', '')
+
+    if stridx(path, ':') != -1
+        let path = split(path, ':')[0]
+    endif
+    
+    return path
 endfunction
 
 "================================[ getReference ]===============================
@@ -40,7 +50,7 @@ function writing#markers#getReference(label=writing#markers#parseLabel(), path=e
     let link = s:makeLink(a:label, reference)
 
     if a:copy
-        let @" = 
+        let @" = link
     endif
 
     return link
@@ -65,28 +75,38 @@ endfunction
 
 
 "===========================[ fuzzy-find references ]===========================
-function writing#markers#pickFileReference(path='')
-    if ! len(a:path)
-        call fzf#run(fzf#wrap({'sink': function('writing#markers#pickFileReference')}))
-    else
-        let reference = writing#markers#getFileReference(a:path, 0)
-        silent call nvim_put([reference], 'l', 0, 0)
-    endif
+function writing#markers#pickReference()
+    let getMarkersCommand = "rg '^[#>] \\[.*\\]\\(\\)$' --no-heading " . b:projectRoot
+
+    let references = []
+    for string in systemlist(getMarkersCommand)
+        let [path, label] = split(string, ':[#>] \[')
+        let path = writing#project#shortenMarkerPath(path, '')
+        let label = substitute(label, ']()', '', '')
+        call add(references, path . ':' . label)
+    endfor
+
+    let getFilesCommand = "fd -tf '' " . b:projectRoot
+    for path in systemlist(getFilesCommand)
+        let path = writing#project#shortenMarkerPath(path, '')
+        call add(references, path)
+    endfor
+
+    call sort(references)
+
+    call fzf#run(fzf#wrap({'sink': function('writing#markers#putPickedReference'), 'source': references}))
 endfunction
 
-function writing#markers#pickReference(pick='')
-    if ! len(a:pick)
-        let g:markerPathChoice = ''
-        call fzf#run(fzf#wrap({'sink': function('writing#markers#pickReference')}))
-    elseif ! len(g:markerPathChoice)
-        let g:markerPathChoice = a:pick
-        let labels = writing#markers#getFileMarkers(a:pick)
-        call fzf#run(fzf#wrap({'sink': function('writing#markers#pickReference'), 'source': labels}))
+function writing#markers#putPickedReference(pick)
+    if stridx(a:pick, ':') != -1
+        let [path, label] = split(a:pick, ':')
+        let path = writing#project#expandMarkerPath(path)
+        let reference = writing#markers#getReference(label, path, 0)
     else
-        let reference = writing#markers#getReference(a:pick, g:markerPathChoice, 0)
-        call nvim_put([reference], 'l', 0, 0)
-        let g:markerPathChoice = ''
+        let reference = writing#markers#getFileReference(a:pick, 0)
     endif
+
+    call nvim_put([reference], 'l', 0, 0)
 endfunction
 
 "============================[ parseMarkerReference ]===========================
@@ -152,9 +172,23 @@ endfunction
 " change a marker's text
 "===============================================================================
 function writing#markers#renameMarker(new, old=writing#markers#parseLabel(), path=expand('%'))
-    let cmd = "writing-project-update --old_path " . a:path
-    let cmd .= ' --old_text "' . a:old  . '"'
-    let cmd .= ' --new_text "' . a:new  . '"'
+    let cmd = "hnetext rename_marker --path " . a:path
+    let cmd .= ' --from_text "' . a:old  . '"'
+    let cmd .= ' --to_text "' . a:new  . '"'
+
+    silent call system(cmd)
+endfunction
+
+
+"=================================[ moveMarker ]================================
+" change a marker's file
+"===============================================================================
+function writing#markers#moveMarker(oldMarker, newMarker)
+    let cmd = "hnetext move_marker"
+    let cmd .= " --from_path " . writing#project#expandMarkerPath(writing#markers#parsePath(a:oldMarker))
+    let cmd .= " --from_text '" . writing#markers#parseLabel(a:oldMarker) . "'"
+    let cmd .= " --to_path " . writing#project#expandMarkerPath(writing#markers#parsePath(a:newMarker))
+    let cmd .= " --to_text '" . writing#markers#parseLabel(a:newMarker) . "'"
 
     silent call system(cmd)
 endfunction

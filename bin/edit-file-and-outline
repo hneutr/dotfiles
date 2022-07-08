@@ -2,6 +2,6 @@
 
 function () {
   local file=$1
-  local outline=$(writing-project -s $1 --print_mirror_path --mirror outlines)
+  local outline=$(hnetext mirror -s $1 -m outlines)
   nvim $file $outline -c 'Goyo'
 } $@

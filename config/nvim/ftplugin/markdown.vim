@@ -57,12 +57,11 @@ nnoremap <silent> <leader>mn /^[>#] \[.*\]()<cr>
 nnoremap <silent> <leader>mN ?^[>#] \[.*\]()<cr>
 
 " insert a header for a marker
-nnoremap <silent> <leader>ms :call writing#dividers#insertMarkerHeader()<cr>
-nnoremap <silent> <leader>mbs :call writing#dividers#insertMarkerHeader("big")<cr>
+nnoremap <silent> <leader>mh :call writing#dividers#insertMarkerHeader()<cr>
+nnoremap <silent> <leader>mbh :call writing#dividers#insertMarkerHeader("big")<cr>
 
 " change a marker's label
 command! -nargs=1 RelabelMarker call writing#markers#renameMarker(<f-args>)
 
 "===========================[ fuzzy-find references ]===========================
-nnoremap <silent> <leader>rf :call writing#markers#pickFileReference()<cr>
-nnoremap <silent> <leader>rl :call writing#markers#pickReference()<cr>
+nnoremap <silent> <leader>r :call writing#markers#pickReference()<cr>

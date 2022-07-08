@@ -1,5 +1,5 @@
 function writing#goals#getGoalsPath()
-    let cmd = "python /Users/hne/dotfiles/scripts/python/writing/goals.py"
+    let cmd = "hnetext goals"
     let path = system(cmd)
     let path = trim(path)
     return path

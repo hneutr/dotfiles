@@ -44,6 +44,6 @@ alias po="popen"
 
 # writing stuff
 alias wr=edit-file-and-outline
-alias j=open-writing-journal
-alias J="open-writing-journal -j on-writing"
+alias j="hnetext journal"
+alias J="hnetext journal -j on-writing"
 alias pmv=writing-project-move
