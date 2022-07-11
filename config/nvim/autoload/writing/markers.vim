@@ -106,7 +106,7 @@ function writing#markers#putPickedReference(pick)
         let reference = writing#markers#getFileReference(a:pick, 0)
     endif
 
-    call nvim_put([reference], 'l', 0, 0)
+    call nvim_put([reference], 'c', 1, 0)
 endfunction
 
 "============================[ parseMarkerReference ]===========================
