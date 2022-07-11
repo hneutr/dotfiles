@@ -75,7 +75,9 @@ endfunction
 
 
 "===========================[ fuzzy-find references ]===========================
-function writing#markers#pickReference()
+function writing#markers#pickReference(handler="writing#markers#putPickedReference")
+    let g:projectRoot = b:projectRoot
+
     let getMarkersCommand = "rg '^[#>] \\[.*\\]\\(\\)$' --no-heading " . b:projectRoot
 
     let references = []
@@ -94,7 +96,7 @@ function writing#markers#pickReference()
 
     call sort(references)
 
-    call fzf#run(fzf#wrap({'sink': function('writing#markers#putPickedReference'), 'source': references}))
+    call fzf#run(fzf#wrap({'sink': function(a:handler), 'source': references}))
 endfunction
 
 function writing#markers#putPickedReference(pick)
@@ -105,8 +107,22 @@ function writing#markers#putPickedReference(pick)
     else
         let reference = writing#markers#getFileReference(a:pick, 0)
     endif
-
     call nvim_put([reference], 'c', 1, 0)
+endfunction
+
+function writing#markers#editPick(pick)
+    let b:projectRoot = g:projectRoot
+    call writing#markers#gotoReference("edit", "." . a:pick)
+endfunction
+
+function writing#markers#splitPick(pick)
+    let b:projectRoot = g:projectRoot
+    call writing#markers#gotoReference("split", "." . a:pick)
+endfunction
+
+function writing#markers#vsplitPick(pick)
+    let b:projectRoot = g:projectRoot
+    call writing#markers#gotoReference("vsplit", "." . a:pick)
 endfunction
 
 "============================[ parseMarkerReference ]===========================
@@ -142,13 +158,11 @@ function writing#markers#parseMarkerReference(marker)
     return [path, text, flags]
 endfunction
 
-"============================[ GoToMarkerReference ]============================
+"===============================[ gotoReference ]===============================
 " navigates to a marker.
 "===============================================================================
-function writing#markers#GoToMarkerReference(openCommand)
-    let marker = lib#getTextInsideNearestParenthesis()
-
-    let [path, text, flags] = writing#markers#parseMarkerReference(marker)
+function writing#markers#gotoReference(openCommand, marker=lib#getTextInsideNearestParenthesis())
+    let [path, text, flags] = writing#markers#parseMarkerReference(a:marker)
 
     " if the file isn't the one we're currently editing, open it
     if path != expand('%:p')

@@ -32,19 +32,16 @@ call lib#mapPrefixedFileOpeningActions("g", "writing#goals#openGoals")
 command! -nargs=0 Goals call lib#openPath(writing#goals#getGoalsPath(), "edit")
 
 "==================================[ indexes ]==================================
-call lib#mapPrefixedFileOpeningActions("i", "writing#index#toggleIndex")
-" directory indexes
-call lib#mapPrefixedFileOpeningActions("id", "writing#index#toggleDirectoryIndex")
-
-" insert the file index into the current file
-nnoremap <silent> <leader>if :call writing#index#insertIndex()<cr>
-nnoremap <silent> <leader>idf :call writing#index#insertIndex("directory")<cr>
-nnoremap <silent> <leader>ib :call writing#index#insertIndex("both")<cr>
+call lib#mapPrefixedFileOpeningActions("i", "writing#index#openIndex")
+command! -nargs=0 Index call lib#openPath(writing#index#makeIndex(), "edit")
 
 "==================================[ markers ]==================================
 " "marker-/" search for a marker
-nnoremap <silent> <leader>m/ :call writing#markers#GoToMarkerReference("edit")<cr>
-call lib#mapPrefixedFileOpeningActions("m", "writing#markers#GoToMarkerReference")
+" nnoremap <silent> <leader>m/ :call writing#markers#gotoReference("edit")<cr>
+call lib#mapPrefixedFileOpeningActions("m", "writing#markers#gotoReference")
+nnoremap <silent> <leader>m/o :call writing#markers#pickReference("writing#markers#editPick")<cr>
+nnoremap <silent> <leader>m/l :call writing#markers#pickReference("writing#markers#vsplitPick")<cr>
+nnoremap <silent> <leader>m/j :call writing#markers#pickReference("writing#markers#splitPick")<cr>
 
 " "marker-reference" create a reference to the mark on the current line
 nnoremap <silent> <leader>mr :call writing#markers#getReference()<cr>
