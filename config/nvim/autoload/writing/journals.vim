@@ -15,7 +15,3 @@ function writing#journals#getJournalFilePath(journal="")
     let path = trim(path)
     return path
 endfunction
-
-function writing#journals#openJournal(openCommand)
-    call lib#openPath(writing#journals#getJournalFilePath(), a:openCommand)
-endfunction

@@ -37,13 +37,46 @@ function deactivate_env() {
   fi
 }
 
-# set the change directory function to cd_and_venv
-function chpwd {
-  cd_and_venv
+# finds the project root if it exists and aliases mv to pmv;
+# otherwise, unaliases mv
+function project_root_exists() {
+  local directory=$1
+  local project_file="$directory/.project"
+
+  if [ -f $project_file ]; then
+    alias mv=pmv
+    export PROJECT_ROOT=$directory
+  else
+    local parent=$(dirname $directory)
+
+    if [ $parent = '/' ]; then
+      unset PROJECT_ROOT
+
+      # unset the alias
+      if [ ${+aliases[mv]} -eq 1 ]; then
+        unalias mv
+      fi
+    else
+      # call recursively if we're not bottomed out yet
+      project_root_exists $parent
+    fi
+  fi
 }
 
-# call the change directory function
-cd_and_venv
+function change_directory_functions {
+  # activates an env if there is one
+  cd_and_venv
+
+  # sets a project root if there is one
+  project_root_exists $PWD
+}
+
+function chpwd {
+  change_directory_functions
+}
+
+# call the change directory functions when starting
+change_directory_functions
 
 function popen() {
     local filename="${1:r}.pdf"

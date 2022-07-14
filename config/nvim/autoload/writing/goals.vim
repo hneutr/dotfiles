@@ -4,7 +4,3 @@ function writing#goals#getGoalsPath()
     let path = trim(path)
     return path
 endfunction
-
-function writing#goals#openGoals(openCommand)
-    call lib#openPath(writing#goals#getGoalsPath(), a:openCommand)
-endfunction

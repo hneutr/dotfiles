@@ -47,3 +47,6 @@ alias wr=edit-file-and-outline
 alias j="gv $(hnetext journal)"
 alias J="gv $(hnetext journal -j on-writing)"
 alias pmv=writing-project-move
+alias todir=writing-project-file-to-directory
+alias mtof=writing-project-marker-to-file
+alias mtodir=writing-project-marker-to-dir

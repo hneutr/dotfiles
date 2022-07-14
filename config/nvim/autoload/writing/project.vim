@@ -54,6 +54,7 @@ endfunction
 " takes a path and abbreviates the project root as `.`
 "===============================================================================
 function writing#project#shortenMarkerPath(path=expand('%'), substituteChar='.')
+    echo a:substituteChar
     let path = fnamemodify(a:path, ':p')
     return substitute(path, b:projectRoot, a:substituteChar, '')
 endfunction

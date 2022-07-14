@@ -1,7 +1,7 @@
 let g:vim_markdown_no_default_key_mappings = 1
 
 "==================================[ projects ]=================================
-nnoremap <silent> <leader>pu :call writing#project#pushChanges()<cr>
+command! Push call writing#project#pushChanges()
 
 "==================================[ outlines ]=================================
 call writing#project#addFileOpeningMappings('o', g:outlinesPrefix)
@@ -23,21 +23,17 @@ nnoremap <silent> <leader>sm :call writing#scratch#moveToScratchFile()<cr>
 vnoremap <silent> <leader>sm :'<,'>call writing#scratch#moveToScratchFile()<cr>
 
 "==================================[ journals ]=================================
-call lib#mapPrefixedFileOpeningActions("j", "writing#journals#openJournal")
-command! -nargs=0 Journal call lib#openPath(writing#journals#getJournalFilePath(), "edit")
-command! -nargs=0 WJournal call lib#openPath(writing#journals#getJournalFilePath(g:onWritingJournal), "edit")
+command! Journal call lib#openPath(writing#journals#getJournalFilePath())
+command! WJournal call lib#openPath(writing#journals#getJournalFilePath(g:onWritingJournal))
 
 "===================================[ goals ]===================================
-call lib#mapPrefixedFileOpeningActions("g", "writing#goals#openGoals")
-command! -nargs=0 Goals call lib#openPath(writing#goals#getGoalsPath(), "edit")
+command! Goals call lib#openPath(writing#goals#getGoalsPath())
 
 "==================================[ indexes ]==================================
 call lib#mapPrefixedFileOpeningActions("i", "writing#index#openIndex")
-command! -nargs=0 Index call lib#openPath(writing#index#makeIndex(), "edit")
+command! Index call lib#openPath(writing#index#makeIndex(), "edit")
 
 "==================================[ markers ]==================================
-" "marker-/" search for a marker
-" nnoremap <silent> <leader>m/ :call writing#markers#gotoReference("edit")<cr>
 call lib#mapPrefixedFileOpeningActions("m", "writing#markers#gotoReference")
 nnoremap <silent> <leader>m/o :call writing#markers#pickReference("writing#markers#editPick")<cr>
 nnoremap <silent> <leader>m/l :call writing#markers#pickReference("writing#markers#vsplitPick")<cr>

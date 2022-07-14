@@ -105,7 +105,8 @@ function writing#markers#putPickedReference(pick)
         let path = writing#project#expandMarkerPath(path)
         let reference = writing#markers#getReference(label, path, 0)
     else
-        let reference = writing#markers#getFileReference(a:pick, 0)
+        let path = writing#project#expandMarkerPath(a:pick)
+        let reference = writing#markers#getFileReference(path, 0)
     endif
     call nvim_put([reference], 'c', 1, 0)
 endfunction
@@ -186,7 +187,7 @@ endfunction
 " change a marker's text
 "===============================================================================
 function writing#markers#renameMarker(new, old=writing#markers#parseLabel(), path=expand('%'))
-    let cmd = "hnetext rename_marker --path " . a:path
+    let cmd = "hnetext rename-marker --path " . a:path
     let cmd .= ' --from_text "' . a:old  . '"'
     let cmd .= ' --to_text "' . a:new  . '"'
 
@@ -198,7 +199,7 @@ endfunction
 " change a marker's file
 "===============================================================================
 function writing#markers#moveMarker(oldMarker, newMarker)
-    let cmd = "hnetext move_marker"
+    let cmd = "hnetext move-marker"
     let cmd .= " --from_path " . writing#project#expandMarkerPath(writing#markers#parsePath(a:oldMarker))
     let cmd .= " --from_text '" . writing#markers#parseLabel(a:oldMarker) . "'"
     let cmd .= " --to_path " . writing#project#expandMarkerPath(writing#markers#parsePath(a:newMarker))

@@ -2,11 +2,6 @@ snippet die "die statement"
 import sys; sys.exit()
 endsnippet
 
-snippet file "open a file for reading or writing"
-with open("$1", "$2") as f:
-    $3
-endsnippet
-
 snippet main "write the boilerplate for a main"
 if __name__ == '__main__':
     $1
@@ -16,12 +11,6 @@ snippet pp "prettyprint"
 import pprint
 pp = pprint.PrettyPrinter()
 pp.pprint($1)
-endsnippet
-
-snippet listfiles "list files in a directory"
-from os import listdir
-from os.path import isfile, join
-onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 endsnippet
 
 snippet _in "init signature"
