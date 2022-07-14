@@ -1,26 +1,31 @@
 let g:vim_markdown_no_default_key_mappings = 1
 
+let g:fileOpeningPrefix = "<leader>o"
+let g:makePrefix = "<leader>m"
+let g:scratchPrefix = "<leader>s"
+
+let g:mirrors = {
+			\ 'c': 'changes',
+			\ 'f': '.fragments',
+			\ 'd': 'ideas',
+			\ 'o': 'outlines',
+			\ 's': '.scratch',
+			\ 'x': 'meta',
+			\}
+
+function s:addOpenMirrorMappings()
+	for [prefix, directory] in items(g:mirrors)
+		call writing#project#addFileOpeningMappings(prefix, directory)
+	endfor
+endfunction
+
+call s:addOpenMirrorMappings()
+
+" mirrors
+let g:scratchPrefix = '.scratch'
+
 "==================================[ projects ]=================================
 command! Push call writing#project#pushChanges()
-
-"==================================[ outlines ]=================================
-call writing#project#addFileOpeningMappings('o', g:outlinesPrefix)
-
-"===============================[ possibilities ]===============================
-call writing#project#addFileOpeningMappings('p', g:possibilitiesPrefix)
-
-"==================================[ changes ]==================================
-call writing#project#addFileOpeningMappings('c', g:changesPrefix)
-
-"=================================[ fragments ]=================================
-call writing#project#addFileOpeningMappings('f', g:fragmentsPrefix)
-
-"==================================[ scratch ]==================================
-call writing#project#addFileOpeningMappings('s', g:scratchPrefix)
-
-" delete the currently selected lines and move them to the scratch file
-nnoremap <silent> <leader>sm :call writing#scratch#moveToScratchFile()<cr>
-vnoremap <silent> <leader>sm :'<,'>call writing#scratch#moveToScratchFile()<cr>
 
 "==================================[ journals ]=================================
 command! Journal call lib#openPath(writing#journals#getJournalFilePath())
@@ -29,15 +34,25 @@ command! WJournal call lib#openPath(writing#journals#getJournalFilePath(g:onWrit
 "===================================[ goals ]===================================
 command! Goals call lib#openPath(writing#goals#getGoalsPath())
 
+"==================================[ scratch ]==================================
+" delete the currently selected lines and move them to the scratch file
+nnoremap <silent> <leader>s :call writing#scratch#moveToScratchFile()<cr>
+vnoremap <silent> <leader>s :'<,'>call writing#scratch#moveToScratchFile()<cr>
+
 "==================================[ indexes ]==================================
-call lib#mapPrefixedFileOpeningActions("i", "writing#index#openIndex")
+call writing#map#mapPrefixedFileOpeners("i", "writing#index#openIndex")
 command! Index call lib#openPath(writing#index#makeIndex(), "edit")
 
 "==================================[ markers ]==================================
-call lib#mapPrefixedFileOpeningActions("m", "writing#markers#gotoReference")
-nnoremap <silent> <leader>m/o :call writing#markers#pickReference("writing#markers#editPick")<cr>
-nnoremap <silent> <leader>m/l :call writing#markers#pickReference("writing#markers#vsplitPick")<cr>
-nnoremap <silent> <leader>m/j :call writing#markers#pickReference("writing#markers#splitPick")<cr>
+call writing#map#mapPrefixedFileOpeners("n", "writing#markers#gotoReference")
+call writing#map#mapPrefixedFileOpeners("m", "writing#markers#pick", '', {'edit': "writing#markers#editPick"}) 
+call writing#map#mapPrefixedFileOpeners("m", "writing#markers#pick", '', {'vsplit': "writing#markers#vsplitPick"}) 
+call writing#map#mapPrefixedFileOpeners("m", "writing#markers#pick", '', {'split': "writing#markers#splitPick"}) 
+
+" insert a header for a marker
+nnoremap <silent> <leader>mm :call writing#dividers#insertMarkerHeader()<cr>
+nnoremap <silent> <leader>ml :call writing#dividers#insertMarkerHeader()<cr>
+nnoremap <silent> <leader>mb :call writing#dividers#insertMarkerHeader("big")<cr>
 
 " "marker-reference" create a reference to the mark on the current line
 nnoremap <silent> <leader>mr :call writing#markers#getReference()<cr>
@@ -46,15 +61,11 @@ nnoremap <silent> <leader>mr :call writing#markers#getReference()<cr>
 nnoremap <silent> <leader>mf :call writing#markers#getFileReference()<cr>
 
 " search for markers
-nnoremap <silent> <leader>mn /^[>#] \[.*\]()<cr>
-nnoremap <silent> <leader>mN ?^[>#] \[.*\]()<cr>
-
-" insert a header for a marker
-nnoremap <silent> <leader>mh :call writing#dividers#insertMarkerHeader()<cr>
-nnoremap <silent> <leader>mbh :call writing#dividers#insertMarkerHeader("big")<cr>
+nnoremap <silent> <leader>fn /^[>#] \[.*\]()<cr>
+nnoremap <silent> <leader>fN ?^[>#] \[.*\]()<cr>
 
 " change a marker's label
 command! -nargs=1 RelabelMarker call writing#markers#renameMarker(<f-args>)
 
 "===========================[ fuzzy-find references ]===========================
-nnoremap <silent> <leader>r :call writing#markers#pickReference()<cr>
+nnoremap <silent> <leader>m/ :call writing#markers#pick()<cr>

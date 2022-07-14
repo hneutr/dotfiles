@@ -1,10 +1,4 @@
 let g:projectFileName = '.project'
-let g:changesPrefix = 'changes'
-let g:outlinesPrefix = 'outlines'
-let g:possibilitiesPrefix = '.possibilities'
-let g:indexPrefix = '.indexes'
-let g:fragmentsPrefix = '.fragments'
-let g:scratchPrefix = '.scratch'
 
 "===============================[ setProjectRoot ]==============================
 " looks for a `.project` file in the current directory and parent directories.
@@ -161,5 +155,5 @@ function writing#project#addFileOpeningMappings(mappingPrefix, directoryPrefix)
     let fn = "writing#project#switchBetweenPathAndPrefixedPath"
     let args = '"' . a:directoryPrefix . '"'
 
-    call lib#mapPrefixedFileOpeningActions(a:mappingPrefix, fn, args)
+    call writing#map#mapPrefixedFileOpeners(a:mappingPrefix, fn, args)
 endfunction

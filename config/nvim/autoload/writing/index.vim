@@ -4,7 +4,7 @@ function writing#index#makeIndex(path=expand('%:p'), outpath=g:defaultIndexPath)
     let cmd = "hnetext index"
     let cmd .= " --source " . fnameescape(a:path)
     let cmd .= " --dest " . a:outpath
-    call system(cmd)
+    silent call system(cmd)
     return a:outpath
 endfunction
 

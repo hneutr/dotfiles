@@ -15,13 +15,10 @@ function writing#scratch#moveToScratchFile() range
         let lines += ['']
     endif
 
-    let tempFile = '/tmp/move-to-scratch-file.md'
-    let scratchFile = writing#project#getPrefixedVersionOfPath(g:scratchPrefix)
+    let scratchFile = writing#project#getPrefixedVersionOfPath('.scratch')
 
-    call writefile(lines, tempFile)
-
-    silent execute "!cat " . scratchFile . " >> " . tempFile
-    silent execute "!mv " . tempFile . " " . scratchFile
+    let newLines = lines + readfile(scratchFile)
+    call writefile(newLines, scratchFile)
 
     silent execute a:firstline . "," . a:lastline . "delete"
 endfunction

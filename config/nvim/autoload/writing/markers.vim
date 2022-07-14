@@ -75,7 +75,7 @@ endfunction
 
 
 "===========================[ fuzzy-find references ]===========================
-function writing#markers#pickReference(handler="writing#markers#putPickedReference")
+function writing#markers#pick(handler="writing#markers#putPick")
     let g:projectRoot = b:projectRoot
 
     let getMarkersCommand = "rg '^[#>] \\[.*\\]\\(\\)$' --no-heading " . b:projectRoot
@@ -99,7 +99,7 @@ function writing#markers#pickReference(handler="writing#markers#putPickedReferen
     call fzf#run(fzf#wrap({'sink': function(a:handler), 'source': references}))
 endfunction
 
-function writing#markers#putPickedReference(pick)
+function writing#markers#putPick(pick)
     if stridx(a:pick, ':') != -1
         let [path, label] = split(a:pick, ':')
         let path = writing#project#expandMarkerPath(path)
