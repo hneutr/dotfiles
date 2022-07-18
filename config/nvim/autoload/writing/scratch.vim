@@ -17,8 +17,11 @@ function writing#scratch#moveToScratchFile() range
 
     let scratchFile = writing#project#getPrefixedVersionOfPath('.scratch')
 
-    let newLines = lines + readfile(scratchFile)
-    call writefile(newLines, scratchFile)
+    if filereadable(scratchFile)
+        let lines += readfile(scratchFile)
+    endif
+
+    call writefile(lines, scratchFile)
 
     silent execute a:firstline . "," . a:lastline . "delete"
 endfunction

@@ -67,5 +67,10 @@ nnoremap <silent> <leader>fN ?^[>#] \[.*\]()<cr>
 " change a marker's label
 command! -nargs=1 RelabelMarker call writing#markers#renameMarker(<f-args>)
 
+" make a reference into a marker
+command! RefToMarker call writing#markers#refToMarker()
+
 "===========================[ fuzzy-find references ]===========================
 nnoremap <silent> <leader>m/ :call writing#markers#pick()<cr>
+"  is <c-/> (the mapping only works if it's the literal character)
+inoremap <silent>  <c-o>:call writing#markers#pick("writing#markers#putPickInInsert")<cr>

@@ -50,3 +50,4 @@ alias pmv=writing-project-move
 alias todir=writing-project-file-to-directory
 alias mtof=writing-project-marker-to-file
 alias mtodir=writing-project-marker-to-dir
+alias mmv=writing-project-move-marker

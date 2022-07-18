@@ -5,22 +5,6 @@ function s:makeLink(label, reference)
     return "[" . a:label . "](" . a:reference . ")"
 endfunction
 
-function writing#markers#getFileMarkers(path=expand('%'))
-    let path = fnamemodify(a:path, ':p')
-
-    let labels = []
-    for line in reverse(readfile(path))
-        let isMarkerStart = match(line, '[#>] \[') != -1
-        let isMarkerEnd = match(line, '.*[\(\)') != -1
-
-        if isMarkerStart && isMarkerEnd
-            call add(labels, writing#markers#parseLabel(line))
-        endif
-    endfor
-
-    return labels
-endfunction
-
 function writing#markers#parseLabel(string=getline('.'))
     let string = substitute(a:string, '^.*[', '', '')
     return substitute(string, '](.*).*$', '', '')
@@ -62,9 +46,18 @@ endfunction
 function writing#markers#getFileReference(path=expand('%'), copy=1)
     let path = writing#project#shortenMarkerPath(a:path)
 
-    let filename = fnamemodify(a:path, ':t:r')
+    let label = fnamemodify(a:path, ':t:r')
 
-    let link = s:makeLink(filename, path)
+    if label == "@"
+        let directory = fnamemodify(a:path, ":p:h")
+        let label = split(directory, "/")[-1]
+    endif
+
+    if stridx(label, "-") != -1
+        let label = substitute(label, '-', ' ', '')
+    endif
+
+    let link = s:makeLink(label, path)
 
     if a:copy
         let @" = link
@@ -99,7 +92,7 @@ function writing#markers#pick(handler="writing#markers#putPick")
     call fzf#run(fzf#wrap({'sink': function(a:handler), 'source': references}))
 endfunction
 
-function writing#markers#putPick(pick)
+function writing#markers#getPick(pick)
     if stridx(a:pick, ':') != -1
         let [path, label] = split(a:pick, ':')
         let path = writing#project#expandMarkerPath(path)
@@ -108,7 +101,16 @@ function writing#markers#putPick(pick)
         let path = writing#project#expandMarkerPath(a:pick)
         let reference = writing#markers#getFileReference(path, 0)
     endif
-    call nvim_put([reference], 'c', 1, 0)
+    return reference
+endfunction
+
+function writing#markers#putPick(pick)
+    call nvim_put([writing#markers#getPick(a:pick)], 'c', 1, 0)
+endfunction
+
+function writing#markers#putPickInInsert(pick)
+    call nvim_put([writing#markers#getPick(a:pick)], 'c', 1, 0)
+    call nvim_input("A")
 endfunction
 
 function writing#markers#editPick(pick)
@@ -187,13 +189,13 @@ endfunction
 " change a marker's text
 "===============================================================================
 function writing#markers#renameMarker(new, old=writing#markers#parseLabel(), path=expand('%'))
-    let cmd = "hnetext rename-marker --path " . a:path
+    let cmd = "hnetext rename-marker"
+    let cmd .= " --path " . a:path
     let cmd .= ' --from_text "' . a:old  . '"'
     let cmd .= ' --to_text "' . a:new  . '"'
 
     silent call system(cmd)
 endfunction
-
 
 "=================================[ moveMarker ]================================
 " change a marker's file
@@ -205,5 +207,75 @@ function writing#markers#moveMarker(oldMarker, newMarker)
     let cmd .= " --to_path " . writing#project#expandMarkerPath(writing#markers#parsePath(a:newMarker))
     let cmd .= " --to_text '" . writing#markers#parseLabel(a:newMarker) . "'"
 
+    call system(cmd)
+endfunction
+
+"================================[ refToMarker ]================================
+" make a reference into a marker
+"===============================================================================
+function writing#markers#refToMarker(to_path=expand('%'), marker=lib#getTextInsideNearestParenthesis())
+    let [path, text, flags] = writing#markers#parseMarkerReference(a:marker)
+
+    if len(text) == 0
+        echo "not moving a file marker"
+    endif
+
+    let cmd = "hnetext move-marker"
+    let cmd .= " --from_path " . path
+    let cmd .= " --from_text '" . text . "'"
+    let cmd .= " --to_path " . writing#project#expandMarkerPath("./" . a:to_path)
+    let cmd .= " --to_text '" . text . "'"
+
     silent call system(cmd)
+endfunction
+
+function s:lineIsMarker(line=getline('.'))
+    let isMarkerStart = match(a:line, '[#>] \[') != -1
+    let isMarkerEnd = match(a:line, '.*]\(\)') != -1
+
+    return isMarkerStart && isMarkerEnd
+endfunction
+
+function writing#markers#getMarkers(path=expand('%:p'))
+    let getMarkersCommand = "rg '^[#>] \\[.*\\]\\(\\)$' --no-heading --line-number " . a:path
+
+    let markers = {}
+    for string in systemlist(getMarkersCommand)
+        let lineNumber = split(string, ':')[0]
+        let label = writing#markers#parseLabel(string)
+        let markers[lineNumber] = label
+    endfor
+
+    return markers
+endfunction
+
+function writing#markers#updateReferencesOnLabelChange()
+    let line = getline('.')
+
+    if ! s:lineIsMarker(line)
+        return
+    endif
+
+    let newLabel = writing#markers#parseLabel(line)
+    let markers = writing#markers#getMarkers()
+
+    let lineNumber = getpos('.')[1]
+
+    if has_key(markers, lineNumber)
+        let oldLabel = markers[lineNumber]
+
+        if newLabel != oldLabel
+            if len(newLabel) > 0 && len(oldLabel) > 0
+                let cmd = "hnetext update-references"
+                let cmd .= " --from_path " . expand('%')
+                let cmd .= " --from_text '" . oldLabel . "'"
+                let cmd .= " --to_path " . expand('%')
+                let cmd .= " --to_text '" . newLabel . "'"
+
+                call system(cmd)
+            else
+                let markers[lineNumber] = newLabel
+            endif
+        endif
+    endif
 endfunction
