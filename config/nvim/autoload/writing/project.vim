@@ -39,9 +39,13 @@ function writing#project#getConfig()
 endfunction
 
 function writing#project#readConfig(path)
-    let cmd = "hnetext json -s " . a:path
+    let jsonOutputPath = $TMPDIR . 'project-json.json'
+
+    let cmd = "hnetext json"
+    let cmd .= " --source " . a:path
+    let cmd .= " --path " . jsonOutputPath
     silent call system(cmd)
-    return json_decode(readfile(fnameescape('/tmp/project-json.json')))
+    return json_decode(readfile(fnameescape(jsonOutputPath)))
 endfunction
 
 "================================[ shortenPath ]================================

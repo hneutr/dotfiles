@@ -74,3 +74,7 @@ command! RefToMarker call writing#markers#refToMarker()
 nnoremap <silent> <leader>m/ :call writing#markers#pick()<cr>
 "  is <c-/> (the mapping only works if it's the literal character)
 inoremap <silent>  <c-o>:call writing#markers#pick("writing#markers#putPickInInsert")<cr>
+
+"===================================[ todos ]===================================
+nnoremap <silent> <leader>t :call writing#todo#toggleDone()<cr>
+vnoremap <silent> <leader>t :'<,'>call writing#todo#toggleDone()<cr>

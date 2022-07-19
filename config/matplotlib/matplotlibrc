@@ -1,31 +1,70 @@
-# thanks to Sam F Way
 pdf.use14corefonts: True
 ps.useafm: True
 pdf.fonttype: 42
 ps.fonttype: 42
 
-text.color: 191414 # Spotify's blackish color
-axes.unicode_minus: False
-
-lines.linewidth   : 1.5
+################################################################################
+# Lines
+################################################################################
+lines.linewidth   : .5
 lines.color       : 191414
-
-# xtick.major.pad: 6
-axes.edgecolor : 191414
-axes.labelcolor: 191414
-xtick.color    : 191414
-ytick.color    : 191414
 lines.solid_capstyle: butt
 
-axes.spines.top    : False
-axes.spines.right  : False
-legend.frameon     : False
+################################################################################
+# Hatches
+################################################################################
+hatch.linewidth: 0.5
 
-figure.dpi       : 400.
-figure.figsize   : 6, 6
+################################################################################
+# Font
+################################################################################
+font.family: sans-serif
+font.sans-serif: Helvetica Neue, SF Pro
+
+################################################################################
+# Text
+################################################################################
+text.color: 191414 # Spotify's blackish color
+
+################################################################################
+# Axes
+################################################################################
+axes.unicode_minus: False
+
+axes.edgecolor : 191414
+axes.labelcolor: 191414
+axes.linewidth: .65
+axes.titlepad: 3.0
+axes.labelpad: 2.0
+
+axes.spines.top: False
+axes.spines.right: False
 
 # Default to Spotify colors (sam), but put a nice blue first (hunter)
 axes.prop_cycle: cycler('color', ['45A1F8', 'FF6437', '4B917D', 'F037A5', '2EBD59', 'FFC864', 'C87D55', '1E3264'])
 
-font.family: sans-serif
-font.sans-serif: Helvetica Neue, SF Pro
+################################################################################
+# Ticks
+################################################################################
+xtick.color: 191414
+ytick.color: 191414
+
+xtick.major.width: .5
+ytick.major.width: .5
+
+xtick.major.size: 2
+ytick.major.size: 2
+
+xtick.major.pad: 1
+ytick.major.pad: 1
+
+################################################################################
+# Legend
+################################################################################
+legend.frameon     : False
+
+################################################################################
+# Figure
+################################################################################
+figure.dpi       : 600.
+figure.figsize   : 3.5, 3.5
