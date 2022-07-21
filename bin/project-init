@@ -14,7 +14,9 @@ touch .project
 
 # if an argument was supplied, set the project name to that
 if [[ $# -gt 0 ]]; then
-  echo "name: $1" >> .project
+  hnetext make-project --path . --name $1
+else
+  hnetext make-project --path .
 fi
 
 git init

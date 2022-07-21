@@ -1,4 +1,3 @@
-" function writing#map#mapPrefixedFileOpeners(prefix, fn, args='', cmds=['edit', 'vsplit', 'split'])
 function writing#map#mapPrefixedFileOpeners(prefix, fn, args='', cmds={'edit': 'e', 'vsplit': 'vs', 'split': 'sp'})
     let LHSPrefix = g:fileOpeningPrefix . a:prefix
     let RHSStart = ':call ' . a:fn . '('
@@ -29,6 +28,6 @@ function writing#map#mapPrefixedFileOpeners(prefix, fn, args='', cmds={'edit': '
         let LHS = LHSPrefix . key
         let RHS = RHSStart . '"' . cmd . '"' . RHSEnd
 
-        silent execute "nnoremap <silent> " . LHS . " " . RHS
+        silent execute "nnoremap <silent> <buffer> " . LHS . " " . RHS
     endfor
 endfunction

@@ -66,30 +66,59 @@ function writing#markers#getFileReference(path=expand('%'), copy=1)
     return link
 endfunction
 
-
-"===========================[ fuzzy-find references ]===========================
-function writing#markers#pick(handler="writing#markers#putPick")
-    let g:projectRoot = b:projectRoot
-
+function writing#markers#getReferences()
     let getMarkersCommand = "rg '^[#>] \\[.*\\]\\(\\)$' --no-heading " . b:projectRoot
 
     let references = []
     for string in systemlist(getMarkersCommand)
         let [path, label] = split(string, ':[#>] \[')
-        let path = writing#project#shortenMarkerPath(path, '')
+        let path = writing#project#shortenMarkerPath(path)
         let label = substitute(label, ']()', '', '')
         call add(references, path . ':' . label)
     endfor
 
     let getFilesCommand = "fd -tf '' " . b:projectRoot
     for path in systemlist(getFilesCommand)
-        let path = writing#project#shortenMarkerPath(path, '')
+        let path = writing#project#shortenMarkerPath(path)
         call add(references, path)
     endfor
 
     call sort(references)
+    return references
+endfunction
 
-    call fzf#run(fzf#wrap({'sink': function(a:handler), 'source': references}))
+"===========================[ fuzzy-find references ]===========================
+function writing#markers#fuzzy(fn)
+	let wrap = fzf#wrap({'source': writing#markers#getReferences()})
+	let wrap['sink*'] = function(a:fn)
+	let wrap['_action'] = {'ctrl-v': 'vsplit', 'ctrl-x': 'split', 'ctrl-t': 'tab split'}
+	let wrap['options'] = ' +m -x --ansi --prompt "References: " --expect=ctrl-v,ctrl-x,ctrl-t'
+	return fzf#run(wrap)
+endfunction
+
+function s:action_for(command)
+    if a:command == 'ctrl-v'
+        return 'vsplit'
+    elseif a:command == 'ctrl-j'
+        return 'split'
+    else
+        return 'edit'
+    endif
+endfunction
+
+function! writing#markers#gotoPickSink(lines)
+    let cmd = s:action_for(a:lines[0])
+
+    call writing#markers#gotoReference(cmd, a:lines[1])
+endfunction
+
+function! writing#markers#putPickSink(lines)
+    call nvim_put([writing#markers#getPick(a:lines[1])], 'c', 1, 0)
+endfunction
+
+function writing#markers#putPickInInsertSink(lines)
+    call nvim_put([writing#markers#getPick(a:lines[1])], 'c', 1, 0)
+    call nvim_input("A")
 endfunction
 
 function writing#markers#getPick(pick)
@@ -102,30 +131,6 @@ function writing#markers#getPick(pick)
         let reference = writing#markers#getFileReference(path, 0)
     endif
     return reference
-endfunction
-
-function writing#markers#putPick(pick)
-    call nvim_put([writing#markers#getPick(a:pick)], 'c', 1, 0)
-endfunction
-
-function writing#markers#putPickInInsert(pick)
-    call nvim_put([writing#markers#getPick(a:pick)], 'c', 1, 0)
-    call nvim_input("A")
-endfunction
-
-function writing#markers#editPick(pick)
-    let b:projectRoot = g:projectRoot
-    call writing#markers#gotoReference("edit", "." . a:pick)
-endfunction
-
-function writing#markers#splitPick(pick)
-    let b:projectRoot = g:projectRoot
-    call writing#markers#gotoReference("split", "." . a:pick)
-endfunction
-
-function writing#markers#vsplitPick(pick)
-    let b:projectRoot = g:projectRoot
-    call writing#markers#gotoReference("vsplit", "." . a:pick)
 endfunction
 
 "============================[ parseMarkerReference ]===========================
@@ -169,9 +174,7 @@ function writing#markers#gotoReference(openCommand, marker=lib#getTextInsideNear
 
     " if the file isn't the one we're currently editing, open it
     if path != expand('%:p')
-        " make the directories leading up to the file if it doesn't exist
-        call lib#makeDirectories(path, path[-3:] == '.md')
-        call lib#openPath(path, a:openCommand)
+        call writing#project#openPath(path, a:openCommand)
     endif
 
     if len(text)

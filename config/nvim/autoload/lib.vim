@@ -321,25 +321,6 @@ function lib#getTextInsideNearestParenthesis()
     return text
 endfunction
 
-"=======================[ mapPrefixedFileOpeningActions ]=======================
-" binds <leader>{PREFIX}o/i/j to the opener function. Opener function should
-" take an opening command, eg "edit"/"split"/"vsplit"
-"===============================================================================
-function lib#mapPrefixedFileOpeningActions(mappingPrefix, functionName, otherArgs='')
-    let mapLHS = "<leader>" . a:mappingPrefix
-    let mapRHSStart = ':call ' . a:functionName . '('
-
-    if len(a:otherArgs)
-        let mapRHSStart = mapRHSStart . a:otherArgs . ', '
-    endif
-
-    let mapRHSEnd = ")<cr>"
-
-    silent execute "nnoremap <silent> " . mapLHS . "o " . mapRHSStart . '"edit"' . mapRHSEnd
-    silent execute "nnoremap <silent> " . mapLHS . "l " . mapRHSStart . '"vsplit"' . mapRHSEnd
-    silent execute "nnoremap <silent> " . mapLHS . "j " . mapRHSStart . '"split"' . mapRHSEnd
-endfunction
-
 function lib#openPath(path, openCommand="edit")
     if isdirectory(a:path)
         return

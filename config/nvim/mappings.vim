@@ -114,6 +114,8 @@ inoremap <M--> —
 inoremap <M-=> ≠
 inoremap <M-Left> ←
 inoremap <M-Right> →
+inoremap <M-Up> ↑
+inoremap <M-Down> ↓
 
 " move to end of line
 inoremap <c-a> <c-o>A

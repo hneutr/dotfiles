@@ -1,28 +1,12 @@
 let g:vim_markdown_no_default_key_mappings = 1
 
+let g:projectFileName = '.project'
+
+let g:mirrorDefaultsPath = "/Users/hne/Documents/research/hnetext/data/mirror-defaults.json"
+
 let g:fileOpeningPrefix = "<leader>o"
 let g:makePrefix = "<leader>m"
 let g:scratchPrefix = "<leader>s"
-
-let g:mirrors = {
-			\ 'c': 'changes',
-			\ 'f': '.fragments',
-			\ 'd': 'ideas',
-			\ 'o': 'outlines',
-			\ 's': '.scratch',
-			\ 'x': 'meta',
-			\}
-
-function s:addOpenMirrorMappings()
-	for [prefix, directory] in items(g:mirrors)
-		call writing#project#addFileOpeningMappings(prefix, directory)
-	endfor
-endfunction
-
-call s:addOpenMirrorMappings()
-
-" mirrors
-let g:scratchPrefix = '.scratch'
 
 "==================================[ projects ]=================================
 command! Push call writing#project#pushChanges()
@@ -45,9 +29,10 @@ command! Index call lib#openPath(writing#index#makeIndex(), "edit")
 
 "==================================[ markers ]==================================
 call writing#map#mapPrefixedFileOpeners("n", "writing#markers#gotoReference")
-call writing#map#mapPrefixedFileOpeners("m", "writing#markers#pick", '', {'edit': "writing#markers#editPick"}) 
-call writing#map#mapPrefixedFileOpeners("m", "writing#markers#pick", '', {'vsplit': "writing#markers#vsplitPick"}) 
-call writing#map#mapPrefixedFileOpeners("m", "writing#markers#pick", '', {'split': "writing#markers#splitPick"}) 
+nnoremap <silent> <leader>g :call writing#markers#fuzzy("writing#markers#gotoPickSink")<cr>
+nnoremap <silent> <M-l> :call writing#markers#gotoReference("vsplit")<cr>
+nnoremap <silent> <M-j> :call writing#markers#gotoReference("split")<cr>
+nnoremap <silent> <M-o> :call writing#markers#gotoReference("edit")<cr>
 
 " insert a header for a marker
 nnoremap <silent> <leader>mm :call writing#dividers#insertMarkerHeader()<cr>
@@ -71,9 +56,9 @@ command! -nargs=1 RelabelMarker call writing#markers#renameMarker(<f-args>)
 command! RefToMarker call writing#markers#refToMarker()
 
 "===========================[ fuzzy-find references ]===========================
-nnoremap <silent> <leader>m/ :call writing#markers#pick()<cr>
+nnoremap <silent> <leader>m/ :call writing#markers#fuzzy("writing#markers#putPickSink")<cr>
 "  is <c-/> (the mapping only works if it's the literal character)
-inoremap <silent>  <c-o>:call writing#markers#pick("writing#markers#putPickInInsert")<cr>
+inoremap <silent>  <c-o>:call writing#markers#fuzzy("writing#markers#putPickInInsertSink")<cr>
 
 "===================================[ todos ]===================================
 nnoremap <silent> <leader>t :call writing#todo#toggleDone()<cr>

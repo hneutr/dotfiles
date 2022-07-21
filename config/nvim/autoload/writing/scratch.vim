@@ -15,7 +15,7 @@ function writing#scratch#moveToScratchFile() range
         let lines += ['']
     endif
 
-    let scratchFile = writing#project#getPrefixedVersionOfPath('.scratch')
+    let scratchFile = writing#mirrors#getMirror('scratch')
 
     if filereadable(scratchFile)
         let lines += readfile(scratchFile)

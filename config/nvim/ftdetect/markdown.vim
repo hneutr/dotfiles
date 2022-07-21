@@ -1,7 +1,11 @@
 augroup markdown_startup
 	autocmd!
 	
-	" set the project root
 	au BufNewFile,BufRead *.md call writing#project#setProjectRoot()
+
+	" highlight done todos like comments
+	au BufNewFile,BufRead *.md syn match doneTodo /^\s*✓.*/ containedin=ALL contains=mkdLink,mkdURL,mkdInlineURL,mkdID,mkdLinkDef,mkdLinkTitle
+	au BufNewFile,BufRead *.md hi link doneTodo Comment
+
 	au TextChanged,InsertLeave *.md call writing#markers#updateReferencesOnLabelChange()
 augroup END

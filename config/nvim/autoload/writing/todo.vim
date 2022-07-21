@@ -1,4 +1,4 @@
-let s:todoChars = ['- ', '> ']
+let s:todoChars = ['- ', '✓ ']
 
 "=================================[ toggleDone ]================================
 " switches list items between dont and not
@@ -17,9 +17,11 @@ function writing#todo#toggleDone() range
 
     let outermostTodoChar = writing#todo#findOutermostTodoChar(lines)
 
-    for lineNumber in lineRange
-        call s:toggleTodoChar(lineNumber, outermostTodoChar)
-    endfor
+    if len(outermostTodoChar) > 0
+        for lineNumber in lineRange
+            call s:toggleTodoChar(lineNumber, outermostTodoChar)
+        endfor
+    endif
 endfunction
 
 function s:toggleTodoChar(lineNumber, oldTodoChar)

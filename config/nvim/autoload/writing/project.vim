@@ -1,4 +1,4 @@
-let g:projectFileName = '.project'
+let g:projectConfigs = {}
 
 "===============================[ setProjectRoot ]==============================
 " looks for a `.project` file in the current directory and parent directories.
@@ -6,8 +6,12 @@ let g:projectFileName = '.project'
 " if it finds it in a directory, it sets `b:projectRoot` to that directory
 " otherwise, it sets `b:projectRoot` to the directory of the file.
 "===============================================================================
-function writing#project#setProjectRoot()
-    let directory = expand('%:p:h')
+function writing#project#setProjectRoot(path=expand('%:p'))
+    if filereadable (a:path)
+        let directory = fnamemodify(a:path, ':h')
+    else
+        let directory = a:path
+    endif
 
     let b:projectRoot = directory
 
@@ -20,8 +24,7 @@ function writing#project#setProjectRoot()
         if filereadable (possibleProjectRootFile)
             let b:projectConfigFile = possibleProjectRootFile
             let b:projectRoot = directory
-
-            let b:configLoaded = 0
+            call writing#mirrors#addMappings(writing#project#getConfig())
             break
         else
             call remove(directoryParts, len(directoryParts) - 1)
@@ -30,31 +33,22 @@ function writing#project#setProjectRoot()
 endfunction
 
 function writing#project#getConfig()
-    if b:configLoaded == 1
-        return b:projectConfig
-    else
-        let b:projectConfig = writing#project#readConfig(b:projectConfigFile)
-        let b:configLoaded = 1
+    if ! has_key(g:projectConfigs, b:projectConfigFile)
+        let config = json_decode(readfile(fnameescape(b:projectConfigFile)))
+        let config['root'] = b:projectRoot
+        let config = writing#mirrors#applyDefaultsToConfig(config)
+        let g:projectConfigs[b:projectConfigFile] = config
     endif
-endfunction
 
-function writing#project#readConfig(path)
-    let jsonOutputPath = $TMPDIR . 'project-json.json'
-
-    let cmd = "hnetext json"
-    let cmd .= " --source " . a:path
-    let cmd .= " --path " . jsonOutputPath
-    silent call system(cmd)
-    return json_decode(readfile(fnameescape(jsonOutputPath)))
+    return g:projectConfigs[b:projectConfigFile]
 endfunction
 
 "================================[ shortenPath ]================================
 " takes a path and abbreviates the project root as `.`
 "===============================================================================
-function writing#project#shortenMarkerPath(path=expand('%'), substituteChar='.')
-    echo a:substituteChar
+function writing#project#shortenMarkerPath(path=expand('%'))
     let path = fnamemodify(a:path, ':p')
-    return substitute(path, b:projectRoot, a:substituteChar, '')
+    return substitute(path, b:projectRoot, '.', '')
 endfunction
 
 "=================================[ expandPath ]================================
@@ -71,78 +65,6 @@ function writing#project#expandMarkerPath(path)
     return b:projectRoot . path
 endfunction
 
-"==========================[ getPrefixedVersionOfPath ]=========================
-" gets the equivalent location of a file for a given prefix.
-"
-" defaults:
-" - path: the current file
-"
-" For example, if: 
-" - prefix = `scratch`
-" - path = `./text/chapters/1.md` (where "." is the projectRoot)
-"
-" it will return `./scratch/text/chapters/1.md`
-"===============================================================================
-function writing#project#getPrefixedVersionOfPath(prefix, path=expand('%:p'))
-    let newPath = substitute(a:path, b:projectRoot, '', '')
-    let newPath = '/' . a:prefix . newPath
-    let newPath = b:projectRoot . newPath
-    silent call lib#makeDirectories(newPath, 1)
-
-    return newPath
-endfunction
-
-"=========================[ getUnprefixedVersionOfPath ]========================
-" gets the "real" location of a file, one with a prefix. For example, the
-" defaults:
-" - path: the current file
-"
-" For example, if: 
-" - prefix = `scratch`
-" - path = `./scratch/text/chapters/1.md` (where "." is the projectRoot)
-"
-" it will return `./text/chapters/1.md`
-"===============================================================================
-function writing#project#getUnprefixedVersionOfPath(prefix, path=expand('%:p'))
-    let newPath = substitute(a:path, b:projectRoot, '', '')
-    let newPath = substitute(newPath, a:prefix . '/', '', '')
-    let newPath = b:projectRoot . newPath
-    
-    return newPath
-endfunction
-
-"===============================[ pathIsPrefixed ]==============================
-" checks whether the path (minus the project root) starts with the given prefix
-" if: 
-" - prefix = `scratch`
-" - file = `./scratch/text/chapters/1.md` (where "." is the projectRoot)
-" it will return a truthy value.
-"
-" if: 
-" - prefix = `scratch`
-" - file = `./text/chapters/1.md` (where "." is the projectRoot)
-" it will return a falsey value
-"===============================================================================
-function writing#project#pathIsPrefixed(prefix, path=expand('%:p'))
-    let path = substitute(a:path, b:projectRoot . '/', '', '')
-
-    return stridx(path, a:prefix) == 0
-endfunction
-
-"======================[ switchBetweenPathAndPrefixedPath ]=====================
-" if in the prefixed version of a path, edits the non-prefixed version;
-" if in the non-prefixed version of a path, edits the prefixed verseion.
-"===============================================================================
-function writing#project#switchBetweenPathAndPrefixedPath(prefix, openCommand='edit', path=expand('%:p'))
-    if writing#project#pathIsPrefixed(a:prefix, a:path)
-        let newPath = writing#project#getUnprefixedVersionOfPath(a:prefix, a:path)
-    else
-        let newPath = writing#project#getPrefixedVersionOfPath(a:prefix, a:path)
-    endif
-
-    silent execute ":" . a:openCommand . " " . fnameescape(newPath)
-endfunction
-
 "================================[ pushChanges ]================================
 " pushes the project's changes to git
 "===============================================================================
@@ -152,12 +74,8 @@ function writing#project#pushChanges()
     silent execute ":!git push"
 endfunction
 
-"===========================[ addFileOpeningMappings ]==========================
-" adds mappings to toggle between project files
-"===============================================================================
-function writing#project#addFileOpeningMappings(mappingPrefix, directoryPrefix)
-    let fn = "writing#project#switchBetweenPathAndPrefixedPath"
-    let args = '"' . a:directoryPrefix . '"'
-
-    call writing#map#mapPrefixedFileOpeners(a:mappingPrefix, fn, args)
+function writing#project#openPath(path, openCommand="edit")
+    " make the directories leading up to the file if it doesn't exist
+    call lib#makeDirectories(a:path, a:path[-3:] == '.md')
+    call lib#openPath(a:path, a:openCommand)
 endfunction

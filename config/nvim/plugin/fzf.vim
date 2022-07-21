@@ -5,6 +5,11 @@ let $FZF_DEFAULT_OPTS .= ' --no-height'
 
 inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
 
+function! Testing()
+  echo "hello"
+  let @" = getline('.')
+endfunction
+
 augroup user:autocmd:fzf
 	autocmd!
 
@@ -17,6 +22,9 @@ augroup user:autocmd:fzf
 augroup END
 
 let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+" let g:fzf_action = { 
+"       \ 'ctrl-l': 'vsplit',
+"       \ 'ctrl-j': 'split' }
 
 function! FloatingFZF()
   let buf = nvim_create_buf(v:false, v:true)
