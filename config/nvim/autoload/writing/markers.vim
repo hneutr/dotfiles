@@ -101,12 +101,12 @@ function writing#markers#fuzzy(fn)
 endfunction
 
 function s:action_for(command)
-    let g:command = a:command
-
     if a:command == 'ctrl-v'
         return 'vsplit'
     elseif a:command == 'ctrl-x'
         return 'split'
+    elseif a:command == 'ctrl-t'
+        return "tabedit"
     else
         return 'edit'
     endif
