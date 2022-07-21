@@ -9,5 +9,9 @@ function writing#index#makeIndex(path=expand('%:p'), outpath=g:defaultIndexPath)
 endfunction
 
 function writing#index#openIndex(openCommand)
-    call lib#openPath(writing#index#makeIndex(), a:openCommand)
+    let projectConfigFile = b:projectConfigFile
+    let projectRoot = b:projectRoot
+    silent call lib#openPath(writing#index#makeIndex(), a:openCommand)
+    let b:projectConfigFile = projectConfigFile
+    let b:projectRoot = projectRoot
 endfunction

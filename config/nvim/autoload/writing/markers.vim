@@ -17,6 +17,10 @@ function writing#markers#parsePath(string=getline(''))
     if stridx(path, ':') != -1
         let path = split(path, ':')[0]
     endif
+
+    if stridx(path, './') == 0
+        let path = path[2:]
+    endif
     
     return path
 endfunction
@@ -89,17 +93,19 @@ endfunction
 
 "===========================[ fuzzy-find references ]===========================
 function writing#markers#fuzzy(fn)
-	let wrap = fzf#wrap({'source': writing#markers#getReferences()})
-	let wrap['sink*'] = function(a:fn)
-	let wrap['_action'] = {'ctrl-v': 'vsplit', 'ctrl-x': 'split', 'ctrl-t': 'tab split'}
-	let wrap['options'] = ' +m -x --ansi --prompt "References: " --expect=ctrl-v,ctrl-x,ctrl-t'
-	return fzf#run(wrap)
+    let wrap = fzf#wrap({'source': writing#markers#getReferences()})
+    let wrap['sink*'] = function(a:fn)
+    let wrap['_action'] = {'ctrl-v': 'vsplit', 'ctrl-x': 'split', 'ctrl-t': 'tab split'}
+    let wrap['options'] = ' +m -x --ansi --prompt "References: " --expect=ctrl-v,ctrl-x,ctrl-t'
+    return fzf#run(wrap)
 endfunction
 
 function s:action_for(command)
+    let g:command = a:command
+
     if a:command == 'ctrl-v'
         return 'vsplit'
-    elseif a:command == 'ctrl-j'
+    elseif a:command == 'ctrl-x'
         return 'split'
     else
         return 'edit'
@@ -108,7 +114,6 @@ endfunction
 
 function! writing#markers#gotoPickSink(lines)
     let cmd = s:action_for(a:lines[0])
-
     call writing#markers#gotoReference(cmd, a:lines[1])
 endfunction
 
@@ -174,7 +179,7 @@ function writing#markers#gotoReference(openCommand, marker=lib#getTextInsideNear
 
     " if the file isn't the one we're currently editing, open it
     if path != expand('%:p')
-        call writing#project#openPath(path, a:openCommand)
+        silent call writing#project#openPath(path, a:openCommand)
     endif
 
     if len(text)

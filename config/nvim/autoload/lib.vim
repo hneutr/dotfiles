@@ -323,7 +323,6 @@ endfunction
 
 function lib#openPath(path, openCommand="edit")
     if isdirectory(a:path)
-        return
         " if it's a directory, open a terminal at that directory
         execute ":" . a:openCommand
         execute ":terminal"

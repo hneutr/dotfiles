@@ -2,9 +2,6 @@ let g:projectConfigs = {}
 
 "===============================[ setProjectRoot ]==============================
 " looks for a `.project` file in the current directory and parent directories.
-"
-" if it finds it in a directory, it sets `b:projectRoot` to that directory
-" otherwise, it sets `b:projectRoot` to the directory of the file.
 "===============================================================================
 function writing#project#setProjectRoot(path=expand('%:p'))
     if filereadable (a:path)
@@ -43,28 +40,6 @@ function writing#project#getConfig()
     return g:projectConfigs[b:projectConfigFile]
 endfunction
 
-"================================[ shortenPath ]================================
-" takes a path and abbreviates the project root as `.`
-"===============================================================================
-function writing#project#shortenMarkerPath(path=expand('%'))
-    let path = fnamemodify(a:path, ':p')
-    return substitute(path, b:projectRoot, '.', '')
-endfunction
-
-"=================================[ expandPath ]================================
-" expands a marker path (from `writing#project#shortenPath`) into a full
-" path
-"===============================================================================
-function writing#project#expandMarkerPath(path)
-    if stridx(a:path, '.') == 0
-        let path = a:path[1:]
-    else
-        let path = a:path
-    endif
-
-    return b:projectRoot . path
-endfunction
-
 "================================[ pushChanges ]================================
 " pushes the project's changes to git
 "===============================================================================
@@ -78,4 +53,30 @@ function writing#project#openPath(path, openCommand="edit")
     " make the directories leading up to the file if it doesn't exist
     call lib#makeDirectories(a:path, a:path[-3:] == '.md')
     call lib#openPath(a:path, a:openCommand)
+endfunction
+
+"================================[ shortenPath ]================================
+" takes a path and abbreviates the project root as `.`
+"===============================================================================
+function writing#project#shortenMarkerPath(path=expand('%'))
+    let path = fnamemodify(a:path, ':p')
+    return substitute(path, b:projectRoot . '/', '', '')
+endfunction
+
+"=================================[ expandPath ]================================
+" expands a marker path (from `writing#project#shortenPath`) into a full
+" path
+"===============================================================================
+function writing#project#expandMarkerPath(path)
+    if stridx(a:path, '.') == 0
+        let path = a:path[1:]
+    else
+        let path = a:path
+    endif
+
+    if stridx(path, '/') == 0
+        let path = path[1:]
+    endif
+
+    return b:projectRoot . '/' . path
 endfunction
