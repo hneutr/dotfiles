@@ -1,9 +1,10 @@
-let s:todoChars = ['- ', '✓ ']
+let s:toggleChars = ['- ', '✓ ', '? '] "∘
+let s:defaultChar = '- '
 
 "=================================[ toggleDone ]================================
 " switches list items between dont and not
 "===============================================================================
-function writing#todo#toggleDone() range
+function writing#todo#toggleDone(toggleChar) range
     if a:firstline == a:lastline
         let lines = [getline(".")]
         let lineRange = range(a:firstline, a:lastline)
@@ -15,59 +16,56 @@ function writing#todo#toggleDone() range
         let lineRange = range(startLine, endLine)
     endif
 
-    let outermostTodoChar = writing#todo#findOutermostTodoChar(lines)
+    let outermostToggleChar = writing#todo#findOutermostToggleChar(lines)
 
-    if len(outermostTodoChar) > 0
+    if len(outermostToggleChar) > 0
+        let newToggleChar = outermostToggleChar == a:toggleChar ? s:defaultChar : a:toggleChar
+
         for lineNumber in lineRange
-            call s:toggleTodoChar(lineNumber, outermostTodoChar)
+            call s:setToggleChar(lineNumber, newToggleChar)
         endfor
     endif
 endfunction
 
-function s:toggleTodoChar(lineNumber, oldTodoChar)
-    let newTodoChar = s:getOtherTodoChar(a:oldTodoChar)
+function s:setToggleChar(lineNumber, newToggleChar)
     let line = getline(a:lineNumber)
 
-    if match(line, '\s*' . a:oldTodoChar) != -1
-        let idx = stridx(line, a:oldTodoChar)
-        let prefix = ''
+    for oldToggleChar in s:toggleChars
+        if match(line, '\s*' . oldToggleChar) != -1
+            let idx = stridx(line, oldToggleChar)
+            let prefix = ''
 
-        if idx == 0
-            let suffix = split(line, a:oldTodoChar)[0]
-        else
-            let [prefix, suffix] = split(line, a:oldTodoChar)
+            if idx == 0
+                let suffix = split(line, oldToggleChar)[0]
+            else
+                let [prefix, suffix] = split(line, oldToggleChar)
+            endif
+
+            let newLine = prefix . a:newToggleChar . suffix
+
+            call setline(a:lineNumber, newLine)
+            return
         endif
-
-        let newLine = prefix . newTodoChar . suffix
-
-        call setline(a:lineNumber, newLine)
-    endif
+    endfor
 endfunction
 
-function s:getOtherTodoChar(todoChar)
-    let index = index(s:todoChars, a:todoChar)
-
-    let newIndex = index ? 0 : 1
-    return s:todoChars[newIndex]
-endfunction
-
-function writing#todo#findOutermostTodoChar(lines)
+function writing#todo#findOutermostToggleChar(lines)
     let filteredLines = []
     let smallestIndex = 1000
-    let outermostTodoChar = ''
+    let outermostToggleChar = ''
     for line in a:lines
-        for todoChar in s:todoChars
-            if match(line, '\s*' . todoChar) != -1
-                let index = stridx(line, todoChar)
+        for char in s:toggleChars
+            if match(line, '\s*' . char) != -1
+                let index = stridx(line, char)
 
                 if index < smallestIndex
                     let smallestIndex = index
-                    let outermostTodoChar = todoChar
+                    let outermostToggleChar = char
                 endif
             endif
         endfor
     endfor
 
-    return outermostTodoChar
+    return outermostToggleChar
 endfunction
 

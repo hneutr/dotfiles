@@ -122,8 +122,8 @@ function! writing#markers#putPickSink(lines)
 endfunction
 
 function writing#markers#putPickInInsertSink(lines)
-    call nvim_put([writing#markers#getPick(a:lines[1])], 'c', 1, 0)
-    call nvim_input("A")
+    call nvim_put([writing#markers#getPick(a:lines[1])], 'c', 0, 1)
+    call nvim_input("i")
 endfunction
 
 function writing#markers#getPick(pick)

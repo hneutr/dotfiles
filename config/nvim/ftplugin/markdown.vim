@@ -24,7 +24,7 @@ nnoremap <silent> <leader>s :call writing#scratch#moveToScratchFile()<cr>
 vnoremap <silent> <leader>s :'<,'>call writing#scratch#moveToScratchFile()<cr>
 
 "==================================[ indexes ]==================================
-call writing#map#mapPrefixedFileOpeners("i", "writing#index#openIndex")
+call writing#map#mapPrefixedFileOpeners("g", "writing#index#openIndex")
 command! Index call lib#openPath(writing#index#makeIndex(), "edit")
 
 "==================================[ markers ]==================================
@@ -61,5 +61,7 @@ nnoremap <silent> <leader>m/ :call writing#markers#fuzzy("writing#markers#putPic
 inoremap <silent>  <c-o>:call writing#markers#fuzzy("writing#markers#putPickInInsertSink")<cr>
 
 "===================================[ todos ]===================================
-nnoremap <silent> <leader>t :call writing#todo#toggleDone()<cr>
-vnoremap <silent> <leader>t :'<,'>call writing#todo#toggleDone()<cr>
+nnoremap <silent> <leader>td :call writing#todo#toggleDone("✓ ")<cr>
+vnoremap <silent> <leader>td :'<,'>call writing#todo#toggleDone("✓ ")<cr>
+nnoremap <silent> <leader>tq :call writing#todo#toggleDone("? ")<cr>
+vnoremap <silent> <leader>tq :'<,'>call writing#todo#toggleDone("? ")<cr>
