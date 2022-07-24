@@ -1,4 +1,4 @@
-let s:toggleChars = ['- ', '✓ ', '? '] "∘
+let s:toggleChars = ['- ', '✓ ', '? ', '~ '] "∘
 let s:defaultChar = '- '
 
 "=================================[ toggleDone ]================================

@@ -21,7 +21,7 @@ function writing#scratch#moveToScratchFile() range
         let lines += readfile(scratchFile)
     endif
 
-    call writefile(lines, scratchFile)
+    silent call lib#writeFile(lines, scratchFile)
 
     silent execute a:firstline . "," . a:lastline . "delete"
 endfunction

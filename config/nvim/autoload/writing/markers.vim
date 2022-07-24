@@ -127,8 +127,10 @@ function writing#markers#putPickInInsertSink(lines)
 endfunction
 
 function writing#markers#getPick(pick)
-    if stridx(a:pick, ':') != -1
-        let [path, label] = split(a:pick, ':')
+    let labelBreakIndex = stridx(a:pick, ':')
+    if labelBreakIndex != -1
+        let path = a:pick[:labelBreakIndex - 1]
+        let label = a:pick[labelBreakIndex + 1:]
         let path = writing#project#expandMarkerPath(path)
         let reference = writing#markers#getReference(label, path, 0)
     else
@@ -179,7 +181,7 @@ function writing#markers#gotoReference(openCommand, marker=lib#getTextInsideNear
 
     " if the file isn't the one we're currently editing, open it
     if path != expand('%:p')
-        silent call writing#project#openPath(path, a:openCommand)
+        silent call lib#openPath(path, a:openCommand)
     endif
 
     if len(text)

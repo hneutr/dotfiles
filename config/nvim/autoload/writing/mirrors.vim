@@ -173,6 +173,6 @@ function writing#mirrors#addMappings(config)
         let prefix = mirrorSettings['vimPrefix']
         let args = '"' . path . '"'
 
-        call writing#map#mapPrefixedFileOpeners(prefix, "writing#project#openPath", args)
+        call writing#map#mapPrefixedFileOpeners(prefix, "lib#openPath", args)
     endfor
 endfunction

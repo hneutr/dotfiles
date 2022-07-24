@@ -238,12 +238,12 @@ endfunction
 "==============================[ makeDirectories ]==============================
 " makes directories for a given path
 "===============================================================================
-function lib#makeDirectories(path, endsInFile=0)
+function lib#makeDirectories(path)
     let directoryParts = split(a:path, '/')
 
-    if a:endsInFile
-        let lastElementIndex = len(directoryParts) - 1
-        let directoryParts = directoryParts[:lastElementIndex - 1]
+    " if the path ends in a file, don't make it a directory
+    if ! len(fnamemodify(directoryParts[-1], ':e'))
+        call remove(directoryParts, -1)
     endif
 
     let currentPath = ''
@@ -322,13 +322,20 @@ function lib#getTextInsideNearestParenthesis()
 endfunction
 
 function lib#openPath(path, openCommand="edit")
+    silent call lib#makeDirectories(a:path)
+
     if isdirectory(a:path)
         " if it's a directory, open a terminal at that directory
-        execute ":" . a:openCommand
-        execute ":terminal"
-        execute ":call chansend(" . b:terminal_job_id . ", 'cd " . fnameescape(a:path) . "')"
-        execute ":call chansend(" . b:terminal_job_id . ", 'clear')"
+        silent execute ":" . a:openCommand
+        silent execute ":terminal"
+        silent execute ":call chansend(" . b:terminal_job_id . ", 'cd " . fnameescape(a:path) . "')"
+        silent execute ":call chansend(" . b:terminal_job_id . ", 'clear')"
     else
-        execute ":" . a:openCommand . " " . fnameescape(a:path)
+        silent execute ":" . a:openCommand . " " . fnameescape(a:path)
     endif
+endfunction
+
+function lib#writeFile(content, file)
+    silent call lib#makeDirectories(a:file)
+    silent call writefile(a:content, a:file)
 endfunction

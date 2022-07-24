@@ -49,12 +49,6 @@ function writing#project#pushChanges()
     silent execute ":!git push"
 endfunction
 
-function writing#project#openPath(path, openCommand="edit")
-    " make the directories leading up to the file if it doesn't exist
-    call lib#makeDirectories(a:path, a:path[-3:] == '.md')
-    call lib#openPath(a:path, a:openCommand)
-endfunction
-
 "================================[ shortenPath ]================================
 " takes a path and abbreviates the project root as `.`
 "===============================================================================

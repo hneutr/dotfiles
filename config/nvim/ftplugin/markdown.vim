@@ -65,3 +65,5 @@ nnoremap <silent> <leader>td :call writing#todo#toggleDone("✓ ")<cr>
 vnoremap <silent> <leader>td :'<,'>call writing#todo#toggleDone("✓ ")<cr>
 nnoremap <silent> <leader>tq :call writing#todo#toggleDone("? ")<cr>
 vnoremap <silent> <leader>tq :'<,'>call writing#todo#toggleDone("? ")<cr>
+nnoremap <silent> <leader>tm :call writing#todo#toggleDone("~ ")<cr>
+vnoremap <silent> <leader>tm :'<,'>call writing#todo#toggleDone("~ ")<cr>

@@ -1,3 +1,0 @@
-#!/usr/local/bin/zsh
-
-hnetext move-marker-to-path --as_directory --from_path $1 --from_text $2 --to_path $3
