@@ -278,19 +278,6 @@ function lex#markers#refToMarker(to_path=expand('%'), marker=lib#getTextInsideNe
     silent call system(cmd)
 endfunction
 
-function lex#markers#getMarkers(path=expand('%:p'))
-    let getMarkersCommand = "rg '^[#>] \\[.*\\]\\(\\)$' --no-heading --line-number " . a:path
-
-    let markers = {}
-    for string in systemlist(getMarkersCommand)
-        let lineNumber = split(string, ':')[0]
-        let label = lex#markers#parseLabel(string)
-        let markers[lineNumber] = label
-    endfor
-
-    return markers
-endfunction
-
 function lex#markers#updateReferences(fromPath, fromText, toPath, toText)
     let cmd = "hnetext update-references"
     let cmd .= " --from_path " . a:fromPath
@@ -302,58 +289,3 @@ function lex#markers#updateReferences(fromPath, fromText, toPath, toText)
 
     silent call system(cmd)
 endfunction
-
-function lex#markers#updateReferencesOnLabelChange()
-    let line = getline('.')
-
-    if ! lex#markers#isMarker(line)
-        return
-    endif
-
-    let newLabel = lex#markers#parseLabel(line)
-    let markers = lex#markers#getMarkers()
-
-    let lineNumber = getpos('.')[1]
-
-    if has_key(markers, lineNumber)
-        let oldLabel = markers[lineNumber]
-
-        if newLabel != oldLabel
-            if len(newLabel) > 0 && len(oldLabel) > 0
-                call lex#markers#updateReferences(expand('%'), oldLabel, expand('%'), newLabel)
-            else
-                let markers[lineNumber] = newLabel
-            endif
-        endif
-    endif
-endfunction
-
-" function lex#markers#parseYankedMarkers(event)
-"     " probably should delete markers that exist in a buffer on BufEnter
-"     let deleted = get(['d', 'c'], v:event['operator'])
-
-"     if ! deleted
-"         return
-"     endif
-
-"     let s:yankedMarkers = {}
-"     for line in v:event['regcontents']
-"         if lex#markers#isMarker(line)
-"             let s:yankedMarkers[line] = expand('%:p')
-"         endif
-"     endfor
-"     echo s:yankedMarkers
-" endfunction
-
-" function lex#markers#checkPaste()
-"     let pastedContent = getreg(v:register)
-
-"     let lines = split(pastedContent, '\n')
-
-"     for line in lines
-"         if has_key(s:yankedMarkers, line)
-"             let label = lex#markers#parseLabel(line)
-"             call lex#markers#updateReferences(s:yankedMarkers[line], label, expand('%'), label)
-"         endif
-"     endfor
-" endfunction

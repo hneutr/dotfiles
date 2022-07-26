@@ -31,6 +31,7 @@ function lex#sync#bufEnter()
     let b:createdMarkers = {}
 endfunction
 
+
 function lex#sync#bufChange()
     let newMarkers = <SID>readMarkers()
 
@@ -56,6 +57,13 @@ function lex#sync#bufChange()
 endfunction
 
 
+function lex#sync#bufLeave()
+    call <SID>handleCreatedMarkers()
+    call <SID>handleDeletedMarkers()
+    call <SID>handleRenamedMarkers()
+endfunction
+
+
 function <SID>recordMarkerCreationsAndDeletions(createdMarkers, deletedMarkers)
     for marker in a:deletedMarkers
         let b:deletedMarkers[marker] = v:true
@@ -72,13 +80,6 @@ function <SID>recordMarkerCreationsAndDeletions(createdMarkers, deletedMarkers)
             call remove(b:deletedMarkers, marker)
         endif
     endfor
-endfunction
-
-
-function lex#sync#bufLeave()
-    call <SID>handleCreatedMarkers()
-    call <SID>handleDeletedMarkers()
-    call <SID>handleRenamedMarkers()
 endfunction
 
 
@@ -126,7 +127,6 @@ function <SID>handleRenamedMarkers()
     let b:renamedMarkersNewToOld = {}
 endfunction
 
-
 function <SID>readMarkers()
     let markers = {}
     for lineNumber in range(1, line('$'))
@@ -169,38 +169,3 @@ function <SID>checkRename(createdMarkers, deletedMarkers)
 
     return [a:createdMarkers, a:deletedMarkers]
 endfunction
-
-
-" function lex#sync#checkRename()
-"     let line = getline('.')
-
-"     if ! lex#markers#isMarker(line)
-"         return
-"     endif
-
-"     let newLabel = lex#markers#parseLabel(line)
-
-"     let lineNumber = getpos('.')[1]
-
-"     if has_key(b:markersByLine, lineNumber)
-"         let oldLabel = b:markersByLine[lineNumber]
-
-"         if newLabel != oldLabel && len(newLabel) > 0 && len(oldLabel) > 0
-"             if has_key(b:renamedMarkersNewToOld, oldLabel)
-"                 let originalLabel = remove(b:renamedMarkersNewToOld, oldLabel)
-"             else
-"                 let originalLabel = oldLabel
-"             endif
-
-"             if newLabel == originalLabel
-"                 call remove(b:renamedMarkersOldToNew, originalLabel)
-"             else
-"                 let b:renamedMarkersNewToOld[newLabel] = originalLabel
-"                 let b:renamedMarkersOldToNew[originalLabel] = newLabel
-"             endif
-
-"             let b:markersByLine[lineNumber] = newLabel
-"             let b:markersByLabel[newLabel] = remove(b:markersByLabel, oldLabel)
-"         endif
-"     endif
-" endfunction
