@@ -1,4 +1,4 @@
-function writing#map#mapPrefixedFileOpeners(prefix, fn, args='', cmds={'edit': 'e', 'vsplit': 'vs', 'split': 'sp'})
+function lex#map#mapPrefixedFileOpeners(prefix, fn, args='', cmds={'edit': 'e', 'vsplit': 'vs', 'split': 'sp'})
     let LHSPrefix = g:fileOpeningPrefix . a:prefix
     let RHSStart = ':call ' . a:fn . '('
     let RHSEnd = ")<cr>"

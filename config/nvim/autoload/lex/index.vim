@@ -1,6 +1,6 @@
 let g:defaultIndexPath = $TMPDIR . 'index.md'
 
-function writing#index#makeIndex(path=expand('%:p'), outpath=g:defaultIndexPath)
+function lex#index#makeIndex(path=expand('%:p'), outpath=g:defaultIndexPath)
     let cmd = "hnetext index"
     let cmd .= " --source " . fnameescape(a:path)
     let cmd .= " --dest " . a:outpath
@@ -8,10 +8,10 @@ function writing#index#makeIndex(path=expand('%:p'), outpath=g:defaultIndexPath)
     return a:outpath
 endfunction
 
-function writing#index#openIndex(openCommand)
+function lex#index#openIndex(openCommand)
     let projectConfigFile = b:projectConfigFile
     let projectRoot = b:projectRoot
-    silent call lib#openPath(writing#index#makeIndex(), a:openCommand)
+    silent call lib#openPath(lex#index#makeIndex(), a:openCommand)
     let b:projectConfigFile = projectConfigFile
     let b:projectRoot = projectRoot
 endfunction

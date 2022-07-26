@@ -339,3 +339,11 @@ function lib#writeFile(content, file)
     silent call lib#makeDirectories(a:file)
     silent call writefile(a:content, a:file)
 endfunction
+
+function lib#flipDict(old)
+    let new = {}
+    for key, val in items(a:old)
+        let [val] = key
+    endfor
+    return new
+endfunction

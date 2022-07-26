@@ -1,4 +1,4 @@
-function writing#dividers#getHeader(content='', size='small')
+function lex#dividers#getHeader(content='', size='small')
     if a:size == 'small'
         let length = 40
         let lineStartChar = '-'
@@ -19,8 +19,8 @@ function writing#dividers#getHeader(content='', size='small')
     return [line, contentLine, line]
 endfunction
 
-function writing#dividers#insertMarkerHeader(size='small')
-    let header = writing#dividers#getHeader('[]()', a:size)
+function lex#dividers#insertMarkerHeader(size='small')
+    let header = lex#dividers#getHeader('[]()', a:size)
     silent call nvim_put(header, 'l', 0, 0)
 
     let pos = getcurpos()

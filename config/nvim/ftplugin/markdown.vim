@@ -9,61 +9,65 @@ let g:makePrefix = "<leader>m"
 let g:scratchPrefix = "<leader>s"
 
 "==================================[ projects ]=================================
-command! Push call writing#project#pushChanges()
+command! Push call lex#project#pushChanges()
 
 "==================================[ journals ]=================================
-command! Journal call lib#openPath(writing#journals#getJournalFilePath())
-command! WJournal call lib#openPath(writing#journals#getJournalFilePath(g:onWritingJournal))
+command! Journal call lib#openPath(lex#journals#getJournalFilePath())
+command! WJournal call lib#openPath(lex#journals#getJournalFilePath(g:onlexJournal))
 
 "===================================[ goals ]===================================
-command! Goals call lib#openPath(writing#goals#getGoalsPath())
+command! Goals call lib#openPath(lex#goals#getGoalsPath())
 
 "==================================[ scratch ]==================================
 " delete the currently selected lines and move them to the scratch file
-nnoremap <silent> <leader>s :call writing#scratch#moveToScratchFile()<cr>
-vnoremap <silent> <leader>s :'<,'>call writing#scratch#moveToScratchFile()<cr>
+nnoremap <silent> <leader>s :call lex#scratch#moveToScratchFile()<cr>
+vnoremap <silent> <leader>s :'<,'>call lex#scratch#moveToScratchFile()<cr>
 
 "==================================[ indexes ]==================================
-call writing#map#mapPrefixedFileOpeners("g", "writing#index#openIndex")
-command! Index call lib#openPath(writing#index#makeIndex(), "edit")
+call lex#map#mapPrefixedFileOpeners("g", "lex#index#openIndex")
+command! Index call lib#openPath(lex#index#makeIndex(), "edit")
 
 "==================================[ markers ]==================================
-call writing#map#mapPrefixedFileOpeners("n", "writing#markers#gotoReference")
-nnoremap <silent> <leader>g :call writing#markers#fuzzy("writing#markers#gotoPickSink")<cr>
-nnoremap <silent> <M-l> :call writing#markers#gotoReference("vsplit")<cr>
-nnoremap <silent> <M-j> :call writing#markers#gotoReference("split")<cr>
-nnoremap <silent> <M-o> :call writing#markers#gotoReference("edit")<cr>
+call lex#map#mapPrefixedFileOpeners("n", "lex#markers#gotoReference")
+nnoremap <silent> <leader>g :call lex#markers#fuzzy("lex#markers#gotoPickSink")<cr>
+nnoremap <silent> <M-l> :call lex#markers#gotoReference("vsplit")<cr>
+nnoremap <silent> <M-j> :call lex#markers#gotoReference("split")<cr>
+nnoremap <silent> <M-o> :call lex#markers#gotoReference("edit")<cr>
 
 " insert a header for a marker
-nnoremap <silent> <leader>mm :call writing#dividers#insertMarkerHeader()<cr>
-nnoremap <silent> <leader>ml :call writing#dividers#insertMarkerHeader()<cr>
-nnoremap <silent> <leader>mb :call writing#dividers#insertMarkerHeader("big")<cr>
+nnoremap <silent> <leader>mm :call lex#dividers#insertMarkerHeader()<cr>
+nnoremap <silent> <leader>ml :call lex#dividers#insertMarkerHeader()<cr>
+nnoremap <silent> <leader>mb :call lex#dividers#insertMarkerHeader("big")<cr>
 
 " "marker-reference" create a reference to the mark on the current line
-nnoremap <silent> <leader>mr :call writing#markers#getReference()<cr>
+nnoremap <silent> <leader>mr :let @" = lex#markers#getRef()<cr>
 
 " "file-marker-reference" create a file-reference to the current file
-nnoremap <silent> <leader>mf :call writing#markers#getFileReference()<cr>
+nnoremap <silent> <leader>mf :let @" = lex#markers#getRef('')<cr>
 
 " search for markers
 nnoremap <silent> <leader>fn /^[>#] \[.*\]()<cr>
 nnoremap <silent> <leader>fN ?^[>#] \[.*\]()<cr>
 
 " change a marker's label
-command! -nargs=1 RelabelMarker call writing#markers#renameMarker(<f-args>)
+command! -nargs=1 RelabelMarker call lex#markers#renameMarker(<f-args>)
 
 " make a reference into a marker
-command! RefToMarker call writing#markers#refToMarker()
+command! RefToMarker call lex#markers#refToMarker()
 
 "===========================[ fuzzy-find references ]===========================
-nnoremap <silent> <leader>m/ :call writing#markers#fuzzy("writing#markers#putPickSink")<cr>
+nnoremap <silent> <leader>m/ :call lex#markers#fuzzy("lex#markers#putPickSink")<cr>
 "  is <c-/> (the mapping only works if it's the literal character)
-inoremap <silent>  <c-o>:call writing#markers#fuzzy("writing#markers#putPickInInsertSink")<cr>
+inoremap <silent>  <c-o>:call lex#markers#fuzzy("lex#markers#putPickInInsertSink")<cr>
 
 "===================================[ todos ]===================================
-nnoremap <silent> <leader>td :call writing#todo#toggleDone("✓ ")<cr>
-vnoremap <silent> <leader>td :'<,'>call writing#todo#toggleDone("✓ ")<cr>
-nnoremap <silent> <leader>tq :call writing#todo#toggleDone("? ")<cr>
-vnoremap <silent> <leader>tq :'<,'>call writing#todo#toggleDone("? ")<cr>
-nnoremap <silent> <leader>tm :call writing#todo#toggleDone("~ ")<cr>
-vnoremap <silent> <leader>tm :'<,'>call writing#todo#toggleDone("~ ")<cr>
+nnoremap <silent> <leader>td :call lex#todo#toggleDone("✓ ")<cr>
+vnoremap <silent> <leader>td :'<,'>call lex#todo#toggleDone("✓ ")<cr>
+nnoremap <silent> <leader>tq :call lex#todo#toggleDone("? ")<cr>
+vnoremap <silent> <leader>tq :'<,'>call lex#todo#toggleDone("? ")<cr>
+nnoremap <silent> <leader>tm :call lex#todo#toggleDone("~ ")<cr>
+vnoremap <silent> <leader>tm :'<,'>call lex#todo#toggleDone("~ ")<cr>
+
+" testing paste bullshit
+nnoremap <silent> p p :call lex#markers#checkPaste()<cr>
+nnoremap <silent> P P :call lex#markers#checkPaste()<cr>

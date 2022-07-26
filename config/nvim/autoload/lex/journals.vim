@@ -1,6 +1,6 @@
 let g:onWritingJournal = 'on-writing'
 
-function writing#journals#getJournalFilePath(journal="")
+function lex#journals#getJournalFilePath(journal="")
     let cmd = "hnetext journal"
 
     if exists("b:projectRoot")

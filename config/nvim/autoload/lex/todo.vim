@@ -4,7 +4,7 @@ let s:defaultChar = '- '
 "=================================[ toggleDone ]================================
 " switches list items between dont and not
 "===============================================================================
-function writing#todo#toggleDone(toggleChar) range
+function lex#todo#toggleDone(toggleChar) range
     if a:firstline == a:lastline
         let lines = [getline(".")]
         let lineRange = range(a:firstline, a:lastline)
@@ -16,7 +16,7 @@ function writing#todo#toggleDone(toggleChar) range
         let lineRange = range(startLine, endLine)
     endif
 
-    let outermostToggleChar = writing#todo#findOutermostToggleChar(lines)
+    let outermostToggleChar = lex#todo#findOutermostToggleChar(lines)
 
     if len(outermostToggleChar) > 0
         let newToggleChar = outermostToggleChar == a:toggleChar ? s:defaultChar : a:toggleChar
@@ -49,7 +49,7 @@ function s:setToggleChar(lineNumber, newToggleChar)
     endfor
 endfunction
 
-function writing#todo#findOutermostToggleChar(lines)
+function lex#todo#findOutermostToggleChar(lines)
     let filteredLines = []
     let smallestIndex = 1000
     let outermostToggleChar = ''

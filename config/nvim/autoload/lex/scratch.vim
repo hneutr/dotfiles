@@ -1,7 +1,7 @@
 "=============================[ moveToScratchFile ]=============================
 " moves the selected to the top of the scratch file
 "===============================================================================
-function writing#scratch#moveToScratchFile() range
+function lex#scratch#moveToScratchFile() range
     if a:firstline == a:lastline
         let lines = [getline(".")]
     else
@@ -15,7 +15,7 @@ function writing#scratch#moveToScratchFile() range
         let lines += ['']
     endif
 
-    let scratchFile = writing#mirrors#getMirror('scratch')
+    let scratchFile = lex#mirrors#getMirror('scratch')
 
     if filereadable(scratchFile)
         let lines += readfile(scratchFile)

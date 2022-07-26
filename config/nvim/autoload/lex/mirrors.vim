@@ -6,7 +6,7 @@ function s:getMirrorDefaults()
     return s:mirrorDefaults
 endfunction
 
-function writing#mirrors#applyDefaultsToConfig(config)
+function lex#mirrors#applyDefaultsToConfig(config)
     let config = a:config
     let defaults = s:getMirrorDefaults()
 
@@ -50,8 +50,8 @@ endfunction
 "
 " it will return `./scratch/text/chapters/1.md`
 "===============================================================================
-function writing#mirrors#getMirror(mirrorType, path=expand('%:p'))
-    let config = writing#project#getConfig()
+function lex#mirrors#getMirror(mirrorType, path=expand('%:p'))
+    let config = lex#project#getConfig()
     return substitute(a:path, config['root'], config['mirrors'][a:mirrorType]['dir'], '')
 endfunction
 
@@ -66,8 +66,8 @@ endfunction
 "
 " it will return `./text/chapters/1.md`
 "===============================================================================
-function writing#mirrors#getSource(mirrorType, path=expand('%:p'))
-    let config = writing#project#getConfig()
+function lex#mirrors#getSource(mirrorType, path=expand('%:p'))
+    let config = lex#project#getConfig()
     return substitute(a:path, config['mirrors'][a:mirrorType]['dir'], config['root'], '')
 endfunction
 
@@ -75,8 +75,8 @@ endfunction
 "=================================[ getOrigin ]=================================
 " returns the path without any mirrors, even recursively
 "===============================================================================
-function writing#mirrors#getOrigin(path=expand('%:p'))
-    let config = writing#project#getConfig()
+function lex#mirrors#getOrigin(path=expand('%:p'))
+    let config = lex#project#getConfig()
     let mirrorDirPrefixes = []
     for mirrorSettings in values(config['mirrors'])
         call add(mirrorDirPrefixes, mirrorSettings['dirPrefix'])
@@ -106,8 +106,8 @@ endfunction
 
 
 
-function writing#mirrors#getMirrorType(path=expand('%:p'))
-    let config = writing#project#getConfig()
+function lex#mirrors#getMirrorType(path=expand('%:p'))
+    let config = lex#project#getConfig()
 
     for [mirrorType, mirrorSettings] in items(config['mirrors'])
         if stridx(a:path, mirrorSettings['dir']) != -1
@@ -118,12 +118,12 @@ function writing#mirrors#getMirrorType(path=expand('%:p'))
     return ""
 endfunction
 
-function writing#mirrors#pathIsMirror(path=expand('%:p'))
-    return len(writing#mirrors#getMirrorType(a:path)) ? v:true : v:false
+function lex#mirrors#pathIsMirror(path=expand('%:p'))
+    return len(lex#mirrors#getMirrorType(a:path)) ? v:true : v:false
 endfunction
 
-function writing#mirrors#pathHasMirrorOfType(mirrorType, path=expand('%:p'))
-    let pathMirrorType = writing#mirrors#getMirrorType(a:path)
+function lex#mirrors#pathHasMirrorOfType(mirrorType, path=expand('%:p'))
+    let pathMirrorType = lex#mirrors#getMirrorType(a:path)
 
     if len(pathMirrorType)
     else
@@ -145,34 +145,34 @@ endfunction
 "   - `mirrorType` has `mirrorOtherMirrors` = False:
 "       - return the `mirrorType` mirror of the source of the `path`
 "===============================================================================
-function writing#mirrors#getPath(mirrorType, path=expand('%:p'))
-    let pathMirrorType = writing#mirrors#getMirrorType(a:path)
+function lex#mirrors#getPath(mirrorType, path=expand('%:p'))
+    let pathMirrorType = lex#mirrors#getMirrorType(a:path)
 
     if len(pathMirrorType) == 0
-        return writing#mirrors#getMirror(a:mirrorType, a:path)
+        return lex#mirrors#getMirror(a:mirrorType, a:path)
     elseif pathMirrorType == a:mirrorType
-        return writing#mirrors#getSource(a:mirrorType, a:path)
+        return lex#mirrors#getSource(a:mirrorType, a:path)
     else
-        let config = writing#project#getConfig()
+        let config = lex#project#getConfig()
 
         if config['mirrors'][a:mirrorType]['mirrorOtherMirrors']
             if config['mirrors'][pathMirrorType]['mirrorOtherMirrors']
-                return writing#mirrors#getMirror(a:mirrorType, writing#mirrors#getOrigin(a:path))
+                return lex#mirrors#getMirror(a:mirrorType, lex#mirrors#getOrigin(a:path))
             else
-                return writing#mirrors#getMirror(a:mirrorType, a:path)
+                return lex#mirrors#getMirror(a:mirrorType, a:path)
             endif
         else
-            return writing#mirrors#getMirror(a:mirrorType, writing#mirrors#getOrigin(a:path))
+            return lex#mirrors#getMirror(a:mirrorType, lex#mirrors#getOrigin(a:path))
         endif
     endif
 endfunction
 
-function writing#mirrors#addMappings(config)
+function lex#mirrors#addMappings(config)
     for [mirrorType, mirrorSettings] in items(a:config['mirrors'])
-        let path = writing#mirrors#getPath(mirrorType)
+        let path = lex#mirrors#getPath(mirrorType)
         let prefix = mirrorSettings['vimPrefix']
         let args = '"' . path . '"'
 
-        call writing#map#mapPrefixedFileOpeners(prefix, "lib#openPath", args)
+        call lex#map#mapPrefixedFileOpeners(prefix, "lib#openPath", args)
     endfor
 endfunction
