@@ -58,9 +58,12 @@ endfunction
 
 
 function lex#sync#bufLeave()
-    call <SID>handleCreatedMarkers()
     call <SID>handleDeletedMarkers()
-    call <SID>handleRenamedMarkers()
+
+    let referenceUpdates = <SID>handleCreatedMarkers()
+    let referenceUpdates += <SID>handleRenamedMarkers()
+
+    call lex#markers#updateReferences(referenceUpdates)
 endfunction
 
 
@@ -84,6 +87,7 @@ endfunction
 
 
 function <SID>handleCreatedMarkers()
+    let updates = []
     let toPath = expand('%:p')
     for fromText in keys(b:createdMarkers)
         if has_key(b:renamedMarkersOldToNew, fromText)
@@ -95,12 +99,14 @@ function <SID>handleCreatedMarkers()
 
         if has_key(g:deletedMarkers, fromText)
             let fromPath = remove(g:deletedMarkers, fromText)
-
-            call lex#markers#updateReferences(fromPath, fromText, toPath, toText)
+        else
+            let fromPath = toPath
         endif
+
+        call add(updates, {'old_path': fromPath, 'old_text': fromText, 'new_path': toPath, 'new_text': toText})
     endfor
-    
-    let b:createdMarkers = {}
+
+    return updates
 endfunction
 
 function <SID>handleDeletedMarkers()
@@ -113,18 +119,17 @@ function <SID>handleDeletedMarkers()
 
         let g:deletedMarkers[marker] = path
     endfor
-
-    let b:deletedMarkers = {}
 endfunction
 
 function <SID>handleRenamedMarkers()
     let path = expand('%:p')
+
+    let updates = []
     for [fromText, toText] in items(b:renamedMarkersOldToNew)
-        call lex#markers#updateReferences(path, fromText, path, toText)
+        call add(updates, {'old_path': path, 'old_text': fromText, 'new_path': path, 'new_text': toText})
     endfor
 
-    let b:renamedMarkersOldToNew = {}
-    let b:renamedMarkersNewToOld = {}
+    return updates
 endfunction
 
 function <SID>readMarkers()

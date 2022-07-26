@@ -67,7 +67,3 @@ nnoremap <silent> <leader>tq :call lex#todo#toggleDone("? ")<cr>
 vnoremap <silent> <leader>tq :'<,'>call lex#todo#toggleDone("? ")<cr>
 nnoremap <silent> <leader>tm :call lex#todo#toggleDone("~ ")<cr>
 vnoremap <silent> <leader>tm :'<,'>call lex#todo#toggleDone("~ ")<cr>
-
-" testing paste bullshit
-nnoremap <silent> p p :call lex#markers#checkPaste()<cr>
-nnoremap <silent> P P :call lex#markers#checkPaste()<cr>

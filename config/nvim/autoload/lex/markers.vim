@@ -275,12 +275,19 @@ function lex#markers#refToMarker(to_path=expand('%'), marker=lib#getTextInsideNe
     silent call system(cmd)
 endfunction
 
-function lex#markers#updateReferences(fromPath, fromText, toPath, toText)
-    let cmd = "hnetext update-references"
+function lex#markers#updateReference(fromPath, fromText, toPath, toText)
+    let cmd = "hnetext update-reference"
     let cmd .= " --from_path " . a:fromPath
     let cmd .= " --from_text '" . a:fromText . "'"
     let cmd .= " --to_path " . a:toPath
     let cmd .= " --to_text '" . a:toText . "'"
+
+    silent call system(cmd)
+endfunction
+
+function lex#markers#updateReferences(references)
+    let cmd = "hnetext update-references"
+    let cmd .= " --references '" . json_encode(a:references) . "'"
 
     silent call system(cmd)
 endfunction
