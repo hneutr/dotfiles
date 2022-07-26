@@ -1,6 +1,6 @@
-let s:markerStartChars = ['# ', '> ', '']
-
-let s:yankedMarkers = {}
+let g:marker_path_text_delimiter = ':'
+let g:marker_text_flags_delimiter = "?="
+let g:directory_filename = "@"
 
 "================================[ shortenPath ]================================
 " takes a path and abbreviates the project root as `.`
@@ -23,79 +23,120 @@ function <SID>expandPath(path)
     return b:projectRoot . '/' . path
 endfunction
 
-"==================================[ makeLink ]=================================
-" creates a markdown link string: [label](reference)
 "===============================================================================
-function <SID>makeLink(label, reference)
-    return "[" . a:label . "](" . a:reference . ")"
+"===================================[ links ]===================================
+"===============================================================================
+function <SID>getLink(label, location)
+    return "[" . a:label . "](" . a:location . ")"
 endfunction
+
+function <SID>parseLink(string)
+    let startIndex = stridx(a:string, '[')
+    let endIndex = stridx(a:string, ')')
+
+    let string = a:string[startIndex + 1:endIndex - 1]
+
+    let labelLocationDelimiterIndex = stridx(string, '](')
+
+    if labelLocationDelimiterIndex == len(string) - 2
+        let label = string[:labelLocationDelimiterIndex - 1]
+        let location = ""
+    else
+        let [label, location] = split(string, '](')
+    endif
+
+    return [label, location]
+endfunction
+
+"===============================================================================
+"==================================[ markers ]==================================
+"===============================================================================
+" a marker has the following structure:
+" [label]()
+"
+" a marker can be preceded by:
+" - "# "
+" - "> "
+" - "" (nothing)
+"
+" nothing should follow the marker
 
 function lex#markers#isMarker(line=getline('.'))
     return match(a:line, '^[#>]\?\s\?\[.\+]\(\)') != -1
 endfunction
 
 function lex#markers#parseLabel(string=getline('.'))
-    for startChar in s:markerStartChars
-        let markerStart = startChar . '['
-
-        if stridx(a:string, markerStart) != 0
-            continue
-        endif
-
-        let string = a:string[len(markerStart):]
-
-        let labelEnd = ']()'
-        let labelEndIndex = stridx(string, labelEnd) 
-
-        if labelEndIndex != -1
-            return string[:labelEndIndex - 1]
-        endif
-    endfor
-
-    return ""
+    return <SID>parseLink(a:string)[0]
 endfunction
 
-function lex#markers#parsePath(string=getline(''))
-    let string = substitute(a:string, '^.*](', '', '')
-    let path = substitute(string, ').*$', '', '')
-
-    if stridx(path, ':') != -1
-        let path = split(path, ':')[0]
-    endif
-
-    if stridx(path, './') == 0
-        let path = path[2:]
-    endif
-    
-    return path
-endfunction
-
-"===================================[ getRef ]==================================
-" makes a reference to a marker
 "===============================================================================
-function lex#markers#getRef(text=lex#markers#parseLabel(), path=expand('%'))
-    let reference = <SID>shortenPath(a:path)
+"=================================[ locations ]=================================
+"===============================================================================
+" a location has he following structure: `path:text?=flags`
+" flags and text are optional
 
-    if len(a:text)
-        let reference .= ':' . a:text
-        let label = a:text
-    else
-        let label = fnamemodify(a:path, ':t:r')
+function <SID>getLocation(path, text='', flags=[])
+    let location = <SID>shortenPath(a:path)
 
-        if label == "@"
-            let label = fnamemodify(a:path, ":p:h:t")
-        endif
-
+    if len(a:text) > 0
+        let location .= g:marker_path_text_delimiter . a:text
     endif
 
-    if stridx(label, "-") != -1
-        let label = substitute(label, '-', ' ', '')
+    if len(a:flags) > 0
+        let location .= g:marker_text_flags_delimiter . join(a:flags, "")
     endif
 
-    return <SID>makeLink(label, reference)
+    return location
 endfunction
 
-function lex#markers#getReferences()
+function <SID>parseLocation(reference)
+    let path = a:reference
+    let text = ''
+    let flags = []
+
+    let pathTextDelimiterIndex = stridx(path, g:marker_path_text_delimiter)
+
+    if pathTextDelimiterIndex != -1
+        let text = path[pathTextDelimiterIndex + 1:]
+        let path = path[:pathTextDelimiterIndex - 1]
+    endif
+
+    let path = <SID>expandPath(path)
+
+    let textFlagsDelimiterIndex = stridx(text, g:marker_text_flags_delimiter)
+
+    if textFlagsDelimiterIndex != -1
+        let flags = text[pathTextDelimiterIndex + 2:]
+        let text = text[:pathTextDelimiterIndex - 1]
+
+        for i in range(len(flagsString))
+            call add(flags, flagsString[i])
+        endfor
+    endif
+
+    return [path, text, flags]
+endfunction
+
+function lex#markers#gotoLocation(openCommand, marker=lib#getTextInsideNearestParenthesis())
+    let [path, text, flags] = <SID>parseLocation(a:marker)
+
+    " if the file isn't the one we're currently editing, open it
+    if path != expand('%:p')
+        silent call lib#openPath(path, a:openCommand)
+    endif
+
+    if len(text)
+        let search = '[#>] \[' . text . '\]'
+
+        let @/ = search
+        try
+            silent execute "normal! nzz"
+        catch
+        endtry
+    endif
+endfunction
+
+function <SID>getLocationsList()
     let getMarkersCommand = "rg '^[#>] \\[.*\\]\\(\\)$' --no-heading " . b:projectRoot
 
     let references = []
@@ -103,7 +144,7 @@ function lex#markers#getReferences()
         let [path, label] = split(string, ':[#>] \[')
         let path = <SID>shortenPath(path)
         let label = substitute(label, ']()', '', '')
-        call add(references, path . ':' . label)
+        call add(references, path . g:marker_path_text_delimiter . label)
     endfor
 
     let getFilesCommand = "fd -tf '' " . b:projectRoot
@@ -116,16 +157,55 @@ function lex#markers#getReferences()
     return references
 endfunction
 
-"===========================[ fuzzy-find references ]===========================
+"===============================================================================
+"=================================[ references ]================================
+"===============================================================================
+function lex#markers#getRef(text=lex#markers#parseLabel(), path=expand('%'))
+    let location = <SID>getLocation(a:path, a:text)
+
+    if len(a:text)
+        let label = a:text
+    else
+        let label = fnamemodify(a:path, ':t:r')
+
+        if label == g:directory_filename
+            let label = fnamemodify(a:path, ":p:h:t")
+        endif
+    endif
+
+    if stridx(label, "-") != -1
+        let label = substitute(label, '-', ' ', '')
+    endif
+
+    return <SID>getLink(label, location)
+endfunction
+
+"==============================[ updateReferences ]=============================
+" references is a list of dicts like so:
+"   - old_path
+"   - old_text
+"   - new_path
+"   - new_text
+"===============================================================================
+function lex#markers#updateReferences(references)
+    let cmd = "hnetext update-references"
+    let cmd .= " --references '" . json_encode(a:references) . "'"
+
+    silent call system(cmd)
+endfunction
+
+"===============================================================================
+"===============================[ fuzzy finding ]===============================
+"===============================================================================
 function lex#markers#fuzzy(fn)
-    let wrap = fzf#wrap({'source': lex#markers#getReferences()})
+    let wrap = fzf#wrap({'source': <SID>getLocationsList()})
     let wrap['sink*'] = function(a:fn)
     let wrap['_action'] = {'ctrl-v': 'vsplit', 'ctrl-x': 'split', 'ctrl-t': 'tab split'}
     let wrap['options'] = ' +m -x --ansi --prompt "References: " --expect=ctrl-v,ctrl-x,ctrl-t'
     return fzf#run(wrap)
 endfunction
 
-function s:actionFor(command)
+function <SID>actionFor(command)
     if a:command == 'ctrl-v'
         return 'vsplit'
     elseif a:command == 'ctrl-x'
@@ -137,12 +217,12 @@ function s:actionFor(command)
     endif
 endfunction
 
-function! lex#markers#gotoPickSink(lines)
-    let cmd = s:actionFor(a:lines[0])
+function lex#markers#gotoPickSink(lines)
+    let cmd = <SID>actionFor(a:lines[0])
     call lex#markers#gotoReference(cmd, a:lines[1])
 endfunction
 
-function! lex#markers#putPickSink(lines)
+function lex#markers#putPickSink(lines)
     call nvim_put([lex#markers#getPick(a:lines[1])], 'c', 1, 0)
 endfunction
 
@@ -163,131 +243,6 @@ function lex#markers#putPickInInsertSink(lines)
 endfunction
 
 function lex#markers#getPick(pick)
-    let labelBreakIndex = stridx(a:pick, ':')
-
-    if labelBreakIndex != -1
-        let path = a:pick[:labelBreakIndex - 1]
-        let text = a:pick[labelBreakIndex + 1:]
-    else
-        let text = ''
-        let path = a:pick
-    endif
-
-    return lex#markers#getRef(text, <SID>expandPath(path))
-endfunction
-
-"============================[ parseMarkerReference ]===========================
-" parses a marker reference.
-"
-" A marker has the following structure:
-" - a full marker: `[label](path:text?=flags)`
-" - without flags: `[label](path:text)`
-" - without a reference: `[label](path)`
-"
-" However, only content within the parentheses should be passed to this function
-"===============================================================================
-function lex#markers#parseMarkerReference(marker)
-    let text = ''
-    let flags = []
-
-    if stridx(a:marker, ':') != -1
-        let [shortPath, text] = split(a:marker, ':')
-    else
-        let shortPath = a:marker
-    endif
-    
-    let path = <SID>expandPath(shortPath)
-
-    if stridx(text, '?=') != -1
-        let [text, flagsString] = split(text, '?=')
-
-        for i in range(len(flagsString))
-            call add(flags, flagsString[i])
-        endfor
-    endif
-
-    return [path, text, flags]
-endfunction
-
-"===============================[ gotoReference ]===============================
-" navigates to a marker.
-"===============================================================================
-function lex#markers#gotoReference(openCommand, marker=lib#getTextInsideNearestParenthesis())
-    let [path, text, flags] = lex#markers#parseMarkerReference(a:marker)
-
-    " if the file isn't the one we're currently editing, open it
-    if path != expand('%:p')
-        silent call lib#openPath(path, a:openCommand)
-    endif
-
-    if len(text)
-        let search = '[#>] \[' . text . '\]'
-
-        let @/ = search
-        try
-            silent execute "normal! nzz"
-        catch
-        endtry
-    endif
-endfunction
-
-"================================[ renameMarker ]===============================
-" change a marker's text
-"===============================================================================
-function lex#markers#renameMarker(new, old=lex#markers#parseLabel(), path=expand('%'))
-    let cmd = "hnetext rename-marker"
-    let cmd .= " --path " . a:path
-    let cmd .= ' --from_text "' . a:old  . '"'
-    let cmd .= ' --to_text "' . a:new  . '"'
-
-    silent call system(cmd)
-endfunction
-
-"=================================[ moveMarker ]================================
-" change a marker's file
-"===============================================================================
-function lex#markers#moveMarker(oldMarker, newMarker)
-    let cmd = "hnetext move-marker"
-    let cmd .= " --from_path " . <SID>expandPath(lex#markers#parsePath(a:oldMarker))
-    let cmd .= " --from_text '" . lex#markers#parseLabel(a:oldMarker) . "'"
-    let cmd .= " --to_path " . <SID>expandPath(lex#markers#parsePath(a:newMarker))
-    let cmd .= " --to_text '" . lex#markers#parseLabel(a:newMarker) . "'"
-
-    call system(cmd)
-endfunction
-
-"================================[ refToMarker ]================================
-" make a reference into a marker
-"===============================================================================
-function lex#markers#refToMarker(to_path=expand('%'), marker=lib#getTextInsideNearestParenthesis())
-    let [path, text, flags] = lex#markers#parseMarkerReference(a:marker)
-
-    if len(text) == 0
-        echo "not moving a file marker"
-    endif
-
-    let cmd = "hnetext move-marker"
-    let cmd .= " --from_path " . path
-    let cmd .= " --from_text '" . text . "'"
-    let cmd .= " --to_path " . <SID>expandPath("./" . a:to_path)
-    let cmd .= " --to_text '" . text . "'"
-
-    silent call system(cmd)
-endfunction
-
-function lex#markers#updateReference(fromPath, fromText, toPath, toText)
-    let cmd = "hnetext update-reference"
-    let cmd .= " --from_path " . a:fromPath
-    let cmd .= " --from_text '" . a:fromText . "'"
-    let cmd .= " --to_path " . a:toPath
-    let cmd .= " --to_text '" . a:toText . "'"
-
-    silent call system(cmd)
-endfunction
-
-function lex#markers#updateReferences(references)
-    let cmd = "hnetext update-references"
-    let cmd .= " --references '" . json_encode(a:references) . "'"
-
-    silent call system(cmd)
+    let [path, text, flags] = <SID>parseLocation(a:pick)
+    return lex#markers#getRef(text, path)
 endfunction

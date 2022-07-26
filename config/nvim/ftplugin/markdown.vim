@@ -30,9 +30,9 @@ command! Index call lib#openPath(lex#index#makeIndex(), "edit")
 "==================================[ markers ]==================================
 call lex#map#mapPrefixedFileOpeners("n", "lex#markers#gotoReference")
 nnoremap <silent> <leader>g :call lex#markers#fuzzy("lex#markers#gotoPickSink")<cr>
-nnoremap <silent> <M-l> :call lex#markers#gotoReference("vsplit")<cr>
-nnoremap <silent> <M-j> :call lex#markers#gotoReference("split")<cr>
-nnoremap <silent> <M-o> :call lex#markers#gotoReference("edit")<cr>
+nnoremap <silent> <M-l> :call lex#markers#gotoLocation("vsplit")<cr>
+nnoremap <silent> <M-j> :call lex#markers#gotoLocation("split")<cr>
+nnoremap <silent> <M-o> :call lex#markers#gotoLocation("edit")<cr>
 
 " insert a header for a marker
 nnoremap <silent> <leader>mm :call lex#dividers#insertMarkerHeader()<cr>
@@ -48,12 +48,6 @@ nnoremap <silent> <leader>mf :let @" = lex#markers#getRef('')<cr>
 " search for markers
 nnoremap <silent> <leader>fn /^[>#] \[.*\]()<cr>
 nnoremap <silent> <leader>fN ?^[>#] \[.*\]()<cr>
-
-" change a marker's label
-command! -nargs=1 RelabelMarker call lex#markers#renameMarker(<f-args>)
-
-" make a reference into a marker
-command! RefToMarker call lex#markers#refToMarker()
 
 "===========================[ fuzzy-find references ]===========================
 nnoremap <silent> <leader>m/ :call lex#markers#fuzzy("lex#markers#putPickSink")<cr>
