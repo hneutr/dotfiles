@@ -271,9 +271,6 @@ function lex#markers#refToMarker(to_path=expand('%'), marker=lib#getTextInsideNe
     let cmd .= " --from_text '" . text . "'"
     let cmd .= " --to_path " . <SID>expandPath("./" . a:to_path)
     let cmd .= " --to_text '" . text . "'"
-    echo cmd
-    echo "not running"
-    return
 
     silent call system(cmd)
 endfunction
@@ -284,8 +281,6 @@ function lex#markers#updateReferences(fromPath, fromText, toPath, toText)
     let cmd .= " --from_text '" . a:fromText . "'"
     let cmd .= " --to_path " . a:toPath
     let cmd .= " --to_text '" . a:toText . "'"
-    echo cmd
-    return
 
     silent call system(cmd)
 endfunction
