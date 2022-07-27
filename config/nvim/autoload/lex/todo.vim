@@ -1,5 +1,5 @@
-let s:toggleChars = ['- ', '✓ ', '? ', '~ '] "∘
-let s:defaultChar = '- '
+let s:toggleChars = ['-', '✓', '?', '~'] "∘
+let s:defaultChar = '-'
 
 "=================================[ toggleDone ]================================
 " switches list items between dont and not
@@ -30,42 +30,45 @@ endfunction
 function s:setToggleChar(lineNumber, newToggleChar)
     let line = getline(a:lineNumber)
 
-    for oldToggleChar in s:toggleChars
-        if match(line, '\s*' . oldToggleChar) != -1
-            let idx = stridx(line, oldToggleChar)
-            let prefix = ''
+    let whitespace = len(line) - len(trim(line))
 
-            if idx == 0
-                let suffix = split(line, oldToggleChar)[0]
-            else
-                let [prefix, suffix] = split(line, oldToggleChar)
-            endif
+    let char = <SID>getToggleChar(line)
 
-            let newLine = prefix . a:newToggleChar . suffix
+    if char != -1 && char != a:newToggleChar
+        let index = stridx(line, char)
 
-            call setline(a:lineNumber, newLine)
-            return
-        endif
-    endfor
+        let newLine = index > 0 ? line[:index - 1] : ""
+        let newLine .= a:newToggleChar . line[index + len(char):]
+        call setline(a:lineNumber, newLine)
+    endif
 endfunction
 
 function lex#todo#findOutermostToggleChar(lines)
-    let filteredLines = []
-    let smallestIndex = 1000
+    let smallestIndent = 1000
     let outermostToggleChar = ''
     for line in a:lines
-        for char in s:toggleChars
-            if match(line, '\s*' . char) != -1
-                let index = stridx(line, char)
+        let char = <SID>getToggleChar(line)
 
-                if index < smallestIndex
-                    let smallestIndex = index
-                    let outermostToggleChar = char
-                endif
+        if char != -1
+            let indent = len(line) - len(trim(line))
+
+            if indent < smallestIndent
+                let smallestIndent = indent
+                let outermostToggleChar = char
             endif
-        endfor
+        endif
     endfor
 
     return outermostToggleChar
 endfunction
 
+function <SID>getToggleChar(line)
+    let line = trim(a:line)
+    for char in s:toggleChars
+        if stridx(line, char) == 0
+            return char
+        endif
+    endfor
+
+    return -1
+endfunction

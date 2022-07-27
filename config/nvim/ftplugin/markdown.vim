@@ -55,9 +55,10 @@ nnoremap <silent> <leader>m/ :call lex#markers#fuzzy("lex#markers#putPickSink")<
 inoremap <silent>  <c-o>:call lex#markers#fuzzy("lex#markers#putPickInInsertSink")<cr>
 
 "===================================[ todos ]===================================
-nnoremap <silent> <leader>td :call lex#todo#toggleDone("✓ ")<cr>
-vnoremap <silent> <leader>td :'<,'>call lex#todo#toggleDone("✓ ")<cr>
-nnoremap <silent> <leader>tq :call lex#todo#toggleDone("? ")<cr>
-vnoremap <silent> <leader>tq :'<,'>call lex#todo#toggleDone("? ")<cr>
-nnoremap <silent> <leader>tm :call lex#todo#toggleDone("~ ")<cr>
-vnoremap <silent> <leader>tm :'<,'>call lex#todo#toggleDone("~ ")<cr>
+nnoremap <silent> <leader>td :lua require'lex.list_toggle'; toggle_item("✓", 'n')<cr>
+vnoremap <silent> <leader>td :lua require'lex.list_toggle'; toggle_item("✓", 'v')<cr>
+nnoremap <silent> <leader>tq :lua require'lex.list_toggle'; toggle_item("?", 'n')<cr>
+vnoremap <silent> <leader>tq :lua require'lex.list_toggle'; toggle_item("?", 'v')<cr>
+nnoremap <silent> <leader>tm :lua require'lex.list_toggle'; toggle_item("~", 'n')<cr>
+vnoremap <silent> <leader>tm :lua require'lex.list_toggle'; toggle_item("~", 'v')<cr>
+

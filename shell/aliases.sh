@@ -28,7 +28,7 @@ alias gc="git commit"
 alias gp="git push"
 alias gd="git diff"
 alias gctd="git commit -m $TD"
-alias gptd="ga .; gctd; gp"
+alias gptd="ga .; gc -m $TD; gp"
 
 # misc
 alias po="popen"
