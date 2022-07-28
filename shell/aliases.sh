@@ -11,6 +11,7 @@ alias lsf='ls -p | grep -v /'
 alias lsfa='ls -pa | grep -v /'
 
 # vim
+alias nvim="remote_nvim"
 alias vi="nvim"
 alias vim="nvim"
 alias gv="nvim -c 'Goyo' "

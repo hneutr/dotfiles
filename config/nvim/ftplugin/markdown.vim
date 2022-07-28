@@ -61,4 +61,3 @@ nnoremap <silent> <leader>tq :lua require'lex.list_toggle'; toggle_item("?", 'n'
 vnoremap <silent> <leader>tq :lua require'lex.list_toggle'; toggle_item("?", 'v')<cr>
 nnoremap <silent> <leader>tm :lua require'lex.list_toggle'; toggle_item("~", 'n')<cr>
 vnoremap <silent> <leader>tm :lua require'lex.list_toggle'; toggle_item("~", 'v')<cr>
-

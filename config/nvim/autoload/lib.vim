@@ -171,36 +171,6 @@ function! lib#AddPluginMapping(lhs, rhs)
     execute "nnoremap <silent> " l:lhs a:rhs
 endfunction
 
-"============================[ SplitWithoutNesting ]============================
-" When opening vim from within vim (eg, from a terminal split):
-" - open it as a split
-"	- call the autocommand that says we entered a window
-" - close the terminal
-"
-" (credit to justinmk)
-"===============================================================================
-function lib#SplitWithoutNesting()
-    if !empty($NVIM_LISTEN_ADDRESS) && $NVIM_LISTEN_ADDRESS !=# v:servername
-        " start a job with the source vim instance
-        let g:receiver = jobstart(['nc', '-U', $NVIM_LISTEN_ADDRESS], {'rpc': v:true})
-
-        " get the filename of the newly opened buffer
-        let g:filename = fnameescape(expand('%:p'))
-
-        " wipeout the buffer
-        noautocmd bwipeout
-
-        " open the buffer in the source vim instance
-        call rpcrequest(g:receiver, "nvim_command", "edit ".g:filename)
-
-        " call the autocommand to enter windows
-        call rpcrequest(g:receiver, "nvim_command", "doautocmd BufWinEnter")
-
-        " quit the "other" instance of vim
-        quitall
-    endif
-endfunction
-
 "============================[ TwoVerticalTerminals ]===========================
 " Opens two vertical terminals
 " I use this from the shell

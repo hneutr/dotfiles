@@ -23,6 +23,14 @@ function fvim() {
     [[ -n "$files" ]] && vim "${files[@]}"
 }
 
+function remote_nvim() {
+  if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
+    nvr --remote "$@"
+  else
+    exec nvim "$@"
+  fi
+}
+
 # refresh the virtual environment if its there
 function cd_and_venv() {
   if [ -f $PWD/env/bin/activate ]; then
