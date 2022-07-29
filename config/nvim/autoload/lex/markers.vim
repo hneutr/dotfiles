@@ -219,7 +219,7 @@ endfunction
 
 function lex#markers#gotoPickSink(lines)
     let cmd = <SID>actionFor(a:lines[0])
-    call lex#markers#gotoReference(cmd, a:lines[1])
+    call lex#markers#gotoLocation(cmd, a:lines[1])
 endfunction
 
 function lex#markers#putPickSink(lines)

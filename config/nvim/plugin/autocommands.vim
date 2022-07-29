@@ -1,7 +1,7 @@
 augroup startup
 	autocmd!
 
-	autocmd VimEnter * let $NVIM_LISTEN_ADDRESS = v:servername
+	autocmd VimEnter * call lib#setListenAddress()
 
 	" save whenever things change
 	autocmd TextChanged,InsertLeave * call lib#SaveAndRestoreVisualSelectionMarks()

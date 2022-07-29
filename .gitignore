@@ -12,3 +12,4 @@ tpm/
 config/coc/extensions/node_modules
 __pycache__
 scripts/python/writing/tests/
+zsh/plugins

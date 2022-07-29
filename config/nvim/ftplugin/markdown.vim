@@ -2,6 +2,8 @@ let g:vim_markdown_no_default_key_mappings = 1
 
 let g:projectFileName = '.project'
 
+let g:writingJournal = 'on-writing'
+
 let g:mirrorDefaultsPath = "/Users/hne/Documents/research/hnetext/data/mirror-defaults.json"
 
 let g:fileOpeningPrefix = "<leader>o"
@@ -12,23 +14,23 @@ let g:scratchPrefix = "<leader>s"
 command! Push call lex#project#pushChanges()
 
 "==================================[ journals ]=================================
-command! Journal call lib#openPath(lex#journals#getJournalFilePath())
-command! WJournal call lib#openPath(lex#journals#getJournalFilePath(g:onlexJournal))
+command! Journal lua require'util'.open_path(require'lex.journal'.path())
+command! WJournal lua require'util'.open_path(require'lex.journal'.path(vim.g.writingJournal))
 
 "===================================[ goals ]===================================
-command! Goals call lib#openPath(lex#goals#getGoalsPath())
+command! Goals lua require'util'.open_path(require'lex.goals'.path())
 
 "==================================[ scratch ]==================================
 " delete the currently selected lines and move them to the scratch file
-nnoremap <silent> <leader>s :call lex#scratch#moveToScratchFile()<cr>
-vnoremap <silent> <leader>s :'<,'>call lex#scratch#moveToScratchFile()<cr>
+nnoremap <silent> <leader>s :lua require'lex.scratch'.move('n')<cr>
+vnoremap <silent> <leader>s :'<,'>lua require'lex.scratch'.move('v')<cr>
 
 "==================================[ indexes ]==================================
-call lex#map#mapPrefixedFileOpeners("g", "lex#index#openIndex")
-command! Index call lib#openPath(lex#index#makeIndex(), "edit")
+lua require'lex.map'.map_prefixed_file_openers('g', ":lua require'lex.index'.open")
+command! Index lua require'lex.index'.open()<cr>
 
 "==================================[ markers ]==================================
-call lex#map#mapPrefixedFileOpeners("n", "lex#markers#gotoReference")
+lua require'lex.map'.map_prefixed_file_openers('n', ":call lex#markers#gotoLocation")
 nnoremap <silent> <leader>g :call lex#markers#fuzzy("lex#markers#gotoPickSink")<cr>
 nnoremap <silent> <M-l> :call lex#markers#gotoLocation("vsplit")<cr>
 nnoremap <silent> <M-j> :call lex#markers#gotoLocation("split")<cr>
@@ -55,9 +57,9 @@ nnoremap <silent> <leader>m/ :call lex#markers#fuzzy("lex#markers#putPickSink")<
 inoremap <silent>  <c-o>:call lex#markers#fuzzy("lex#markers#putPickInInsertSink")<cr>
 
 "===================================[ todos ]===================================
-nnoremap <silent> <leader>td :lua require'lex.list_toggle'; toggle_item("✓", 'n')<cr>
-vnoremap <silent> <leader>td :lua require'lex.list_toggle'; toggle_item("✓", 'v')<cr>
-nnoremap <silent> <leader>tq :lua require'lex.list_toggle'; toggle_item("?", 'n')<cr>
-vnoremap <silent> <leader>tq :lua require'lex.list_toggle'; toggle_item("?", 'v')<cr>
-nnoremap <silent> <leader>tm :lua require'lex.list_toggle'; toggle_item("~", 'n')<cr>
-vnoremap <silent> <leader>tm :lua require'lex.list_toggle'; toggle_item("~", 'v')<cr>
+nnoremap <silent> <leader>td :lua require'lex.list_toggle'.toggle_item("✓", 'n')<cr>
+vnoremap <silent> <leader>td :lua require'lex.list_toggle'.toggle_item("✓", 'v')<cr>
+nnoremap <silent> <leader>tq :lua require'lex.list_toggle'.toggle_item("?", 'n')<cr>
+vnoremap <silent> <leader>tq :lua require'lex.list_toggle'.toggle_item("?", 'v')<cr>
+nnoremap <silent> <leader>tm :lua require'lex.list_toggle'.toggle_item("~", 'n')<cr>
+vnoremap <silent> <leader>tm :lua require'lex.list_toggle'.toggle_item("~", 'v')<cr>

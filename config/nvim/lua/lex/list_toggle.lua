@@ -1,19 +1,14 @@
 local M = {}
 local api = vim.api
+local util = require'util'
 
 local toggle_chars = {'-', '✓', '?', '~'}
 local default_char = '-'
 
-function toggle_item(toggle_char, mode)
-  local start_line = api.nvim_win_get_cursor(0)[1] - 1
-  local end_line = start_line + 1
-
-  if mode == 'v' then
-    start_line = api.nvim_buf_get_mark(0, '<')[1] - 1
-    end_line = api.nvim_buf_get_mark(0, '>')[1]
-  end
-
-  local lines = api.nvim_buf_get_lines(0, start_line, end_line, false)
+function M.toggle_item(toggle_char, mode)
+  local start_line = util.get_selection_start(mode)
+  local end_line = util.get_selection_end(mode)
+  local lines = util.get_selected_lines(mode)
 
   local outermost_toggle_char = M.find_outermost_toggle_char(lines)
 
@@ -86,3 +81,5 @@ function M.get_toggle_char(line)
     end
   end
 end
+
+return M

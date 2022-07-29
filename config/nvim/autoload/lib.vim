@@ -53,28 +53,6 @@ function! lib#ModifyLineEndDelimiter(character)
     call setline('.', newline)
 endfunction
 
-function! lib#VisualSelection(direction, extra_filter) range
-    let l:saved_reg=@"
-    execute "normal! vgvy"
-
-    let l:pattern = escape(@", '\\/.*$^~[]')
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
-
-    let l:command = ''
-    if a:direction == 'gv'
-        let l:command = "Ag \"" . l:pattern . "\" "
-    elseif a:direction == 'replace'
-        let l:command = "%s" . '/' . l:pattern . '/'
-    endif
-
-    exe "menu Foo.Bar :" . l:command
-    emenu Foo.Bar
-    unmenu Foo
-
-    let @/ = l:pattern
-    let @" = l:saved_reg
-endfunction
-
 function! lib#FoldDisplayText()                                                         
     let linecount = v:foldend - v:foldstart + 1
     let line = getline(v:foldstart)
@@ -87,12 +65,6 @@ function! lib#FoldDisplayText()
     let postinfospaces = repeat(" ", winwidth(0))
 
     return preinfospaces . linecount . " lines: " . info . postinfospaces
-endfunction
-
-" sets some stuff up for writing
-function! lib#UnstructuredText()
-    setlocal wrap
-    setlocal spell
 endfunction
 
 " Show help along the screen's larger dimension
@@ -171,6 +143,34 @@ function! lib#AddPluginMapping(lhs, rhs)
     execute "nnoremap <silent> " l:lhs a:rhs
 endfunction
 
+function lib#setListenAddress(listenAddress=v:servername)
+    let $NVIM_LISTEN_ADDRESS = a:listenAddress
+endfunction
+
+function lib#editWithoutNesting(listenAddress)
+    if a:listenAddress !=# v:servername
+        call lib#setListenAddress(a:listenAddress)
+
+        " start a job with the source vim instance
+        let g:receiver = jobstart(['nc', '-U', a:listenAddress], {'rpc': v:true})
+
+        " get the filename of the newly opened buffer
+        let g:filename = fnameescape(expand('%:p'))
+
+        " wipeout the buffer
+        noautocmd bwipeout
+
+        " open the buffer in the source vim instance
+        call rpcrequest(g:receiver, "nvim_command", "edit ".g:filename)
+
+        " call the autocommand to enter windows
+        call rpcrequest(g:receiver, "nvim_command", "doautocmd BufWinEnter")
+
+        " quit the "other" instance of vim
+        quitall
+    endif
+endfunction
+
 "============================[ TwoVerticalTerminals ]===========================
 " Opens two vertical terminals
 " I use this from the shell
@@ -194,17 +194,6 @@ function! lib#KillBufferAndGoToNext()
     silent! execute ":bdelete " . l:buffer_number
 endfunction
 
-"==============================[ StripWhitespace ]==============================
-" does what it says
-"===============================================================================
-function lib#StripWhitespace() range
-  let @/='\v(\s+$)|( +\ze\t)'
-  let oldhlsearch = &hlsearch
-  let &hlsearch = 1
-  %s/\s\+$//e
-  let &hlsearch = oldhlsearch
-endfunction
-
 "==============================[ makeDirectories ]==============================
 " makes directories for a given path
 "===============================================================================
@@ -212,7 +201,7 @@ function lib#makeDirectories(path)
     let directoryParts = split(a:path, '/')
 
     " if the path ends in a file, don't make it a directory
-    if ! len(fnamemodify(directoryParts[-1], ':e'))
+    if len(fnamemodify(directoryParts[-1], ':e'))
         call remove(directoryParts, -1)
     endif
 
@@ -308,12 +297,4 @@ endfunction
 function lib#writeFile(content, file)
     silent call lib#makeDirectories(a:file)
     silent call writefile(a:content, a:file)
-endfunction
-
-function lib#flipDict(old)
-    let new = {}
-    for key, val in items(a:old)
-        let [val] = key
-    endfor
-    return new
 endfunction

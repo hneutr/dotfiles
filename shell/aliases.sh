@@ -14,8 +14,8 @@ alias lsfa='ls -pa | grep -v /'
 alias nvim="remote_nvim"
 alias vi="nvim"
 alias vim="nvim"
-alias gv="nvim -c 'Goyo' "
-alias gvt="nvim -c 'Goyo' text.md"
+alias gv="vim -c 'Goyo' "
+alias gvt="vim -c 'Goyo' text.md"
 
 # python
 alias python="python3"

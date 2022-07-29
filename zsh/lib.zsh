@@ -25,9 +25,9 @@ function fvim() {
 
 function remote_nvim() {
   if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
-    nvr --remote "$@"
+    /usr/local/bin/nvim -c "call lib#editWithoutNesting('$NVIM_LISTEN_ADDRESS')" "$@"
   else
-    exec nvim "$@"
+    /usr/local/bin/nvim "$@"
   fi
 }
 

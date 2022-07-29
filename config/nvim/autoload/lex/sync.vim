@@ -22,7 +22,6 @@
 " these are in the format: oldLabel: oldPath
 let g:deletedMarkers = {}
 
-
 function lex#sync#bufEnter()
     let b:markers = <SID>readMarkers()
     let b:renamedMarkersNewToOld = {}

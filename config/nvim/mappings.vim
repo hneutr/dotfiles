@@ -120,6 +120,9 @@ inoremap <M-Down> ↓
 " move to end of line
 inoremap <c-a> <c-o>A
 
+" paste like in terminal mode
+inoremap  <c-r>"
+
 "================================[ visual mode ]================================
 " keep visual selection after indent/unindent
 vnoremap > >gv
@@ -186,6 +189,10 @@ tnoremap <c-l> <c-\><c-n><c-w>l
 
 " make <c-r> work like in insert mode
 tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+
+" make pasting nice
+tnoremap <c-]> <c-\><c-n>""pA
+tnoremap <leader><c-]> <c-\><c-n>""pA
 
 "==================================[ operator ]=================================
 
