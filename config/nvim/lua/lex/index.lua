@@ -18,15 +18,11 @@ function M.make(path, index_path)
 end
 
 function M.open(open_command)
-    local project_config_file = vim.b.projectConfigFile
-    local project_root = vim.b.projectRoot
+    local project_config_file = vim.b.project_config_file
 
-    local path = M.make()
-
-    util.open_path(path, open_command)
+    util.open_path(M.make(), open_command)
 
     vim.b.projectConfigFile = project_config_file
-    vim.b.projectRoot = project_root
 end
 
 return M

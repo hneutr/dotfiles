@@ -176,6 +176,7 @@ endfunction
 " I use this from the shell
 "===============================================================================
 function! lib#TwoVerticalTerminals()
+    call lib#setListenAddress()
     execute "silent! terminal"
     execute "silent! <esc>"
     execute "silent! vsplit"

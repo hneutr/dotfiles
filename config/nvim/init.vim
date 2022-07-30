@@ -38,33 +38,26 @@ let g:python3_host_prog = '/Users/hne/.pyenv/shims/python3'
 
 " Close quickfix & help with q, Escape, or Control-C
 " Also, keep default <cr> binding
-augroup easy_close
-	autocmd!
-	autocmd FileType help,qf nnoremap <buffer> q :q<cr>
-	autocmd FileType help,qf nnoremap <buffer> <Esc> :q<cr>
-	autocmd FileType help,qf nnoremap <buffer> <C-c> :q<cr>
-augroup END
+" augroup easy_close
+" 	autocmd!
+" 	autocmd FileType help,qf nnoremap <buffer> q :q<cr>
+" 	autocmd FileType help,qf nnoremap <buffer> <Esc> :q<cr>
+" 	autocmd FileType help,qf nnoremap <buffer> <C-c> :q<cr>
+" augroup END
 
 " testing how to avoid stupid paste mode
-let &t_SI .= "\<Esc>[?2004h"
-let &t_EI .= "\<Esc>[?2004l"
+" let &t_SI .= "\<Esc>[?2004h"
+" let &t_EI .= "\<Esc>[?2004l"
 
-inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+" inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
-function! XTermPasteBegin()
-    set pastetoggle=<Esc>[201~
-    set paste
-    return ""
-endfunction
+" function! XTermPasteBegin()
+"     set pastetoggle=<Esc>[201~
+"     set paste
+"     return ""
+" endfunction
 
 " the fuck, why is my cwd not being set
 execute "chdir $PWD"
 
-" open file at last point
-autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-
-set updatetime=300
-
-" lua << EOF
-" require('settings')
-" EOF
+lua require'util'

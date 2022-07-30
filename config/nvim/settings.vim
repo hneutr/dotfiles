@@ -98,6 +98,9 @@ set undodir=~/.config/nvim/undodir
 
 set undofile
 
+" save things regularly
+set updatetime=300
+
 " ignore file types in completion
 set wildignore+=.DS_Store,.git,*.tmp,*.swp,*.png,*.jpg,*.gif,*.gz
 
@@ -148,3 +151,6 @@ set smartcase
 "=================================[ formatting ]================================
 " ftplugins play with this stuff so settings have to be put in after/
 " (see /after/plugin/formatting.vim)
+
+"=========================[ annoying plugins bullshit ]=========================
+let g:polyglot_disabled = ['markdown.plugin']

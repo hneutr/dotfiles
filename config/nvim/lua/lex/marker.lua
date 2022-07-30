@@ -1,5 +1,6 @@
+local project = require'lex.project'
+
 local M = {}
-local api = vim.api
 
 local location_path_text_delimiter = ':'
 local location_text_flags_delimiter = "?="
@@ -14,15 +15,15 @@ M.link = {}
 --
 --------------------------------------------------------------------------------
 function M.path.shorten(path)
-    local root = vim.b.projectRoot .. "/"
-    return string.gsub(path, root, "")
+    local root = project.get_config()['root'] .. "/"
+    return string.gsub(path, _G.escape(root), "")
 end
 
 function M.path.expand(path)
     path = string.gsub(path, "^%.", "")
     path = string.gsub(path, "^/", "")
 
-    return vim.b.projectRoot .. "/" .. path
+    return project.get_config()['root'] .. "/" .. path
 end
 
 --------------------------------------------------------------------------------

@@ -192,7 +192,6 @@ tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
 " make pasting nice
 tnoremap <c-]> <c-\><c-n>""pA
-tnoremap <leader><c-]> <c-\><c-n>""pA
 
 "==================================[ operator ]=================================
 

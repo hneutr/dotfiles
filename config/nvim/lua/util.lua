@@ -1,6 +1,11 @@
 local M = {}
 local api = vim.api
 
+
+function _G.escape(s)
+    return (s:gsub('[%-%.%+%[%]%(%)%$%^%%%?%*]','%%%1'))
+end
+
 --------------------------------------------------------------------------------
 -- makes directories for a given path.
 -- If the last component of the path has an extension, it won't make that part

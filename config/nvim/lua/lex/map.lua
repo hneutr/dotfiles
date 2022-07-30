@@ -6,7 +6,7 @@ local default_opener_cmds = { edit = 'e', vsplit = 'vs', split = 'sp'}
 function M.map_prefixed_file_openers(prefix, fn, args, cmds)
     cmds = cmds or default_opener_cmds
 
-    local lhs_prefix = vim.g.fileOpeningPrefix .. prefix
+    local lhs_prefix = vim.g.file_opening_prefix .. prefix
     local rhs_start = fn .. '('
     local rhs_end = ")<cr>"
 

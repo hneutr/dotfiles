@@ -1,21 +1,17 @@
-let g:vim_markdown_no_default_key_mappings = 1
+let g:project_file_name = '.project'
 
-let g:projectFileName = '.project'
+let g:writing_journal = 'on-writing'
 
-let g:writingJournal = 'on-writing'
+let g:mirror_defaults_path = "/Users/hne/Documents/research/hnetext/data/mirror-defaults.json"
 
-let g:mirrorDefaultsPath = "/Users/hne/Documents/research/hnetext/data/mirror-defaults.json"
-
-let g:fileOpeningPrefix = "<leader>o"
-let g:makePrefix = "<leader>m"
-let g:scratchPrefix = "<leader>s"
+let g:file_opening_prefix = "<leader>o"
 
 "==================================[ projects ]=================================
-command! Push call lex#project#pushChanges()
+command! Push lua require'lex.project'.push()
 
 "==================================[ journals ]=================================
 command! Journal lua require'util'.open_path(require'lex.journal'.path())
-command! WJournal lua require'util'.open_path(require'lex.journal'.path(vim.g.writingJournal))
+command! WJournal lua require'util'.open_path(require'lex.journal'.path(vim.g.writing_journal))
 
 "===================================[ goals ]===================================
 command! Goals lua require'util'.open_path(require'lex.goals'.path())
@@ -31,15 +27,15 @@ command! Index lua require'lex.index'.open()<cr>
 
 "==================================[ markers ]==================================
 lua require'lex.map'.map_prefixed_file_openers('n', ":call lex#markers#gotoLocation")
-nnoremap <silent> <leader>g :call lex#markers#fuzzy("lex#markers#gotoPickSink")<cr>
+nnoremap <silent> <leader>f :call lex#markers#fuzzy("lex#markers#gotoPickSink")<cr>
 nnoremap <silent> <M-l> :call lex#markers#gotoLocation("vsplit")<cr>
 nnoremap <silent> <M-j> :call lex#markers#gotoLocation("split")<cr>
 nnoremap <silent> <M-o> :call lex#markers#gotoLocation("edit")<cr>
 
 " insert a header for a marker
-nnoremap <silent> <leader>mm :call lex#dividers#insertMarkerHeader()<cr>
-nnoremap <silent> <leader>ml :call lex#dividers#insertMarkerHeader()<cr>
-nnoremap <silent> <leader>mb :call lex#dividers#insertMarkerHeader("big")<cr>
+nnoremap <silent> <leader>mm :lua require'lex.divider'.header.insert_marker()<cr>
+nnoremap <silent> <leader>ml :lua require'lex.divider'.header.insert_marker()<cr>
+nnoremap <silent> <leader>mb :lua require'lex.divider'.header.insert_marker("large")<cr>
 
 " "marker-reference" create a reference to the mark on the current line
 nnoremap <silent> <leader>mr :let @" = lex#markers#getRef()<cr>
@@ -48,8 +44,8 @@ nnoremap <silent> <leader>mr :let @" = lex#markers#getRef()<cr>
 nnoremap <silent> <leader>mf :let @" = lex#markers#getRef('')<cr>
 
 " search for markers
-nnoremap <silent> <leader>fn /^[>#] \[.*\]()<cr>
-nnoremap <silent> <leader>fN ?^[>#] \[.*\]()<cr>
+" nnoremap <silent> <leader>fn /^[>#] \[.*\]()<cr>
+" nnoremap <silent> <leader>fN ?^[>#] \[.*\]()<cr>
 
 "===========================[ fuzzy-find references ]===========================
 nnoremap <silent> <leader>m/ :call lex#markers#fuzzy("lex#markers#putPickSink")<cr>

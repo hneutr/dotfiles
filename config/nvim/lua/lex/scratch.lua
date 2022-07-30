@@ -11,7 +11,7 @@ function M.move(mode)
       table.insert(lines, "")
     end
 
-    local scratch_file = vim.fn['lex#mirrors#getMirror']('scratch')
+    local scratch_file = require'lex.mirror'.get_mirror('scratch')
 
     if vim.fn.filereadable(scratch_file) ~= 0 then
         for line in io.lines(scratch_file) do
