@@ -139,8 +139,8 @@ endfunction
 " Adds a plugin mapping to the normal-mode plugin mapping space
 "===============================================================================
 function! lib#AddPluginMapping(lhs, rhs)
-    let l:lhs = g:pluginleader.a:lhs
-    execute "nnoremap <silent> " l:lhs a:rhs
+    let lhs = g:pluginleader . a:lhs
+    execute "nnoremap <silent> " lhs a:rhs
 endfunction
 
 function lib#setListenAddress(listenAddress=v:servername)
@@ -193,28 +193,6 @@ function! lib#KillBufferAndGoToNext()
     let l:buffer_number = bufnr('%')
     silent! execute ":bnext"
     silent! execute ":bdelete " . l:buffer_number
-endfunction
-
-"==============================[ makeDirectories ]==============================
-" makes directories for a given path
-"===============================================================================
-function lib#makeDirectories(path)
-    let directoryParts = split(a:path, '/')
-
-    " if the path ends in a file, don't make it a directory
-    if len(fnamemodify(directoryParts[-1], ':e'))
-        call remove(directoryParts, -1)
-    endif
-
-    let currentPath = ''
-
-    for part in directoryParts
-        let currentPath = currentPath . '/' . part
-
-        if !isdirectory(currentPath)
-            silent execute "!mkdir " . currentPath
-        endif
-    endfor
 endfunction
 
 function lib#findNearestInstanceOfString(string)
@@ -279,23 +257,4 @@ function lib#getTextInsideNearestParenthesis()
     let text = getline('.')[startParensCol:endParensCol]
 
     return text
-endfunction
-
-function lib#openPath(path, openCommand="edit")
-    silent call lib#makeDirectories(a:path)
-
-    if isdirectory(a:path)
-        " if it's a directory, open a terminal at that directory
-        silent execute ":" . a:openCommand
-        silent execute ":terminal"
-        silent execute ":call chansend(" . b:terminal_job_id . ", 'cd " . fnameescape(a:path) . "')"
-        silent execute ":call chansend(" . b:terminal_job_id . ", 'clear')"
-    else
-        silent execute ":" . a:openCommand . " " . fnameescape(a:path)
-    endif
-endfunction
-
-function lib#writeFile(content, file)
-    silent call lib#makeDirectories(a:file)
-    silent call writefile(a:content, a:file)
 endfunction

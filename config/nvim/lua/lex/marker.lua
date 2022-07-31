@@ -223,15 +223,6 @@ end
 ---------------------------------------------------------------------------------
 M.fuzzy = { sink = {} }
 
-function M.fuzzy.start(fn)
-    local wrap = vim.fn["fzf#wrap"]({ source = M.location.list()})
-    -- wrap['sink*'] = function(a:fn)
-    wrap['_action'] = fuzzy_actions
-    wrap['options'] = ' +m -x --ansi --prompt "References: " --expect=ctrl-v,ctrl-x,ctrl-t'
-
-    return vim.fn["fzf#run"](wrap)
-end
-
 function M.fuzzy.sink.goto(lines)
     local cmd = vim.tbl_get(fuzzy_actions, lines[1]) or "edit"
     M.location.goto(cmd, lines[2])
@@ -241,7 +232,7 @@ function M.fuzzy.sink.put(lines)
     vim.api.nvim_put({M.fuzzy.get_pick(lines[2])} , 'c', 1, 0)
 end
 
-function M.fuzzy.sink.insertPut(lines)
+function M.fuzzy.sink.insert_put(lines)
     local line = line_utils.cursor.get()
     local column = vim.api.nvim_win_get_cursor(0)[2] + 1
 

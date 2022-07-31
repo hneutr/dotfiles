@@ -46,7 +46,7 @@ nnoremap <silent> <leader>mf :lua vim.fn.setreg('"', require'lex.marker'.referen
 nnoremap <silent> <leader>f :call lex#fuzzy#start("lex#fuzzy#goto")<cr>
 nnoremap <silent> <leader>m/ :call lex#fuzzy#start("lex#fuzzy#put")<cr>
 "  is <c-/> (the mapping only works if it's the literal character)
-inoremap <silent>  <c-o>:call lex#fuzzy#start("lex#fuzzy#insertPut")<cr>
+inoremap <silent>  <c-o>:call lex#fuzzy#start("lex#fuzzy#insert_put")<cr>
 
 "===================================[ todos ]===================================
 nnoremap <silent> <leader>td :lua require'lex.list_toggle'.toggle_item("✓", 'n')<cr>

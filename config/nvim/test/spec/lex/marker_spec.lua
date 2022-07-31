@@ -156,14 +156,4 @@ describe("location", function()
          assert.equal("a/b?=abc", m.location.get("root/a/b", "", {"a", "b", "c"}))
       end)
    end)
-
-   -- before_each(function()
-   --    line_utils = require('lines')
-   --    line_utils.cursor.get = function() return "[testing]()" end
-
-   --    local lines = {"nonmarker", "", "[other marker]()", "[marker]()", "[another marker]()"}
-
-   --    line_utils.get = function() return lines end
-   -- end)
-
 end)

@@ -1,6 +1,4 @@
 local M = {}
-local api = vim.api
-local util = require'util'
 local line_utils = require'lines'
 
 function M.move(mode)
@@ -18,7 +16,7 @@ function M.move(mode)
         end
     end
 
-    util.write_file(lines, scratch_file)
+    require'util'.write_file(lines, scratch_file)
 
     line_utils.selection.cut({ mode = mode })
 end

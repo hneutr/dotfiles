@@ -1,8 +1,7 @@
 local M = {}
 
 function M.path()
-    local path = vim.fn.system('hnetext goals')
-    return vim.trim(path)
+    return vim.trim(vim.fn.system('hnetext goals'))
 end
 
 return M

@@ -14,7 +14,7 @@ function lex#fuzzy#put(lines)
     call luaeval("require'lex.marker'.fuzzy.sink.put(_A)", a:lines)
 endfunction
 
-function lex#fuzzy#insertPut(lines)
-    call luaeval("require'lex.marker'.fuzzy.sink.insertPut(_A)", a:lines)
+function lex#fuzzy#insert_put(lines)
+    call luaeval("require'lex.marker'.fuzzy.sink.insert_put(_A)", a:lines)
 endfunction
 

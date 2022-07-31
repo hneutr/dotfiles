@@ -1,7 +1,6 @@
 local M = {}
 local project = require'lex.project'
 
-
 function M.get_mirror_defaults()
     if not vim.g.mirror_defaults then
         vim.g.mirror_defaults = vim.fn.json_decode(vim.fn.readfile(vim.g.mirror_defaults_path))
@@ -88,8 +87,8 @@ function M.get_origin(path)
     local config = project.get_config()
 
     local mirror_prefixes = {}
-    for k, mirror_settings in ipairs(config['mirrors']) do
-        table.insert(mirror_prefixes, mirror_settings['dirPrefix'])
+    for k, mirror_config in ipairs(config['mirrors']) do
+        table.insert(mirror_prefixes, mirror_config['dirPrefix'])
     end
 
     local path = path:gsub(_G.escape(config['root'] .. '/'), '', 1)

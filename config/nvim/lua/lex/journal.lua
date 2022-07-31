@@ -1,5 +1,4 @@
 local M = {}
-local api = vim.api
 
 local writing_journal = 'on-writing'
 
@@ -16,8 +15,7 @@ function M.path(journal_name)
         cmd = cmd .. ' -j ' .. journal_name
     end
 
-    local path = vim.fn.system(cmd)
-    return vim.trim(path)
+    return vim.trim(vim.fn.system(cmd))
 end
 
 return M
