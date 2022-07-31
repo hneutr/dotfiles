@@ -6,8 +6,7 @@ augroup markdown_startup
 	
 	au BufNewFile,BufRead *.md lua require'lex.project'.set_root()
 
-	" sync renamed/moved references
-	au BufEnter *.md call lex#sync#bufEnter()
-	au TextChanged,InsertLeave *.md call lex#sync#bufChange()
-	au BufLeave,VimLeave *.md call lex#sync#bufLeave()
+	au BufEnter *.md lua require'lex.sync'.buf_enter()
+	au TextChanged,InsertLeave *.md lua require'lex.sync'.buf_change()
+	au BufLeave,VimLeave *.md lua require'lex.sync'.buf_leave()
 augroup END

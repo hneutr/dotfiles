@@ -61,3 +61,4 @@ let g:python3_host_prog = '/Users/hne/.pyenv/shims/python3'
 execute "chdir $PWD"
 
 lua require'util'
+lua require'tbl'
