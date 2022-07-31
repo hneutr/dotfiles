@@ -26,11 +26,10 @@ lua require'lex.map'.map_prefixed_file_openers('g', ":lua require'lex.index'.ope
 command! Index lua require'lex.index'.open()<cr>
 
 "==================================[ markers ]==================================
-lua require'lex.map'.map_prefixed_file_openers('n', ":call lex#markers#gotoLocation")
-nnoremap <silent> <leader>f :call lex#markers#fuzzy("lex#markers#gotoPickSink")<cr>
-nnoremap <silent> <M-l> :call lex#markers#gotoLocation("vsplit")<cr>
-nnoremap <silent> <M-j> :call lex#markers#gotoLocation("split")<cr>
-nnoremap <silent> <M-o> :call lex#markers#gotoLocation("edit")<cr>
+lua require'lex.map'.map_prefixed_file_openers('n', ":lua require'lex.marker'.location.goto")
+nnoremap <silent> <M-l> :lua require'lex.marker'.location.goto("vsplit")<cr>
+nnoremap <silent> <M-j> :lua require'lex.marker'.location.goto("split")<cr>
+nnoremap <silent> <M-o> :lua require'lex.marker'.location.goto("edit")<cr>
 
 " insert a header for a marker
 nnoremap <silent> <leader>mm :lua require'lex.divider'.header.insert_marker()<cr>
@@ -38,19 +37,16 @@ nnoremap <silent> <leader>ml :lua require'lex.divider'.header.insert_marker()<cr
 nnoremap <silent> <leader>mb :lua require'lex.divider'.header.insert_marker("large")<cr>
 
 " "marker-reference" create a reference to the mark on the current line
-nnoremap <silent> <leader>mr :let @" = lex#markers#getRef()<cr>
+nnoremap <silent> <leader>mr :lua vim.fn.setreg('"', require'lex.marker'.reference.get())<cr>
 
 " "file-marker-reference" create a file-reference to the current file
-nnoremap <silent> <leader>mf :let @" = lex#markers#getRef('')<cr>
-
-" search for markers
-" nnoremap <silent> <leader>fn /^[>#] \[.*\]()<cr>
-" nnoremap <silent> <leader>fN ?^[>#] \[.*\]()<cr>
+nnoremap <silent> <leader>mf :lua vim.fn.setreg('"', require'lex.marker'.reference.get({ text = "" }))<cr>
 
 "===========================[ fuzzy-find references ]===========================
-nnoremap <silent> <leader>m/ :call lex#markers#fuzzy("lex#markers#putPickSink")<cr>
+nnoremap <silent> <leader>f :call lex#fuzzy#start("lex#fuzzy#goto")<cr>
+nnoremap <silent> <leader>m/ :call lex#fuzzy#start("lex#fuzzy#put")<cr>
 "  is <c-/> (the mapping only works if it's the literal character)
-inoremap <silent>  <c-o>:call lex#markers#fuzzy("lex#markers#putPickInInsertSink")<cr>
+inoremap <silent>  <c-o>:call lex#fuzzy#start("lex#fuzzy#insertPut")<cr>
 
 "===================================[ todos ]===================================
 nnoremap <silent> <leader>td :lua require'lex.list_toggle'.toggle_item("✓", 'n')<cr>

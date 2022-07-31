@@ -1,15 +1,13 @@
 local M = {}
 local api = vim.api
 local util = require'util'
+local line_utils = require'lines'
 
 local toggle_chars = {'-', '✓', '?', '~'}
 local default_char = '-'
 
 function M.toggle_item(toggle_char, mode)
-  local start_line = util.get_selection_start(mode)
-  local end_line = util.get_selection_end(mode)
-  local lines = util.get_selected_lines(mode)
-
+  local lines = line_utils.selection.get({ mode = mode })
   local outermost_toggle_char = M.find_outermost_toggle_char(lines)
 
   if outermost_toggle_char then
@@ -19,12 +17,12 @@ function M.toggle_item(toggle_char, mode)
       new_toggle_char = default_char
     end
 
-    local newLines = {}
+    local new_lines = {}
     for k, line in ipairs(lines) do
-      table.insert(newLines, M.change_toggle_char(line, new_toggle_char))
+      table.insert(new_lines, M.change_toggle_char(line, new_toggle_char))
     end
 
-    api.nvim_buf_set_lines(0, start_line, end_line, false, newLines)
+    line_utils.selection.set({ mode = mode, replacement = new_lines})
   end
 end
 
@@ -34,7 +32,7 @@ function M.change_toggle_char(line, new_toggle_char)
   local char = M.get_toggle_char(line)
 
   local newLine = line
-  if char ~= new_toggle_char then
+  if vim.tbl_contains(toggle_chars, char) and char ~= new_toggle_char then
     local parts = vim.split(line, char)
 
     for i, part in ipairs(parts) do

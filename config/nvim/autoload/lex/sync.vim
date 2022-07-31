@@ -62,7 +62,7 @@ function lex#sync#bufLeave()
     let referenceUpdates = <SID>handleCreatedMarkers()
     let referenceUpdates += <SID>handleRenamedMarkers()
 
-    call lex#markers#updateReferences(referenceUpdates)
+    lua require'lex.marker'.reference.update(referenceUpdates)
 endfunction
 
 
@@ -135,8 +135,8 @@ function <SID>readMarkers()
     let markers = {}
     for lineNumber in range(1, line('$'))
         let line = getline(lineNumber)
-        if lex#markers#isMarker(line)
-            let label = lex#markers#parseLabel(line)
+        if luaeval("require'lex.marker'.marker.is(_A)", line)
+            let label = luaeval("require'lex.marker'.marker.parse(_A)", line)
             let markers[label] = lineNumber
         endif
     endfor

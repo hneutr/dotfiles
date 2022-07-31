@@ -6,6 +6,18 @@ function _G.escape(s)
     return (s:gsub('[%-%.%+%[%]%(%)%$%^%%%?%*]','%%%1'))
 end
 
+function _G.tbl_update(...)
+    return vim.tbl_extend("force", ...)
+end
+
+function _G.tbl_default(...)
+    return vim.tbl_extend("keep", ...)
+end
+
+function _G.default_args(args, defaults)
+    return vim.tbl_extend("keep", args or {}, defaults)
+end
+
 --------------------------------------------------------------------------------
 -- makes directories for a given path.
 -- If the last component of the path has an extension, it won't make that part
@@ -56,37 +68,14 @@ function M.write_file(content, file)
     vim.fn.writefile(content, file)
 end
 
-function M.get_selection_start(mode, buffer)
-    buffer = buffer or 0
 
-    local line = api.nvim_win_get_cursor(buffer)[1] - 1
-
-    if mode == 'v' then
-        line = api.nvim_buf_get_mark(buffer, '<')[1] - 1
-    end
-
-    return line
+function M.sort_ascending(a, b)
+    return a < b
 end
 
-function M.get_selection_end(mode, buffer)
-    buffer = buffer or 0
 
-    local line = 1 + M.get_selection_start(mode, buffer)
-
-    if mode == 'v' then
-        line = api.nvim_buf_get_mark(buffer, '>')[1]
-    end
-
-    return line
-end
-
-function M.get_selected_lines(mode, buffer)
-    buffer = buffer or 0
-
-    local start_line = M.get_selection_start(mode, buffer)
-    local end_line = M.get_selection_end(mode, buffer)
-
-    return api.nvim_buf_get_lines(buffer, start_line, end_line, false)
+function M.sort_descending(a, b)
+    return a > b
 end
 
 return M
