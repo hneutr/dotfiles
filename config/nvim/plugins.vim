@@ -28,6 +28,7 @@ Plug 'sheerun/vim-polyglot'
 "==================================[ testing ]==================================
 Plug 'neovim/nvim-lspconfig'        " try setting up, or delete?
 Plug 'SirVer/ultisnips'             " snippet engine; try switching to L3MON4D3/LuaSnip
+" Plug 'nvim-lua/plenary.nvim' " unit tests?
 
 call plug#end()
 

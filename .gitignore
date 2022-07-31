@@ -1,11 +1,11 @@
 .gitmodules
 config/nvim/.netrwhist
 config/nvim/.plugged
+config/nvim/test/vendor
 config/nvim/autoload/plug*
 config/nvim/undodir
 config/nvim/colors
 config/nvim/doc
-config/nvim/test
 config/configstore
 zplug/
 tpm/
