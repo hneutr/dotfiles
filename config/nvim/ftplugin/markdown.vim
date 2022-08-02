@@ -9,7 +9,6 @@ vnoremap <silent> <leader>s :'<,'>lua require'lex.scratch'.move('v')<cr>
 
 "==================================[ indexes ]==================================
 lua require'lex.map'.map_prefixed_file_openers('g', ":lua require'lex.index'.open")
-command! Index lua require'lex.index'.open()<cr>
 
 "==================================[ markers ]==================================
 lua require'lex.map'.map_prefixed_file_openers('n', ":lua require'lex.marker'.location.goto")

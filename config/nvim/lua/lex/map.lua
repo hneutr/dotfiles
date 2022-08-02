@@ -1,5 +1,4 @@
 local M = {}
-local api = vim.api
 
 local default_opener_cmds = { edit = 'e', vsplit = 'vs', split = 'sp'}
 
@@ -38,7 +37,7 @@ function M.map_prefixed_file_openers(prefix, fn, args, cmds)
     for key, cmd in pairs(mappings) do
         local lhs = lhs_prefix .. key
         local rhs = rhs_start .. "'" ..  cmd .. "'" .. rhs_end
-        api.nvim_set_keymap('n', lhs, rhs, { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('n', lhs, rhs, { silent = true })
     end
 end
 
