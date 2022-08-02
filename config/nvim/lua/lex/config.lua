@@ -55,7 +55,7 @@ function M.set(start_path)
 end
 
 function M.push()
-    vim.fn.system("git add " .. M.get()['root'])
+    vim.fn.system("git add " .. vim.tbl_get(vim.b.lex_config, 'root') or '.')
     vim.fn.system("git commit -m ${TD}")
     vim.fn.system("git push")
 end

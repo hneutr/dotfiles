@@ -51,10 +51,18 @@ function M.selection.range(args)
         start_line = vim.api.nvim_win_get_cursor(args['buffer'])[1] - 1
         end_line = start_line + 1
     elseif args['mode'] == 'v' then
+        vim.api.nvim_input('<esc>')
         start_line = vim.api.nvim_buf_get_mark(args['buffer'], '<')[1] - 1
         end_line = vim.api.nvim_buf_get_mark(args['buffer'], '>')[1]
+        
+        local difference = end_line - start_line
+        if start_line < 0 then
+            start_line = 0
+        end
     end
 
+    vim.g.start_line = start_line
+    vim.g.end_line = end_line
     return { start_line = start_line, end_line = end_line }
 end
 

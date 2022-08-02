@@ -1,24 +1,10 @@
-let g:config_file_name = '.project'
-
 let g:writing_journal = 'on-writing'
-
-let g:mirror_defaults_path = "/Users/hne/Documents/research/hnetext/data/mirror-defaults.json"
 
 let g:file_opening_prefix = "<leader>o"
 
-"===================================[ config ]==================================
-command! Push lua require'lex.config'.push()
-
-"==================================[ journals ]=================================
-command! Journal lua require'util'.open_path(require'lex.journal'.path())
-command! WJournal lua require'util'.open_path(require'lex.journal'.path(vim.g.writing_journal))
-
-"===================================[ goals ]===================================
-command! Goals lua require'util'.open_path(require'lex.goals'.path())
-
 "==================================[ scratch ]==================================
 " delete the currently selected lines and move them to the scratch file
-nnoremap <silent> <leader>s :lua require'lex.scratch'.move('n')<cr>
+" nnoremap <silent> <leader>s :lua require'lex.scratch'.move('n')<cr>
 vnoremap <silent> <leader>s :'<,'>lua require'lex.scratch'.move('v')<cr>
 
 "==================================[ indexes ]==================================

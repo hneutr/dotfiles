@@ -3,6 +3,7 @@ local line_utils = require'lines'
 
 function M.move(mode)
     local lines = line_utils.selection.get({ mode = mode })
+    line_utils.selection.cut({ mode = mode })
 
     if lines[vim.tbl_count(lines)] ~= "" then
       table.insert(lines, "")
@@ -18,7 +19,8 @@ function M.move(mode)
 
     require'util'.write_file(lines, scratch_file)
 
-    line_utils.selection.cut({ mode = mode })
+    -- line_utils.selection.cut({ mode = mode })
+    vim.api.nvim_input('<esc>')
 end
 
 return M
