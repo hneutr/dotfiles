@@ -1,5 +1,4 @@
 local M = {}
-local project = require'lex.project'
 
 function M.get_mirror_defaults()
     if not vim.g.mirror_defaults then
@@ -16,21 +15,13 @@ function M.apply_defaults_to_config(config)
 
     local mirrors_dir_prefix = vim.tbl_get(config, "mirrorsDirPrefix") or defaults['mirrorsDirPrefix']
 
-    if mirrors_dir_prefix:len() > 0 then
-        mirrors_dir_prefix = '/' .. mirrors_dir_prefix
-    end
-
-    local mirrors_dir = config['root'] .. mirrors_dir_prefix
+    local mirrors_dir = _G.joinpath(config['root'], mirrors_dir_prefix)
 
     local mirrors = {}
     for mirror_type, mirror_config in pairs(defaults['mirrors']) do
-        local mirror_settings = vim.tbl_get(config, 'mirrors', mirror_type) or {}
+        local mirror_config = _G.default_args(vim.tbl_get(config, 'mirrors', mirror_type), mirror_config)
 
-        for k, v in pairs(mirror_settings) do
-            mirror_config[k] = v
-        end
-
-        mirror_config['dir'] = mirrors_dir .. '/' .. mirror_config['dirPrefix']
+        mirror_config['dir'] = _G.joinpath(mirrors_dir, mirror_config['dirPrefix'])
 
         if not vim.tbl_get(mirror_config, "disable") then
             mirrors[mirror_type] = mirror_config
@@ -50,13 +41,13 @@ end
 --
 -- For example, if: 
 -- - prefix = `scratch`
--- - path = `./text/chapters/1.md` (where "." is the projectRoot)
+-- - path = `./text/chapters/1.md` (where "." is the config root)
 --
 -- it will return `./scratch/text/chapters/1.md`
 ---------------------------------------------------------------------------------
 function M.get_mirror(mirror_type, path)
     path = path or vim.fn.expand('%:p')
-    local config = project.get_config()
+    local config = vim.b.lex_config
     return path:gsub(_G.escape(config['root']), config['mirrors'][mirror_type]['dir'], 1)
 end
 
@@ -67,16 +58,15 @@ end
 --
 -- For example, if: 
 -- - prefix = `scratch`
--- - path = `./scratch/text/chapters/1.md` (where "." is the projectRoot)
+-- - path = `./scratch/text/chapters/1.md` (where "." is the config root)
 --
 -- it will return `./text/chapters/1.md`
 --------------------------------------------------------------------------------
 function M.get_source(mirror_type, path)
     path = path or vim.fn.expand('%:p')
-    local config = project.get_config()
+    local config = vim.b.lex_config
     return path:gsub(_G.escape(config['mirrors'][mirror_type]['dir']), config['root'], 1)
 end
-
 
 --------------------------------- get_origin ----------------------------------
 -- returns the path without any mirrors, even recursively
@@ -84,7 +74,7 @@ end
 function M.get_origin(path)
     path = path or vim.fn.expand('%:p')
 
-    local config = project.get_config()
+    local config = vim.b.lex_config
 
     local mirror_prefixes = {}
     for k, mirror_config in ipairs(config['mirrors']) do
@@ -105,7 +95,7 @@ end
 
 function M.get_mirror_type(path)
     path = path or vim.fn.expand('%:p')
-    local config = project.get_config()
+    local config = vim.b.lex_config
 
     local mirror_type = nil
     for current_mirror_type, mirror_config in pairs(config['mirrors']) do
@@ -142,7 +132,7 @@ function M.get_path(mirror_type, path)
     elseif path_mirror_type == mirror_type then
         new_path = M.get_source(mirror_type, path)
     else
-        local config = project.get_config()
+        local config = vim.b.lex_config
 
         if config['mirrors'][mirror_type]['mirrorOtherMirrors'] then
             if config['mirrors'][path_mirror_type]['mirrorOtherMirrors'] then
@@ -159,7 +149,7 @@ function M.get_path(mirror_type, path)
 end
 
 function M.add_mappings()
-    local config = project.get_config()
+    local config = vim.b.lex_config
 
     local mapper = require'lex.map'
     for mirror_type, mirror_config in pairs(config['mirrors']) do
@@ -167,7 +157,7 @@ function M.add_mappings()
         local prefix = mirror_config['vimPrefix']
         local args = '"' .. path .. '"'
 
-        mapper.map_prefixed_file_openers(prefix, ": lua require'util'.open_path", args)
+        mapper.map_prefixed_file_openers(prefix, ":lua require'util'.open_path", args)
     end
 end
 

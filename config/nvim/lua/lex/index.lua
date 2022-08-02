@@ -16,11 +16,11 @@ function M.make(path, index_path)
 end
 
 function M.open(open_command)
-    local project_config_file = vim.b.project_config_file
+    local lex_config_path = vim.b.lex_config_path
 
     require'util'.open_path(M.make(), open_command)
 
-    vim.b.projectConfigFile = project_config_file
+    vim.b.lex_config_path = lex_config_path
 end
 
 return M

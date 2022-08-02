@@ -17,6 +17,16 @@ function _G.default_args(args, defaults)
     return vim.tbl_extend("keep", args or {}, defaults)
 end
 
+function _G.joinpath(left, right)
+    local path = left
+
+    if not vim.endswith(left, '/') and not vim.startswith(right, '/') then
+        path = path .. '/'
+    end
+
+    return path .. right
+end
+
 --------------------------------------------------------------------------------
 -- makes directories for a given path.
 -- If the last component of the path has an extension, it won't make that part
@@ -29,11 +39,7 @@ function M.make_directories(path)
 
     local current_path = ''
     for part in vim.gsplit(path, '/') do
-        if not vim.endswith(current_path, '/') then
-            current_path = current_path .. '/'
-        end
-
-        current_path = current_path .. part
+        current_path = _G.joinpath(current_path, part)
 
         if not vim.fn.isdirectory(current_path) then
             vim.cmd("silent execute !mkdir '" .. current_path .. "'")

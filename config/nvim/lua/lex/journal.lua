@@ -5,10 +5,10 @@ local writing_journal = 'on-writing'
 function M.path(journal_name)
     local cmd = "hnetext journal"
 
-    local project_root = vim.tbl_get(require'lex.project'.get_config(), 'root') or ''
+    local root = vim.tbl_get(require'lex.config'.get(), 'root') or ''
 
-    if project_root then
-        cmd = cmd .. ' -s ' .. project_root
+    if root then
+        cmd = cmd .. ' -s ' .. root
     end
 
     if journal_name then

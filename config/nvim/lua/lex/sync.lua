@@ -155,15 +155,39 @@ function M.buf_leave()
     local renames = vim.b.renamed_markers
     local previous_deletions = vim.g.deleted_markers
 
+    if M.skip_if_possible(creations, deletions, renames) then
+        return
+    end
+
     local updates
-    updates, renames, previous_deletions  = M.process_creations(creations, renames, previous_deletions)
 
-    renames, previous_deletions = M.process_deletions(deletions, renames, previous_deletions)
+    if vim.tbl_count(creations) then
+        updates, renames, previous_deletions  = M.process_creations(creations, renames, previous_deletions)
+    end
 
-    updates = M.process_renames(renames, updates)
+    if vim.tbl_count(deletions) then
+        renames, previous_deletions = M.process_deletions(deletions, renames, previous_deletions)
+    end
+
+    if vim.tbl_count(renames) then
+        updates = M.process_renames(renames, updates)
+    end
 
     vim.g.deleted_markers = previous_deletions
-    return marker_utils.reference.update(updates)
+
+    if vim.tbl_count(updates) then
+        return marker_utils.reference.update(updates)
+    else
+        return
+    end
+end
+
+function M.skip_if_possible(creations, deletions, renames)
+    local n_creations = vim.tbl_count(creations)
+    local n_deletions = vim.tbl_count(deletions)
+    local n_renames = vim.tbl_count(renames)
+
+    return n_creations == 0 and n_deletions == 0 and n_renames == 0
 end
 
 function M.process_creations(creations, renames, previous_deletions)

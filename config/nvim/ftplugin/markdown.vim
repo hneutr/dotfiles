@@ -1,4 +1,4 @@
-let g:project_file_name = '.project'
+let g:config_file_name = '.project'
 
 let g:writing_journal = 'on-writing'
 
@@ -6,8 +6,8 @@ let g:mirror_defaults_path = "/Users/hne/Documents/research/hnetext/data/mirror-
 
 let g:file_opening_prefix = "<leader>o"
 
-"==================================[ projects ]=================================
-command! Push lua require'lex.project'.push()
+"===================================[ config ]==================================
+command! Push lua require'lex.config'.push()
 
 "==================================[ journals ]=================================
 command! Journal lua require'util'.open_path(require'lex.journal'.path())

@@ -1,13 +1,11 @@
 local mock = require('luassert.mock')
 local stub = require('luassert.stub')
 local m = require('lex.marker')
--- local project = require('lex.project')
 
 
 describe("path", function()
    before_each(function()
-      project = require('lex.project')
-      project.get_config = function() return { root = 'root' } end
+      vim.b.lex_config = {root = 'root'}
 	end)
 
   describe(".shorten:", function() 
@@ -136,8 +134,7 @@ end)
 
 describe("location", function()
    before_each(function()
-      project = require('lex.project')
-      project.get_config = function() return { root = 'root' } end
+      vim.b.lex_config = {root = 'root'}
    end)
 
    describe(".get", function()

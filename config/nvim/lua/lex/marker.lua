@@ -1,4 +1,3 @@
-local project = require'lex.project'
 local util = require'util'
 local line_utils = require'lines'
 
@@ -17,7 +16,7 @@ local fuzzy_actions = { ["ctrl-v"] = 'vsplit', ["ctrl-x"] = 'split', ["ctrl-t"] 
 M.path = {}
 
 function M.path.shorten(path)
-    local root = project.get_config()['root'] .. "/"
+    local root = vim.b.lex_config.root .. "/"
     return path:gsub(_G.escape(root), "")
 end
 
@@ -25,7 +24,7 @@ function M.path.expand(path)
     path = path:gsub("^%.", "")
     path = path:gsub("^/", "")
 
-    return project.get_config()['root'] .. "/" .. path
+    return vim.b.lex_config.root .. "/" .. path
 end
 
 --------------------------------------------------------------------------------
@@ -161,7 +160,7 @@ function M.location.goto(open_command, str)
 end
 
 function M.location.list()
-    local root = project.get_config()['root']
+    local root = vim.b.lex_config.root
     local list_markers_cmd = "rg '^[#>] \\[.*\\]\\(\\)$' --no-heading " .. root
     local list_files_command = "fd -tf '' " .. root
 
