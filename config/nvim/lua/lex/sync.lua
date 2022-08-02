@@ -20,6 +20,7 @@
 --   - add it back onto the "deleted" list
 --------------------------------------------------------------------------------
 -- these are in the format: old_label: old_path
+line_utils = require'lines'
 local M = {}
 
 local marker_utils = require'lex.marker'
@@ -36,6 +37,53 @@ function M.buf_enter()
     vim.b.created_markers = {}
 end
 
+function M.read_markers()
+    local markers = {}
+    for i, str in ipairs(line_utils.get()) do
+        if marker_utils.marker.is(str) then
+            markers[marker_utils.marker.parse(str)] = i
+        end
+    end
+
+    return markers
+end
+
+--------------------------------------------------------------------------------
+-- on leave functions
+--------------------------------------------------------------------------------
+function M.buf_change()
+    local new_markers = M.read_markers()
+
+    local deleted = {}
+    for marker, line in pairs(vim.b.markers) do
+        if not vim.tbl_get(new_markers, marker) then
+            table.insert(deleted, marker)
+        end
+    end
+
+    local created = {}
+    for marker, line in pairs(new_markers) do
+        if not vim.tbl_get(vim.b.markers, marker) then
+            table.insert(created, marker)
+        end
+    end
+
+    if vim.tbl_count(created) == 1 and vim.tbl_count(deleted) == 1 then
+        created, deleted = M.check_rename(created[1], deleted[1])
+    end
+
+    M.record_marker_creations_and_deletions(created, deleted)
+
+    -- change to:
+    -- if found_rename(created, deleted) then
+    --      record_rename()
+    -- else
+    --      record_creations()
+    --      record_deletions()
+    -- end
+
+    vim.b.markers = new_markers
+end
 
 function M.buf_change()
     local new_markers = M.read_markers()
@@ -60,94 +108,38 @@ function M.buf_change()
 
     M.record_marker_creations_and_deletions(created, deleted)
 
+    -- change to:
+    -- if found_rename(created, deleted) then
+    --      record_rename()
+    -- else
+    --      record_creations()
+    --      record_deletions()
+    -- end
+
     vim.b.markers = new_markers
 end
 
 
-function M.buf_leave()
-    M.handle_deleted_markers()
-
-    local updates = M.handle_created_markers()
-    for i, update in ipairs(M.handle_renamed_markers()) do
-        table.insert(updates, update)
+function M.get_deletions(old, new)
+    local deletions = {}
+    for marker, line in pairs(old) do
+        if not vim.tbl_get(new, marker) then
+            table.insert(deletions, marker)
+        end
     end
 
-    return updates
-    -- marker_utils.reference.update(updates)
+    return deletions
 end
 
-
-function M.record_marker_creations_and_deletions(newly_created, newly_deleted)
-    for i, marker in ipairs(newly_deleted) do
-        table.vim.set('b', 'deleted_markers', marker, true)
-
-        if vim.tbl_get(vim.b.created_markers, marker) then
-            table.vim.removekey('b', 'created_markers', marker)
+function M.get_creations(old_markers, new_markers)
+    local creations = {}
+    for marker, line in pairs(new) do
+        if not vim.tbl_get(old, marker) then
+            table.insert(creations, marker)
         end
     end
 
-    for i, marker in ipairs(newly_created) do
-        table.vim.set('b', 'created_markers', marker, true)
-
-        if vim.tbl_get(vim.b.deleted_markers, marker) then
-            table.vim.removekey('b', 'deleted_markers', marker)
-        end
-    end
-end
-
-function M.handle_created_markers()
-    local updates = {}
-    local path = vim.fn.expand('%:p')
-    for text, i in pairs(vim.b.created_markers) do
-        local update = { from_path = path, from_text = text, to_path = path, to_text = text }
-        if vim.tbl_get(vim.b.renamed_markers_old_to_new, text) then
-            update.to_text = table.vim.removekey('b', 'renamed_markers_old_to_new', text)
-            table.vim.removekey('b', 'renamed_markers_new_to_old', update.to_text)
-        end
-
-        if vim.tbl_get(vim.g.deleted_markers, text) then
-            update.from_path = table.vim.removekey('g', 'deleted_markers', text)
-        end
-
-        table.insert(updates, update)
-    end
-
-    return updates
-end
-
-function M.handle_deleted_markers()
-    local path = vim.fn.expand('%:p')
-
-    for marker, i in pairs(vim.b.deleted_markers) do
-        if vim.tbl_get(vim.b.renamed_markers_new_to_old, marker) then
-            marker = table.vim.removekey('b', 'renamed_markers_new_to_old', marker)
-            table.vim.removekey('b', 'renamed_markers_old_to_new', marker)
-        end
-
-        table.vim.set('g', 'deleted_markers', marker, path)
-    end
-end
-
-function M.handle_renamed_markers()
-    local path = vim.fn.expand('%:p')
-
-    local updates = {}
-    for from_text, to_text in pairs(vim.b.renamed_markers_old_to_new) do
-        table.insert(updates, {old_path = path, old_text = from_text, new_path = path, new_text = to_text})
-    end
-
-    return updates
-end
-
-function M.read_markers()
-    local markers = {}
-    for i, str in ipairs(require'lines'.get()) do
-        if marker_utils.marker.is(str) then
-            markers[marker_utils.marker.parse(str)] = i
-        end
-    end
-
-    return markers
+    return creations
 end
 
 function M.check_rename(new, old)
@@ -175,6 +167,83 @@ function M.check_rename(new, old)
     end
 
     return created, deleted
+end
+
+
+function M.record_marker_creations_and_deletions(newly_created, newly_deleted)
+    for i, marker in ipairs(newly_deleted) do
+        table.vim.set('b', 'deleted_markers', marker, true)
+
+        if vim.tbl_get(vim.b.created_markers, marker) then
+            table.vim.removekey('b', 'created_markers', marker)
+        end
+    end
+
+    for i, marker in ipairs(newly_created) do
+        table.vim.set('b', 'created_markers', marker, true)
+
+        if vim.tbl_get(vim.b.deleted_markers, marker) then
+            table.vim.removekey('b', 'deleted_markers', marker)
+        end
+    end
+end
+
+--------------------------------------------------------------------------------
+-- on leave functions
+--------------------------------------------------------------------------------
+function M.buf_leave()
+    M.process_deletions()
+
+    local updates = M.process_creations()
+    for i, update in ipairs(M.process_renames()) do
+        table.insert(updates, update)
+    end
+
+    marker_utils.reference.update(updates)
+end
+
+function M.process_creations()
+    local updates = {}
+    local path = vim.fn.expand('%:p')
+    for text, i in pairs(vim.b.created_markers) do
+        local update = { from_path = path, from_text = text, to_path = path, to_text = text }
+        if vim.tbl_get(vim.b.renamed_markers_old_to_new, text) then
+            update.to_text = table.vim.removekey('b', 'renamed_markers_old_to_new', text)
+            table.vim.removekey('b', 'renamed_markers_new_to_old', update.to_text)
+        end
+
+        if vim.tbl_get(vim.g.deleted_markers, text) then
+            update.from_path = table.vim.removekey('g', 'deleted_markers', text)
+        end
+
+        table.insert(updates, update)
+    end
+
+    return updates
+end
+
+function M.process_deletions()
+    local path = vim.fn.expand('%:p')
+
+    for marker, i in pairs(vim.b.deleted_markers) do
+        if vim.tbl_get(vim.b.renamed_markers_new_to_old, marker) then
+            marker = table.vim.removekey('b', 'renamed_markers_new_to_old', marker)
+            table.vim.removekey('b', 'renamed_markers_old_to_new', marker)
+        end
+
+        table.vim.set('g', 'deleted_markers', marker, path)
+    end
+end
+
+function M.process_renames()
+    local path = vim.fn.expand('%:p')
+
+    local updates = {}
+    for from_text, to_text in pairs(vim.b.renamed_markers_old_to_new) do
+        table.insert(updates, {old_path = path, old_text = from_text, new_path = path, new_text = to_text})
+    end
+
+    return updates
 end
 
 return M

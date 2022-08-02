@@ -1,5 +1,4 @@
 local M = {}
-local api = vim.api
 
 
 function _G.escape(s)
