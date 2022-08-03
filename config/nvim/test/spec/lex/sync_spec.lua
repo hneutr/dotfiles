@@ -34,9 +34,8 @@ describe("sync", function()
          assert.is_true(vim.tbl_isempty(vim.b.renamed_markers))
          assert.is_true(vim.tbl_isempty(vim.b.deleted_markers))
          assert.is_true(vim.tbl_isempty(vim.b.created_markers))
-         assert.equals(type(vim.b.markers), 'table')
-         assert.equals(vim.tbl_count(vim.b.markers), 1)
-         assert.equals(vim.b.markers.key, 'val')
+
+         assert.are.same(vim.b.markers, { key = 'val' })
       end)
    end)
 
@@ -51,16 +50,10 @@ describe("sync", function()
          vim.api.nvim_buf_set_lines(0, 0, -1, true, buffer_text)
 
          local markers = m.read_markers()
-
-         assert.equals(vim.tbl_count(markers), 2)
-         assert.equals(markers['marker 1'], 1)
-         assert.equals(markers['marker 2'], 4)
+         assert.are.same(markers, { ['marker 1'] = 1, ['marker 2'] = 4})
       end)
    end)
 
-   -- M.buf_change()
-   -- M.record_marker_creations_and_deletions
-   -- M.check_rename(new, old)
    describe("on change", function()
       before_each(function()
          local buf = vim.api.nvim_create_buf(false, true)
@@ -72,10 +65,7 @@ describe("sync", function()
             local old = { one = 1, two = 2 }
             local new = { one = 1 }
 
-            local actual = m.get_deletions(old, new)
-
-            assert.equal(vim.tbl_count(actual), 1)
-            assert.equal(actual[1], "two")
+            assert.are.same(m.get_deletions(old, new), { "two" })
          end)
       end)
 
@@ -84,10 +74,7 @@ describe("sync", function()
             local old = { one = 1 }
             local new = { one = 1, two = 2 }
 
-            local actual = m.get_creations(old, new)
-
-            assert.equal(vim.tbl_count(actual), 1)
-            assert.equal(actual[1], "two")
+            assert.are.same(m.get_creations(old, new), { "two" })
          end)
       end)
 
@@ -123,44 +110,31 @@ describe("sync", function()
       describe(".record_rename", function()
          it("basic case", function()
             local actual = m.update_renames("old", "new", {})
-
-            assert.equal(vim.tbl_count(actual), 1)
-            assert.equal(actual.old, 'new')
+            assert.are.same(actual, { old = 'new' })
          end)
 
          it("rename of something else", function()
             local actual = m.update_renames("old", "new", {older = 'old'})
-
-            assert.equal(vim.tbl_count(actual), 1)
-            assert.equal(actual.older, 'new')
+            assert.are.same(actual, { older = 'new' })
          end)
 
          it("doesn't overwrite stuff", function()
             local actual = m.update_renames("old", "new", {other_old = 'other_new'})
-
-            assert.equal(vim.tbl_count(actual), 2)
-            assert.equal(actual.old, 'new')
-            assert.equal(actual.other_old, 'other_new')
+            assert.are.same(actual, { old = 'new', other_old = 'other_new' })
          end)
       end)
 
       describe(".update_creations", function()
          it("base case", function()
             local actual = m.update_creations({"old"}, {"new"}, {old = true, other = true})
-
-            assert.equal(vim.tbl_count(actual), 2)
-            assert.equal(actual.other, true)
-            assert.equal(actual.new, true)
+            assert.are.same(actual, { other = true, new = true })
          end)
       end)
 
       describe(".update_deletions", function()
          it("base case", function()
             local actual = m.update_deletions({"old"}, {"new"}, {new = true, other = true})
-
-            assert.equal(vim.tbl_count(actual), 2)
-            assert.equal(actual.other, true)
-            assert.equal(actual.old, true)
+            assert.are.same(actual, { other = true, old = true })
          end)
       end)
 
@@ -175,9 +149,7 @@ describe("sync", function()
          vim.api.nvim_buf_set_lines(0, 0, -1, true, new_text)
          m.buf_change()
 
-         assert.equal(vim.tbl_count(vim.b.renamed_markers), 2)
-         assert.equal(vim.b.renamed_markers['marker 2'], 'marker 2a')
-         assert.equal(vim.b.renamed_markers['marker 1'], 'marker 1a')
+         assert.are.same(vim.b.renamed_markers, { ['marker 1'] = 'marker 1a', ['marker 2'] = 'marker 2a'})
       end)
 
       it("records a deletion", function()
@@ -191,7 +163,7 @@ describe("sync", function()
          vim.api.nvim_buf_set_lines(0, 0, -1, true, new_text)
          m.buf_change()
 
-         assert.is_true(vim.b.deleted_markers['marker 1'])
+         assert.are.same(vim.b.deleted_markers, { ['marker 1'] = true })
          assert.is_true(vim.tbl_isempty(vim.b.created_markers))
          assert.is_true(vim.tbl_isempty(vim.b.markers))
       end)
@@ -208,10 +180,9 @@ describe("sync", function()
          vim.api.nvim_buf_set_lines(0, 0, -1, true, new_text)
          m.buf_change()
 
-         assert.is_true(vim.b.created_markers['marker 1'])
+         assert.are.same(vim.b.created_markers, { ['marker 1'] = true })
          assert.is_true(vim.tbl_isempty(vim.b.deleted_markers))
-         assert.equals(vim.tbl_count(vim.b.markers), 1)
-         assert.equals(vim.b.markers['marker 1'], 1)
+         assert.are.same(vim.b.markers, { ['marker 1'] = 1 })
       end)
 
    end)
@@ -235,19 +206,11 @@ describe("sync", function()
 
             local updates, renames, deletions = m.process_creations(creations, renames, deletions)
 
-            assert.equal(vim.tbl_count(updates), 1)
+            local expected = {old_path = 'path', old_text = 'creation', new_path = 'path', new_text = 'creation'}
 
-            local u1 = updates[1]
-            assert.equal(u1.old_path, 'path')
-            assert.equal(u1.old_text, 'creation')
-            assert.equal(u1.new_path, 'path')
-            assert.equal(u1.new_text, 'creation')
-
-            assert.equal(vim.tbl_count(renames), 1)
-            assert.equal(renames.one, 'one a')
-            assert.equal(vim.tbl_count(deletions), 1)
-            assert.equal(deletions.two, 'path/to/two')
-
+            assert.are.same(updates, {expected})
+            assert.are.same(renames, { one = 'one a' })
+            assert.are.same(deletions, { two = 'path/to/two' })
          end)
 
          it("handles a rename+previous_deletion case", function()
@@ -257,18 +220,11 @@ describe("sync", function()
 
             local updates, renames, deletions = m.process_creations(creations, renames, deletions)
 
-            assert.equal(vim.tbl_count(updates), 1)
+            local expected = {old_path = 'path/to/one', old_text = 'one', new_path = 'path', new_text = 'one a'}
 
-            local u1 = updates[1]
-            assert.equal(u1.old_path, 'path/to/one')
-            assert.equal(u1.old_text, 'one')
-            assert.equal(u1.new_path, 'path')
-            assert.equal(u1.new_text, 'one a')
-
-            assert.equal(vim.tbl_count(renames), 1)
-            assert.equal(renames.two, 'two a')
-            assert.equal(vim.tbl_count(deletions), 1)
-            assert.equal(deletions.two, 'path/to/two')
+            assert.are.same(updates, {expected})
+            assert.are.same(renames, { two = 'two a' })
+            assert.are.same(deletions, { two = 'path/to/two' })
          end)
       end)
 
@@ -280,11 +236,8 @@ describe("sync", function()
 
             local renames, previous_dels = m.process_deletions(deletions, renames, previous_dels)
 
-            assert.equal(vim.tbl_count(renames), 1)
-            assert.equal(renames.one, 'one a')
-            assert.equal(vim.tbl_count(previous_dels), 2)
-            assert.equal(previous_dels.two, 'path/to/two')
-            assert.equal(previous_dels.deletion, 'path')
+            assert.are.same(renames, { one = 'one a' })
+            assert.are.same(previous_dels, { two = 'path/to/two', deletion = 'path' })
          end)
 
          it("handles a rename case", function()
@@ -294,11 +247,8 @@ describe("sync", function()
 
             local renames, previous_dels = m.process_deletions(deletions, renames, previous_dels)
 
-            assert.equal(vim.tbl_count(renames), 1)
-            assert.equal(renames.two, 'two a')
-            assert.equal(vim.tbl_count(previous_dels), 2)
-            assert.equal(previous_dels['one a'], 'path')
-            assert.equal(previous_dels.two, 'path/to/two')
+            assert.are.same(renames, { two = 'two a' })
+            assert.are.same(previous_dels, { ['one a'] = 'path', two = 'path/to/two' })
          end)
       end)
 
@@ -308,21 +258,14 @@ describe("sync", function()
 
             local updates = m.process_renames(renames)
 
-            assert.equal(vim.tbl_count(updates), 2)
-
             table.sort(updates, function(a, b) return a.old_text < b.old_text end)
 
-            local r1 = updates[1]
-            assert.equal(r1.old_path, 'path')
-            assert.equal(r1.old_text, 'one')
-            assert.equal(r1.new_path, 'path')
-            assert.equal(r1.new_text, 'one a')
+            local expected = {
+               { old_path = 'path', old_text = 'one', new_path = 'path', new_text = 'one a' },
+               { old_path = 'path', old_text = 'two', new_path = 'path', new_text = 'two a' },
+            }
 
-            local r2 = updates[2]
-            assert.equal(r2.old_path, 'path')
-            assert.equal(r2.old_text, 'two')
-            assert.equal(r2.new_path, 'path')
-            assert.equal(r2.new_text, 'two a')
+            assert.are.same(updates, expected)
          end)
       end)
 
@@ -348,20 +291,14 @@ describe("sync", function()
 
             table.sort(updates, function(a, b) return a.old_text < b.old_text end)
 
-            local u1, u2 = updates[1], updates[2]
-            assert.equal(u1.old_path, 'path')
-            assert.equal(u1.old_text, 'one')
-            assert.equal(u1.new_path, 'path')
-            assert.equal(u1.new_text, 'one a')
+            local expected = {
+               { old_path = 'path', old_text = 'one', new_path = 'path', new_text = 'one a' },
+               { old_path = 'path/to/two', old_text = 'two', new_path = 'path', new_text = 'two a' },
+            }
 
-            assert.equal(u2.old_path, 'path/to/two')
-            assert.equal(u2.old_text, 'two')
-            assert.equal(u2.new_path, 'path')
-            assert.equal(u2.new_text, 'two a')
+            assert.are.same(updates, expected)
 
-            assert.equal(vim.tbl_count(vim.g.deleted_markers), 2)
-            assert.equal(vim.g.deleted_markers.four, 'path/to/four')
-            assert.equal(vim.g.deleted_markers["three a"], 'path')
+            assert.are.same(vim.g.deleted_markers, { four = 'path/to/four', ['three a'] = 'path' })
          end)
       end)
    end)
