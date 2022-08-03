@@ -88,12 +88,12 @@ function M.cursor.get()
     return M.selection.get()[1]
 end
 
-function M.cursor.set(args)
-    return M.selection.set()[1]
+function M.cursor.set(line)
+    return M.selection.set({ replacement = {line} })
 end
 
 function M.cursor.cut(args)
-    return M.selection.cut()[1]
+    return M.selection.cut()
 end
 
 

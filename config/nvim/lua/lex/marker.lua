@@ -18,11 +18,13 @@ local fuzzy_actions = { ["ctrl-v"] = 'vsplit', ["ctrl-x"] = 'split', ["ctrl-t"] 
 M.path = {}
 
 function M.path.shorten(path)
+    path = path or vim.fn.expand('%:p')
     local root = config.get()['root'] .. "/"
     return path:gsub(_G.escape(root), "")
 end
 
 function M.path.expand(path)
+    path = path or vim.fn.expand('%:p')
     path = path:gsub("^%.", "")
     path = path:gsub("^/", "")
 
@@ -145,8 +147,6 @@ end
 
 function M.location.rg_parse(str)
     local path, text = unpack(vim.fn.split(str, ':[#>] ['))
-
-    -- path = path:gsub(_G.escape(root .. '/'), '')
     text = text:gsub(']%(%)', '')
 
     return path, text
@@ -189,7 +189,7 @@ end
 --
 --------------------------------------------------------------------------------
 Location = class(function(self, args)
-    args = _G.default_args(args, { path = vim.fn.expand('%'), text = '', flags = {} })
+    args = _G.default_args(args, { path = vim.fn.expand('%:p'), text = '', flags = {} })
     self.path = args.path
     self.text = args.text
     self.flags = args.flags
@@ -232,7 +232,7 @@ end
 M.reference = {}
 
 function M.reference.get(args)
-    args = _G.default_args(args, { path = vim.fn.expand('%'), text = M.marker.parse() or '' })
+    args = _G.default_args(args, { path = vim.fn.expand('%:p'), text = M.marker.parse() or '' })
 
     local location = M.location.get(args.path, args.text)
 
@@ -322,17 +322,24 @@ end
 
 function M.fuzzy.sink.insert_put(lines)
     local line = line_utils.cursor.get()
-    local column = vim.api.nvim_win_get_cursor(0)[2] + 1
+    local line_number, column = unpack(vim.api.nvim_win_get_cursor(0))
 
-    local paste_cmd = 'P'
-    if column == line:len() or line:len() == 0 then
-        paste_cmd = 'p'
+    local insert_command = 'i'
+
+    if column == line:len() - 1 then
+        column = column + 1
+        insert_command = 'a'
     end
 
-    local paste_register_pre = vim.fn.getreg('"')
-    vim.fn.setreg('"', M.fuzzy.get_pick(lines[2]))
-    vim.api.nvim_input('<ctrl-o>' .. paste_cmd .. 'a')
-    vim.fn.setreg('"', paste_register_pre)
+    local content = M.fuzzy.get_pick(lines[2])
+
+    local new_line = line:sub(1, column) .. content .. line:sub(column + 1)
+    local new_column = column + content:len()
+
+    line_utils.cursor.set(new_line)
+
+    vim.api.nvim_win_set_cursor(0, {line_number, new_column})
+    vim.api.nvim_input(insert_command)
 end
 
 function M.fuzzy.get_pick(str)

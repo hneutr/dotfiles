@@ -120,6 +120,13 @@ function M.update_renames(old_marker, new_marker, renames)
 
     if old_marker ~= new_marker then
         renames[old_marker] = new_marker
+
+        -- TODO: the below updates in-file references automatically
+        -- local cursor = vim.api.nvim_win_get_cursor(0)
+        -- local path = marker_utils.path.shorten()
+        -- local cmd = "%s/\\](" .. path .. ":" .. old_marker .. "/\\](" .. path .. ":" .. new_marker .. "/g"
+        -- vim.cmd(cmd)
+        -- vim.api.nvim_win_set_cursor(0, cursor)
     end
 
     return renames
@@ -189,6 +196,19 @@ function M.buf_leave()
         return
     end
 end
+
+-- function test(updates)
+--     local root = require'lex.config'.get()['root']
+--     local cmd = ''
+--     for i, u in ipairs(updates) do
+--         local pattern = '\\](' .. u.old_path:gsub('/', '\\/') .. u.old_text
+--         local replace = '\\](' .. u.new_path:gsub('/', '\\/') .. u.new_text
+--         local sed_exp = "s/(" .. pattern .. "/" .. replace .. "/gI"
+--         local sub_cmd = "!find " .. root .. "-t f --exec gsed -i '" .. sed_exp .. "' {} \\;"
+
+--         -- find . -t f --exec gsed -i 's/\](context\/technology.md:the stalagmite/\](context\/technology.md:stalagmite/gI' {} \;
+--     end
+-- end
 
 function M.skip_if_possible(creations, deletions, renames)
     local n_creations = vim.tbl_count(creations)
