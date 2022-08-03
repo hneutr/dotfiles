@@ -1,3 +1,4 @@
+require'class'
 local util = require'util'
 local line_utils = require'lines'
 local config = require'lex.config'
@@ -40,8 +41,12 @@ function M.link.get(label, location)
     return "[" .. label .. "](" .. location .. ")"
 end
 
-function M.link.parse(text)
-    return text:match(".*%[(.*)%]%((.*)%).*")
+function M.link.parse(str)
+    return str:match(".*%[(.*)%]%((.*)%).*")
+end
+
+function M.link.str_is_a(str)
+    return M.link.parse(str)
 end
 
 --------------------------------------------------------------------------------
@@ -180,6 +185,46 @@ end
 
 --------------------------------------------------------------------------------
 --
+-- Location (class)
+--
+--------------------------------------------------------------------------------
+Location = class(function(self, args)
+    args = _G.default_args(args, { path = vim.fn.expand('%'), text = '', flags = {} })
+    self.path = args.path
+    self.text = args.text
+    self.flags = args.flags
+end)
+
+function Location.from_str(str)
+    local path = ''
+    local text = ''
+    local flags = {}
+
+    local parts = vim.split(str, location_path_text_delimiter)
+    for k, v in ipairs(parts) do
+        if k == 1 then
+            path = v
+        else
+            text = text .. v
+        end
+    end
+
+    path = M.path.expand(path)
+
+    local parts = vim.split(text, location_text_flags_delimiter)
+    for k, v in ipairs(parts) do
+        if k == 1 then
+            text = v
+        else
+            table.insert(flags, v)
+        end
+    end
+
+    return Location{ path = path, text = text, flags = flags }
+end
+
+--------------------------------------------------------------------------------
+--
 -- references
 --
 -- format: [label](location)
@@ -208,6 +253,47 @@ function M.reference.get(args)
     end
 
     return M.link.get(label, location)
+end
+
+function M.reference.list(args)
+    args = _G.default_args(args, { include_path_references = true })
+
+    local root = config.get()['root']
+    local cmd = "rg '\\[.*\\]\\(.+\\)' --no-heading --no-filename --no-line-number " .. root
+
+    local references = {}
+    for i, str in ipairs(vim.fn.systemlist(cmd)) do
+        while M.link.str_is_a(str) do
+            str = str:gsub("^.*%[", '[', 1)
+
+            local link_str = str:gsub('%).*', ')', 1)
+            local label, location_str = M.link.parse(link_str)
+
+            if not vim.startswith(location_str, 'http') then
+                local location = Location.from_str(location_str)
+
+                local path_references = vim.tbl_get(references, location.path)
+
+                if location.text:len() > 0 then
+                    if type(path_references) ~= 'table' then
+                        path_references = {}
+                    end
+
+                    if not vim.tbl_contains(path_references, location.text) then
+                        table.insert(path_references, location.text)
+                    end
+                elseif args.include_path_references and path_references == nil then
+                    path_references = {}
+                end
+
+                references[location.path] = path_references
+            end
+
+            str = str:gsub(_G.escape(link_str), '', 1)
+        end
+    end
+
+    return references
 end
 
 function M.reference.update(references)

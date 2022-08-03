@@ -33,7 +33,15 @@ function M.buf_enter()
     vim.b.renamed_markers = {} -- format: old_name: new_name
     vim.b.deleted_markers = {}
     vim.b.created_markers = {}
+
+    -- M.test()
 end
+
+-- function M.test()
+--     if not vim.g.marker_references then
+--         vim.g.marker_references = marker_utils.reference.list{ include_path_references = false }
+--     end
+-- end
 
 function M.read_markers()
     local markers = {}
