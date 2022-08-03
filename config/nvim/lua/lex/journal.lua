@@ -1,7 +1,5 @@
 local M = {}
 
-local writing_journal = 'on-writing'
-
 function M.path(journal_name)
     local cmd = "hnetext journal"
 

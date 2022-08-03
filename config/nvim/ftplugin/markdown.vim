@@ -1,20 +1,7 @@
-let g:writing_journal = 'on-writing'
-
-let g:file_opening_prefix = "<leader>o"
-
 "==================================[ scratch ]==================================
 " delete the currently selected lines and move them to the scratch file
-" nnoremap <silent> <leader>s :lua require'lex.scratch'.move('n')<cr>
+nnoremap <silent> <leader>s :lua require'lex.scratch'.move('n')<cr>
 vnoremap <silent> <leader>s :'<,'>lua require'lex.scratch'.move('v')<cr>
-
-"==================================[ indexes ]==================================
-lua require'lex.map'.map_prefixed_file_openers('g', ":lua require'lex.index'.open")
-
-"==================================[ markers ]==================================
-lua require'lex.map'.map_prefixed_file_openers('n', ":lua require'lex.marker'.location.goto")
-nnoremap <silent> <M-l> :lua require'lex.marker'.location.goto("vsplit")<cr>
-nnoremap <silent> <M-j> :lua require'lex.marker'.location.goto("split")<cr>
-nnoremap <silent> <M-o> :lua require'lex.marker'.location.goto("edit")<cr>
 
 " insert a header for a marker
 nnoremap <silent> <leader>mm :lua require'lex.divider'.header.insert_marker()<cr>

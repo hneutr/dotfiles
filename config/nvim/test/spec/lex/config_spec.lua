@@ -5,6 +5,7 @@ require'util'
 
 describe(".config", function()
    vim.g.config_file_name = '.project'
+   vim.g.mirror_defaults_path = "/Users/hne/Documents/research/hnetext/data/mirror-defaults.json"
 
    before_each(function()
       m = require('lex.config')
@@ -34,7 +35,6 @@ describe(".config", function()
       end)
 
       describe("find", function() 
-
          it("doesn't find a config", function()
             assert.is_nil(m.file.find("/a/b/c/d.md"))
          end)
@@ -44,46 +44,98 @@ describe(".config", function()
          end)
       end)
 
-      describe("create", function() 
-         local _mirror = require'lex.mirror'
-         local apply_defaults_to_config = _mirror.apply_defaults_to_config
+      describe("build", function() 
+         -- local _mirror = require'lex.mirror'
+         local get_mirror_defaults = m.file.get_mirror_defaults
+         -- local apply_defaults_to_config = _mirror.apply_defaults_to_config
          local json_decode = vim.fn.json_decode
          local readfile = vim.fn.readfile
 
+         local raw_config = {
+            root = '/root',
+            mirrors = {
+               two = {
+                  mirrorOtherMirrors = true,
+               },
+               three = {
+                  disable = true,
+               },
+            },
+         }
+
+         local mirror_defaults = {
+            mirrorsDirPrefix = '',
+            mirrors = {
+               one = {
+                  vimPrefix = '1',
+                  dirPrefix = '1',
+                  mirrorOtherMirrors = false,
+               },
+               two = {
+                  vimPrefix = '2',
+                  dirPrefix = '2',
+                  mirrorOtherMirrors = false,
+               },
+               three = {
+                  vimPrefix = '3',
+                  dirPrefix = '3',
+                  mirrorOtherMirrors = true,
+               },
+            }
+         }
+
          before_each(function()
-            vim.fn.json_decode = function() return {} end
+            vim.fn.json_decode = function() return raw_config end
             vim.fn.readfile = function() return {} end
-            _mirror.apply_defaults_to_config = function(args) return args end
+
+            m.file.get_mirror_defaults = function() return mirror_defaults end
+            -- _mirror.apply_defaults_to_config = function(args) return args end
          end)
 
          after_each(function()
-            _mirror.apply_defaults_to_config = apply_defaults_to_config
+            m.file.get_mirror_defaults = get_mirror_defaults
+            -- _mirror.apply_defaults_to_config = apply_defaults_to_config
             vim.fn.json_decode = json_decode
             vim.fn.readfile = readfile
          end)
 
          it("reads a config", function()
-            local config = m.file.build("/1/2/3/4.md")
-            assert.equal(vim.tbl_count(config), 1)
-            assert.equal(config.root, "/1/2/3")
+            local expected = {
+               mirrors = {
+                  one = {
+                     dir = "/1/2/3/1",
+                     dirPrefix = "1",
+                     mirrorOtherMirrors = false,
+                     root = "/1/2/3",
+                     vimPrefix = "1"
+                  },
+                  two = {
+                     dir = "/1/2/3/2",
+                     dirPrefix = "2",
+                     mirrorOtherMirrors = true,
+                     root = "/1/2/3",
+                     vimPrefix = "2"
+                  }
+               },
+               root = "/1/2/3"
+            }
+
+            local actual = m.file.build("/1/2/3/4.md")
+            assert.are.same(actual, expected)
          end)
       end)
    end)
 
    describe("set", function()
-      local _mirror = require'lex.mirror'
-      local add_mappings
       local find = m.file.find
       local build = m.file.build
 
       before_each(function()
-         add_mappings = stub(_mirror, 'add_mappings')
          m.file.build = function() return { test = 1 } end
          vim.g.lex_configs = nil
       end)
 
       after_each(function()
-         add_mappings:revert()
          m.file.find = find
          m.file.build = build
          vim.g.lex_configs = nil
@@ -104,8 +156,6 @@ describe(".config", function()
          assert.equals(vim.b.lex_config_path, 'test')
          assert.equals(vim.tbl_count(vim.g.lex_configs.test), 1)
          assert.equals(vim.g.lex_configs.test.test, 1)
-
-         assert.stub(add_mappings).was_called()
       end)
 
       it("finds a file with predefined config", function()
@@ -120,7 +170,6 @@ describe(".config", function()
          assert.equals(vim.g.lex_configs.test.test, 1)
 
          assert.stub(build).was_not_called()
-         assert.stub(add_mappings).was_called()
 
          build:revert()
       end)

@@ -1,13 +1,15 @@
-local pattern = {"*.md"}
-local sync = require'lex.sync'
+local augroup = vim.api.nvim_create_augroup
+local aucmd = vim.api.nvim_create_autocmd
 
-local function ftset()
-    vim.o.ft = 'markdown'
-    vim.g.vim_markdown_no_default_key_mappings = 1
-    require'lex.config'.set()
-end
+local p = { "*.md" }
 
-vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, { pattern=pattern, callback=ftset })
-vim.api.nvim_create_autocmd({'BufEnter'}, { pattern=pattern, callback=sync.buf_enter })
-vim.api.nvim_create_autocmd({'TextChanged', 'InsertLeave'}, { pattern=pattern, callback=sync.buf_change })
-vim.api.nvim_create_autocmd({'BufLeave', 'VimLeave'}, { pattern=pattern, callback=sync.buf_leave })
+vim.o.ft = 'markdown'
+vim.g.vim_markdown_no_default_key_mappings = 1
+
+local lex = augroup('lex_cmds', { clear = true })
+
+aucmd({"BufNewFile", "BufRead"}, { pattern=p, group=lex, callback=require'lex.config'.set })
+aucmd({'BufEnter'}, { pattern=p, group=lex, callback=require'lex.map'.add_mappings })
+aucmd({'BufEnter'}, { pattern=p, group=lex, callback=require'lex.sync'.buf_enter })
+aucmd({'TextChanged', 'InsertLeave'}, { pattern=p, group=lex, callback=require'lex.sync'.buf_change })
+aucmd({'BufLeave', 'VimLeave'}, { pattern=p, group=lex, callback=require'lex.sync'.buf_leave })
