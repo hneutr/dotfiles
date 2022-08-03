@@ -45,9 +45,7 @@ describe(".config", function()
       end)
 
       describe("build", function() 
-         -- local _mirror = require'lex.mirror'
-         local get_mirror_defaults = m.file.get_mirror_defaults
-         -- local apply_defaults_to_config = _mirror.apply_defaults_to_config
+         local get_mirror_defaults = m.file.mirror_defaults.get
          local json_decode = vim.fn.json_decode
          local readfile = vim.fn.readfile
 
@@ -88,13 +86,11 @@ describe(".config", function()
             vim.fn.json_decode = function() return raw_config end
             vim.fn.readfile = function() return {} end
 
-            m.file.get_mirror_defaults = function() return mirror_defaults end
-            -- _mirror.apply_defaults_to_config = function(args) return args end
+            m.file.mirror_defaults.get = function() return mirror_defaults end
          end)
 
          after_each(function()
-            m.file.get_mirror_defaults = get_mirror_defaults
-            -- _mirror.apply_defaults_to_config = apply_defaults_to_config
+            m.file.mirror_defaults.get = get_mirror_defaults
             vim.fn.json_decode = json_decode
             vim.fn.readfile = readfile
          end)

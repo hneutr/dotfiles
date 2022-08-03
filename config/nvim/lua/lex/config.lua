@@ -29,7 +29,7 @@ function M.file.build(path)
 
     config['root'] = vim.fn.fnamemodify(path, ':h')
 
-    local mirror_defaults = M.file.get_mirror_defaults()
+    local mirror_defaults = M.file.mirror_defaults.get()
 
     local mirrors_dir_prefix = vim.tbl_get(config, "mirrorsDirPrefix") or mirror_defaults['mirrorsDirPrefix']
     local mirrors_dir = _G.joinpath(config['root'], mirrors_dir_prefix)
@@ -51,12 +51,17 @@ function M.file.build(path)
     return config
 end
 
-function M.file.get_mirror_defaults()
+M.file.mirror_defaults = {}
+function M.file.mirror_defaults.get()
     if not vim.g.mirror_defaults then
-        vim.g.lex_mirror_defaults = vim.fn.json_decode(vim.fn.readfile(vim.g.mirror_defaults_path))
+        M.file.mirror_defaults.set()
     end
 
     return vim.g.lex_mirror_defaults
+end
+
+function M.file.mirror_defaults.set()
+    vim.g.lex_mirror_defaults = vim.fn.json_decode(vim.fn.readfile(vim.g.mirror_defaults_path))
 end
 
 --------------------------------------------------------------------------------
@@ -77,10 +82,6 @@ function M.set(start_path)
         if not vim.tbl_get(configs, path) then
             configs[path] = M.file.build(path)
         end
-
-        vim.b.lex_config = configs[path]
-    else
-        vim.b.lex_config = {}
     end
 
     vim.g.lex_configs = configs
@@ -94,7 +95,7 @@ end
 -- commands
 --------------------------------------------------------------------------------
 function M.push()
-    vim.fn.system("git add " .. vim.tbl_get(vim.b.lex_config, 'root') or '.')
+    vim.fn.system("git add " .. vim.tbl_get(M.get(), 'root') or '.')
     vim.fn.system("git commit -m ${TD}")
     vim.fn.system("git push")
 end

@@ -1,5 +1,6 @@
 local util = require'util'
 local line_utils = require'lines'
+local config = require'lex.config'
 
 local M = {}
 
@@ -16,7 +17,7 @@ local fuzzy_actions = { ["ctrl-v"] = 'vsplit', ["ctrl-x"] = 'split', ["ctrl-t"] 
 M.path = {}
 
 function M.path.shorten(path)
-    local root = vim.b.lex_config.root .. "/"
+    local root = config.get()['root'] .. "/"
     return path:gsub(_G.escape(root), "")
 end
 
@@ -24,7 +25,7 @@ function M.path.expand(path)
     path = path:gsub("^%.", "")
     path = path:gsub("^/", "")
 
-    return vim.b.lex_config.root .. "/" .. path
+    return config.get()['root'] .. "/" .. path
 end
 
 --------------------------------------------------------------------------------
@@ -160,7 +161,7 @@ function M.location.goto(open_command, str)
 end
 
 function M.location.list()
-    local root = vim.b.lex_config.root
+    local root = config.get()['root']
     local list_markers_cmd = "rg '^[#>] \\[.*\\]\\(\\)$' --no-heading " .. root
     local list_files_command = "fd -tf '' " .. root
 
@@ -190,19 +191,21 @@ function M.reference.get(args)
 
     local location = M.location.get(args.path, args.text)
 
-    local label
+    local label = args.label
 
-    if args.text:len() > 0 then
-        label = args.text
-    else
-        label = vim.fn.fnamemodify(args.path, ':t:r')
+    if not label then
+        if args.text:len() > 0 then
+            label = args.text
+        else
+            label = vim.fn.fnamemodify(args.path, ':t:r')
 
-        if label == directory_filename then
-            label = vim.fn.fnamemodify(args.path, ":p:h:t")
+            if label == directory_filename then
+                label = vim.fn.fnamemodify(args.path, ":p:h:t")
+            end
         end
-    end
 
-    label = label:gsub("%-", " ")
+        label = label:gsub("%-", " ")
+    end
 
     return M.link.get(label, location)
 end

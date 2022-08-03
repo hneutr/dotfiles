@@ -87,14 +87,6 @@ inoremap (; ();<esc>hi
 inoremap [; [];<esc>hi
 inoremap {; {};<esc>hi
 
-" comma triggered
-inoremap (, (),<esc>hi
-inoremap {, {},<esc>hi
-inoremap [, [],<esc>hi
-inoremap ', '',<esc>hi
-inoremap ", "",<esc>hi
-inoremap `, ``,<esc>hi
-
 " tab triggered
 inoremap (<tab> ()<esc>i
 inoremap [<tab> []<esc>i

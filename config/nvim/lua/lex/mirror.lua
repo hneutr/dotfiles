@@ -1,6 +1,12 @@
 local M = {}
 local config = require'lex.config'
 
+
+function M.open(mirror_type, open_command)
+    require'util'.open_path(M.get_path(mirror_type), open_command)
+end
+
+
 ------------------------------------ get_mirror ---------------------------------
 -- gets the equivalent location of a file for a given prefix.
 --
@@ -45,7 +51,7 @@ function M.get_origin(path)
     local _config = config.get()
 
     local mirror_prefixes = {}
-    for k, mirror_config in ipairs(_config['mirrors']) do
+    for mirror_type, mirror_config in pairs(_config['mirrors']) do
         table.insert(mirror_prefixes, mirror_config['dirPrefix'])
     end
 
