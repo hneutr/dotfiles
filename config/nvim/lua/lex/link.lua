@@ -50,7 +50,8 @@ Link = class(function(self, args)
     self.after = args.after
 end)
 
-Link.regex = "(.*)%[(.*)%]%((.*)%)(.*)"
+-- Link.regex = "(.*)%[(.*)%]%((.-)%)(.*)"
+Link.regex = "(.-)%[(.-)%]%((.-)%)(.*)"
 
 function Link:str()
     return "[" .. self.label .. "](" .. self.location .. ")"
@@ -185,27 +186,29 @@ function Location.goto(open_command, str)
 end
 
 function Location.update(args)
-    args = _G.default_args(args, { new = nil, scope = 'project' })
+    args = _G.default_args(args, { old_location = nil, new_location = nil, scope = 'buffer' })
 
-    local old = self:str():gsub('/', '\\/')
-    local new = args.new:str():gsub('/', '\\/')
+    local old = args.old_location:gsub('/', '\\/')
+    local new = args.new_location:gsub('/', '\\/')
 
+    vim.g.testing = 1
     if args.scope == 'buffer' then
         local cursor = vim.api.nvim_win_get_cursor(0)
 
-        local cmd = "%s/\\](" .. old .. "/\\](" .. new .. "/g"
-        vim.cmd(cmd)
+        local cmd = "%s/\\](" .. old .. ")/\\](" .. new .. ")/g"
+        pcall(function() vim.cmd(cmd) return end)
         vim.api.nvim_win_set_cursor(0, cursor)
-    elseif scope == 'project' then
+    elseif args.scope == 'project' then
+        -- turns out this is a lot slower than just using python...
         local root = require'lex.config'.get()['root']
 
         local pattern = '\\](' .. old .. ')'
         local replace = '\\](' .. new .. ')'
         local sed_exp = "s/" .. pattern .. "/" .. replace .. "/gI"
-        local cmd = "!find " .. root .. "-t f --exec gsed -i '" .. sed_exp .. "' {} \\;"
+        local cmd = "cd " .. root .. " && find . -type f -exec gsed -i '" .. sed_exp .. "' {} \\;"
 
-        -- find . -t f --exec
-        -- gsed -i 's/\](context\/technology.md:the stalagmite/\](context\/technology.md:stalagmite/gI' {} \;
+        vim.g.cmd = cmd
+        vim.fn.system(cmd)
     end
 end
 
@@ -258,6 +261,7 @@ end
 
 function Mark.rg_str_is_a(str)
     local path, str = unpack(vim.fn.split(str, ':'))
+
     return Mark.str_is_a(str)
 end
 
@@ -348,23 +352,24 @@ end
 
 
 function Reference.list(args)
-    args = _G.default_args(args, { include_path_references = true })
+    args = _G.default_args(args, { include_path_references = false, path = config.get()['root'] })
 
-    local cmd = Reference.rg_cmd .. config.get()['root']
+    local cmd = Reference.rg_cmd .. args.path
 
     local references = {}
     for i, str in ipairs(vim.fn.systemlist(cmd)) do
         while Reference.str_is_a(str) do
-            -- this won't work
-            local ref = Reference.from_str(str)
-            -- local ref = Reference{ location = Location.from_str(str) }
-            str = ref.after
+            local before, text, raw_location, after = str:match(Link.regex)
 
-            if not vim.startswith(ref.location.path, "http") then
-                if location.path:len() > 0 or args.include_path_references then
-                    table.insert(references, location:str())
+            if not vim.startswith(raw_location, "http") then
+                location = Location.from_str(raw_location)
+
+                if location.text:len() > 0 or args.include_path_references then
+                    references[location:str()] = true
                 end
             end
+
+            str = after
         end
     end
 
@@ -418,16 +423,6 @@ function M.fuzzy.sink.insert_put(lines)
 
     vim.api.nvim_win_set_cursor(0, {line_number, new_column})
     vim.api.nvim_input(insert_command)
-end
-
---------------------------------------------------------------------------------
---                         things that will be changed                         
---------------------------------------------------------------------------------
-function M.update_references(references)
-    local cmd = "hnetext update-references"
-    cmd = cmd .. " --references '" .. vim.fn.json_encode(references) .. "'"
-
-    vim.fn.system(cmd)
 end
 
 return M

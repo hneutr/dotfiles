@@ -1,12 +1,21 @@
 local mock = require('luassert.mock')
 local stub = require('luassert.stub')
 local m = require'lex.sync'
+local config = require'lex.config'
+
 require'util'
 require'tbl'
 
 describe("sync", function()
+   local get_config = config.get
+
    before_each(function()
       m = require'lex.sync'
+      config.get = function() return { root = 'root' } end
+   end)
+
+   after_each(function()
+      config.get = get_config
    end)
 
    describe("on enter", function()
@@ -55,9 +64,17 @@ describe("sync", function()
    end)
 
    describe("on change", function()
+      local link = require'lex.link'
+
       before_each(function()
          local buf = vim.api.nvim_create_buf(false, true)
          vim.api.nvim_command("buffer " .. buf)
+
+         link.Location.update = function() return  end
+      end)
+
+      after_each(function()
+         link.Location.update = location_update
       end)
 
       describe(".get_deletions", function()
@@ -198,107 +215,100 @@ describe("sync", function()
          vim.fn.expand = expand
       end)
 
-      describe("process_creations", function()
-         it("handles an unrenamed case", function()
-            local creations = { creation = true }
-            local renames = {one = 'one a'}
-            local deletions = { two = "path/to/two" }
+      describe("process_renames", function()
+         it("base case", function()
+            local renames = {one = 'one a', two = 'two a'}
+            local refs = { ['path:one'] = true }
+            local creations = {}
+            local deletions = {}
 
-            local updates, renames, deletions = m.process_creations(creations, renames, deletions)
-
-            local expected = {old_path = 'path', old_text = 'creation', new_path = 'path', new_text = 'creation'}
-
-            assert.are.same(updates, {expected})
-            assert.are.same(renames, { one = 'one a' })
-            assert.are.same(deletions, { two = 'path/to/two' })
+            local a_updates, a_renames, a_references = m.process_renames(renames, deletions, creations, refs)
+            assert.are.same(a_updates, {{ new_location = "path:one a", old_location = "path:one" }})
+            assert.are.same(a_references, { ["path:one a"] = true })
+            assert.are.same(a_renames, renames)
          end)
 
-         it("handles a rename+previous_deletion case", function()
-            local creations = { one = true }
+         it("handles deletion", function()
             local renames = {one = 'one a', two = 'two a'}
-            local deletions = { one = "path/to/one", two = 'path/to/two' }
+            local refs = { ['path:one'] = true }
+            local creations = {}
+            local deletions = { ["two a"] = true }
 
-            local updates, renames, deletions = m.process_creations(creations, renames, deletions)
+            local a_updates, a_renames, a_references = m.process_renames(renames, deletions, creations, refs)
+            assert.are.same(a_updates, {{ new_location = "path:one a", old_location = "path:one" }})
+            assert.are.same(a_references, { ["path:one a"] = true })
+            assert.are.same(a_renames, { one = 'one a' })
+         end)
 
-            local expected = {old_path = 'path/to/one', old_text = 'one', new_path = 'path', new_text = 'one a'}
+         it("handles creation", function()
+            local renames = {one = 'one a', two = 'two a'}
+            local refs = { ['path:one'] = true }
+            local creations = { one = true }
+            local deletions = { ["two a"] = true }
 
-            assert.are.same(updates, {expected})
-            assert.are.same(renames, { two = 'two a' })
-            assert.are.same(deletions, { two = 'path/to/two' })
+            local a_updates, a_renames, a_references = m.process_renames(renames, deletions, creations, refs)
+            assert.are.same(a_updates, {})
+            assert.are.same(a_references, { ["path:one a"] = true })
+            assert.are.same(a_renames, { one = 'one a' })
+         end)
+
+         it("adds references", function()
+            local link = require'lex.link'
+            local references_list = link.Reference.list
+
+            link.Reference.list = function() return { new = true } end
+
+            local renames = {one = 'one a', two = 'two a'}
+            local refs = { ['path:one'] = true }
+            local creations = {}
+            local deletions = { ["two a"] = true }
+
+            local a_updates, a_renames, a_references = m.process_renames(renames, deletions, creations, refs)
+            assert.are.same(a_updates, {{ new_location = "path:one a", old_location = "path:one" }})
+            assert.are.same(a_references, { ["path:one a"] = true, new = true })
+            assert.are.same(a_renames, renames)
+
+            link.Reference.list = references_list
+         end)
+      end)
+
+      describe("process_creations", function()
+         it("handles an unrenamed case", function()
+            local creations = { two = true }
+            local renames = {one = 'one a'}
+            local deletions = { two = "path/to/two" }
+            local refs = { ['path/to/two:two'] = true }
+
+            local updates, deletions, refs = m.process_creations(creations, renames, deletions, refs)
+
+            assert.are.same(updates, {{ new_location = "path:two", old_location = "path/to/two:two"}})
+            assert.are.same(deletions, {})
+            assert.are.same(refs, {['path:two'] = true})
+         end)
+
+         it("handles a rename", function()
+            local creations = { two = true }
+            local renames = {one = 'one a', two = 'two a'}
+            local deletions = { two = "path/to/two" }
+            local refs = { ['path/to/two:two'] = true }
+
+            local updates, deletions, refs = m.process_creations(creations, renames, deletions, refs)
+
+            assert.are.same(updates, {{ new_location = "path:two a", old_location = "path/to/two:two"}})
+            assert.are.same(deletions, {})
+            assert.are.same(refs, {['path:two a'] = true})
          end)
       end)
 
       describe("process_deletions", function()
          it("handles an unrenamed case", function()
-            local deletions = { deletion = true }
-            local renames = {one = 'one a'}
+            local deletions = { one = true }
             local previous_dels = { two = "path/to/two" }
+            local refs = { ['path:one'] = true }
 
-            local renames, previous_dels = m.process_deletions(deletions, renames, previous_dels)
+            local previous_dels = m.process_deletions(deletions, previous_dels, refs)
 
-            assert.are.same(renames, { one = 'one a' })
-            assert.are.same(previous_dels, { two = 'path/to/two', deletion = 'path' })
-         end)
-
-         it("handles a rename case", function()
-            local deletions = { ['one a'] = true }
-            local renames = {one = 'one a', two = 'two a'}
-            local previous_dels = { two = "path/to/two" }
-
-            local renames, previous_dels = m.process_deletions(deletions, renames, previous_dels)
-
-            assert.are.same(renames, { two = 'two a' })
-            assert.are.same(previous_dels, { ['one a'] = 'path', two = 'path/to/two' })
-         end)
-      end)
-
-      describe("process_renames", function()
-         it("base case", function()
-            local renames = {one = 'one a', two = 'two a'}
-
-            local updates = m.process_renames(renames)
-
-            table.sort(updates, function(a, b) return a.old_text < b.old_text end)
-
-            local expected = {
-               { old_path = 'path', old_text = 'one', new_path = 'path', new_text = 'one a' },
-               { old_path = 'path', old_text = 'two', new_path = 'path', new_text = 'two a' },
-            }
-
-            assert.are.same(updates, expected)
-         end)
-      end)
-
-      describe("integrations", function()
-         local link = require'lex.link'
-         local update_references = link.update_references
-
-         before_each(function()
-            link.update_references = function(args) return args end
-         end)
-
-         after_each(function()
-            link.update_references = update_references
-         end)
-
-         it("processes things", function()
-            vim.b.created_markers = { one = true, two = true }
-            vim.b.deleted_markers = { ["three a"] = true }
-            vim.b.renamed_markers = { one = "one a", two = "two a", three = "three a" }
-            vim.g.deleted_markers = { two = "path/to/two", four = "path/to/four" }
-
-            local updates = m.buf_leave()
-
-            table.sort(updates, function(a, b) return a.old_text < b.old_text end)
-
-            local expected = {
-               { old_path = 'path', old_text = 'one', new_path = 'path', new_text = 'one a' },
-               { old_path = 'path/to/two', old_text = 'two', new_path = 'path', new_text = 'two a' },
-            }
-
-            assert.are.same(updates, expected)
-
-            assert.are.same(vim.g.deleted_markers, { four = 'path/to/four', ['three a'] = 'path' })
+            assert.are.same(previous_dels, { two = 'path/to/two', one = 'path' })
          end)
       end)
    end)

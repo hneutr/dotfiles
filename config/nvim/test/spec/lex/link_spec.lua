@@ -61,6 +61,13 @@ describe("Link", function()
 
          assert.are.same(actual, expected)
       end)
+
+      it("another link after", function()
+         local actual = m.Link.from_str("before [a](b) [c](d)")
+         local expected = m.Link{ label = 'a', location = 'b', before = 'before ', after = ' [c](d)' }
+
+         assert.are.same(actual, expected)
+      end)
    end)
    describe(".str_is_a:", function() 
       it("negative case", function()
