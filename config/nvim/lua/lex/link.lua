@@ -420,4 +420,14 @@ function M.fuzzy.sink.insert_put(lines)
     vim.api.nvim_input(insert_command)
 end
 
+--------------------------------------------------------------------------------
+--                         things that will be changed                         
+--------------------------------------------------------------------------------
+function M.update_references(references)
+    local cmd = "hnetext update-references"
+    cmd = cmd .. " --references '" .. vim.fn.json_encode(references) .. "'"
+
+    vim.fn.system(cmd)
+end
+
 return M

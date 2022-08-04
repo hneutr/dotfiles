@@ -269,16 +269,16 @@ describe("sync", function()
          end)
       end)
 
-      describe("leave integration", function()
-         local marker_utils = require'lex.marker'
-         local reference_update = marker_utils.reference.update
+      describe("integrations", function()
+         local link = require'lex.link'
+         local update_references = link.update_references
 
          before_each(function()
-            marker_utils.reference.update = function(args) return args end
+            link.update_references = function(args) return args end
          end)
 
          after_each(function()
-            marker_utils.reference.update = reference_update
+            link.update_references = update_references
          end)
 
          it("processes things", function()

@@ -20,7 +20,8 @@
 --   - add it back onto the "deleted" list
 --------------------------------------------------------------------------------
 line_utils = require'lines'
-marker_utils = require'lex.marker'
+-- marker_utils = require'lex.marker'
+local link = require'lex.link'
 
 local M = {}
 
@@ -46,8 +47,10 @@ end
 function M.read_markers()
     local markers = {}
     for i, str in ipairs(line_utils.get()) do
-        if marker_utils.marker.is(str) then
-            markers[marker_utils.marker.parse(str)] = i
+        -- if marker_utils.marker.is(str) then
+        --     markers[marker_utils.marker.parse(str)] = i
+        if link.Mark.str_is_a(str) then
+            markers[link.Mark.from_str(str).text] = i
         end
     end
 
@@ -191,7 +194,8 @@ function M.buf_leave()
     vim.g.deleted_markers = previous_deletions
 
     if vim.tbl_count(updates) then
-        return marker_utils.reference.update(updates)
+        -- TODO: make this better
+        return link.update_references(updates)
     else
         return
     end
