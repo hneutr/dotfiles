@@ -9,10 +9,10 @@ nnoremap <silent> <leader>ml :lua require'lex.divider'.header.insert_marker()<cr
 nnoremap <silent> <leader>mb :lua require'lex.divider'.header.insert_marker("large")<cr>
 
 " "marker-reference" create a reference to the mark on the current line
-nnoremap <silent> <leader>mr :lua vim.fn.setreg('"', require'lex.marker'.reference.get())<cr>
+nnoremap <silent> <leader>mr :lua vim.fn.setreg('"', require'lex.link'.Reference.from_str():str())<cr>
 
 " "file-marker-reference" create a file-reference to the current file
-nnoremap <silent> <leader>mf :lua vim.fn.setreg('"', require'lex.marker'.reference.get({ text = "" }))<cr>
+nnoremap <silent> <leader>mf :lua vim.fn.setreg('"', require'lex.link'.Reference.from_path():str() )<cr>
 
 "===========================[ fuzzy-find references ]===========================
 nnoremap <silent> <leader>f :call lex#fuzzy#start("lex#fuzzy#goto")<cr>

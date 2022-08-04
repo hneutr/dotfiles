@@ -7,6 +7,7 @@ local M = {}
 
 local location_path_text_delimiter = ':'
 local directory_filename = "@"
+local fuzzy_actions = { ["ctrl-v"] = 'vsplit', ["ctrl-x"] = 'split', ["ctrl-t"] = 'tabedit' }
 
 --------------------------------------------------------------------------------
 --
@@ -24,9 +25,14 @@ end
 function M.path.expand(path)
     path = path or vim.fn.expand('%:p')
     path = path:gsub("^%.", "")
-    path = path:gsub("^/", "")
 
-    return _G.joinpath(config.get()['root'], path)
+    local root = config.get()['root']
+
+    if not vim.startswith(path, root) then
+        path = _G.joinpath(config.get()['root'], path)
+    end
+
+    return path
 end
 
 --------------------------------------------------------------------------------
@@ -122,7 +128,7 @@ function Location.list.all(args)
         table.insert(locations, location)
     end
 
-    table.sort(locations, function(a, b) return a > b end)
+    table.sort(locations, function(a, b) return a < b end)
 
     return locations
 end
@@ -166,14 +172,15 @@ function Location.list.files(args)
     return locations
 end
 
--- equivalent of lex.marker.location.goto is: Location.from_str():goto()
-function Location:goto(open_command)
-    if self.path ~= vim.fn.expand('%:p') then
-        util.open_path(self.path, open_command)
+function Location.goto(open_command, str)
+    local location = Location.from_str(str)
+
+    if location.path ~= vim.fn.expand('%:p') then
+        util.open_path(location.path, open_command)
     end
 
-    if self.text:len() > 0 then
-        Mark.goto(self.text)
+    if location.text:len() > 0 then
+        Mark.goto(location.text)
     end
 end
 
@@ -296,17 +303,17 @@ end)
 Reference.rg_cmd = "rg '\\[.*\\]\\(.+\\)' --no-heading --no-filename --no-line-number " 
 
 function Reference.default_text(text, location)
-    if len(text) > 0 then
+    if text:len() > 0 then
         return text
     end
 
     if location.text:len() > 0 then
         text = location.text
     else
-        text = vim.fn.fnamemodify(args.path, ':t:r')
+        text = vim.fn.fnamemodify(location.path, ':t:r')
 
         if text == directory_filename then
-            text = vim.fn.fnamemodify(args.path, ":p:h:t")
+            text = vim.fn.fnamemodify(location.path, ":p:h:t")
         end
     end
 
@@ -329,14 +336,14 @@ function Reference.from_str(str)
     str = str or line_utils.cursor.get()
 
     local before, text, location, after = str:match(Link.regex)
-    location = Location.from_str(location)
+    location = Location{ text = text }
 
-    return Mark{ text = text, location = location, before = before, after = after, flagset = nil}
+    return Reference{ text = text, location = location, before = before, after = after, flagset = nil}
 end
 
 function Reference.from_path(path)
     path = path or vim.fn.expand('%:p')
-    return Mark{ location = Location.from_str(path)}
+    return Reference{ location = Location.from_str(path)}
 end
 
 
@@ -348,7 +355,9 @@ function Reference.list(args)
     local references = {}
     for i, str in ipairs(vim.fn.systemlist(cmd)) do
         while Reference.str_is_a(str) do
+            -- this won't work
             local ref = Reference.from_str(str)
+            -- local ref = Reference{ location = Location.from_str(str) }
             str = ref.after
 
             if not vim.startswith(ref.location.path, "http") then
@@ -371,5 +380,44 @@ M.Reference = Reference
 -- followed by: any
 --------------------------------------------------------------------------------
 
+
+--------------------------------------------------------------------------------
+--                                fuzzy finding                                
+--------------------------------------------------------------------------------
+M.fuzzy = { sink = {} }
+
+function M.fuzzy.sink.goto(lines)
+    local cmd = vim.tbl_get(fuzzy_actions, lines[1]) or "edit"
+    Location.goto(cmd, lines[2])
+end
+
+function M.fuzzy.sink.put(lines)
+    local ref = Reference{ location = Location.from_str(lines[2]) }
+    vim.api.nvim_put({ ref:str() } , 'c', 1, 0)
+end
+
+function M.fuzzy.sink.insert_put(lines)
+    local line = line_utils.cursor.get()
+    local line_number, column = unpack(vim.api.nvim_win_get_cursor(0))
+
+    local insert_command = 'i'
+
+    if column == line:len() - 1 then
+        column = column + 1
+        insert_command = 'a'
+    elseif column == 0 then
+        insert_command = 'a'
+    end
+
+    local content = Reference{ location = Location.from_str(lines[2]) }:str()
+
+    local new_line = line:sub(1, column) .. content .. line:sub(column + 1)
+    local new_column = column + content:len()
+
+    line_utils.cursor.set(new_line)
+
+    vim.api.nvim_win_set_cursor(0, {line_number, new_column})
+    vim.api.nvim_input(insert_command)
+end
 
 return M

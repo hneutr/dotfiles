@@ -165,24 +165,6 @@ function M.location.goto(open_command, str)
     end
 end
 
-function M.location.list()
-    local root = config.get()['root']
-    local list_markers_cmd = "rg '^[#>] \\[.*\\]\\(\\)$' --no-heading " .. root
-    local list_files_command = "fd -tf '' " .. root
-
-    local locations = {}
-    for i, str in ipairs(vim.fn.systemlist(list_markers_cmd)) do
-        table.insert(locations, M.location.get(M.location.rg_parse(str)))
-    end
-
-    for i, path in ipairs(vim.fn.systemlist(list_files_command)) do
-        table.insert(locations, M.location.get(path))
-    end
-
-    table.sort(locations, util.sort_ascending)
-    return locations
-end
-
 --------------------------------------------------------------------------------
 --
 -- references
@@ -263,48 +245,5 @@ function M.reference.update(references)
     vim.fn.system(cmd)
 end
 
-
----------------------------------------------------------------------------------
---
--- fuzzy finding
---
----------------------------------------------------------------------------------
-M.fuzzy = { sink = {} }
-
-function M.fuzzy.sink.goto(lines)
-    local cmd = vim.tbl_get(fuzzy_actions, lines[1]) or "edit"
-    M.location.goto(cmd, lines[2])
-end
-
-function M.fuzzy.sink.put(lines)
-    vim.api.nvim_put({M.fuzzy.get_pick(lines[2])} , 'c', 1, 0)
-end
-
-function M.fuzzy.sink.insert_put(lines)
-    local line = line_utils.cursor.get()
-    local line_number, column = unpack(vim.api.nvim_win_get_cursor(0))
-
-    local insert_command = 'i'
-
-    if column == line:len() - 1 then
-        column = column + 1
-        insert_command = 'a'
-    end
-
-    local content = M.fuzzy.get_pick(lines[2])
-
-    local new_line = line:sub(1, column) .. content .. line:sub(column + 1)
-    local new_column = column + content:len()
-
-    line_utils.cursor.set(new_line)
-
-    vim.api.nvim_win_set_cursor(0, {line_number, new_column})
-    vim.api.nvim_input(insert_command)
-end
-
-function M.fuzzy.get_pick(str)
-    local path, text, flags = unpack(M.location.parse(str))
-    return M.reference.get({ path = path, text = text })
-end
 
 return M 

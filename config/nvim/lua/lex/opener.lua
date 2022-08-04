@@ -13,7 +13,7 @@ end
 function M.set()
     local mappings = {
         { prefix = 'g', fn =  ":lua require'lex.index'.open"},
-        { prefix = 'n', fn =  ":lua require'lex.marker'.location.goto"},
+        { prefix = 'n', fn =  ":lua require'lex.link'.Location.goto"},
     }
 
     for mirror_type, mirror_config in pairs(vim.g.lex_mirror_defaults.mirrors) do
@@ -29,7 +29,7 @@ function M.set()
     end
 
     table.insert(mappings, {
-        fn = ":lua require'lex.marker'.location.goto",
+        fn = ":lua require'lex.link'.Location.goto",
         lhs_to_cmd = {
             ["<M-l>"] = "vsplit",
             ["<M-j>"] = "split",
