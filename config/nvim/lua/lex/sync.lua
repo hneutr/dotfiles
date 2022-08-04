@@ -197,19 +197,6 @@ function M.buf_leave()
     end
 end
 
--- function test(updates)
---     local root = require'lex.config'.get()['root']
---     local cmd = ''
---     for i, u in ipairs(updates) do
---         local pattern = '\\](' .. u.old_path:gsub('/', '\\/') .. u.old_text
---         local replace = '\\](' .. u.new_path:gsub('/', '\\/') .. u.new_text
---         local sed_exp = "s/(" .. pattern .. "/" .. replace .. "/gI"
---         local sub_cmd = "!find " .. root .. "-t f --exec gsed -i '" .. sed_exp .. "' {} \\;"
-
---         -- find . -t f --exec gsed -i 's/\](context\/technology.md:the stalagmite/\](context\/technology.md:stalagmite/gI' {} \;
---     end
--- end
-
 function M.skip_if_possible(creations, deletions, renames)
     local n_creations = vim.tbl_count(creations)
     local n_deletions = vim.tbl_count(deletions)
