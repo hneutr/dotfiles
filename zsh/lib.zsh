@@ -96,3 +96,7 @@ function gmd() {
     mkdir ${directory}
     touch "${directory}/.gitignore"
 }
+
+function today() {
+  date +20%y%m%d
+}
