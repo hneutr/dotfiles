@@ -12,6 +12,7 @@ Plug 'junegunn/fzf.vim'                             " fzf for vim
 Plug 'junegunn/goyo.vim'                            " distraction free + centered editing
 Plug 'tpope/vim-repeat'                             " repeat stuff
 Plug 'wellle/targets.vim'                           " more objects
+Plug 'L3MON4D3/LuaSnip'                             " snippets
 
 "==================================[ mappings ]=================================
 Plug 'junegunn/vim-easy-align'         " align text at a separator
@@ -28,7 +29,6 @@ Plug 'sheerun/vim-polyglot'
 
 "==================================[ testing ]==================================
 Plug 'neovim/nvim-lspconfig'        " try setting up, or delete?
-Plug 'SirVer/ultisnips'             " snippet engine; try switching to L3MON4D3/LuaSnip
 
 call plug#end()
 
