@@ -32,13 +32,13 @@ function M.file.build(path)
     local mirror_defaults = M.file.mirror_defaults.get()
 
     local mirrors_dir_prefix = vim.tbl_get(config, "mirrorsDirPrefix") or mirror_defaults['mirrorsDirPrefix']
-    local mirrors_dir = _G.joinpath(config['root'], mirrors_dir_prefix)
+    config['mirrors_root'] = _G.joinpath(config['root'], mirrors_dir_prefix)
 
     local mirrors = {}
     for m_type, m_defaults in pairs(mirror_defaults['mirrors']) do
         local m_config = _G.default_args(vim.tbl_get(config, 'mirrors', m_type), m_defaults)
 
-        m_config['dir'] = _G.joinpath(mirrors_dir, m_config['dirPrefix'])
+        m_config['dir'] = _G.joinpath(config['mirrors_root'], m_config['dirPrefix'])
         m_config['root'] = config['root']
 
         if not vim.tbl_get(m_config, "disable") then

@@ -6,6 +6,14 @@ function M.open(mirror_type, open_command)
     require'util'.open_path(M.get_path(mirror_type), open_command)
 end
 
+--------------------------------------------------------------------------------
+--                                  path                                      --
+--------------------------------------------------------------------------------
+M.path = {}
+function M.path.shorten(path)
+    return path:gsub(_G.escape(config.get()['mirrors_root']), '', 1)
+end
+
 
 ------------------------------------ get_mirror ---------------------------------
 -- gets the equivalent location of a file for a given prefix.
@@ -69,16 +77,11 @@ end
 
 function M.get_mirror_type(path)
     path = path or vim.fn.expand('%:p')
-
-    local mirror_type = nil
     for current_mirror_type, mirror_config in pairs(config.get()['mirrors']) do
         if vim.startswith(path, mirror_config['dir']) then
-            mirror_type = current_mirror_type
-            break
+            return current_mirror_type
         end
     end
-
-    return mirror_type
 end
 
 ----------------------------------- get_path -----------------------------------

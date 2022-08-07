@@ -29,6 +29,7 @@ Plug 'sheerun/vim-polyglot'
 
 "==================================[ testing ]==================================
 Plug 'neovim/nvim-lspconfig'        " try setting up, or delete?
+Plug 'nvim-treesitter/nvim-treesitter'
 
 call plug#end()
 

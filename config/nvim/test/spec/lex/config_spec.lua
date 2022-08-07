@@ -44,7 +44,7 @@ describe(".config", function()
          end)
       end)
 
-      describe("build", function() 
+      describe("build:", function() 
          local get_mirror_defaults = m.file.mirror_defaults.get
          local json_decode = vim.fn.json_decode
          local readfile = vim.fn.readfile
@@ -113,6 +113,7 @@ describe(".config", function()
                      vimPrefix = "2"
                   }
                },
+               mirrors_root = '/1/2/3/',
                root = "/1/2/3"
             }
 

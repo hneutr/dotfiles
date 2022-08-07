@@ -14,6 +14,13 @@ local function md_settings()
   require'lex.config'.file.mirror_defaults.set()
 end
 
+local function md_buf_enter_settings()
+  vim.wo.conceallevel = 2
+  vim.bo.expandtab = true
+  vim.bo.commentstring = ">%s"
+  vim.bo.textwidth = 0
+end
+
 local function if_lex(fn)
   return function()
     if vim.b.lex_config_path then
@@ -24,10 +31,11 @@ end
 
 local lex = augroup('lex_cmds', { clear = true })
 
-aucmd({"BufNewFile", "BufRead"}, { pattern=p, group=lex, callback=md_settings })
+aucmd({"BufNewFile", "BufRead"}, { pattern=p, callback=md_settings })
 aucmd({"BufNewFile", "BufRead"}, { pattern=p, group=lex, callback=require'lex.config'.set })
 aucmd({"BufNewFile", "BufRead"}, { pattern=p, group=lex, callback=if_lex(require'lex.opener'.map) })
 
+aucmd({'BufEnter'}, { pattern=p, callback=md_buf_enter_settings })
 aucmd({'BufEnter'}, { pattern=p, group=lex, callback=if_lex(require'lex.sync'.buf_enter) })
 aucmd({'TextChanged', 'InsertLeave'}, { pattern=p, group=lex, callback=if_lex(require'lex.sync'.buf_change) })
 aucmd({'BufLeave', 'VimLeave'}, { pattern=p, group=lex, callback=if_lex(require'lex.sync'.buf_leave) })
