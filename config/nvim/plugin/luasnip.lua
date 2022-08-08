@@ -1,26 +1,19 @@
 local ls = require"luasnip"
+
+ls.config.set_config({
+    -- ensure tab behaves normally outside snips
+    region_check_events = 'InsertEnter',
+    delete_check_events = 'InsertLeave',
+})
+
 local s = ls.snippet
-local sn = ls.snippet_node
-local isn = ls.indent_snippet_node
 local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
-local c = ls.choice_node
-local d = ls.dynamic_node
-local r = ls.restore_node
-local events = require("luasnip.util.events")
-local ai = require("luasnip.nodes.absolute_indexer")
-local fmt = require("luasnip.extras.fmt").fmt
-local m = require("luasnip.extras").m
-local lambda = require("luasnip.extras").l
-local postfix = require("luasnip.extras.postfix").postfix
 
-local t_nl = function(text) return t{text, ""} end
-local nl_t = function(text) return t{"", text} end
-
--- notes on switching from ultisnips to luasnip:
--- - unconverted:
---   - vim.snippets
+--------------------------------------------------------------------------------
+--                           utility functions                                --
+--------------------------------------------------------------------------------
 local function charline(args)
     args = _G.default_args(args, { char = '-', len = 80, start = '' })
     local str = args.start
@@ -86,6 +79,9 @@ local function header_line_right(args, snip, user_args)
     return header_line(args[1][1], user_args).right
 end
 
+--------------------------------------------------------------------------------
+--                                 snips                                      --
+--------------------------------------------------------------------------------
 ls.add_snippets("all", {
     s("quote", {
         t{"-----",
@@ -106,6 +102,9 @@ ls.add_snippets("all", {
     })
 })
 
+--------------------------------------------------------------------------------
+--                               javascript                                   --
+--------------------------------------------------------------------------------
 ls.add_snippets("javascript", {
     s("print", { t("console.log(JSON.stringify("), i(1, ""), t("))") }),
     s("p", { t("console.log("), i(1, ""), t(")") }),
@@ -141,6 +140,9 @@ ls.add_snippets("lua", {
     }),
 })
 
+--------------------------------------------------------------------------------
+--                                markdown                                    --
+--------------------------------------------------------------------------------
 local big_line = charline{ char = '-', start = '#' }
 local small_line = charline{ char = '-', len = 40 }
 
@@ -169,7 +171,8 @@ ls.add_snippets("markdown", {
     s("bl", { t(big_line) }),
     s("l", { t(small_line) }),
     s("journal", {
-        f(function() return vim.fn.strftime("%Y%m%d") end), t{":",
+        t("["),
+        f(function() return vim.fn.strftime("%Y%m%d") end), t{"]():",
         "",
         ""}, i(1),
         t{"",
@@ -178,6 +181,9 @@ ls.add_snippets("markdown", {
     })
 })
 
+--------------------------------------------------------------------------------
+--                                 python                                     --
+--------------------------------------------------------------------------------
 ls.add_snippets("python", {
     -- printing
     s("p", { t("print("), i(1), t(")") }),
@@ -199,6 +205,9 @@ ls.add_snippets("python", {
     s("init", { t("def __init__(self, "), i(1), t("):") }),
 })
 
+--------------------------------------------------------------------------------
+--                                  vim                                       --
+--------------------------------------------------------------------------------
 local header_args = {
     line_start = '"',
     line_end = '"',
