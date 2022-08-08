@@ -15,11 +15,14 @@ local f = ls.function_node
 --                           utility functions                                --
 --------------------------------------------------------------------------------
 local function charline(args)
-    args = _G.default_args(args, { char = '-', len = 80, start = '' })
+    args = _G.default_args(args, { char = '-', len = 80, start = '', _end = '' })
     local str = args.start
-    while str:len() < args.len do
+    while str:len() < args.len - args._end:len() do
         str = str .. args.char
     end
+
+    str = str .. args._end
+
     return str
 end
 
@@ -97,18 +100,18 @@ ls.add_snippets("all", {
         end)
     }),
     -- close things
-    s("(", { t '(', i(1), t ')' }),
-    s("[", { t '[', i(1), t ']' }),
-    s("{", { t '{', i(1), t '}' }),
-    s("<", { t '<', i(1), t '>' }),
-    s("'", { t "'", i(1), t "'" }),
-    s('"', { t '"', i(1), t '"' }),
-    s('`', { t '`', i(1), t '`' }),
-    s('_', { t '_', i(1), t '_' }),
-    s('__', { t '__', i(1), t '__' }),
-    s('*', { t '*', i(1), t '*' }),
-    s('**', { t '**', i(1), t '**' }),
-    s('$', { t '$', i(1), t '$' }),
+    s({ trig = "(", wordTrig = false }, { t '(', i(1), t ')' }),
+    s({ trig = "[", wordTrig = false }, { t '[', i(1), t ']' }),
+    s({ trig = "{", wordTrig = false }, { t '{', i(1), t '}' }),
+    s({ trig = "<", wordTrig = false }, { t '<', i(1), t '>' }),
+    s({ trig = "'", wordTrig = false }, { t "'", i(1), t "'" }),
+    s({ trig = '"', wordTrig = false }, { t '"', i(1), t '"' }),
+    s({ trig = '`', wordTrig = false }, { t '`', i(1), t '`' }),
+    s({ trig = '_', wordTrig = false }, { t '_', i(1), t '_' }),
+    s({ trig = '__', wordTrig = false }, { t '__', i(1), t '__' }),
+    s({ trig = '*', wordTrig = false }, { t '*', i(1), t '*' }),
+    s({ trig = '**', wordTrig = false }, { t '**', i(1), t '**' }),
+    s({ trig = '$', wordTrig = false }, { t '$', i(1), t '$' }),
 })
 
 --------------------------------------------------------------------------------
@@ -248,6 +251,51 @@ ls.add_snippets("vim", {
         i(1),
         f(header_line_right, {1}, { user_args = { {header_args} }}), t{ "",
         charline{ char = '-', start = '"' } },
+    }),
+    s("h3", {
+        f(header_line_left, {1}, { user_args = { {inline_header_args} }}),
+        i(1),
+        f(header_line_right, {1}, { user_args = { {inline_header_args} }}),
+    }),
+})
+
+--------------------------------------------------------------------------------
+--                                  zsh                                       --
+--------------------------------------------------------------------------------
+local header_args = {
+    line_start = '#',
+    line_end = '#',
+}
+
+local inline_header_args = {
+    line_start = '#',
+    line_end = '#',
+    pre_text = '[ ',
+    post_text = ' ]',
+    fill_char = '-',
+    min_fill_left = 1,
+}
+
+local line = charline{ char = '-', start = '#', _end = '#' }
+
+ls.add_snippets("zsh", {
+    s("p", { t("echo "), i(1), t(")") }),
+    s("qp", { t("echo '"), i(1), t("')"), }),
+    s("h1", {
+        t{ line, "" },
+        f(header_line_left, {1}, { user_args = { {header_args} }}),
+        i(1),
+        f(header_line_right, {1}, { user_args = { {header_args} }}), t{ "",
+        line,
+        '# '}, i(2),
+        t{ "", line }
+    }),
+    s("h2", {
+        t{ line, "" },
+        f(header_line_left, {1}, { user_args = { {header_args} }}),
+        i(1),
+        f(header_line_right, {1}, { user_args = { {header_args} }}), t{ "",
+        line },
     }),
     s("h3", {
         f(header_line_left, {1}, { user_args = { {inline_header_args} }}),

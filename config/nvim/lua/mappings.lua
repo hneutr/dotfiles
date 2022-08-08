@@ -69,6 +69,8 @@ local maps = {
         { "<c-a>", "<c-o>A" },
         -- paste like in terminal mode
         { "", '<c-r>"' },
+        -- forward delete like macos
+        { "<c-d>", "<del>" },
     },
     v = {
         -- keep visual selection after indent/unindent

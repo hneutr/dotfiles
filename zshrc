@@ -8,13 +8,6 @@ source ~/dotfiles/shell/exports.sh
 ################################################################################
 source $HOME/dotfiles/zsh/plugins/F-Sy-H/F-Sy-H.plugin.zsh
 
-# if type brew &>/dev/null; then
-#     FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-
-#     autoload -Uz compinit
-#     compinit
-# fi
-
 ################################################################################
 # General
 ################################################################################
@@ -25,6 +18,10 @@ source ~/.zsh/bindings.zsh
 
 # commands/lib
 source ~/.zsh/lib.zsh
+
+# call the change directory functions when starting
+# change_directory_functions
+chpwd
 
 ################################################################################
 # Prompt

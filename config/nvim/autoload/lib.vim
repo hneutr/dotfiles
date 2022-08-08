@@ -258,3 +258,9 @@ function lib#getTextInsideNearestParenthesis()
 
     return text
 endfunction
+
+
+function! lib#Goals()
+    execute "edit " .. luaeval("require'lex.goals'.path()")
+endfunction
+

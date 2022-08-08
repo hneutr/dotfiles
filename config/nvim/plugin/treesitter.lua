@@ -6,7 +6,7 @@ require'nvim-treesitter.configs'.setup {
   highlight = {
     -- `false` will disable the whole extension
     enable = true,
-    disable = { "lua", "python", "markdown", "markdown-inline" },
+    disable = { "lua", "python", "markdown", "markdown-inline", "javascript", },
     additional_vim_regex_highlighting = true,
   },
 }

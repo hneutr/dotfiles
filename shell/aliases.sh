@@ -52,7 +52,6 @@ alias po="popen"
 alias wr=edit-file-and-outline
 alias journal="gv $(hnetext journal)"
 alias wjournal="gv $(hnetext journal -j on-writing)"
-alias goals="nvim $(hnetext goals)"
 alias pmv=writing-project-move
 alias todir=writing-project-file-to-directory
 alias mtop=writing-project-marker-to-path
