@@ -9,7 +9,7 @@ function M.move(mode)
       table.insert(lines, "")
     end
 
-    local scratch_file = require'lex.mirror'.get_mirror('scratch')
+    local scratch_file = require'lex.mirror'.MLocation():get_location('scratch').path
 
     if vim.fn.filereadable(scratch_file) ~= 0 then
         for line in io.lines(scratch_file) do
@@ -19,7 +19,6 @@ function M.move(mode)
 
     require'util'.write_file(lines, scratch_file)
 
-    -- line_utils.selection.cut({ mode = mode })
     vim.api.nvim_input('<esc>')
 end
 

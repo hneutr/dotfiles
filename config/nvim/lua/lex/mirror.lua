@@ -1,25 +1,130 @@
+require'class'
 local M = {}
 local config = require'lex.config'
 
 
+--------------------------------------------------------------------------------
+--                                Location                                    --
+--------------------------------------------------------------------------------
+-- collected path functions in an object
+--
+-- a location is a file.
+--
+-- a location has a `type`:
+-- - origin
+-- - mirror
+--------------------------------------------------------------------------------
+MLocation = class(function(self, args)
+    args = _G.default_args(args, { path = vim.fn.expand('%:p') })
+    self.path = args.path
+
+    self.config = config.get()
+
+    self:set_type()
+    self:set_origin()
+    self:set_mirrors_other_mirrors()
+end)
+
+function MLocation:set_origin()
+    -- if we didn't start in a mirrors dir, return the root path
+    if self.type == 'origin' then
+        self.origin = self
+        return
+    end
+
+    local path = self:remove_type()
+
+    while true do
+        local subbed_this_round = false
+
+        for mirror_type, mirror_config in pairs(self.config.mirrors) do
+            local prefix = mirror_config.dirPrefix .. '/'
+
+            if vim.startswith(path, prefix) then
+                subbed_this_round = true
+                path = path:gsub(prefix, '', 1)
+                break
+            end
+        end
+
+        if subbed_this_round then
+            subbed_this_round = false
+        else
+            break
+        end
+    end
+    
+    self.origin = MLocation({path = _G.joinpath(self.config.root, path) })
+end
+
+function MLocation:set_type()
+    local root = self.config.root
+    if vim.startswith(self.path, self.config.mirrors_root) then
+        root = self.config.mirrors_root
+    end
+
+    local path = self.path:gsub(_G.escape(root .. '/'), '', 1)
+
+    self.type = 'origin'
+
+    for _type, _config in pairs(self.config.mirrors) do
+        if vim.startswith(path, _config.dirPrefix .. '/') then
+            self.type = _type
+            break
+        end
+    end
+
+    return
+end
+
+
+function MLocation:set_mirrors_other_mirrors()
+    local mirror_config = vim.tbl_get(self.config.mirrors, self.type) or {}
+    self.mirrors_other_mirrors = vim.tbl_get(mirror_config, 'mirrorOtherMirrors') or false
+end
+
+
+function MLocation:remove_type()
+    local root = self.config.root
+
+    if self.type ~= 'origin' then
+        root = self.config.mirrors_root
+    end
+
+    return self.path:gsub(_G.escape(root .. '/'), '', 1)
+end
+
+
+function MLocation:get_location_of_type(location_type)
+    local path = self:remove_type()
+    path = _G.joinpath(self.config.mirrors[location_type].dir, path)
+    return MLocation({ path = path })
+end
+
+
+function MLocation:get_location(location_type)
+    local location
+    if self.type == location_type then
+        location = self.origin
+    elseif not self.mirrors_other_mirrors and self.config.mirrors[location_type].mirrorOtherMirrors then
+        location = self:get_location_of_type(location_type)
+    else
+        location = self.origin:get_location_of_type(location_type)
+    end
+
+    return location
+end
+
+M.MLocation = MLocation
+
+--------------------------------------------------------------------------------
+
 function M.open(mirror_type, open_command)
-    require'util'.open_path(M.get_path(mirror_type), open_command)
+    require'util'.open_path(MLocation():get_location(mirror_type).path, open_command)
 end
-
---------------------------------------------------------------------------------
---                                  path                                      --
---------------------------------------------------------------------------------
-M.path = {}
-function M.path.shorten(path)
-    return path:gsub(_G.escape(config.get()['mirrors_root']), '', 1)
-end
-
 
 ------------------------------------ get_mirror ---------------------------------
 -- gets the equivalent location of a file for a given prefix.
---
--- defaults:
--- - path: the current file
 --
 -- For example, if: 
 -- - prefix = `scratch`
@@ -34,12 +139,10 @@ function M.get_mirror(mirror_type, path)
 end
 
 ---------------------------------- getSource -----------------------------------
--- gets the "real" location of a file, one with a prefix. For example, the
--- defaults:
--- - path: the current file
+-- gets the "real" location of a file, one with a prefix.
 --
 -- For example, if: 
--- - prefix = `scratch`
+-- - mirror_type = `scratch`
 -- - path = `./scratch/text/chapters/1.md` (where "." is the config root)
 --
 -- it will return `./text/chapters/1.md`
