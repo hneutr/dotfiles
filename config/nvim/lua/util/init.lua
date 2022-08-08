@@ -74,13 +74,4 @@ function M.write_file(content, file)
 end
 
 
-function M.sort_ascending(a, b)
-    return a < b
-end
-
-
-function M.sort_descending(a, b)
-    return a > b
-end
-
 return M

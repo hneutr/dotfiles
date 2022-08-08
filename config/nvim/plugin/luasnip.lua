@@ -42,7 +42,7 @@ local function header_line(text, args)
         min_fill_right = 0,
         len = 80,
     })
-    
+
     local space_to_fill = args.len - text:len()
     local space_to_fill = space_to_fill - args.line_start:len() - args.line_end:len()
     local space_to_fill = space_to_fill - args.pre_text:len() - args.post_text:len()
@@ -60,8 +60,6 @@ local function header_line(text, args)
 end
 
 local function header_line_left(args, snip, user_args)
-    user_args = {}
-
     if type(user_args) == 'table' and table.getn(user_args) > 0 then
         user_args = user_args[1]
     end
@@ -70,8 +68,6 @@ local function header_line_left(args, snip, user_args)
 end
 
 local function header_line_right(args, snip, user_args)
-    user_args = {}
-
     if type(user_args) == 'table' and table.getn(user_args) > 0 then
         user_args = user_args[1]
     end
@@ -99,7 +95,20 @@ ls.add_snippets("all", {
             local today_plus_six_days = vim.fn.strftime("%Y%m%d", vim.fn.localtime() + 518400)
             return today .. "-" .. today_plus_six_days
         end)
-    })
+    }),
+    -- close things
+    s("(", { t '(', i(1), t ')' }),
+    s("[", { t '[', i(1), t ']' }),
+    s("{", { t '{', i(1), t '}' }),
+    s("<", { t '<', i(1), t '>' }),
+    s("'", { t "'", i(1), t "'" }),
+    s('"', { t '"', i(1), t '"' }),
+    s('`', { t '`', i(1), t '`' }),
+    s('_', { t '_', i(1), t '_' }),
+    s('__', { t '__', i(1), t '__' }),
+    s('*', { t '*', i(1), t '*' }),
+    s('**', { t '**', i(1), t '**' }),
+    s('$', { t '$', i(1), t '$' }),
 })
 
 --------------------------------------------------------------------------------
@@ -230,7 +239,7 @@ ls.add_snippets("vim", {
         i(1),
         f(header_line_right, {1}, { user_args = { {header_args} }}), t{ "",
         charline{ char = '-', start = '"' },
-        "-- "}, i(2),
+        '" '}, i(2),
         t{ "", charline{ char = '-', start = '"' } }
     }),
     s("h2", {

@@ -4,7 +4,7 @@ local m = require'lex.sync'
 local config = require'lex.config'
 
 require'util'
-require'tbl'
+require'util.tbl'
 
 describe("sync", function()
    local get_config = config.get

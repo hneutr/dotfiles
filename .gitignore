@@ -4,6 +4,7 @@ config/nvim/.plugged
 config/nvim/test/vendor
 config/nvim/autoload/plug*
 config/nvim/undodir
+config/nvim/.undodir
 config/nvim/colors
 config/nvim/doc
 config/configstore
