@@ -2,7 +2,6 @@ require'class'
 local M = {}
 local config = require'lex.config'
 
-
 --------------------------------------------------------------------------------
 --                                Location                                    --
 --------------------------------------------------------------------------------
@@ -103,16 +102,56 @@ end
 
 
 function MLocation:get_location(location_type)
-    local location
     if self.type == location_type then
-        location = self.origin
+        return self.origin
     elseif not self.mirrors_other_mirrors and self.config.mirrors[location_type].mirrorOtherMirrors then
-        location = self:get_location_of_type(location_type)
+        return self:get_location_of_type(location_type)
     else
-        location = self.origin:get_location_of_type(location_type)
+        return self.origin:get_location_of_type(location_type)
+    end
+end
+
+function MLocation:find_updates(new_location, updates)
+    local do_not_mirror_other_mirrors = {}
+    local mirror_other_mirrors = {}
+    local types = {}
+
+    for _type, _config in pairs(config.get()['mirrors']) do
+        table.insert(types, _type)
+        if _config.mirrorOtherMirrors then
+            table.insert(mirror_other_mirrors, _type)
+        else
+            table.insert(do_not_mirror_other_mirrors, _type)
+        end
     end
 
-    return location
+    local origin = self.origin
+    local new_origin = new_location.origin
+    local updates = {}
+
+    updates[origin.path] = new_origin.path
+
+    for i, _type in ipairs(types) do
+        local m = origin:get_location_of_type(_type)
+        local new_m = new_origin:get_location_of_type(_type)
+        updates[m.path] = new_m.path
+
+        if vim.tbl_contains(do_not_mirror_other_mirrors, _type) then
+            for j, o_type in ipairs(mirror_other_mirrors) do
+                local m_sub = m:get_location_of_type(o_type)
+                local new_m_sub = new_m:get_location_of_type(o_type)
+                updates[m_sub.path] = new_m_sub.path
+            end
+        end
+    end
+
+    for key, val in pairs(updates) do
+        if vim.fn.filereadable(key) == 0 then
+            updates[key] = nil
+        end
+    end
+
+    return updates
 end
 
 M.MLocation = MLocation
@@ -121,110 +160,6 @@ M.MLocation = MLocation
 
 function M.open(mirror_type, open_command)
     require'util'.open_path(MLocation():get_location(mirror_type).path, open_command)
-end
-
------------------------------------- get_mirror ---------------------------------
--- gets the equivalent location of a file for a given prefix.
---
--- For example, if: 
--- - prefix = `scratch`
--- - path = `./text/chapters/1.md` (where "." is the config root)
---
--- it will return `./scratch/text/chapters/1.md`
----------------------------------------------------------------------------------
-function M.get_mirror(mirror_type, path)
-    path = path or vim.fn.expand('%:p')
-    local m_config = config.get()['mirrors'][mirror_type]
-    return path:gsub(_G.escape(m_config['root']), m_config['dir'], 1)
-end
-
----------------------------------- getSource -----------------------------------
--- gets the "real" location of a file, one with a prefix.
---
--- For example, if: 
--- - mirror_type = `scratch`
--- - path = `./scratch/text/chapters/1.md` (where "." is the config root)
---
--- it will return `./text/chapters/1.md`
---------------------------------------------------------------------------------
-function M.get_source(mirror_type, path)
-    path = path or vim.fn.expand('%:p')
-    local m_config = config.get()['mirrors'][mirror_type]
-    return path:gsub(_G.escape(m_config['dir']), m_config['root'], 1)
-end
-
---------------------------------- get_origin ----------------------------------
--- returns the path without any mirrors, even recursively
--------------------------------------------------------------------------------
-function M.get_origin(path)
-    path = path or vim.fn.expand('%:p')
-
-    local _config = config.get()
-
-    local mirror_prefixes = {}
-    for mirror_type, mirror_config in pairs(_config['mirrors']) do
-        table.insert(mirror_prefixes, mirror_config['dirPrefix'])
-    end
-
-    local path = path:gsub(_G.escape(_config['root'] .. '/'), '', 1)
-
-    local origin_path_components = {_config['root']}
-    for component in vim.gsplit(path, "/") do
-        if not vim.tbl_contains(mirror_prefixes, component) then
-            table.insert(origin_path_components, component)
-        end
-    end
-
-    return vim.fn.join(origin_path_components, "/")
-end
-
-function M.get_mirror_type(path)
-    path = path or vim.fn.expand('%:p')
-    for current_mirror_type, mirror_config in pairs(config.get()['mirrors']) do
-        if vim.startswith(path, mirror_config['dir']) then
-            return current_mirror_type
-        end
-    end
-end
-
------------------------------------ get_path -----------------------------------
--- takes a mirror type and a path.
---
--- cases:
--- - `path` != a mirror: return a `mirrorType` mirror of the `path`
--- - `path` == a mirror:
---   - `mirrorType` == the mirror type of the `path`: return the source of the `path`
---   - `mirrorType` has `mirrorOtherMirrors` = True:
---       - `mirrorOtherMirrors` = True for the mirror type of the path:
---           - return the `mirrorType` mirror of the source of the `path`
---       - `mirrorOtherMirrors` = False for the mirror type of the path:
---           - return the `mirrorType` mirror of the `path`
---   - `mirrorType` has `mirrorOtherMirrors` = False:
---       - return the `mirrorType` mirror of the source of the `path`
---------------------------------------------------------------------------------
-function M.get_path(mirror_type, path)
-    local path_mirror_type = M.get_mirror_type(path)
-
-    local new_path = nil
-    if not path_mirror_type then
-        new_path = M.get_mirror(mirror_type, path)
-    elseif path_mirror_type == mirror_type then
-        new_path = M.get_source(mirror_type, path)
-    else
-        local _config = config.get()
-
-        if _config['mirrors'][mirror_type]['mirrorOtherMirrors'] then
-            if _config['mirrors'][path_mirror_type]['mirrorOtherMirrors'] then
-                new_path = M.get_mirror(mirror_type, M.get_origin(path))
-            else
-                new_path = M.get_mirror(mirror_type, path)
-            end
-        else
-            new_path = M.get_mirror(mirror_type, M.get_origin(path))
-        end
-    end
-    
-    return new_path
 end
 
 return M

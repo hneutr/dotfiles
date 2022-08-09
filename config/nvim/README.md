@@ -66,6 +66,30 @@
     - calls `hnetext update-references` to update cross-file References
 
 ----------------------------------------
+> [how to implement pure-lua pmv/etc]()
+----------------------------------------
+- alias `mv` to `nvim --headless MOVE_COMMAND`
+- finding mirrors:
+    - make:
+        - `OldLoc`: old location
+        - `NewLoc`: new location
+    - for each `mirror_type`:
+        - make:
+            - `OldMirror` = `OldLoc.get_location(mirror_type)`
+            - `NewMirror` = `NewLoc.get_location(mirror_type)`
+        - if `OldMirror` exists, add an update `{ old = OldMirror, new = NewMirror }`
+    - repeat the above process for each `OldMirror` found, so that you are sure to get all of them
+- move command:
+    - moves mirrors/mirrors of mirrors
+- update_references:
+    - rg and find all references (use `lex.link.Reference.list`)
+        - store as dict: { file = { line_number = str_with_reference } }
+    - for each file with references:
+        - for each line with a reference:
+            - run gsub on the line for every reference to update
+            - if the string changes, write it
+
+----------------------------------------
 > [todo]()
 ----------------------------------------
 - make constants into a lua file; have `hnetext` call something that converts that file into JSON and saves it
