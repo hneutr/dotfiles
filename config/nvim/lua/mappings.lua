@@ -1,9 +1,6 @@
 local leader = " "
 vim.g.mapleader = leader
 
--- the prefix I use to "namespace" plugin mappings
-vim.g.pluginleader = " d"
-
 local maps = {
     n = {
         -- select last paste/visual selection
@@ -35,9 +32,6 @@ local maps = {
         { leader .. "q", ":q<cr>" },
         -- kill the buffer with an arpeggiation (stp)
         { leader .. "k", ":call lib#KillBufferAndGoToNext()<cr>", { silent = true} },
-        -- switch buffers with tab/s-tab
-        { "<tab>", ":bn<cr>" },
-        { "<s-tab>", ":bp<cr>" },
         -- <BS> is useless in normal mode; map it to gE
         { "<BS>", "gE" },
         -- switch panes
@@ -45,6 +39,8 @@ local maps = {
         { "<c-j>", "<c-w>j" },
         { "<c-k>", "<c-w>k" },
         { "<c-l>", "<c-w>l" },
+        { leader .. "df", ":FZF<cr>" },
+        { leader .. "dg", ":Goyo<cr>" },
     },
     i = {
         { "<esc>", "<esc>", { nowait = true} },
@@ -125,15 +121,4 @@ local maps = {
     },
 }
 
-for modes, mode_maps in pairs(maps) do
-    for _, map in ipairs(mode_maps) do
-        local lhs, rhs, opts = unpack(map)
-
-        opts = _G.default_args(opts, { noremap = true })
-
-        for i = 1, #modes do
-            local mode = modes:sub(i, i)
-            vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
-        end
-    end
-end
+require'util'.map_modes(maps)

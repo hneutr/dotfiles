@@ -199,7 +199,8 @@ function M.buf_leave()
     vim.g.deleted_markers = old_deletions
     vim.g.referenced_markers = references
 
-    return M.process_updates(updates)
+    M.process_updates(updates)
+    return updates
 end
 
 
@@ -270,6 +271,10 @@ end
 
 
 function M.process_updates(updates)
+    if vim.tbl_count(updates) == 0 then
+        return
+    end
+
     local formatted_updates = {}
     for i, update in ipairs(updates) do
         local old = link.Location.from_str(update.old_location)
@@ -286,8 +291,6 @@ function M.process_updates(updates)
     cmd = cmd .. " --references '" .. vim.fn.json_encode(formatted_updates) .. "'"
 
     vim.fn.system(cmd)
-
-    return updates
 end
 
 

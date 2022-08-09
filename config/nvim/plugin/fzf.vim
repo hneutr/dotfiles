@@ -1,5 +1,3 @@
-call lib#AddPluginMapping('f', ':FZF<cr>')
-
 " Append --no-height to fix weird issue with neovim terminal buffers
 let $FZF_DEFAULT_OPTS .= ' --no-height'
 
@@ -22,9 +20,6 @@ augroup user:autocmd:fzf
 augroup END
 
 let g:fzf_layout = { 'window': 'call FloatingFZF()' }
-" let g:fzf_action = { 
-"       \ 'ctrl-l': 'vsplit',
-"       \ 'ctrl-j': 'split' }
 
 function! FloatingFZF()
   let buf = nvim_create_buf(v:false, v:true)

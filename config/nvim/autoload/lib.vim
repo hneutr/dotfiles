@@ -135,14 +135,6 @@ function! lib#SetNumberDisplay()
     endif
 endfunction
 
-"==============================[ AddPluginMapping ]=============================
-" Adds a plugin mapping to the normal-mode plugin mapping space
-"===============================================================================
-function! lib#AddPluginMapping(lhs, rhs)
-    let lhs = g:pluginleader . a:lhs
-    execute "nnoremap <silent> " lhs a:rhs
-endfunction
-
 function lib#setListenAddress(listenAddress=v:servername)
     let $NVIM_LISTEN_ADDRESS = a:listenAddress
 endfunction

@@ -1,19 +1,24 @@
 local M = {}
 
-function M.path(journal_name)
-    local cmd = "hnetext journal"
-
-    local root = vim.tbl_get(config.get(), 'root') or ''
-
-    if root then
-        cmd = cmd .. ' -s ' .. root
+function M.path(args)
+    args = args or {}
+    if args.set_config then
+        require'lex.config'.set(vim.env.PWD)
     end
 
-    if journal_name then
-        cmd = cmd .. ' -j ' .. journal_name
+    if not args.journal and vim.b.lex_config_path then
+        args.journal = require'lex.config'.get().name
     end
 
-    return vim.trim(vim.fn.system(cmd))
+    local this_month = vim.fn.strftime("%Y%m")
+    local path = this_month .. ".md"
+
+    if args.journal and args.journal ~= 'catch all' then
+        args.journal = args.journal:gsub("%s", "-")
+        path = _G.joinpath(args.journal, path)
+    end
+
+    return _G.joinpath(require'lex.constants'.journals_directory, path)
 end
 
 return M

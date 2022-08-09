@@ -14,7 +14,7 @@ function M.file.find(start_path)
     for part in vim.gsplit(start_path, '/') do
         current_path = _G.joinpath(current_path, part)
 
-        local possible_path = _G.joinpath(current_path, vim.g.config_file_name)
+        local possible_path = _G.joinpath(current_path, require'lex.constants'.config_file_name)
 
         if vim.fn.filereadable(possible_path) ~= 0 then
             path = possible_path
@@ -61,7 +61,7 @@ function M.file.mirror_defaults.get()
 end
 
 function M.file.mirror_defaults.set()
-    vim.g.lex_mirror_defaults = vim.fn.json_decode(vim.fn.readfile(vim.g.mirror_defaults_path))
+    vim.g.lex_mirror_defaults = vim.fn.json_decode(vim.fn.readfile(require'lex.constants'.mirror_defaults_path))
 end
 
 --------------------------------------------------------------------------------

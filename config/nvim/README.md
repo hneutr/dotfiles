@@ -46,10 +46,7 @@
 - config.lua
     - finds project file
     - builds config
-- divider.lua
-    - creates headers/etc
 - goals.lua
-    - calls `hnetext goals` (probably shouldn't need a system command)
 - index.lua
     - calls `hnetext index --source {src} --dest {dest}` (probably shouldn't need a system command)
 - journal.lua
@@ -74,5 +71,3 @@
 > [todo]()
 ----------------------------------------
 - make constants into a lua file; have `hnetext` call something that converts that file into JSON and saves it
-- profile buffer switching and make faster
-- use `snips` code to generate `lex.divider`

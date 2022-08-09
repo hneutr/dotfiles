@@ -110,6 +110,10 @@ function goals() {
     nvim -c "call lib#Goals()"
 }
 
+function _journal() {
+    nvim -c "lua require'util'.open_path(require'lex.journal'.path({ $1 }))"
+}
+
 #------------------------------------------------------------------------------#
 #                         change directory functions                           #
 #------------------------------------------------------------------------------#

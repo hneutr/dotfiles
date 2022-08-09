@@ -50,8 +50,9 @@ alias po="popen"
 
 # writing stuff
 alias wr=edit-file-and-outline
-alias journal="gv $(hnetext journal)"
-alias wjournal="gv $(hnetext journal -j on-writing)"
+alias journal='_journal "journal = '"'"'catch all'"'"'"'
+alias pjournal='_journal "set_config = true"'
+alias wjournal='_journal "journal = '"'"'on writing'"'"'"'
 alias pmv=writing-project-move
 alias todir=writing-project-file-to-directory
 alias mtop=writing-project-marker-to-path

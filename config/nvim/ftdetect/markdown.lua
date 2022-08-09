@@ -6,9 +6,6 @@ local p = { "*.md" }
 local function md_settings()
   vim.o.ft = 'markdown'
   vim.g.vim_markdown_no_default_key_mappings = 1
-
-  vim.g.config_file_name = '.project'
-  vim.g.mirror_defaults_path = "/Users/hne/Documents/research/hnetext/data/mirror-defaults.json"
   vim.g.file_opening_prefix = "<leader>o"
 
   require'lex.config'.file.mirror_defaults.set()
@@ -19,6 +16,8 @@ local function md_buf_enter_settings()
   vim.bo.expandtab = true
   vim.bo.commentstring = ">%s"
   vim.bo.textwidth = 0
+  vim.bo.shiftwidth = 2
+  vim.bo.softtabstop = 2
 end
 
 local function if_lex(fn)

@@ -40,9 +40,8 @@ function M.make_directories(path)
     local current_path = ''
     for part in vim.gsplit(path, '/') do
         current_path = _G.joinpath(current_path, part)
-
-        if not vim.fn.isdirectory(current_path) then
-            vim.cmd("silent execute !mkdir '" .. current_path .. "'")
+        if vim.fn.isdirectory(current_path) == 0 then
+            vim.cmd("silent! execute '!mkdir " .. current_path .. "'")
         end
     end
 end
@@ -71,6 +70,21 @@ end
 function M.write_file(content, file)
     M.make_directories(file)
     vim.fn.writefile(content, file)
+end
+
+function M.map_modes(maps)
+    for modes, mode_maps in pairs(maps) do
+        for _, map in ipairs(mode_maps) do
+            local lhs, rhs, opts = unpack(map)
+
+            opts = _G.default_args(opts, { noremap = true })
+
+            for i = 1, #modes do
+                local mode = modes:sub(i, i)
+                vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
+            end
+        end
+    end
 end
 
 
