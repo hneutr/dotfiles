@@ -20,7 +20,6 @@
 --   - add it back onto the "deleted" list
 --------------------------------------------------------------------------------
 line_utils = require'lines'
--- marker_utils = require'lex.marker'
 local link = require'lex.link'
 
 local M = {}
