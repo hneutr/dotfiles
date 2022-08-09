@@ -87,7 +87,8 @@ function project_root_exists() {
     local project_file="$directory/.project"
 
     if [ -f $project_file ]; then
-        alias mv=pmv
+        # alias mv=pmv
+        alias mv=nvim_mv
         export PROJECT_ROOT=$directory
     else
         local parent=$(dirname $directory)
@@ -115,8 +116,7 @@ function _journal() {
 }
 
 function nvim_mv() {
-    # /usr/local/bin/nvim -c "lua require'lex.move'.move_path('$PWD/$1', '$PWD/$2')"
-    /usr/local/bin/nvim --headless -c "lua require'lex.move'.move_path('$PWD/$1', '$PWD/$2')" +q
+    /usr/local/bin/nvim --headless -c "lua require'lex.move'.move_path('$1', '$2')" +q
 }
 
 #------------------------------------------------------------------------------#

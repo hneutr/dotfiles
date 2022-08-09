@@ -4,21 +4,37 @@ local line_utils = require'lines'
 local mirror = require'lex.mirror'
 local util = require'util'
 
+function resolve_path(path)
+    if path == '.' then
+        path = vim.env.PWD
+    else
+        path = _G.joinpath(vim.env.PWD, path)
+    end
+    return path
+end
+
 
 --------------------------------------------------------------------------------
 --                                    move                                    --
 --------------------------------------------------------------------------------
 function M.move_path(src, dst)
+    src = resolve_path(src)
+    dst = resolve_path(dst)
+
+    vim.g.lex_sync_ignore = true
     require'lex.config'.set(vim.env.PWD)
     dst = infer_destination(src, dst)
+
     updates = M.get_updates(src, dst)
 
-    if vim.fn.fnamemodify(src, ':p:h') == dst and _G.isdirectory(src) then
-        updates = set_dir_file_name_to_parent_dir(updates, src)
+    if vim.fn.fnamemodify(src, ':p:h:h') == dst and _G.isdirectory(src) then
+        updates = set_dir_file_name_to_parent_dir(updates, src, dst)
     end
 
     M.update_paths(updates)
     M.update_references(updates)
+
+    vim.g.lex_sync_ignore = true
 end
 
 function M.update_paths(updates)
@@ -28,32 +44,8 @@ function M.update_paths(updates)
     end
 end
 
-
--- function M.update_references(updates)
---     local root = _G.escape(require'lex.config'.get().root .. '/')
---     for key, val in pairs(updates) do
---         updates[key] = nil
---         updates[_G.escape(key:gsub(root, ''))] = val:gsub(root, '')
---     end
-
---     for file, lines in pairs(l.Reference.list_by_file()) do
---         util.open_path(file)
-
---         for i, line in ipairs(lines) do
---             local str = line_utils.get({ start_line = line - 1, end_line = line })[1]
-
---             for old, new in pairs(updates) do
---                 if string.find(str, old) then
---                     str = str:gsub(old, new)
---                     line_utils.set({ start_line = line - 1, end_line = line, replacement = { str } })
---                     break
---                 end
---             end
---         end
---     end
--- end
 function M.update_references(updates)
-    vim.lex_sync_ignore = true
+    vim.g.lex_sync_ignore = true
     local root = require'lex.config'.get().root
 
     local refs_by_file = l.Reference.list_by_file()
@@ -85,7 +77,7 @@ function M.update_references(updates)
     if current_file ~= starting_file then
         util.open_path(starting_file)
     end
-    vim.lex_sync_ignore = false
+    vim.g.lex_sync_ignore = false
 end
 
 --------------------------------------------------------------------------------
@@ -103,13 +95,13 @@ end
 --                               infer_filename                               --
 --------------------------------------------------------------------------------
 -- behave like `mv`
--- if `from_path` is a file and `to_path` doesn't share the same extention,
--- assume it's a directory and move `from_path` to `to_path/{from_path.name}`
+-- if `src` is a file and `dst` doesn't share the same extention,
+-- assume it's a directory and move `src` to `dst/{src.name}`
 --------------------------------------------------------------------------------
 function infer_filename(src, dst)
     if _G.filereadable(src) then
         if vim.fn.fnamemodify(src, ':e') ~= vim.fn.fnamemodify(dst, ':e') then
-            dst = _G.joinpath(dst, vim.fn.fnamemodify(src, ':h'))
+            dst = _G.joinpath(dst, vim.fn.fnamemodify(src, ':t'))
         end
     end
 
@@ -180,14 +172,13 @@ function _tree(dir)
     return results
 end
 
-function set_dir_file_name_to_parent_dir(updates, src_dir)
+function set_dir_file_name_to_parent_dir(updates, src_dir, dst_dir)
     local src_dir_file = _G.joinpath(src_dir, require'lex.constants'.dir_file_name)
     local dst_dir_file = vim.tbl_get(updates, src_dir_file)
 
     if dst_dir_file then
-        local src_dir_name = vim.fn.fnamemodify(':p:h:t')
-
-        updates[src_dir_file] = vim.fn.fnamemodify(dst_dir_file, ':p:h') .. src_dir_name .. ".md"
+        local src_dir_name = vim.fn.fnamemodify(src_dir, ':p:h:t')
+        updates[src_dir_file] = _G.joinpath(dst_dir, src_dir_name .. ".md")
     end
 
     return updates
