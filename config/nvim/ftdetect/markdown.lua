@@ -21,11 +21,20 @@ local function md_buf_enter_settings()
 end
 
 local function if_lex(fn)
-  return function()
-    if vim.b.lex_config_path then
-      fn()
+    return function()
+        if vim.b.lex_config_path then
+            fn()
+        end
     end
-  end
+end
+
+
+local function if_sync(fn)
+    return function()
+        if vim.b.lex_config_path and not vim.b.lex_sync_ignore then
+            fn()
+        end
+    end
 end
 
 local lex = augroup('lex_cmds', { clear = true })
@@ -35,6 +44,6 @@ aucmd({"BufNewFile", "BufRead"}, { pattern=p, group=lex, callback=require'lex.co
 aucmd({"BufNewFile", "BufRead"}, { pattern=p, group=lex, callback=if_lex(require'lex.opener'.map) })
 
 aucmd({'BufEnter'}, { pattern=p, callback=md_buf_enter_settings })
-aucmd({'BufEnter'}, { pattern=p, group=lex, callback=if_lex(require'lex.sync'.buf_enter) })
-aucmd({'TextChanged', 'InsertLeave'}, { pattern=p, group=lex, callback=if_lex(require'lex.sync'.buf_change) })
-aucmd({'BufLeave', 'VimLeave'}, { pattern=p, group=lex, callback=if_lex(require'lex.sync'.buf_leave) })
+aucmd({'BufEnter'}, { pattern=p, group=lex, callback=if_sync(require'lex.sync'.buf_enter) })
+aucmd({'TextChanged', 'InsertLeave'}, { pattern=p, group=lex, callback=if_sync(require'lex.sync'.buf_change) })
+aucmd({'BufLeave', 'VimLeave'}, { pattern=p, group=lex, callback=if_sync(require'lex.sync'.buf_leave) })

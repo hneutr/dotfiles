@@ -46,11 +46,9 @@
 - config.lua
     - finds project file
     - builds config
-- goals.lua
-- index.lua
-    - calls `hnetext index --source {src} --dest {dest}` (probably shouldn't need a system command)
-- journal.lua
-    - calls `hnetext journal` (probably shouldn't need a system command)
+- goals.lua: opens a journal file
+- index.lua: generates an index
+- journal.lua: opens a journal file
 - link.lua
     - path: shorten/expand
     - Link
@@ -62,7 +60,7 @@
 - mirror.lua: 
     - MLocation
 - opener.lua: maps file-open stuff
-- scratch.lua: implements scratching
+- scratch.lua: implements text-scratching
 - sync.lua: 
     - keeps within-buffer References up to date
     - calls `hnetext update-references` to update cross-file References
