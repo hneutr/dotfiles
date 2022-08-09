@@ -114,6 +114,11 @@ function _journal() {
     nvim -c "lua require'util'.open_path(require'lex.journal'.path({ $1 }))"
 }
 
+function nvim_mv() {
+    # /usr/local/bin/nvim -c "lua require'lex.move'.move_path('$PWD/$1', '$PWD/$2')"
+    /usr/local/bin/nvim --headless -c "lua require'lex.move'.move_path('$PWD/$1', '$PWD/$2')" +q
+}
+
 #------------------------------------------------------------------------------#
 #                         change directory functions                           #
 #------------------------------------------------------------------------------#

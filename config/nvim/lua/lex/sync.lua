@@ -269,29 +269,43 @@ function M.process_deletions(deletions, old_deletions, references)
     return old_deletions
 end
 
-
 function M.process_updates(updates)
     if vim.tbl_count(updates) == 0 then
         return
     end
 
+    vim.pretty_print(updates)
+
     local formatted_updates = {}
     for i, update in ipairs(updates) do
-        local old = link.Location.from_str(update.old_location)
-        local new = link.Location.from_str(update.new_location)
-        table.insert(formatted_updates, {
-            old_path = old.path,
-            old_text = old.text,
-            new_path = new.path,
-            new_text = new.text,
-        })
+        formatted_updates[update.old_location] = update.new_location
     end
 
-    local cmd = "hnetext update-references"
-    cmd = cmd .. " --references '" .. vim.fn.json_encode(formatted_updates) .. "'"
-
-    vim.fn.system(cmd)
+    require'lex.move'.update_references(formatted_updates)
 end
+
+-- function M.process_updates(updates)
+--     if vim.tbl_count(updates) == 0 then
+--         return
+--     end
+
+--     local formatted_updates = {}
+--     for i, update in ipairs(updates) do
+--         local old = link.Location.from_str(update.old_location)
+--         local new = link.Location.from_str(update.new_location)
+--         table.insert(formatted_updates, {
+--             old_path = old.path,
+--             old_text = old.text,
+--             new_path = new.path,
+--             new_text = new.text,
+--         })
+--     end
+
+--     local cmd = "hnetext update-references"
+--     cmd = cmd .. " --references '" .. vim.fn.json_encode(formatted_updates) .. "'"
+
+--     vim.fn.system(cmd)
+-- end
 
 
 return M

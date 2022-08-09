@@ -146,7 +146,7 @@ function MLocation:find_updates(new_location, updates)
     end
 
     for key, val in pairs(updates) do
-        if vim.fn.filereadable(key) == 0 then
+        if not _G.filereadable(key) then
             updates[key] = nil
         end
     end

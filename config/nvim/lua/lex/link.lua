@@ -304,7 +304,8 @@ Reference = class(function(self, args)
     self.text = Reference.default_text(args.text, self.location)
 end)
 
-Reference.rg_cmd = "rg '\\[.*\\]\\(.+\\)' --no-heading --no-filename --no-line-number " 
+Reference.rg_cmd = "rg '\\[.*\\]\\(.+\\)' --no-heading --no-filename --no-line-number --hidden " 
+Reference.by_file_rg_cmd = "rg '\\[.*\\]\\(.+\\)' --no-heading --line-number --hidden " 
 
 function Reference.default_text(text, location)
     if text:len() > 0 then
@@ -371,6 +372,38 @@ function Reference.list(args)
 
             str = after
         end
+    end
+
+    return references
+end
+
+function Reference.list_by_file(args)
+    args = _G.default_args(args, { path = config.get()['root'] })
+
+    local cmd = Reference.by_file_rg_cmd .. args.path
+
+    local references = {}
+    for i, str in ipairs(vim.fn.systemlist(cmd)) do
+        local path, line_number, ref_str
+        for part in vim.gsplit(str, ':') do
+            if not path then
+                path = part
+            elseif not line_number then
+                line_number = tonumber(part)
+            elseif not ref_str then
+                ref_str = part
+            else
+                ref_str = ref_str .. ':' .. part
+            end
+        end
+
+        local path_refs = vim.tbl_get(references, path) or {}
+
+        if not vim.tbl_get(path_refs, line_number) then
+            path_refs[line_number] = ref_str
+        end
+
+        references[path] = path_refs
     end
 
     return references

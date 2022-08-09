@@ -31,7 +31,7 @@ end
 
 local function if_sync(fn)
     return function()
-        if vim.b.lex_config_path and not vim.b.lex_sync_ignore then
+        if vim.b.lex_config_path and not vim.b.lex_sync_ignore and not vim.g.lex_sync_ignore then
             fn()
         end
     end

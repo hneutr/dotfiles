@@ -28,6 +28,17 @@ function _G.joinpath(left, right)
 end
 
 --------------------------------------------------------------------------------
+--                       improving vim.fn return types                        --
+--------------------------------------------------------------------------------
+function _G.isdirectory(path)
+    return vim.fn.isdirectory(path) == 1
+end
+
+function _G.filereadable(path)
+    return vim.fn.filereadable(path) == 1
+end
+
+--------------------------------------------------------------------------------
 -- makes directories for a given path.
 -- If the last component of the path has an extension, it won't make that part
 --------------------------------------------------------------------------------
@@ -40,7 +51,7 @@ function M.make_directories(path)
     local current_path = ''
     for part in vim.gsplit(path, '/') do
         current_path = _G.joinpath(current_path, part)
-        if vim.fn.isdirectory(current_path) == 0 then
+        if not _G.isdirectory(current_path) then
             vim.cmd("silent! execute '!mkdir " .. current_path .. "'")
         end
     end
@@ -52,7 +63,7 @@ function M.open_path(path, open_command)
 
     M.make_directories(path)
 
-    if vim.fn.isdirectory(path) ~= 0 then
+    if _G.isdirectory(path) then
         -- if it's a directory, open a terminal at that directory
         vim.cmd("silent " .. open_command)
         vim.cmd("silent terminal")
@@ -86,6 +97,5 @@ function M.map_modes(maps)
         end
     end
 end
-
 
 return M
