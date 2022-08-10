@@ -86,6 +86,48 @@ end
 --------------------------------------------------------------------------------
 --                                    misc                                    --
 --------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+--                              modify_line_end                               --
+--------------------------------------------------------------------------------
+-- args:
+--      - a delimiter char
+--
+-- if the line ends with the delimiter char: removes the delimiter char
+-- if the line doesn't end in a delimiter: adds the delimiter char
+-- if the line ends in another delimiter: replaces it with the delimiter char
+--
+-- delimiters: ,;:
+--------------------------------------------------------------------------------
+function M.modify_line_end(char)
+    local delimiters = {',', ';', ':'}
+    local found_delimiter
+    local line = require'util.lines'.cursor.get()
+    line = line:gsub('%s*$', '')
+
+    for i, _char in ipairs(delimiters) do
+        vim.pretty_print(_char)
+        if vim.endswith(line, _char) then
+            found_delimiter = true
+
+            line = line:sub(1, line:len() - 1)
+            vim.pretty_print(_char .. char)
+
+            if _char ~= char then
+                line = line .. char
+            end
+
+            break
+        end
+    end
+
+    if not found_delimiter then
+        line = line .. char
+    end
+
+    require'util.lines'.cursor.set({ replacement = {line} })
+end
+
 function M.kill_buffer_and_go_to_next()
     local buf_number = vim.fn.bufnr('%')
     vim.cmd("bnext")

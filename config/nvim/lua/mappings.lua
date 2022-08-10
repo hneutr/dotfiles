@@ -24,8 +24,8 @@ local maps = {
         { leader .. "l", "$" },
         { leader .. "h", "^" },
         -- Conditionally modify character at end of line
-        { leader .. ",", ":call lib#ModifyLineEndDelimiter(',')<cr>", { silent = true } },
-        { leader .. ";", ":call lib#ModifyLineEndDelimiter(';')<cr>", { silent = true } },
+        { leader .. ",", function() require'util'.modify_line_end(',') end, { silent = true } },
+        { leader .. ";", function() require'util'.modify_line_end(';') end, { silent = true } },
         -- run last command
         { leader .. "c", ":<c-p><cr>" },
         -- quit with an arpeggiation (save the pinky)

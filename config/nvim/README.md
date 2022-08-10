@@ -9,7 +9,6 @@
 > [vimscript --> lua]()
 ----------------------------------------
 - autoload/lib:
-  - modifyLineEndDelimiter
   - foldDisplayText
   - SaveAndRestoreVisualSelectionMarks
   - OpenFileSettings
