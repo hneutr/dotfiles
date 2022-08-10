@@ -15,31 +15,22 @@ cmd("Index", function() require'lex.index'.open() end, {})
 -- mappings
 --------------------------------------------------------------------------------
 local map = vim.keymap.set
-
--- "marker-reference" create a reference to the mark on the current line
-map("n", " mr", [[:lua vim.fn.setreg('"', require'lex.link'.Reference.from_str():str())<cr>]], { silent = true })
--- "file-marker-reference" create a file-reference to the current file
-map("n", " mf", [[:lua vim.fn.setreg('"', require'lex.link'.Reference.from_path():str())<cr>]], { silent = true })
-
--- insert a marker header
-map("n", " mm", "imh<Plug>luasnip-expand-or-jump", { silent = true })
-map("n", " ml", "imh<Plug>luasnip-expand-or-jump", { silent = true })
-map("n", " mb", "imbh<Plug>luasnip-expand-or-jump", { silent = true })
+local args = { silent = true }
 
 -- fuzzy find stuff
-map("n", " f", [[:call lex#fuzzy#start("lex#fuzzy#goto")<cr>]], { silent = true })
-map("n", " m/", [[:call lex#fuzzy#start("lex#fuzzy#put")<cr>]], { silent = true })
+map("n", " f", [[:call lex#fuzzy#start("lex#fuzzy#goto")<cr>]], args)
 -- "  is <c-/> (the mapping only works if it's the literal character)
-map("i", "", [[<c-o>:call lex#fuzzy#start("lex#fuzzy#insert_put")<cr>]], { silent = true })
+map("n", "", [[:call lex#fuzzy#start("lex#fuzzy#put")<cr>]], args)
+map("i", "", [[<c-o>:call lex#fuzzy#start("lex#fuzzy#insert_put")<cr>]], args)
 
 -- delete the currently selected lines and move them to the scratch file
-map("n", " s", function() require'lex.scratch'.move('n') end, { silent = true })
-map("v", " s", [[:'<,'>lua require'lex.scratch'.move('v')<cr>]], { silent = true })
+map("n", " s", function() require'lex.scratch'.move('n') end, args)
+map("v", " s", [[:'<,'>lua require'lex.scratch'.move('v')<cr>]], args)
 
 -- todos
-map("n", " td", function() require'lex.list'.toggle_sigil('n', '✓') end, { silent = true })
-map("v", " td", ":lua require'lex.list'.toggle_sigil('v', '✓')<cr>", { silent = true })
-map("n", " tq", function() require'lex.list'.toggle_sigil('n', '?') end, { silent = true })
-map("v", " tq", ":lua require'lex.list'.toggle_sigil('v', '?')<cr>", { silent = true })
-map("n", " tm", function() require'lex.list'.toggle_sigil('n', '~') end, { silent = true })
-map("v", " tm", ":lua require'lex.list'.toggle_sigil('v', '~')<cr>", { silent = true })
+map("n", " td", function() require'lex.list'.toggle_sigil('n', '✓') end, args)
+map("v", " td", ":lua require'lex.list'.toggle_sigil('v', '✓')<cr>", args)
+map("n", " tq", function() require'lex.list'.toggle_sigil('n', '?') end, args)
+map("v", " tq", ":lua require'lex.list'.toggle_sigil('v', '?')<cr>", args)
+map("n", " tm", function() require'lex.list'.toggle_sigil('n', '~') end, args)
+map("v", " tm", ":lua require'lex.list'.toggle_sigil('v', '~')<cr>", args)

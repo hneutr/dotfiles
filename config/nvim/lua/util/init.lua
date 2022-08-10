@@ -83,4 +83,13 @@ function M.write_file(content, file)
     vim.fn.writefile(content, file)
 end
 
+--------------------------------------------------------------------------------
+--                                    misc                                    --
+--------------------------------------------------------------------------------
+function M.kill_buffer_and_go_to_next()
+    local buf_number = vim.fn.bufnr('%')
+    vim.cmd("bnext")
+    vim.api.nvim_buf_delete(buf_number, {})
+end
+
 return M

@@ -27,7 +27,7 @@ end
 function M.get_file_index(path)
     local marks = {}
     local min_indent = 1000
-    for i, str in ipairs(require'lines'.get()) do
+    for i, str in ipairs(require'util.lines'.get()) do
         if l.Mark.str_is_a(str) then
             local mark = l.Mark.from_str(str)
 

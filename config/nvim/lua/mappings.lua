@@ -31,7 +31,7 @@ local maps = {
         -- quit with an arpeggiation (save the pinky)
         { leader .. "q", ":q<cr>" },
         -- kill the buffer with an arpeggiation (stp)
-        { leader .. "k", ":call lib#KillBufferAndGoToNext()<cr>", { silent = true} },
+        { leader .. "k", require'util'.kill_buffer_and_go_to_next, { silent = true} },
         -- <BS> is useless in normal mode; map it to gE
         { "<BS>", "gE" },
         -- switch panes

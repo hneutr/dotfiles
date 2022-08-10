@@ -1,7 +1,7 @@
 require'class'
 local util = require'util'
 local config = require'lex.config'
-local line_utils = require'lines'
+local ulines = require'util.lines'
 
 local M = {}
 
@@ -50,7 +50,6 @@ Link = class(function(self, args)
     self.after = args.after
 end)
 
--- Link.regex = "(.*)%[(.*)%]%((.-)%)(.*)"
 Link.regex = "(.-)%[(.-)%]%((.-)%)(.*)"
 
 function Link:str()
@@ -58,7 +57,7 @@ function Link:str()
 end
 
 function Link.from_str(str)
-    str = str or line_utils.cursor.get()
+    str = str or ulines.cursor.get()
 
     local before, label, location, after = str:match(Link.regex)
 
@@ -91,11 +90,10 @@ function Location:str()
     return str
 end
 
-Location.regex = "(.*):(.*)"
+Location.regex = "(.-):(.*)"
 
 function Location.from_str(str)
-    -- retrieving from nearest parens is untested
-    str = str or vim.fn['lib#getTextInsideNearestParenthesis']()
+    str = str or M.get_nearest_link().location
 
     local path, text = str:match(Location.regex)
 
@@ -241,7 +239,7 @@ Mark.rg_cmd = "rg '\\[.*\\]\\(\\)' --no-heading "
 
 
 function Mark.str_is_a(str)
-    str = str or line_utils.cursor.get()
+    str = str or ulines.cursor.get()
 
     if not Link.str_is_a(str) then
         return false
@@ -267,7 +265,7 @@ function Mark.rg_str_is_a(str)
 end
 
 function Mark.from_str(str)
-    str = str or line_utils.cursor.get()
+    str = str or ulines.cursor.get()
 
     local before, text, location, after = str:match(Link.regex)
 
@@ -275,8 +273,8 @@ function Mark.from_str(str)
 end
 
 function Mark.goto(str)
-    str = str or line_utils.cursor.get()
-    for i, line in ipairs(require'lines'.get()) do
+    str = str or ulines.cursor.get()
+    for i, line in ipairs(ulines.get()) do
         if line:len() > 0 then
             if Mark.str_is_a(line) and Mark.from_str(line).text == str then
                 vim.api.nvim_win_set_cursor(0, {i, 0})
@@ -339,7 +337,7 @@ end
 
 
 function Reference.from_str(str)
-    str = str or line_utils.cursor.get()
+    str = str or ulines.cursor.get()
 
     local before, text, location, after = str:match(Link.regex)
     location = Location{ text = text }
@@ -436,7 +434,7 @@ function M.fuzzy.sink.put(lines)
 end
 
 function M.fuzzy.sink.insert_put(lines)
-    local line = line_utils.cursor.get()
+    local line = ulines.cursor.get()
     local line_number, column = unpack(vim.api.nvim_win_get_cursor(0))
 
     local insert_command = 'i'
@@ -453,10 +451,52 @@ function M.fuzzy.sink.insert_put(lines)
     local new_line = line:sub(1, column) .. content .. line:sub(column + 1)
     local new_column = column + content:len()
 
-    line_utils.cursor.set(new_line)
+    ulines.cursor.set({ replacement = { new_line } })
 
     vim.api.nvim_win_set_cursor(0, {line_number, new_column})
     vim.api.nvim_input(insert_command)
+end
+
+--------------------------------------------------------------------------------
+--                                    misc                                    --
+--------------------------------------------------------------------------------
+function M.get_nearest_link()
+    local str = ulines.cursor.get()
+    local cursor_col = vim.api.nvim_win_get_cursor(0)[2]
+
+    local _start, _end = 1, 1
+    local start_to_link = {}
+    local end_to_link = {}
+    while true do
+        if Link.str_is_a(str) then
+            local link = Link.from_str(str)
+
+            _start = _end + link.before:len()
+            start_to_link[_start] = link
+
+            _end = _start + link:str():len()
+            end_to_link[_end] = link
+
+            str = link.after
+        else
+            break
+        end
+    end
+
+    local starts = vim.tbl_keys(start_to_link)
+    table.sort(starts, function(a, b) return math.abs(a - cursor_col) < math.abs(b - cursor_col) end)
+
+    local ends = vim.tbl_keys(end_to_link)
+    table.sort(ends, function(a, b) return math.abs(a - cursor_col) < math.abs(b - cursor_col) end)
+
+    local nearest_start = starts[1]
+    local nearest_end = ends[1]
+
+    if math.abs(nearest_start - cursor_col) <= math.abs(nearest_end - cursor_col) then
+        return start_to_link[nearest_start]
+    else
+        return end_to_link[nearest_end]
+    end
 end
 
 return M

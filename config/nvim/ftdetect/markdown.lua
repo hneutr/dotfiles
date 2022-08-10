@@ -1,31 +1,45 @@
-local augroup = vim.api.nvim_create_augroup
 local aucmd = vim.api.nvim_create_autocmd
 
 local p = { "*.md" }
 
-local function md_settings()
-  vim.o.ft = 'markdown'
-  vim.g.vim_markdown_no_default_key_mappings = 1
-  vim.g.file_opening_prefix = "<leader>o"
-end
+vim.g.vim_markdown_no_default_key_mappings = 1
 
-local function md_buf_enter_settings()
-  vim.wo.conceallevel = 2
-  vim.bo.expandtab = true
-  vim.bo.commentstring = ">%s"
-  vim.bo.textwidth = 0
-  vim.bo.shiftwidth = 2
-  vim.bo.softtabstop = 2
-end
-
-local function if_lex(fn)
+local function run_once(fn, key)
     return function()
-        if vim.b.lex_config_path then
+        if not vim.b[key] then
             fn()
+            vim.b[key] = true
         end
     end
 end
 
+local function ft_settings()
+    vim.wo.conceallevel = 2
+    vim.bo.expandtab = true
+    vim.bo.commentstring = ">%s"
+    vim.bo.textwidth = 0
+    vim.bo.shiftwidth = 2
+    vim.bo.softtabstop = 2
+end
+
+--------------------------------------------------------------------------------
+--                                  settings                                  --
+--------------------------------------------------------------------------------
+aucmd({'BufEnter'}, { pattern=p, callback=run_once(ft_settings, 'md_settings_applied') })
+
+--------------------------------------------------------------------------------
+--                            general lex commands                            --
+--------------------------------------------------------------------------------
+local lex_g = vim.api.nvim_create_augroup('lex_cmds', { clear = true })
+
+aucmd({"BufEnter"}, { pattern=p, group=lex_g, callback=require'lex.config'.set })
+aucmd({"BufEnter"}, { pattern=p, group=lex_g, callback=run_once(require'lex.opener'.map, 'lex_maps_applied') })
+
+--------------------------------------------------------------------------------
+--                                    sync                                    --
+--------------------------------------------------------------------------------
+local sync_g = vim.api.nvim_create_augroup('lex_sync_cmds', { clear = true })
+local sync = require'lex.sync'
 
 local function if_sync(fn)
     return function()
@@ -35,15 +49,6 @@ local function if_sync(fn)
     end
 end
 
-local lex = augroup('lex_cmds', { clear = true })
-local sync = augroup('lex_sync_cmds', { clear = true })
-
-aucmd({"BufEnter"}, { pattern=p, callback=md_settings })
-aucmd({"BufEnter"}, { pattern=p, group=lex, callback=require'lex.config'.set })
-aucmd({"BufEnter"}, { pattern=p, group=lex, callback=if_lex(require'lex.opener'.map) })
-
-aucmd({'BufEnter'}, { pattern=p, callback=md_buf_enter_settings })
-
-aucmd({'BufEnter'}, { pattern=p, group=sync, callback=if_sync(require'lex.sync'.buf_enter) })
-aucmd({'TextChanged', 'InsertLeave'}, { pattern=p, group=sync, callback=if_sync(require'lex.sync'.buf_change) })
-aucmd({'BufLeave', 'VimLeave'}, { pattern=p, group=sync, callback=if_sync(require'lex.sync'.buf_leave) })
+aucmd({'BufEnter'}, { pattern=p, group=sync_g, callback=if_sync(sync.buf_enter) })
+aucmd({'TextChanged', 'InsertLeave'}, { pattern=p, group=sync_g, callback=if_sync(sync.buf_change) })
+aucmd({'BufLeave', 'VimLeave'}, { pattern=p, group=sync_g, callback=if_sync(sync.buf_leave) })

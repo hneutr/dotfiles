@@ -67,37 +67,18 @@ function! lib#FoldDisplayText()
     return preinfospaces . linecount . " lines: " . info . postinfospaces
 endfunction
 
-" Show help along the screen's larger dimension
-function! lib#ShowHelp(tag) abort
-    if winheight('%') < ( winwidth('%') / 2 )
-        execute 'vertical help ' . a:tag
-    else
-        execute 'help ' . a:tag
-    endif
-endfunction
-
 " Store visual selection marks, save, restore visual selection marks
 function! lib#SaveAndRestoreVisualSelectionMarks() abort
-    let l:fname = expand("%")
+    let start_mark = getpos("'[")
+    let end_mark = getpos("']")
 
-    " the intent of this line was to only save existing files, but this is
-    " (unintentionally) making things not save when I'd like them to.
-    " I think that what I really want is to always save files all the time,
-    " but to delete a file that is empty on vim-exit
-    " I'm gonna make that a TODO and comment this out for now
-    " if filereadable(l:fname) && match(readfile(l:fname), "text")
-    if v:true
-        let start_mark = getpos("'[")
-        let end_mark = getpos("']")
-
-        try
-            silent write
-        catch
-        finally
-            call setpos("'[", start_mark)
-            call setpos("']", end_mark)
-        endtry
-    endif
+    try
+        silent write
+    catch
+    finally
+        call setpos("'[", start_mark)
+        call setpos("']", end_mark)
+    endtry
 endfunction
 
 " takes the filetype of the file I'm in and a single argument for 'plugin' or
@@ -174,85 +155,3 @@ function! lib#TwoVerticalTerminals()
     execute "silent! vsplit"
     execute "silent! terminal"
 endfunction
-
-"===========================[ KillBufferAndGoToNext ]===========================
-" does what it says, in a specific order so that Goyo works:
-" 1. get current buffer's number
-" 2. :bnext
-" 3. :bdelete that the previous buffer number
-"===============================================================================
-function! lib#KillBufferAndGoToNext()
-    let l:buffer_number = bufnr('%')
-    silent! execute ":bnext"
-    silent! execute ":bdelete " . l:buffer_number
-endfunction
-
-function lib#findNearestInstanceOfString(string)
-    let line = getline('.')
-
-    let col = getcurpos()[2]
-
-    let lineUpToCursor = line[:col - 1]
-    let lineAfterCursor = line[col:]
-
-    let indexBeforeCursor = strridx(lineUpToCursor, a:string)
-    let indexAfterCursor = stridx(lineAfterCursor, a:string)
-
-    let foundBefore = indexBeforeCursor != -1 ? 1 : 0
-    let foundAfter = indexAfterCursor != -1 ? 1 : 0
-
-    if col
-        let indexAfterCursor = indexAfterCursor + 1
-        let indexBeforeCursor = indexBeforeCursor + 1
-    endif
-
-    let indexBeforeCursor = -1 * (col - indexBeforeCursor)
-
-    if foundBefore && foundAfter
-        if abs(indexBeforeCursor) <= abs(indexAfterCursor)
-            return indexBeforeCursor
-        else
-            return indexAfterCursor
-        endif
-    elseif foundBefore
-        return indexBeforeCursor
-    elseif foundAfter
-        return indexAfterCursor
-    endif
-endfunction
-
-function lib#getTextInsideNearestParenthesis()
-    let pos = getcurpos()
-    let col = pos[2]
-
-    let distFromOpen = lib#findNearestInstanceOfString('(')
-    let distFromClosed = lib#findNearestInstanceOfString(')')
-
-    if abs(distFromOpen) <= abs(distFromClosed)
-        let parensCol = col + distFromOpen
-    else
-        let parensCol = col + distFromClosed
-    endif
-
-    let newpos = deepcopy(pos)
-    let newpos[2] = parensCol
-
-    call setpos('.', newpos)
-    execute ":normal %"
-    let otherParensCol = getcurpos()[2]
-
-    call setpos('.', pos)
-
-    let startParensCol = min([parensCol, otherParensCol])
-    let endParensCol = max([parensCol, otherParensCol]) - 2 " no idea why it's 2
-
-    let text = getline('.')[startParensCol:endParensCol]
-
-    return text
-endfunction
-
-
-function! lib#Goals()
-    execute "edit " .. luaeval("require'lex.goals'.path()")
-endfunction
-

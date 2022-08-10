@@ -1,9 +1,9 @@
 local M = {}
-local line_utils = require'lines'
+local ulines = require'util.lines'
 
 function M.move(mode)
-    local lines = line_utils.selection.get({ mode = mode })
-    line_utils.selection.cut({ mode = mode })
+    local lines = ulines.selection.get({ mode = mode })
+    ulines.selection.cut({ mode = mode })
 
     if lines[vim.tbl_count(lines)] ~= "" then
       table.insert(lines, "")

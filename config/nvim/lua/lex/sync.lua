@@ -19,7 +19,7 @@
 --   - remove it from the "delete move" list
 --   - add it back onto the "deleted" list
 --------------------------------------------------------------------------------
-line_utils = require'lines'
+local ulines = require'util.lines'
 local link = require'lex.link'
 
 local M = {}
@@ -41,7 +41,7 @@ end
 
 function M.read_markers()
     local markers = {}
-    for i, str in ipairs(line_utils.get()) do
+    for i, str in ipairs(ulines.get()) do
         if link.Mark.str_is_a(str) then
             markers[link.Mark.from_str(str).text] = i
         end

@@ -1,4 +1,3 @@
-lua << EOF
 local nvimux = require('nvimux')
 
 -- Nvimux custom bindings
@@ -14,11 +13,8 @@ nvimux.config.set_all{
   open_term_by_default = true,
   quickterm_direction = 'botright',
   quickterm_orientation = 'vertical',
-  -- Use 'g' for global quickterm
   quickterm_scope = 't',
   quickterm_size = '80',
 }
 
 nvimux.bootstrap()
-
-EOF

@@ -1,5 +1,3 @@
-command! -nargs=1 -complete=help H call lib#ShowHelp(<f-args>)
-
 command! -nargs=? OpenFileSettings call lib#OpenFileSettings(<f-args>)
 
 command! -nargs=0 TermVerticalSplit vspl|term

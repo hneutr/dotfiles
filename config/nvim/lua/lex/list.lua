@@ -1,7 +1,7 @@
 require'util'
 require'class'
 
-line_utils = require'lines'
+local ulines = require'util.lines'
 
 local M = {}
 
@@ -86,7 +86,7 @@ M.NonItem = NonItem
 M.lines = {}
 function M.lines.get(mode)
     local lines = {}
-    for i, raw_line in ipairs(line_utils.selection.get{ mode = mode }) do
+    for i, raw_line in ipairs(ulines.selection.get{ mode = mode }) do
         if M.Item.str_is_a(raw_line) then
             line = M.Item.from_str(raw_line)
         else
@@ -111,7 +111,7 @@ function M.lines.set(args)
         table.insert(new_lines, line:str())
     end
 
-    return line_utils.selection.set{ mode = args.mode, replacement = new_lines}
+    return ulines.selection.set{ mode = args.mode, replacement = new_lines}
 end
 
 function M.toggle_sigil(mode, sigil)

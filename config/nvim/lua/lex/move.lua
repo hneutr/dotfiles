@@ -1,6 +1,6 @@
 local M = {}
 local l = require'lex.link'
-local line_utils = require'lines'
+local ulines = require'util.lines'
 local mirror = require'lex.mirror'
 local util = require'util'
 
@@ -66,7 +66,7 @@ function M.update_references(updates)
                     end
 
                     local new_str = ref_str:gsub(key, val)
-                    line_utils.set({ start_line = ln - 1, end_line = ln, replacement = { new_str } })
+                    ulines.line.set({ start_line = ln - 1, replacement = { new_str } })
                 end
             end
         end

@@ -106,13 +106,13 @@ end)
 describe("toggle sigil", function()
    before_each(function()
       m = require('lex.list')
-      line_utils = require'lines'
+      ulines = require'util.lines'
    end)
 
    describe("Lines", function()
       describe(".get", function()
          it("gets Items and NonItems", function()
-            line_utils.selection.get = function() return { "nonitem", "- hello", "    ? test" } end
+            ulines.selection.get = function() return { "nonitem", "- hello", "    ? test" } end
 
             local e_1 = m.NonItem{text = "nonitem"}
             local e_2 = m.Item{text = "hello", sigil = '-'}
@@ -139,15 +139,15 @@ describe("toggle sigil", function()
          local get
 
          before_each(function()
-            set = line_utils.selection.set
-            line_utils.selection.set = function(args) return args end
-            get = line_utils.selection.get
-            line_utils.selection.get = function() return { "nonitem", "- hello", "    ? test", "? other" } end
+            set = ulines.selection.set
+            ulines.selection.set = function(args) return args end
+            get = ulines.selection.get
+            ulines.selection.get = function() return { "nonitem", "- hello", "    ? test", "? other" } end
          end)
 
          after_each(function()
-            line_utils.selection.set = set
-            line_utils.selection.get = get
+            ulines.selection.set = set
+            ulines.selection.get = get
          end)
 
          it("works without a sigil", function()
@@ -172,20 +172,20 @@ describe("toggle sigil", function()
 
    describe("get_min_indent_sigil", function()
       it("returns nil when no list items present", function()
-         line_utils.selection.get = function() return { "nonitem", "hello", "    test", "other" } end
+         ulines.selection.get = function() return { "nonitem", "hello", "    test", "other" } end
          local lines = m.lines.get()
 
          assert.equal(m.get_min_indent_sigil(lines), nil)
       end)
       it("finds the appropriate min sigil", function()
-         line_utils.selection.get = function() return { "nonitem", "- hello", "    ? test", "? other" } end
+         ulines.selection.get = function() return { "nonitem", "- hello", "    ? test", "? other" } end
          local lines = m.lines.get()
 
          assert.equal(m.get_min_indent_sigil(lines), "-")
       end)
 
       it("finds the appropriate min sigil (2)", function()
-         line_utils.selection.get = function() return { "nonitem", "    ? test", "✓ hello", "? other" } end
+         ulines.selection.get = function() return { "nonitem", "    ? test", "✓ hello", "? other" } end
          local lines = m.lines.get()
 
          assert.equal(m.get_min_indent_sigil(lines), "✓")

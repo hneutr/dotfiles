@@ -225,4 +225,67 @@ describe("Mark", function()
          assert.stub(nvim_win_set_cursor).was_called_with(0, {3, 0})
       end)
    end)
+
+   describe("get_nearest_link", function()
+      local function set_up(line, cursor_col)
+         local buf = vim.api.nvim_create_buf(false, true)
+         vim.api.nvim_command("buffer " .. buf)
+         vim.api.nvim_buf_set_lines(0, 0, -1, true, { line })
+         vim.api.nvim_win_set_cursor(0, {1, cursor_col})
+      end
+
+      it("1 link: cursor in link", function()
+          local line = "a [b](c) d"
+          set_up(line, string.find(line, 'b'))
+          assert.equal(m.get_nearest_link():str(), "[b](c)")
+      end)
+
+      it("1 link: cursor before link", function()
+          local line = "a [b](c) d"
+          set_up(line, string.find(line, 'a'))
+          assert.equal(m.get_nearest_link():str(), "[b](c)")
+      end)
+
+      it("1 link: cursor after link", function()
+          local line = "a [b](c) d"
+          set_up(line, string.find(line, 'd'))
+          assert.equal(m.get_nearest_link():str(), "[b](c)")
+      end)
+
+      it("2 links: cursor before link 1", function()
+          local line = "a [b](c) d [e](f) g"
+          set_up(line, string.find(line, 'a'))
+          assert.equal(m.get_nearest_link():str(), "[b](c)")
+      end)
+
+      it("2 links: cursor in link 1", function()
+          local line = "a [b](c) d [e](f) g"
+          set_up(line, string.find(line, 'b'))
+          assert.equal(m.get_nearest_link():str(), "[b](c)")
+      end)
+
+      it("2 links: cursor in between links", function()
+          local line = "a [b](c) d [e](f) g"
+          set_up(line, string.find(line, 'd'))
+          assert.equal(m.get_nearest_link():str(), "[b](c)")
+      end)
+
+      it("2 links: cursor in link 2", function()
+          local line = "a [b](c) d [e](f) g"
+          set_up(line, string.find(line, 'e'))
+          assert.equal(m.get_nearest_link():str(), "[e](f)")
+      end)
+
+      it("2 links: cursor in after link 2", function()
+          local line = "a [b](c) d [e](f) g"
+          set_up(line, string.find(line, 'g'))
+          assert.equal(m.get_nearest_link():str(), "[e](f)")
+      end)
+
+      it("3 links: cursor between link 2 and 3", function()
+          local line = "a [b](c) d [e](f) g [h](i) j"
+          set_up(line, string.find(line, 'g'))
+          assert.equal(m.get_nearest_link():str(), "[e](f)")
+      end)
+   end)
 end)

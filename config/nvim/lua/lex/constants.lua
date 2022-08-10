@@ -3,6 +3,7 @@ local M = {
     journals_directory = '/Users/hne/Documents/text/written/journals/content',
     config_file_name = '.project',
     dir_file_name = '@.md',
+    opener_prefix = "<leader>o",
     mirror_defaults = {
         mirrors_dir_prefix = ".mirrors",
         mirrors = {

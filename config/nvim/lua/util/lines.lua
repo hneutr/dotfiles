@@ -1,7 +1,8 @@
-local util = require'util'
-
 local M = {}
 
+--------------------------------------------------------------------------------
+--                              generic line ops                              --
+--------------------------------------------------------------------------------
 function M._do(args)
     defaults = {
         action = nil,
@@ -40,6 +41,9 @@ function M.cut(args)
     return M._do(args)
 end
 
+--------------------------------------------------------------------------------
+--                                 selections                                 --
+--------------------------------------------------------------------------------
 M.selection = {}
 
 function M.selection.range(args)
@@ -55,14 +59,11 @@ function M.selection.range(args)
         start_line = vim.api.nvim_buf_get_mark(args['buffer'], '<')[1] - 1
         end_line = vim.api.nvim_buf_get_mark(args['buffer'], '>')[1]
         
-        local difference = end_line - start_line
         if start_line < 0 then
             start_line = 0
         end
     end
 
-    vim.g.start_line = start_line
-    vim.g.end_line = end_line
     return { start_line = start_line, end_line = end_line }
 end
 
@@ -82,14 +83,37 @@ function M.selection.cut(args)
     return M.cut(M.selection._set_range(args))
 end
 
+--------------------------------------------------------------------------------
+--                                    line                                    --
+--------------------------------------------------------------------------------
+M.line = {}
+function M.line._set_range(args)
+    args.end_line = args.start_line + 1
+    return args
+end
 
+function M.line.get(args)
+    return M.get(M.line._set_range(args))[1]
+end
+
+function M.line.set(args)
+    return M.set(M.line._set_range(args))
+end
+
+function M.line.cut(args)
+    return M.cut(M.line._set_range(args))
+end
+
+--------------------------------------------------------------------------------
+--                                   cursor                                   --
+--------------------------------------------------------------------------------
 M.cursor = {}
 function M.cursor.get()
     return M.selection.get()[1]
 end
 
-function M.cursor.set(line)
-    return M.selection.set({ replacement = {line} })
+function M.cursor.set(args)
+    return M.selection.set(args)
 end
 
 function M.cursor.cut(args)
