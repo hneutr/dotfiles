@@ -111,7 +111,7 @@ local maps = {
         { "<c-k>", "<c-\\><c-n><c-w>k" },
         { "<c-l>", "<c-\\><c-n><c-w>l" },
         -- make <c-r> work like in insert mode
-        { "<c-r>", "'<c-\\><c-n>" .. '"' .. "'.nr2char(getchar()).'pi'", { expr = true } },
+        { "<c-r>", [['<c-\><c-n>"'.nr2char(getchar()).'pi']], { expr = true } },
         -- make pasting nice
         { "<c-]>", '<c-\\><c-n>""pA' },
     },
@@ -121,4 +121,14 @@ local maps = {
     },
 }
 
-require'util'.map_modes(maps)
+for modes_str, maps in pairs(maps) do
+    local modes = {}
+    for i = 1, #modes_str do
+        table.insert(modes, modes_str:sub(i, i))
+    end
+
+    for _, map in ipairs(maps) do
+        local lhs, rhs, opts = unpack(map)
+        vim.keymap.set(modes, lhs, rhs, opts)
+    end
+end

@@ -83,19 +83,4 @@ function M.write_file(content, file)
     vim.fn.writefile(content, file)
 end
 
-function M.map_modes(maps)
-    for modes, mode_maps in pairs(maps) do
-        for _, map in ipairs(mode_maps) do
-            local lhs, rhs, opts = unpack(map)
-
-            opts = _G.default_args(opts, { noremap = true })
-
-            for i = 1, #modes do
-                local mode = modes:sub(i, i)
-                vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
-            end
-        end
-    end
-end
-
 return M
