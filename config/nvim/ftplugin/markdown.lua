@@ -33,13 +33,13 @@ map("n", " m/", [[:call lex#fuzzy#start("lex#fuzzy#put")<cr>]], { silent = true 
 map("i", "", [[<c-o>:call lex#fuzzy#start("lex#fuzzy#insert_put")<cr>]], { silent = true })
 
 -- delete the currently selected lines and move them to the scratch file
-map("n", " s", [[:lua require'lex.scratch'.move('n')<cr>]], { silent = true })
+map("n", " s", function() require'lex.scratch'.move('n') end, { silent = true })
 map("v", " s", [[:'<,'>lua require'lex.scratch'.move('v')<cr>]], { silent = true })
 
 -- todos
-map("n", " td", ":lua require'lex.list'.toggle_sigil('n', '✓')<cr>", { silent = true })
+map("n", " td", function() require'lex.list'.toggle_sigil('n', '✓') end, { silent = true })
 map("v", " td", ":lua require'lex.list'.toggle_sigil('v', '✓')<cr>", { silent = true })
-map("n", " tq", ":lua require'lex.list'.toggle_sigil('n', '?')<cr>", { silent = true })
+map("n", " tq", function() require'lex.list'.toggle_sigil('n', '?') end, { silent = true })
 map("v", " tq", ":lua require'lex.list'.toggle_sigil('v', '?')<cr>", { silent = true })
-map("n", " tm", ":lua require'lex.list'.toggle_sigil('n', '~')<cr>", { silent = true })
+map("n", " tm", function() require'lex.list'.toggle_sigil('n', '~') end, { silent = true })
 map("v", " tm", ":lua require'lex.list'.toggle_sigil('v', '~')<cr>", { silent = true })

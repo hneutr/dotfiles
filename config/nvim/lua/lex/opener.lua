@@ -12,15 +12,14 @@ end
 
 function M.set()
     local mappings = {
-        { prefix = 'g', fn =  ":lua require'lex.index'.open"},
-        { prefix = 'n', fn =  ":lua require'lex.link'.Location.goto"},
+        { prefix = 'g', fn = function(open_cmd) require'lex.index'.open(open_cmd) end },
+        { prefix = 'n', fn = function(open_cmd) require'lex.link'.Location.goto(open_cmd) end },
     }
 
     for mirror_type, mirror_config in pairs(vim.g.lex_mirror_defaults.mirrors) do
         table.insert(mappings, {
             prefix = mirror_config['vimPrefix'],
-            fn = ":lua require'lex.mirror'.open",
-            fn_args = '"' .. mirror_type .. '"',
+            fn = function(open_cmd) require'lex.mirror'.open(mirror_type, open_cmd) end,
         })
     end
 
@@ -29,7 +28,7 @@ function M.set()
     end
 
     table.insert(mappings, {
-        fn = ":lua require'lex.link'.Location.goto",
+        fn = function(open_cmd) require'lex.link'.Location.goto(open_cmd) end,
         lhs_to_cmd = {
             ["<M-l>"] = "vsplit",
             ["<M-j>"] = "split",
@@ -55,23 +54,16 @@ end
 function M.format(args)
     args = _G.default_args(args, {
         fn = nil,
-        fn_args = nil,
         lhs_to_cmd = default_lhs_to_cmd,
         lhs_prefix = '',
-        map_args = { silent = true },
+        map_args = { silent = true, buffer = 0 },
     })
-
-    local rhs_start = args.fn .. '('
-
-    if args.fn_args then
-        rhs_start = rhs_start .. args.fn_args .. ", "
-    end
 
     local mappings = {}
     for lhs, cmd in pairs(args.lhs_to_cmd) do
         lhs = args.lhs_prefix .. lhs
-        local rhs = rhs_start .. "'" ..  cmd .. "')<cr>"
 
+        local rhs = function() args.fn(cmd) end
         table.insert(mappings, { lhs = lhs, rhs = rhs, args = args.map_args })
     end
 
@@ -80,7 +72,7 @@ end
 
 function M.map()
     for i, mapping in ipairs(M.get()) do
-        vim.api.nvim_buf_set_keymap(0, 'n', mapping.lhs, mapping.rhs, mapping.args)
+        vim.keymap.set('n', mapping.lhs, mapping.rhs, mapping.args)
     end
 end
 

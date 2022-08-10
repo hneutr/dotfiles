@@ -94,7 +94,8 @@ end
 Location.regex = "(.*):(.*)"
 
 function Location.from_str(str)
-    str = str or vim.fn['lib#getTextInsideNearestParenthesis']() -- retrieving from nearest parens is untested
+    -- retrieving from nearest parens is untested
+    str = str or vim.fn['lib#getTextInsideNearestParenthesis']()
 
     local path, text = str:match(Location.regex)
 
