@@ -8,22 +8,22 @@ describe("Location", function()
     local config = require'lex.config'
     local _config = {
         root = '/a',
-        mirrorsDirPrefix = 'b',
+        mirrors_dir_prefix = 'b',
         mirrors_root = '/a/b',
         mirrors = {
             type_one = {
-                dirPrefix = 'type_one',
-                mirrorOtherMirrors = false,
+                dir_prefix = 'type_one',
+                mirror_other_mirrors = false,
                 dir = '/a/b/type_one',
             },
             type_two = {
-                dirPrefix = 'type_two/two',
-                mirrorOtherMirrors = true,
+                dir_prefix = 'type_two/two',
+                mirror_other_mirrors = true,
                 dir = '/a/b/type_two/two',
             },
             type_three = {
-                dirPrefix = 'type_three',
-                mirrorOtherMirrors = true,
+                dir_prefix = 'type_three',
+                mirror_other_mirrors = true,
                 dir = '/a/b/type_three',
             },
         },

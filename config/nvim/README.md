@@ -43,8 +43,6 @@
 ----------------------------------------
 > [todo]()
 ----------------------------------------
-- move all variables into `lex.constants`
-    - put `mirror-defaults` in it
 - remove fluff:
     - normal-to-insert-mode-create-markers
     - `<leader>mf`/`<leader>mr` — fuzzy find is better

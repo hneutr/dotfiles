@@ -37,7 +37,7 @@ function MLocation:set_origin()
         local subbed_this_round = false
 
         for mirror_type, mirror_config in pairs(self.config.mirrors) do
-            local prefix = mirror_config.dirPrefix .. '/'
+            local prefix = mirror_config.dir_prefix .. '/'
 
             if vim.startswith(path, prefix) then
                 subbed_this_round = true
@@ -67,7 +67,7 @@ function MLocation:set_type()
     self.type = 'origin'
 
     for _type, _config in pairs(self.config.mirrors) do
-        if vim.startswith(path, _config.dirPrefix .. '/') then
+        if vim.startswith(path, _config.dir_prefix .. '/') then
             self.type = _type
             break
         end
@@ -79,7 +79,7 @@ end
 
 function MLocation:set_mirrors_other_mirrors()
     local mirror_config = vim.tbl_get(self.config.mirrors, self.type) or {}
-    self.mirrors_other_mirrors = vim.tbl_get(mirror_config, 'mirrorOtherMirrors') or false
+    self.mirrors_other_mirrors = vim.tbl_get(mirror_config, 'mirror_other_mirrors') or false
 end
 
 
@@ -104,7 +104,7 @@ end
 function MLocation:get_location(location_type)
     if self.type == location_type then
         return self.origin
-    elseif not self.mirrors_other_mirrors and self.config.mirrors[location_type].mirrorOtherMirrors then
+    elseif not self.mirrors_other_mirrors and self.config.mirrors[location_type].mirror_other_mirrors then
         return self:get_location_of_type(location_type)
     else
         return self.origin:get_location_of_type(location_type)
@@ -118,7 +118,7 @@ function MLocation:find_updates(new_location, updates)
 
     for _type, _config in pairs(config.get()['mirrors']) do
         table.insert(types, _type)
-        if _config.mirrorOtherMirrors then
+        if _config.mirror_other_mirrors then
             table.insert(mirror_other_mirrors, _type)
         else
             table.insert(do_not_mirror_other_mirrors, _type)

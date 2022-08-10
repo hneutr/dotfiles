@@ -1,4 +1,5 @@
 local M = {}
+local constants = require'lex.constants'
 
 --------------------------------------------------------------------------------
 -- file
@@ -29,16 +30,16 @@ function M.file.build(path)
 
     config['root'] = vim.fn.fnamemodify(path, ':h')
 
-    local mirror_defaults = M.file.mirror_defaults.get()
+    local mirror_defaults = constants.mirror_defaults
 
-    local mirrors_dir_prefix = vim.tbl_get(config, "mirrorsDirPrefix") or mirror_defaults['mirrorsDirPrefix']
+    local mirrors_dir_prefix = vim.tbl_get(config, "mirrors_dir_prefix") or mirror_defaults.mirrors_dir_prefix
     config['mirrors_root'] = _G.joinpath(config['root'], mirrors_dir_prefix)
 
     local mirrors = {}
     for m_type, m_defaults in pairs(mirror_defaults['mirrors']) do
         local m_config = _G.default_args(vim.tbl_get(config, 'mirrors', m_type), m_defaults)
 
-        m_config['dir'] = _G.joinpath(config['mirrors_root'], m_config['dirPrefix'])
+        m_config['dir'] = _G.joinpath(config['mirrors_root'], m_config.dir_prefix)
         m_config['root'] = config['root']
 
         if not vim.tbl_get(m_config, "disable") then
@@ -49,19 +50,6 @@ function M.file.build(path)
     config['mirrors'] = mirrors
 
     return config
-end
-
-M.file.mirror_defaults = {}
-function M.file.mirror_defaults.get()
-    if not vim.g.mirror_defaults then
-        M.file.mirror_defaults.set()
-    end
-
-    return vim.g.lex_mirror_defaults
-end
-
-function M.file.mirror_defaults.set()
-    vim.g.lex_mirror_defaults = vim.fn.json_decode(vim.fn.readfile(require'lex.constants'.mirror_defaults_path))
 end
 
 --------------------------------------------------------------------------------

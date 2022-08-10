@@ -7,8 +7,6 @@ local function md_settings()
   vim.o.ft = 'markdown'
   vim.g.vim_markdown_no_default_key_mappings = 1
   vim.g.file_opening_prefix = "<leader>o"
-
-  require'lex.config'.file.mirror_defaults.set()
 end
 
 local function md_buf_enter_settings()

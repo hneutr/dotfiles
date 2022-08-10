@@ -16,9 +16,9 @@ function M.set()
         { prefix = 'n', fn = function(open_cmd) require'lex.link'.Location.goto(open_cmd) end },
     }
 
-    for mirror_type, mirror_config in pairs(vim.g.lex_mirror_defaults.mirrors) do
+    for mirror_type, mirror_config in pairs(require'lex.constants'.mirror_defaults.mirrors) do
         table.insert(mappings, {
-            prefix = mirror_config['vimPrefix'],
+            prefix = mirror_config['opener_prefix'],
             fn = function(open_cmd) require'lex.mirror'.open(mirror_type, open_cmd) end,
         })
     end
