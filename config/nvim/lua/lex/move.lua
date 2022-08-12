@@ -74,7 +74,7 @@ function M.update_references(updates)
 
     vim.cmd("silent! wall")
 
-    if current_file ~= starting_file then
+    if current_file ~= starting_file and _G.filereadable(starting_file) then
         util.open_path(starting_file)
     end
     vim.g.lex_sync_ignore = false

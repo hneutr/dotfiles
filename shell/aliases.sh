@@ -49,7 +49,6 @@ alias po="popen"
 [[ ! -z $(which rg) ]] && alias rgl="rg -l"
 
 # writing stuff
-alias wr=edit-file-and-outline
 alias journal='_journal "journal = '"'"'catch all'"'"'"'
 alias pjournal='_journal "set_config = true"'
 alias wjournal='_journal "journal = '"'"'on writing'"'"'"'

@@ -108,7 +108,7 @@ function project_root_exists() {
 }
 
 function goals() {
-    nvim -c "call lib#Goals()"
+    nvim -c "lua require'util'.open_path(require'lex.goals'.path())"
 }
 
 function _journal() {
@@ -117,6 +117,10 @@ function _journal() {
 
 function nvim_mv() {
     /usr/local/bin/nvim --headless -c "lua require'lex.move'.move_path('$1', '$2')" +q
+}
+
+function wr() {
+    nvim $1 -c "lua require'lex.mirror'.open('outlines')" +bnext +Goyo
 }
 
 #------------------------------------------------------------------------------#

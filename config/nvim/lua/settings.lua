@@ -1,5 +1,4 @@
-local augroup = vim.api.nvim_create_augroup
-local aucmd = vim.api.nvim_create_autocmd
+vim.g.python3_host_prog = vim.env.NVIM_PYTHON
 
 -- write all the time
 vim.go.autowriteall = true
@@ -76,11 +75,9 @@ vim.o.wildignorecase = true
 
 vim.o.wildmode = "list:longest,full"
 
--------------------------------[ indentation ]----------------------------------
 -- if there are spaces when </>, round down
 vim.o.shiftround = true
 
-------------------------------------[ searching ]---------------------------------
 -- ignore case when searching
 vim.o.ignorecase = true
 
@@ -97,45 +94,49 @@ vim.g.polyglot_disabled = { "autoindent" }
 --------------------------------------------------------------------------------
 --                             window options                                 --
 --------------------------------------------------------------------------------
-vim.api.nvim_create_autocmd({ "VimEnter", "WinNew" }, { pattern="*", callback=function() 
+vim.api.nvim_create_autocmd({"WinEnter"}, {pattern="*", callback=require'util'.run_once({
+    scope = 'w',
+    key = 'win_opts_applied',
+    fn = function()
+        vim.wo.linebreak = true
 
-vim.wo.linebreak = true
+        vim.wo.cursorline = false
 
-vim.wo.cursorline = false
-
-----------------------------------[ folds ]-------------------------------------
--- turn off folds
-vim.wo.foldenable = false
-vim.wo.foldmethod = 'indent'
-vim.wo.foldnestmax = 1
-vim.wo.foldtext = "lib#FoldDisplayText()"
-
-end})
+        -----------------------------------[ folds ]----------------------------
+        vim.wo.foldenable = false
+        vim.wo.foldmethod = 'indent'
+        vim.wo.foldnestmax = 1
+        vim.wo.foldtext = "lib#FoldDisplayText()"
+    end,
+})})
 
 --------------------------------------------------------------------------------
 --                             buffer options                                 --
 --------------------------------------------------------------------------------
-vim.api.nvim_create_autocmd({"BufWinEnter"}, { pattern="*", callback=function() 
--- '.': current buffer
--- 'w': other windows
--- 'b': buffers in buffer list
--- 'u': unloaded buffers
--- 'i': OFF. current and included files
--- 't': OFF. scan tags
-vim.bo.complete = ".,w,b,u"
+vim.api.nvim_create_autocmd({"BufEnter"}, { pattern="*", callback=require'util'.run_once({
+    scope = 'b',
+    key = 'buf_opts_applied',
+    fn = function()
+        -- '.': current buffer
+        -- 'w': other windows
+        -- 'b': buffers in buffer list
+        -- 'u': unloaded buffers
+        -- 'i': OFF. current and included files
+        -- 't': OFF. scan tags
+        vim.bo.complete = ".,w,b,u"
 
--- 80 is nice
-vim.bo.textwidth = 80
+        -- 80 is nice
+        vim.bo.textwidth = 80
 
-vim.bo.undofile = true
+        vim.bo.undofile = true
 
-vim.bo.infercase = true
+        vim.bo.infercase = true
 
--------------------------------[ indentation ]----------------------------------
-vim.bo.autoindent = true
-vim.bo.cindent = true
-vim.bo.shiftwidth = 4
-vim.bo.softtabstop = 4
-vim.bo.expandtab = true
-
-end})
+        -------------------------------[ indentation ]--------------------------
+        vim.bo.autoindent = true
+        vim.bo.cindent = true
+        vim.bo.shiftwidth = 4
+        vim.bo.softtabstop = 4
+        vim.bo.expandtab = true
+    end,
+})})

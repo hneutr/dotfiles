@@ -43,3 +43,5 @@ export TD="$(date +20%y%m%d)"
 # make sed better on OSX
 export LC_CTYPE=C 
 export LANG=C
+
+export NVIM_PYTHON='/Users/hne/.pyenv/shims/python3'

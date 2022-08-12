@@ -41,6 +41,9 @@ local maps = {
         { "<c-l>", "<c-w>l" },
         { leader .. "df", ":FZF<cr>" },
         { leader .. "dg", ":Goyo<cr>" },
+        -- tab/shift-tab through buffers
+        { "<tab>", ":bnext<cr>" },
+        { "<s-tab>", ":bprev<cr>" },
     },
     i = {
         { "<esc>", "<esc>", { nowait = true} },

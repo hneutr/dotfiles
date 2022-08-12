@@ -22,8 +22,6 @@ require'mappings'
 
 vim.cmd("source " .. _G.joinpath(vim.g.vim_config, "plugins.vim"))
 
-vim.g.python3_host_prog = '/Users/hne/.pyenv/shims/python3'
-
 --------------------------------------------------------------------------------
 --                                testing                                     --
 --------------------------------------------------------------------------------
