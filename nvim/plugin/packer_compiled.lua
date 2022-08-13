@@ -84,10 +84,10 @@ _G.packer_plugins = {
     path = "/Users/hne/.local/share/nvim/site/pack/packer/start/fzf",
     url = "https://github.com/junegunn/fzf"
   },
-  ["fzf.vim"] = {
+  ["fzf-lua"] = {
     loaded = true,
-    path = "/Users/hne/.local/share/nvim/site/pack/packer/start/fzf.vim",
-    url = "https://github.com/junegunn/fzf.vim"
+    path = "/Users/hne/.local/share/nvim/site/pack/packer/start/fzf-lua",
+    url = "https://github.com/ibhagwan/fzf-lua"
   },
   ["goyo.vim"] = {
     loaded = true,

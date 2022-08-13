@@ -423,17 +423,48 @@ M.Reference = Reference
 --------------------------------------------------------------------------------
 M.fuzzy = { sink = {} }
 
-function M.fuzzy.sink.goto(lines)
-    local cmd = vim.tbl_get(fuzzy_actions, lines[1]) or "edit"
-    Location.goto(cmd, lines[2])
+--------------------------------------------------------------------------------
+-- testing
+--------------------------------------------------------------------------------
+function M.fuzzy._do(actions)
+    require'fzf-lua'.fzf_exec(M.Location.list.all(), {actions = actions})
 end
 
-function M.fuzzy.sink.put(lines)
-    local ref = Reference{ location = Location.from_str(lines[2]) }
-    vim.api.nvim_put({ ref:str() } , 'c', 1, 0)
+function M.fuzzy.goto()
+    M.fuzzy._do({
+        ["default"] = function(selected, opts) Location.goto("edit", selected[1]) end,
+        ["ctrl-j"] = function(selected, opts) Location.goto("split", selected[1]) end,
+        ["ctrl-l"] = function(selected, opts) Location.goto("vsplit", selected[1]) end,
+        ["ctrl-t"] = function(selected, opts) Location.goto("tabedit", selected[1]) end,
+    })
 end
 
-function M.fuzzy.sink.insert_put(lines)
+function M.fuzzy.put()
+    local fn = function(items)
+        local ref = Reference{location = Location.from_str(items[1])}
+        vim.api.nvim_put({ref:str()} , 'c', 1, 0)
+    end
+
+    M.fuzzy._do({
+        ["default"] = fn,
+        ["ctrl-j"] = fn,
+        ["ctrl-l"] = fn,
+        ["ctrl-t"] = fn,
+    })
+end
+
+function M.fuzzy.insert()
+    local fn = function(selected) M.fuzzy.insert_selection(selected[1]) end
+
+    M.fuzzy._do({
+        ["default"] = fn,
+        ["ctrl-j"] = fn,
+        ["ctrl-l"] = fn,
+        ["ctrl-t"] = fn,
+    })
+end
+
+function M.fuzzy.insert_selection(selection)
     local line = ulines.cursor.get()
     local line_number, column = unpack(vim.api.nvim_win_get_cursor(0))
 
@@ -446,7 +477,7 @@ function M.fuzzy.sink.insert_put(lines)
         insert_command = 'a'
     end
 
-    local content = Reference{ location = Location.from_str(lines[2]) }:str()
+    local content = Reference{location = Location.from_str(selection)}:str()
 
     local new_line = line:sub(1, column) .. content .. line:sub(column + 1)
     local new_column = column + content:len()

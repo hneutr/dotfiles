@@ -2,21 +2,15 @@
 # [todo]()
 #-------------------------------------------------------------------------------
 - set up `lsp`?
-- switch to `treesitter`?
 - fzf → telescope/fzf-lua
 
 ----------------------------------------
 > [vimscript --> lua]()
 ----------------------------------------
-- autoload
-  - fuzzy.vim
 - plugin
   - autocommands.vim
   - colors.vim
-  - commands.vim
-  - fzf.vim
   - goyo.vim
-  - sandwich.vim
 - syntax
 
 #-------------------------------------------------------------------------------

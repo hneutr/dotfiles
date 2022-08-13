@@ -1,10 +1,15 @@
 local nvimux = require('nvimux')
 
+local cmd = vim.api.nvim_create_user_command
+cmd("Tvsplit", "vspl|term", {})
+cmd("Tsplit", "spl|term", {})
+cmd("Ttab", "tabnew|term", {})
+
 -- Nvimux custom bindings
 nvimux.bindings.bind_all{
-  {'j', ':TermHorizontalSplit', {'n', 'v', 'i', 't'}},
-  {'l', ':TermVerticalSplit', {'n', 'v', 'i', 't'}},
-  {'c', ':TermTab', {'n', 'v', 'i', 't'}},
+  {'j', ':Tsplit', {'n', 'v', 'i', 't'}},
+  {'l', ':Tvsplit', {'n', 'v', 'i', 't'}},
+  {'c', ':Ttab', {'n', 'v', 'i', 't'}},
 }
 
 -- Nvimux configuration

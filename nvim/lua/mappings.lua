@@ -39,7 +39,7 @@ local maps = {
         { "<c-j>", "<c-w>j" },
         { "<c-k>", "<c-w>k" },
         { "<c-l>", "<c-w>l" },
-        { leader .. "df", ":FZF<cr>" },
+        { leader .. "df", require'fzf-lua'.files },
         { leader .. "dg", ":Goyo<cr>" },
         -- tab/shift-tab through buffers
         { "<tab>", ":bnext<cr>" },

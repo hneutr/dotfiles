@@ -13,7 +13,8 @@ return require('packer').startup(function(use)
     use 'hneutr/nvimux'                                                 -- tmux replacement
     use 'hneutr/vim-cool'                                               -- it's cool
     use {'junegunn/fzf', run = function() vim.fn['fzf#install']() end } -- fzf
-    use 'junegunn/fzf.vim'                                              -- fzf for vim
+    -- use {'junegunn/fzf', run = './install --bin' } -- fzf
+    -- use 'junegunn/fzf.vim'                                              -- fzf for vim
     use 'junegunn/goyo.vim'                                             -- distraction free + centered editing
     use 'tpope/vim-repeat'                                              -- repeat stuff
     use 'wellle/targets.vim'                                            -- more objects
@@ -36,6 +37,7 @@ return require('packer').startup(function(use)
     use 'neovim/nvim-lspconfig'                                         -- try setting up, or delete?
     use 'nvim-treesitter/nvim-treesitter'                               -- syntax/indent
     use 'windwp/nvim-autopairs'                                         -- close things
+    use 'ibhagwan/fzf-lua'
 
     if bootstrap then
         require('packer').sync()

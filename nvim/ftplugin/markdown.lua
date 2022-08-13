@@ -18,10 +18,10 @@ local map = vim.keymap.set
 local args = { silent = true }
 
 -- fuzzy find stuff
-map("n", " f", [[:call lex#fuzzy#start("lex#fuzzy#goto")<cr>]], args)
+map("n", " f", function() require'lex.link'.fuzzy.goto() end, args)
 -- "  is <c-/> (the mapping only works if it's the literal character)
-map("n", "", [[:call lex#fuzzy#start("lex#fuzzy#put")<cr>]], args)
-map("i", "", [[<c-o>:call lex#fuzzy#start("lex#fuzzy#insert_put")<cr>]], args)
+map("n", "", function() require'lex.link'.fuzzy.put() end, args)
+map("i", "", function() require'lex.link'.fuzzy.insert() end, args)
 
 -- delete the currently selected lines and move them to the scratch file
 map("n", " s", function() require'lex.scratch'.move('n') end, args)
