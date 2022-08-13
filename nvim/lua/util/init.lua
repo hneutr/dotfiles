@@ -95,9 +95,10 @@ function M.open_two_vertical_terminals()
 end
 
 function M.edit_without_nesting()
+    local has_ui = vim.tbl_count(vim.api.nvim_list_uis()) > 0
     local server_address = vim.env.NVIM
 
-    if server_address then
+    if server_address and has_ui then
         -- start a job with the source vim instance
         local server = vim.fn.jobstart({'nc', '-U', server_address}, {rpc = true})
 
@@ -126,7 +127,7 @@ function M.save_and_restore_visual_selection_marks()
     pcall(function() vim.cmd("silent write") end)
 
     start_line = math.max(start_line, 0)
-    end_line = math.min(end_line, vim.fn.line('$'))
+    end_line = math.min(end_line, vim.fn.line('$') - 1)
 
     vim.api.nvim_buf_set_mark(0, "[", start_line, start_col, {})
     vim.api.nvim_buf_set_mark(0, "]", end_line, end_col, {})

@@ -6,7 +6,6 @@
 > [vimscript --> lua]()
 ----------------------------------------
 - plugin
-  - autocommands.vim
   - colors.vim
   - goyo.vim
 - syntax
