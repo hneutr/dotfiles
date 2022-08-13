@@ -28,7 +28,7 @@ function popen() {
 #------------------------------------------------------------------------------#
 #                                    vim                                       #
 #------------------------------------------------------------------------------#
-function remote_nvim() {
+function nvim() {
     # avoids nesting vim sessions when opening from the terminal:
     # - if there is a vim session running, attaches to it
     # - else: starts a new vim session

@@ -27,9 +27,6 @@ I mostly use:
 - move `dotfiles/config/nvim` to `dotfiles/nvim`
 - move `dotfiles/config/kitty` to `dotfiles/kitty`
 - move `dotfiles/config/matplotlib` to `dotfiles/matplotlib`
-- handle `nvim` locations:
-  - from brew (if it exists)
-  - by downloading and unpacking the AppImage (maybe just always use AppImage?)
 - handle setup stuff:
   - download `fzf`
   - download `vim.plug` or another plugin manager
