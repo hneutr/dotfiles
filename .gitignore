@@ -1,11 +1,6 @@
 .gitmodules
 nvim/.netrwhist
-nvim/.plugged
 nvim/test/vendor
-nvim/autoload/plug*
-nvim/undodir
 nvim/.undodir
-nvim/colors
 nvim/doc
-__pycache__
 zsh/plugins
