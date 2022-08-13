@@ -32,8 +32,8 @@ function nvim() {
     # avoids nesting vim sessions when opening from the terminal:
     # - if there is a vim session running, attaches to it
     # - else: starts a new vim session
-    if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
-        $NVIM_PATH -c "call lib#editWithoutNesting('$NVIM_LISTEN_ADDRESS')" "$@"
+    if [ -n "$NVIM" ]; then
+        $NVIM_PATH -c "lua require'util'.edit_without_nesting()" "$@"
     else
         $NVIM_PATH "$@"
     fi

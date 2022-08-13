@@ -101,7 +101,6 @@ vim.api.nvim_create_autocmd({"WinEnter"}, {pattern="*", callback=require'util'.r
         vim.wo.foldenable = false
         vim.wo.foldmethod = 'indent'
         vim.wo.foldnestmax = 1
-        vim.wo.foldtext = "lib#FoldDisplayText()"
     end,
 })})
 
@@ -153,3 +152,5 @@ vim.g.polyglot_disabled = { "autoindent" }
 
 -- default maps are stupid
 vim.g.vim_markdown_no_default_key_mappings = 1
+
+vim.g.is_pythonsense_alternate_motion_keymaps = 1

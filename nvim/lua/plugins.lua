@@ -3,7 +3,6 @@ local packer_url = 'https://github.com/wbthomason/packer.nvim'
 local bootstrap
 
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-    vim.pretty_print('sup')
     bootstrap = vim.fn.system({'git', 'clone', '--depth', '1', packer_url, install_path})
     vim.cmd [[packadd packer.nvim]]
 end

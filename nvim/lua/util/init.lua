@@ -86,6 +86,67 @@ end
 --------------------------------------------------------------------------------
 --                                    misc                                    --
 --------------------------------------------------------------------------------
+function M.open_two_vertical_terminals()
+    vim.cmd("silent terminal")
+    vim.api.nvim_input('<esc>')
+    vim.cmd("silent vsplit")
+    vim.cmd("silent terminal")
+    vim.api.nvim_input('A')
+end
+
+function M.edit_without_nesting()
+    local server_address = vim.env.NVIM
+
+    if server_address then
+        -- start a job with the source vim instance
+        local server = vim.fn.jobstart({'nc', '-U', server_address}, {rpc = true})
+
+        -- get the filename of the newly opened buffer
+        local filename = vim.fn.fnameescape(vim.fn.expand('%:p'))
+
+        -- wipeout the buffer
+        vim.api.nvim_buf_delete(0, {})
+
+        -- open the buffer in the source vim instance
+        vim.fn.rpcrequest(server, "nvim_command", "edit " .. filename)
+
+        -- call the autocommand to enter windows
+        vim.fn.rpcrequest(server, "nvim_command", "doautocmd BufWinEnter")
+
+        -- quit the "other" instance of vim
+        vim.cmd("quitall")
+    end
+end
+
+-- Store visual selection marks, save, restore visual selection marks
+function M.save_and_restore_visual_selection_marks()
+    local start_line, start_col = unpack(vim.api.nvim_buf_get_mark(0, "["))
+    local end_line, end_col = unpack(vim.api.nvim_buf_get_mark(0, "]"))
+
+    pcall(function() vim.cmd("silent write") end)
+
+    vim.api.nvim_buf_set_mark(0, "[", start_line, start_col, {})
+    vim.api.nvim_buf_set_mark(0, "]", end_line, end_col, {})
+end
+
+--------------------------------------------------------------------------------
+--                             set_number_display                             --
+--------------------------------------------------------------------------------
+-- Varies the display of numbers.
+--
+-- This is not a 'mode' specific setting, so a simple autocommand won't work.
+-- Numbers should not show up in a terminal buffer, regardless of if that
+-- buffer is in terminal mode or not.
+--------------------------------------------------------------------------------
+function M.set_number_display()
+    if vim.bo.buftype == 'terminal' then
+        vim.wo.number = false
+        vim.wo.relativenumber = false
+    else
+        vim.wo.number = true
+        vim.wo.relativenumber = true
+    end
+end
 
 --------------------------------------------------------------------------------
 --                              modify_line_end                               --

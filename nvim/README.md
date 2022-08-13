@@ -8,14 +8,16 @@
 ----------------------------------------
 > [vimscript --> lua]()
 ----------------------------------------
-- autoload/lib:
-  - foldDisplayText
-  - SaveAndRestoreVisualSelectionMarks
-  - OpenFileSettings
-  - SetNumberDisplay
-  - setListenAddress
-  - editWithoutNesting
-  - TwoVerticalTerminals
+- autoload
+  - fuzzy.vim
+- plugin
+  - autocommands.vim
+  - colors.vim
+  - commands.vim
+  - fzf.vim
+  - goyo.vim
+  - sandwich.vim
+- syntax
 
 #-------------------------------------------------------------------------------
 # [lex]()

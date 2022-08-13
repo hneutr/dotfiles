@@ -1,2 +1,0 @@
-"==================================[ command ]==================================
-cnoreabbrev OFS OpenFileSettings

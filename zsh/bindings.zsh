@@ -23,6 +23,6 @@ bindkey "^[^[[D" backward-word
 # alt-RightArrow
 bindkey "^[^[[C" forward-word
 
-if [ -z "$NVIM_LISTEN_ADDRESS" ]; then
-    bindkey -s '^[t' "deactivate_env && nvim -c 'TwoVerticalTerminals'\n"
+if [ -z "$NVIM" ]; then
+    bindkey -s '^[t' 'deactivate_env && nvim -c "lua require'"'"'"'util'"'"'"'.open_two_vertical_terminals()"\n'
 fi
