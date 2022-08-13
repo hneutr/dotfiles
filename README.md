@@ -24,6 +24,15 @@ I mostly use:
 
 
 #----------------------------------[ todos ]----------------------------------->
+- move `dotfiles/config/nvim` to `dotfiles/nvim`
+- move `dotfiles/config/kitty` to `dotfiles/kitty`
+- move `dotfiles/config/matplotlib` to `dotfiles/matplotlib`
+- handle `nvim` locations:
+  - from brew (if it exists)
+  - by downloading and unpacking the AppImage (maybe just always use AppImage?)
+- handle setup stuff:
+  - download `fzf`
+  - download `vim.plug` or another plugin manager
 - zsh:
     - fix function loading so I can use 'settex' from within vim
     - fix `fvim` command so that it outputs last line to commandline for repetition
