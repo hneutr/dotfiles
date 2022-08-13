@@ -13,6 +13,7 @@ alias lsfa='ls -pa | grep -v /'
 alias lst='tree --git-ignore -I .git\|.gitignore'
 
 # vim
+alias nvim=$NVIM_PATH
 alias vi="nvim"
 alias vim="nvim"
 alias gv="vim -c 'Goyo' "

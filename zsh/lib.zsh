@@ -93,7 +93,7 @@ function _journal() {
 }
 
 function nvim_mv() {
-    $NVIM_PATH --headless -c "lua require'lex.move'.move_path('$1', '$2')" +q
+    nvim --headless -c "lua require'lex.move'.move_path('$1', '$2')" +q
 }
 
 function wr() {
