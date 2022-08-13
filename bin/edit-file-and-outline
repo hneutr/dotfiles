@@ -1,7 +1,0 @@
-#!/usr/local/bin/zsh
-
-function () {
-  local file=$1
-  local outline=$(hnetext mirror -s $1 -m outlines)
-  nvim $file $outline -c 'Goyo'
-} $@

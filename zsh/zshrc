@@ -1,0 +1,8 @@
+source ~/dotfiles/shell/rc.sh
+
+source ~/.zsh/settings.zsh
+source ~/.zsh/lib.zsh
+source ~/.zsh/colors.zsh
+source ~/.zsh/bindings.zsh
+source ~/.zsh/prompt.zsh
+source ~/.zsh/plugins.zsh

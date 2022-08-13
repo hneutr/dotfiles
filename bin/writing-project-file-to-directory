@@ -1,3 +1,0 @@
-#!/usr/local/bin/zsh
-
-hnetext move-path --as_directory --from_path $1 --to_path $2

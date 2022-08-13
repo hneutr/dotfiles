@@ -4,9 +4,14 @@ setopt no_beep
 # no beep for autocomplete
 setopt no_list_beep
 
-################################################################################
-# History
-################################################################################
+# set bindkey delay to 10ms
+export KEYTIMEOUT=1
+#------------------------------------------------------------------------------#
+#                                   history                                    #
+#------------------------------------------------------------------------------#
+# make a history file if there isn't one
+[[ -z "$HISTFILE" ]] && export HISTFILE=$HOME/.zsh_history
+
 HISTSIZE=10000
 SAVEHIST=10000
 
@@ -16,16 +21,15 @@ setopt EXTENDED_HISTORY
 
 setopt HIST_EXPIRE_DUPS_FIRST
 
-# setopt hist_ignore_space
 setopt HIST_VERIFY
 
-# Do not display a line previously found.
+# do not display a line previously found.
 setopt HIST_FIND_NO_DUPS
 
-# Remove superfluous blanks before recording entry.
+# remove superfluous blanks before recording entry.
 setopt HIST_REDUCE_BLANKS
 
-# Don't write duplicate entries in the history file.
+# don't write duplicate entries in the history file.
 setopt HIST_SAVE_NO_DUPS
 
 # remove extraneous blanks from history
@@ -37,13 +41,12 @@ setopt INC_APPEND_HISTORY
 # share history across shells
 setopt SHARE_HISTORY
 
-################################################################################
-# Completion
-################################################################################
+#------------------------------------------------------------------------------#
+#                                  completion                                  #
+#------------------------------------------------------------------------------#
 # show completions automatically
 setopt auto_list
 
-# complete alisases
 setopt completealiases
 
 # spelling correction for commands
@@ -59,9 +62,9 @@ setopt list_ambiguous
 autoload -Uz compinit
 # completion is slow
 if [ $(date +'%j') != $(stat -f '%Sm' -t '%j' ~/.zcompdump) ]; then
-  compinit
+    compinit
 else
-  compinit -C
+    compinit -C
 fi
 
 # add a space on tab complete. not really doing what I want yet

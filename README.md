@@ -23,18 +23,7 @@ I mostly use:
 - kitty
 
 
-## Todos:
-- nvim:
-    - make it so that <tab> in insert mode in md files indents when in a list and there are no other characters
-        - same thing for <shift-tab>
-- writing in nvim:
-    - learn about 'spell'
-        - how to add words
-        - local projects (eg character names)
-    - etymonline querying without leaving vim:
-        1. query etymonline
-        2. put results in floating window
-    - make your own colorscheme
+#----------------------------------[ todos ]----------------------------------->
 - zsh:
     - fix function loading so I can use 'settex' from within vim
     - fix `fvim` command so that it outputs last line to commandline for repetition

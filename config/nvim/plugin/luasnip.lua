@@ -29,7 +29,7 @@ local snips_dir = _G.joinpath(vim.g.vim_config, 'snips')
 function load_ft_snips()
     for i, path in ipairs(vim.fn.readdir(snips_dir)) do
         path = _G.joinpath(snips_dir, path)
-        if vim.fn.filereadable(path) > 0 then
+        if _G.filereadable(path) then
             vim.cmd("source " .. path)
         end
     end

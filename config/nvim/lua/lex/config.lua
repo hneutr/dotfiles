@@ -83,9 +83,8 @@ end
 -- commands
 --------------------------------------------------------------------------------
 function M.push()
-    vim.fn.system("git add " .. vim.tbl_get(M.get(), 'root') or '.')
-    vim.fn.system("git commit -m ${TD}")
-    vim.fn.system("git push")
+    vim.fn.system("cd " .. vim.tbl_get(M.get(), 'root') or '.')
+    vim.fn.system("gptd")
 end
 
 return M

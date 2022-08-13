@@ -1,0 +1,4 @@
+source ~/dotfiles/shell/rc.sh
+
+source ~/.bash/prompt.sh
+source ~/.bash/plugins.sh

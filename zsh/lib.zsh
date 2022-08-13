@@ -8,11 +8,6 @@ function gmd() {
     touch "${directory}/.gitignore"
 }
 
-function today() {
-    # prints the current date in YYYYMMDD format
-    date +20%y%m%d
-}
-
 function setmd() {
     # convert: markdown → pdf
     # - input: {name of markdown file} (extension optional)
@@ -33,31 +28,14 @@ function settex() {
     pdflatex $input && open $output
 }
 
-function popen() {
-    # opens a pdf of the given name
-    local filename="${1:r}.pdf"
-    open $filename
-}
-
 #------------------------------------------------------------------------------#
 #                                    vim                                       #
 #------------------------------------------------------------------------------#
 function fvim() {
-    # fuzzy find into vim (credit to "bag-man/dotfiles/bashrc")
+    # fuzzy find into vim
     local IFS=$'\n'
     local files=($(fzf --reverse --query="$1" --multi --select-1 --exit-0))
     [[ -n "$files" ]] && vim "${files[@]}"
-}
-
-function remote_nvim() {
-    # avoids nesting vim sessions when opening from the terminal:
-    # - if there is a vim session running, attaches to it
-    # - else: starts a new vim session
-    if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
-        /usr/local/bin/nvim -c "call lib#editWithoutNesting('$NVIM_LISTEN_ADDRESS')" "$@"
-    else
-        /usr/local/bin/nvim "$@"
-    fi
 }
 
 #------------------------------------------------------------------------------#
@@ -87,7 +65,6 @@ function project_root_exists() {
     local project_file="$directory/.project"
 
     if [ -f $project_file ]; then
-        # alias mv=pmv
         alias mv=nvim_mv
         export PROJECT_ROOT=$directory
     else
@@ -116,11 +93,29 @@ function _journal() {
 }
 
 function nvim_mv() {
-    /usr/local/bin/nvim --headless -c "lua require'lex.move'.move_path('$1', '$2')" +q
+    $NVIM_PATH --headless -c "lua require'lex.move'.move_path('$1', '$2')" +q
 }
 
 function wr() {
     nvim $1 -c "lua require'lex.mirror'.open('outlines')" +bnext +Goyo
+}
+
+function start_project() {
+    mkdir meta && touch meta/@.md
+    mkdir story
+    mkdir context
+    mkdir text
+
+    git init > /dev/null
+
+    echo ".DS_Store\n.project" > .gitignore
+
+    local contents=""
+    if [[ $# -gt 0 ]]; then
+        contents='"name": "'$1'"'
+    fi
+
+    echo "{"$contents"}" > .project
 }
 
 #------------------------------------------------------------------------------#
@@ -133,3 +128,6 @@ function chpwd {
   # sets a project root if there is one
   project_root_exists $PWD
 }
+
+# call the change directory functions at startup
+chpwd

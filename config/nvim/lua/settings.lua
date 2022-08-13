@@ -86,11 +86,6 @@ vim.o.smartcase = true
 
 -- because ftplugins play with formatting opts, settings are in `/after/plugin/formatting.vim`
 
------------------------------------[ misc ]-------------------------------------
-
--- polyglot is super annoying
-vim.g.polyglot_disabled = { "autoindent" }
-
 --------------------------------------------------------------------------------
 --                             window options                                 --
 --------------------------------------------------------------------------------
@@ -140,3 +135,21 @@ vim.api.nvim_create_autocmd({"BufEnter"}, { pattern="*", callback=require'util'.
         vim.bo.expandtab = true
     end,
 })})
+
+--------------------------------------------------------------------------------
+--                                  plugins                                   --
+--------------------------------------------------------------------------------
+vim.g.snip_ft_printstrings = {
+    javascript = 'console.log(%s)',
+    lua = 'vim.pretty_print(%s)',
+    python = 'print(%s)',
+    vim = 'echo %s',
+    zsh = 'echo %s',
+    sh = 'echo %s',
+}
+
+-- polyglot is super annoying
+vim.g.polyglot_disabled = { "autoindent" }
+
+-- default maps are stupid
+vim.g.vim_markdown_no_default_key_mappings = 1

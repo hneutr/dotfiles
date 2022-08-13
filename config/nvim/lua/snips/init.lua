@@ -8,7 +8,7 @@ local i = ls.insert_node
 local f = ls.function_node
 
 --------------------------------------------------------------------------------
---                           utility functions                                --
+--                                   lines                                    --
 --------------------------------------------------------------------------------
 function M.charline(args)
     args = _G.default_args(args, { char = '-', len = 80, line_start = '', line_end = '' })
@@ -178,6 +178,9 @@ function header.h3.get_ls(comment_str)
     return { header.line.get{ comment_str = comment_str, line_type = 'inline' } }
 end
 
+--------------------------------------------------------------------------------
+--                             standard snippets                              --
+--------------------------------------------------------------------------------
 function M.get_header_snippets(comment_str)
     return {
         s("h1", header.h1.get_ls(comment_str)),
@@ -193,6 +196,25 @@ function M.get_print_snippets(args)
         s("p", { t(args.print_fn .. args.fn_open), i(1), t(args.fn_close) }),
         s("qp", { t(args.print_fn .. args.fn_open .. '"'), i(1), t('"' .. args.fn_close) }),
     }
+end
+
+function M._get_print_snippets(print_string)
+    local snips = {}
+    if print_string then
+        local print_open, print_close = print_string:match("^(.*)%%s(.*)$")
+
+        snips = {
+            s("p", {t(print_open), i(1), t(print_close)}),
+            s("qp", {t(print_open .. '"'), i(1), t('"' .. print_close)}),
+        }
+    end
+
+    return snips
+end
+
+function M.load_standard_snips_for_filetype(filetype, comment_str)
+    ls.add_snippets(filetype, M.get_header_snippets(comment_str))
+    ls.add_snippets(filetype, M._get_print_snippets(vim.tbl_get(vim.g.snip_ft_printstrings, filetype)))
 end
 
 return M

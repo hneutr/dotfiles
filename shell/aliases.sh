@@ -1,14 +1,13 @@
-# cd
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-
 # ls
 alias lsl='ls -l'
 alias lsla='ls -la'
 alias lsf='ls -p | grep -v /'
 alias lsfa='ls -pa | grep -v /'
+
+# exa
+[[ ! -z $(which exa) ]] && alias ls='exa --git --header --group'
+[[ ! -z $(which exa) ]] && alias lsla='exa --long --git -a --header --group'
+[[ ! -z $(which exa) ]] && alias tree='exa --tree --level=2 --long -a --header --git'
 
 # tree
 alias lst='tree --git-ignore -I .git\|.gitignore'
@@ -37,22 +36,13 @@ alias gptd="ga .; gc -m $(today); gp"
 # misc
 alias po="popen"
 
-# exa
-[[ ! -z $(which exa) ]] && alias ls='exa --git --header --group'
-[[ ! -z $(which exa) ]] && alias lsla='exa --long --git -a --header --group'
-[[ ! -z $(which exa) ]] && alias tree='exa --tree --level=2 --long -a --header --git'
-
 # fd
 [[ ! -z $(which fd) ]] && alias find='fd'
 
 # rg
 [[ ! -z $(which rg) ]] && alias rgl="rg -l"
 
-# writing stuff
+# writing
 alias journal='_journal "journal = '"'"'catch all'"'"'"'
 alias pjournal='_journal "set_config = true"'
 alias wjournal='_journal "journal = '"'"'on writing'"'"'"'
-alias pmv=writing-project-move
-alias todir=writing-project-file-to-directory
-alias mtop=writing-project-marker-to-path
-alias mmv=writing-project-move-marker
