@@ -40,7 +40,7 @@ end
 function M.update_paths(updates)
     for old, new in pairs(updates) do
         util.make_directories(new)
-        vim.fn.system("mv " .. old .. " " .. new)
+        vim.fn.system("/bin/mv " .. old .. " " .. new)
     end
 end
 

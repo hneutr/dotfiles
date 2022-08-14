@@ -9,9 +9,9 @@ vim.g['sneak#use_ic_scs'] = 1
 
 vim.g['sneak#label_esc'] = "<c-c>"
 
-vim.api.nvim_set_keymap('', 's', '<Plug>Sneak_s', {})
-vim.api.nvim_set_keymap('', 'S', '<Plug>Sneak_S', {})
-vim.api.nvim_set_keymap('', 'f', '<Plug>Sneak_f', {})
-vim.api.nvim_set_keymap('', 'F', '<Plug>Sneak_F', {})
-vim.api.nvim_set_keymap('', 't', '<Plug>Sneak_t', {})
-vim.api.nvim_set_keymap('', 'T', '<Plug>Sneak_T', {})
+vim.keymap.set('n', 's', '<Plug>Sneak_s', {remap = true})
+vim.keymap.set('n', 'S', '<Plug>Sneak_S', {remap = true})
+vim.keymap.set('', 'f', '<Plug>Sneak_f', {remap = true})
+vim.keymap.set('', 'F', '<Plug>Sneak_F', {remap = true})
+vim.keymap.set('', 't', '<Plug>Sneak_t', {remap = true})
+vim.keymap.set('', 'T', '<Plug>Sneak_T', {remap = true})
