@@ -22,6 +22,7 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
         vim.bo.textwidth = 0
         vim.bo.shiftwidth = 2
         vim.bo.softtabstop = 2
+        vim.bo.textwidth = 80
     end,
 })})
 

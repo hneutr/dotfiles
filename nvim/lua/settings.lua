@@ -119,8 +119,8 @@ vim.api.nvim_create_autocmd({"BufEnter"}, { pattern="*", callback=require'util'.
         -- 't': OFF. scan tags
         vim.bo.complete = ".,w,b,u"
 
-        -- 80 is nice
-        vim.bo.textwidth = 80
+        -- 100 is nice
+        vim.bo.textwidth = 100
 
         vim.bo.undofile = true
 

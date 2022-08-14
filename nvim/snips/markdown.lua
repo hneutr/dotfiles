@@ -1,6 +1,6 @@
-local ls = require"luasnip"
-local su = require'snips'
-local mds = require'snips.markdown'
+local ls = require('luasnip')
+local su = require('snips')
+local mds = require('snips.markdown')
 
 local s = ls.snippet
 local t = ls.text_node
@@ -23,5 +23,14 @@ ls.add_snippets("markdown", {
         t{"",
         "",
         su.charline()}
-    })
+    }),
+    s("quote", {
+        t{"-----",
+        ""}, i(1, ""), t{":",
+        "",
+        ""}, i(2, "quote"),
+        t{"",
+        "",
+        "quote"}
+    }),
 })
