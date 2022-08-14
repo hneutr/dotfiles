@@ -97,7 +97,7 @@ function nvim_mv() {
 }
 
 function wr() {
-    nvim $1 -c "lua require'lex.mirror'.open('outlines')" +bnext +Goyo
+    nvim $1 -c "lua require'lex.mirror'.open('outlines')" +bnext +GoyoToggle
 }
 
 function start_project() {

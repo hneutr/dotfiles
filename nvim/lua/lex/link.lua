@@ -1,7 +1,8 @@
-require'class'
-local util = require'util'
-local config = require'lex.config'
-local ulines = require'util.lines'
+local class = require('util.class')
+local util = require('util')
+local ulines = require('util.lines')
+
+local config = require('lex.config')
 
 local M = {}
 

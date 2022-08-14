@@ -129,8 +129,10 @@ function M.save_and_restore_visual_selection_marks()
     start_line = math.max(start_line, 0)
     end_line = math.min(end_line, vim.fn.line('$') - 1)
 
-    vim.api.nvim_buf_set_mark(0, "[", start_line, start_col, {})
-    vim.api.nvim_buf_set_mark(0, "]", end_line, end_col, {})
+    pcall(function()
+        vim.api.nvim_buf_set_mark(0, "[", start_line, start_col, {})
+        vim.api.nvim_buf_set_mark(0, "]", end_line, end_col, {})
+    end)
 end
 
 --------------------------------------------------------------------------------

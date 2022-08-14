@@ -1,36 +1,88 @@
---------------------------------------------------------------------------------
--- commands
---------------------------------------------------------------------------------
 local util = require'util'
-local cmd = vim.api.nvim_create_user_command
+local aucmd = vim.api.nvim_create_autocmd
 
-cmd("Push", function() require'lex.config'.push() end, {})
-cmd("Journal", function() util.open_path(require'lex.journal'.path({ journal = 'catch all' })) end, {})
-cmd("PJournal", function() util.open_path(require'lex.journal'.path()) end, {})
-cmd("WJournal", function() util.open_path(require'lex.journal'.path({ journal = 'on writing'})) end, {})
-cmd("Goals", function() util.open_path(require'lex.goals'.path()) end, {})
-cmd("Index", function() require'lex.index'.open() end, {})
+local p = { "*.md" }
 
 --------------------------------------------------------------------------------
--- mappings
+--                                  filetype                                  --
 --------------------------------------------------------------------------------
-local map = vim.keymap.set
-local args = { silent = true }
+aucmd({"BufEnter"}, {pattern = p, once = true, callback = require('lex.list').highlight_items})
 
--- fuzzy find stuff
-map("n", " f", function() require'lex.link'.fuzzy.goto() end, args)
--- "  is <c-/> (the mapping only works if it's the literal character)
-map("n", "", function() require'lex.link'.fuzzy.put() end, args)
-map("i", "", function() require'lex.link'.fuzzy.insert() end, args)
+--------------------------------------------------------------------------------
+--                                  settings                                  --
+--------------------------------------------------------------------------------
+aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
+    scope = 'b',
+    key = 'ft_opts_applied',
+    fn = function()
+        vim.wo.conceallevel = 2
+        vim.wo.linebreak = true
+        vim.bo.expandtab = true
+        vim.bo.commentstring = ">%s"
+        vim.bo.textwidth = 0
+        vim.bo.shiftwidth = 2
+        vim.bo.softtabstop = 2
+    end,
+})})
 
--- delete the currently selected lines and move them to the scratch file
-map("n", " s", function() require'lex.scratch'.move('n') end, args)
-map("v", " s", [[:'<,'>lua require'lex.scratch'.move('v')<cr>]], args)
+--------------------------------------------------------------------------------
+--                            general lex commands                            --
+--------------------------------------------------------------------------------
+local lex_g = vim.api.nvim_create_augroup('lex_cmds', { clear = true })
 
--- todos
-map("n", " td", function() require'lex.list'.toggle_sigil('n', '✓') end, args)
-map("v", " td", ":lua require'lex.list'.toggle_sigil('v', '✓')<cr>", args)
-map("n", " tq", function() require'lex.list'.toggle_sigil('n', '?') end, args)
-map("v", " tq", ":lua require'lex.list'.toggle_sigil('v', '?')<cr>", args)
-map("n", " tm", function() require'lex.list'.toggle_sigil('n', '~') end, args)
-map("v", " tm", ":lua require'lex.list'.toggle_sigil('v', '~')<cr>", args)
+aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=require'lex.config'.set})
+
+------------------------------------[ sync ]------------------------------------
+local sync_g = vim.api.nvim_create_augroup('lex_sync_cmds', { clear = true })
+local sync = require'lex.sync'
+
+local function if_sync(fn)
+    return function()
+        if vim.b.lex_config_path and not vim.b.lex_sync_ignore and not vim.g.lex_sync_ignore then
+            fn()
+        end
+    end
+end
+
+aucmd({'BufEnter'}, {pattern=p, group=sync_g, callback=if_sync(sync.buf_enter)})
+aucmd({'TextChanged', 'InsertLeave'}, {pattern=p, group=sync_g, callback=if_sync(sync.buf_change)})
+aucmd({'BufLeave', 'VimLeave'}, {pattern=p, group=sync_g, callback=if_sync(sync.buf_leave)})
+
+----------------------------------[ mappings ]----------------------------------
+aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
+    scope = 'b',
+    key = 'lex_maps_applied', 
+    fn = function()
+        require('lex.opener').map()
+        require('lex.list').map_item_toggles(" t")
+
+        local args = { silent = true, buffer = true }
+
+        -- fuzzy find stuff
+        vim.keymap.set("n", " df", function() require'lex.link'.fuzzy.goto() end, args)
+        -- "  is <c-/> (the mapping only works if it's the literal character)
+        vim.keymap.set("n", "", function() require'lex.link'.fuzzy.put() end, args)
+        vim.keymap.set("i", "", function() require'lex.link'.fuzzy.insert() end, args)
+
+        -- delete the currently selected lines and move them to the scratch file
+        vim.keymap.set("n", " s", function() require'lex.scratch'.move('n') end, args)
+        vim.keymap.set("v", " s", [[:'<,'>lua require'lex.scratch'.move('v')<cr>]], args)
+    end
+})})
+
+----------------------------------[ commands ]----------------------------------
+aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
+    scope = 'b',
+    key = 'lex_cmds_applied', 
+    fn = function()
+        local cmd = vim.api.nvim_buf_create_user_command
+        local journal = require('lex.journal')
+
+        cmd(0, "Push", function() require'lex.config'.push() end, {})
+        cmd(0, "Journal", function() util.open_path(journal.path{journal = 'catch all'}) end, {})
+        cmd(0, "PJournal", function() util.open_path(journal.path()) end, {})
+        cmd(0, "WJournal", function() util.open_path(journal.path{journal = 'on writing'}) end, {})
+        cmd(0, "Goals", function() util.open_path(require'lex.goals'.path()) end, {})
+        cmd(0, "Index", function() require'lex.index'.open() end, {})
+    end
+})})

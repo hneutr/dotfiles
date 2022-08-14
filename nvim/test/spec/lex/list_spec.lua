@@ -1,6 +1,7 @@
 local mock = require('luassert.mock')
 local stub = require('luassert.stub')
 local m = require('lex.list')
+require('util')
 
 
 describe("Item", function()

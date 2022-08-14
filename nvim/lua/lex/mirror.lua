@@ -1,5 +1,5 @@
-require'class'
 local M = {}
+local class = require'util.class'
 local config = require'lex.config'
 
 --------------------------------------------------------------------------------
