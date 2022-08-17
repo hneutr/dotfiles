@@ -42,6 +42,9 @@
         - `questions`
         - `todos`
       - `notes`
+        - `style`
+        - `ideas`
+      - have `gotos` to each of these sections, and treat them as _marks_
     - structure 2:
       - `questions`
       - `todos`

@@ -9,6 +9,7 @@ end
 
 return require('packer').startup(function(use)
     ----------------------------------[ plugins ]-----------------------------------
+    use 'wbthomason/packer.nvim'                                        -- plugin manager
     use 'altercation/vim-colors-solarized'                              -- colorscheme
     use 'hneutr/nvimux'                                                 -- tmux replacement
     use 'hneutr/vim-cool'                                               -- it's cool
@@ -31,9 +32,9 @@ return require('packer').startup(function(use)
 
     ---------------------------------[ languages ]----------------------------------
     use 'nvim-treesitter/nvim-treesitter'                               -- syntax/indent
-    use 'jeetsukumaran/vim-pythonsense'
-    use 'sheerun/vim-polyglot'
+    use 'jeetsukumaran/vim-pythonsense'                                 -- python text objects
     use 'neovim/nvim-lspconfig'
+    use 'sheerun/vim-polyglot'
 
     ----------------------------------[ testing ]-----------------------------------
 

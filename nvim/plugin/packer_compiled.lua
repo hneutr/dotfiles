@@ -124,6 +124,11 @@ _G.packer_plugins = {
     path = "/Users/hne/.local/share/nvim/site/pack/packer/start/nvimux",
     url = "https://github.com/hneutr/nvimux"
   },
+  ["packer.nvim"] = {
+    loaded = true,
+    path = "/Users/hne/.local/share/nvim/site/pack/packer/start/packer.nvim",
+    url = "https://github.com/wbthomason/packer.nvim"
+  },
   ["targets.vim"] = {
     loaded = true,
     path = "/Users/hne/.local/share/nvim/site/pack/packer/start/targets.vim",
