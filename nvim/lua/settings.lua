@@ -152,5 +152,7 @@ vim.g.polyglot_disabled = { "autoindent" }
 
 -- default maps are stupid
 vim.g.vim_markdown_no_default_key_mappings = 1
+vim.g.vim_markdown_auto_insert_bullets = 0
+vim.g.vim_markdown_new_list_item_indent = 0
 
 vim.g.is_pythonsense_alternate_motion_keymaps = 1

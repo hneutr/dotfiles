@@ -222,6 +222,11 @@ function M.map_item_toggles(lhs_prefix)
     for i, item_type in ipairs(vim.tbl_keys(Item.types)) do
         Item.map_toggle(lhs_prefix, item_type)
     end
+
+    vim.b.autolist_chars = vim.tbl_keys(Item.types)
+    vim.cmd("iunmap <cr>")
+    vim.keymap.set("i", "<cr>", [[<cr><cmd>lua require'util.list'.autolist()<cr>]], {buffer = true})
+    vim.keymap.set("n", "o", [[o<cmd>lua require'util.list'.autolist()<cr>]], {buffer = true})
 end
 
 return M
