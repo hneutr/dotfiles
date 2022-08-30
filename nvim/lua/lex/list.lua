@@ -7,17 +7,17 @@ local M = {}
 -- Item
 --------------------------------------------------------------------------------
 Item = class(function(self, args)
-    args = _G.default_args(args, { sigil = '-', text = '', indent = 0 })
+    args = _G.default_args(args, {sigil = '-', text = '', indent = 0})
     self.sigil = args.sigil
     self.text = args.text
     self.indent = args.indent
 end)
 
 Item.types = {
-    ['-'] = { name = 'default', nohl = true},
-    ['✓'] = { name = 'done', map_lhs_suffix = 'd'},
-    ['?'] = { name = 'question', map_lhs_suffix = 'q'},
-    ['~'] = { name = 'maybe', map_lhs_suffix = 'm', regex_sigil = [[\~]]},
+    ['-'] = {name = 'default', nohl = true},
+    ['✓'] = {name = 'done', map_lhs_suffix = 'd'},
+    ['?'] = {name = 'question', map_lhs_suffix = 'q'},
+    ['~'] = {name = 'maybe', map_lhs_suffix = 'm', regex_sigil = [[\~]]},
 }
 Item.default_type = '-'
 Item.default_hl_args = {
@@ -224,9 +224,6 @@ function M.map_item_toggles(lhs_prefix)
     end
 
     vim.b.autolist_chars = vim.tbl_keys(Item.types)
-    vim.cmd("iunmap <cr>")
-    vim.keymap.set("i", "<cr>", [[<cr><cmd>lua require'util.list'.autolist()<cr>]], {buffer = true})
-    vim.keymap.set("n", "o", [[o<cmd>lua require'util.list'.autolist()<cr>]], {buffer = true})
 end
 
 return M

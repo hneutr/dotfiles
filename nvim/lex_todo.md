@@ -6,6 +6,10 @@
 - support specifying files for indexes to ignore in `.project`
 - implement: view a mark's references
 - snippet: `mhtd`: make marker header with today's date in it
+- `X` list item type: indicates rejections
+  - have command to move all `X` items into a rejections mirror
+- have some method/place to store prose fragments, eg content about wildlife, hippose, Fennessez, etc
+- have `mark-insert` respect capitalization (and capitalize character filenames)
 
 ----------------------------------------
 > [locations]()
@@ -21,11 +25,9 @@
 ----------------------------------------
 > [questions]()
 ----------------------------------------
-- infrastructure around daily questions?
-  - move old questions to a dir
-  - browse by topic/tag
-- store all questions in one file?
-  - categorize questions?
+- change the list item style text color so that it emphasizes questions, rather than mutes them
+- make `mq` snippet: inserts a `?` list item with a date flag (`[](d=TODAY)`)
+- implement way to view all questions by date/status (open/closed)
 
 #-------------------------------------------------------------------------------
 # [mirrors]()
@@ -81,6 +83,7 @@
 - `*` = in progress (display visually in indexes)
 - `?` = question (maybe)
 - `+` = include in-file markers in the outline (when used within an outline)
+- `d=YYYYMMDD` = date flag
 
 #-------------------------------------------------------------------------------
 # [plans]()

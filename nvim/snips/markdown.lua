@@ -22,7 +22,7 @@ ls.add_snippets("markdown", {
         ""}, i(1),
         t{"",
         "",
-        su.charline()}
+        su.charline(), ""}
     }),
     s("quote", {
         t{"-----",

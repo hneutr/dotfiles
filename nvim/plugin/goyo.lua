@@ -16,7 +16,15 @@ function goyo_start()
     vim.o.showcmd = false
     vim.wo.spell = true
 
-    vim.keymap.set("n", " q", function() vim.cmd("GoyoToggle|quit") end, {silent = true})
+    vim.keymap.set(
+        "n",
+        " q",
+        function()
+            vim.cmd("GoyoToggle")
+            vim.cmd("quit")
+        end,
+        {silent = true}
+    )
 end
 
 function goyo_stop()

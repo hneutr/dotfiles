@@ -53,20 +53,28 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
     scope = 'b',
     key = 'lex_maps_applied', 
     fn = function()
-        require('lex.opener').map()
-        require('lex.list').map_item_toggles(" t")
+        if vim.b.lex_config_path then
+            require('lex.opener').map()
+            require('lex.list').map_item_toggles(" t")
 
-        local args = { silent = true, buffer = true }
+            local args = { silent = true, buffer = true }
 
-        -- fuzzy find stuff
-        vim.keymap.set("n", " df", function() require'lex.link'.fuzzy.goto() end, args)
-        -- "  is <c-/> (the mapping only works if it's the literal character)
-        vim.keymap.set("n", "", function() require'lex.link'.fuzzy.put() end, args)
-        vim.keymap.set("i", "", function() require'lex.link'.fuzzy.insert() end, args)
+            -- fuzzy find stuff
+            vim.keymap.set("n", " df", function() require'lex.link'.fuzzy.goto() end, args)
+            -- "  is <c-/> (the mapping only works if it's the literal character)
+            vim.keymap.set("n", "", function() require'lex.link'.fuzzy.put() end, args)
+            vim.keymap.set("i", "", function() require'lex.link'.fuzzy.insert() end, args)
 
-        -- delete the currently selected lines and move them to the scratch file
-        vim.keymap.set("n", " s", function() require'lex.scratch'.move('n') end, args)
-        vim.keymap.set("v", " s", [[:'<,'>lua require'lex.scratch'.move('v')<cr>]], args)
+            -- delete the currently selected lines and move them to the scratch file
+            vim.keymap.set("n", " s", function() require'lex.scratch'.move('n') end, args)
+            vim.keymap.set("v", " s", [[:'<,'>lua require'lex.scratch'.move('v')<cr>]], args)
+        else
+            vim.b.autolist_chars = {'-'}
+        end
+
+
+        vim.keymap.set("i", "<cr>", [[<cr><cmd>lua require'util.list'.autolist()<cr>]], {buffer = true})
+        vim.keymap.set("n", "o", [[o<cmd>lua require'util.list'.autolist()<cr>]], {buffer = true})
     end
 })})
 
