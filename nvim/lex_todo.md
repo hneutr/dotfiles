@@ -1,15 +1,15 @@
 #-------------------------------------------------------------------------------
 # [misc todo]()
 #-------------------------------------------------------------------------------
-- visual mapping: open fuzzy menu to turn selected text into a reference
-- render italics/bold in toggled list items
-- support specifying files for indexes to ignore in `.project`
-- implement: view a mark's references
-- snippet: `mhtd`: make marker header with today's date in it
-- `X` list item type: indicates rejections
-  - have command to move all `X` items into a rejections mirror
-- have some method/place to store prose fragments, eg content about wildlife, hippose, Fennessez, etc
-- have `mark-insert` respect capitalization (and capitalize character filenames)
+- imp: visual mapping open fuzzy menu to turn selected text into a reference
+- imp: specify files to be ignored by indexes in `.project`
+- imp: view a mark's references
+- imp: `X` list item type, indicates rejections
+  - imp: command to move all `X` items into a rejections mirror
+- imp: make `mark-insert` respect capitalization (and capitalize character filenames)
+- imp: some method/place to store prose fragments, eg content about wildlife, hippos, Fennessez, etc
+- BUG: render italics/bold in toggled list items
+- BUG: fix `goals`: if file month-file doesn't exist, create one with the monthly/weekly/daily headers
 
 ----------------------------------------
 > [locations]()

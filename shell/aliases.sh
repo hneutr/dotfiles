@@ -18,6 +18,7 @@ alias vi="nvim"
 alias vim="nvim"
 alias gv="vim -c 'GoyoToggle' "
 alias gvt="vim -c 'GoyoToggle' text.md"
+alias term="nvim -c term"
 
 # python
 alias python="python3"

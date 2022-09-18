@@ -13,6 +13,12 @@ ls.add_snippets("markdown", {
     s("bh", mds.header.big.ls),
     s("mh", mds.link_header.small.ls),
     s("mbh", mds.link_header.big.ls),
+    s("mhtd", {
+        t{mds.divider.small.str(), "> ["},
+        f(function() return vim.fn.strftime("%Y%m%d") end),  t{"]()",
+        mds.divider.small.str(), "", ""},
+        i(1)
+    }),
     s("bl", mds.divider.big.ls),
     s("l", mds.divider.small.ls),
     s("journal", {

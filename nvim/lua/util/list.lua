@@ -29,7 +29,7 @@ function M.autolist()
 	end
 end
 
---------------------------------------------------------------------------------
+--                                                                            ----------------------------------------------------------------------------------
 --                                  ListItem                                  --
 --------------------------------------------------------------------------------
 ListItem = Object:extend()
@@ -37,15 +37,18 @@ ListItem = Object:extend()
 ListItem.pattern = "^(%s*)%-%s(.*)$"
 
 function ListItem:new(args)
-    self = vim.tbl_extend("force", self, {text = '', indent = '', line_number = 0}, args)
-end
-
-function ListItem:str()
-    return self.indent .. self:sigil_str() .. self.text
+    args = _G.default_args(args, {text = '', indent = '', line_number = 0})
+    for key, val in pairs(args) do
+        self[key] = val
+    end
 end
 
 function ListItem:write()
     line_utils.set({start_line = self.line_number, replacement = {self:str()}})
+end
+
+function ListItem:str()
+    return self.indent .. self:sigil_str() .. self.text
 end
 
 function ListItem:sigil_str()
@@ -59,12 +62,35 @@ function ListItem.get_if_str_is_a(str, line_number)
     end
 end
 
+M.ListItem = ListItem
+
+--------------------------------------------------------------------------------
+--                                NonListItem                                 --
+--------------------------------------------------------------------------------
+NonListItem = ListItem:extend()
+
+function NonListItem:sigil_str()
+    return ""
+end
+
+function NonListItem.get_if_str_is_a(str, line_number)
+    return Item({text = str, line_number = line_number})
+end
+
+M.NonListItem = NonListItem
+
 --------------------------------------------------------------------------------
 --                              NumberedListItem                              --
 --------------------------------------------------------------------------------
 NumberedListItem = ListItem:extend()
 
 NumberedListItem.pattern = "^(%s*)(%d+)%.%s(.*)$"
+
+function NumberedListItem:new(args)
+    args = _G.default_args(args, {number = 1})
+    NumberedListItem.super.new(self, args)
+end
+
 
 function NumberedListItem:sigil_str()
     return self.number .. ". "
@@ -73,8 +99,75 @@ end
 function NumberedListItem.get_if_str_is_a(str, line_number)
     local indent, number, text = str:match(NumberedListItem.pattern)
     if indent and number and text then
+        number = tonumber(number)
         return NumberedListItem({number = number, text = text, indent = indent, line_number = line_number})
     end
+end
+
+M.NumberedListItem = NumberedListItem
+
+--------------------------------------------------------------------------------
+--                             get_item_from_line                             --
+--------------------------------------------------------------------------------
+M.default_item_types = {ListItem, NumberedListItem, Item}
+
+function M.get_item_from_line(str, line_number, item_types)
+    item_types = item_types or M.default_item_types
+    for i, item_type in ipairs(item_types) do
+        local item = item_type.get_if_str_is_a(str, line_number)
+
+        if item then
+            return item
+        end
+    end
+end
+
+function M.group_items_by_indent(items)
+    table.sort(items, function(a, b) return a.line_number < b.line_number end)
+
+    local last_indent = 0
+    local groups = {}
+    local current_groups = {}
+
+    for i, item in ipairs(items) do
+        if item:str():len() == 0 then
+            for _, group in pairs(current_groups) do
+                table.insert(groups, group)
+            end
+
+            current_groups = {}
+        else
+            local indent = item.indent:len()
+            if indent < last_indent then
+                table.insert(groups, current_groups[last_indent])
+                current_groups[last_indent] = {}
+            end
+
+            if not vim.tbl_get(current_groups, indent) then
+                current_groups[indent] = {}
+            end
+
+            table.insert(current_groups[indent], item)
+        end
+
+        last_indent = indent
+    end
+
+    for _, group in pairs(current_groups) do
+        table.insert(groups, group)
+    end
+
+    local final_groups = {}
+    for _, group in ipairs(groups) do
+        if vim.tbl_count(group) > 0 then
+            table.insert(final_groups, group)
+        end
+    end
+
+    return final_groups
+end
+
+function M.change_item_type(items, new_item_type)
 end
 
 --------------------------------------------------------------------------------

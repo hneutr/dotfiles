@@ -1,5 +1,5 @@
-local class = require'util.class'
-local ulines = require'util.lines'
+local class = require('util.class')
+local ulines = require('util.lines')
 
 local M = {}
 
@@ -124,6 +124,7 @@ end
 --------------------------[ syntax and highlighting ]---------------------------
 
 M.Item = Item
+
 --------------------------------------------------------------------------------
 -- NonItem
 --------------------------------------------------------------------------------
@@ -139,10 +140,11 @@ function NonItem:str()
 end
 
 function NonItem.from_str(str)
-    return NonItem{ text = str }
+    return NonItem({text = str})
 end
 
 M.NonItem = NonItem
+
 --------------------------------------------------------------------------------
 -- Lines
 --------------------------------------------------------------------------------
@@ -150,7 +152,7 @@ M.lines = {}
 
 function M.lines.get(mode)
     local lines = {}
-    for i, raw_line in ipairs(ulines.selection.get{ mode = mode }) do
+    for i, raw_line in ipairs(ulines.selection.get({mode = mode})) do
         if M.Item.str_is_a(raw_line) then
             line = Item.from_str(raw_line)
         else
@@ -164,7 +166,7 @@ function M.lines.get(mode)
 end
 
 function M.lines.set(args)
-    args = _G.default_args(args, { mode = 'n', lines = {}, sigil = nil })
+    args = _G.default_args(args, {mode = 'n', lines = {}, sigil = nil})
 
     local new_lines = {}
     for i, line in ipairs(args.lines) do
@@ -175,7 +177,7 @@ function M.lines.set(args)
         table.insert(new_lines, line:str())
     end
 
-    return ulines.selection.set{ mode = args.mode, replacement = new_lines}
+    return ulines.selection.set({mode = args.mode, replacement = new_lines})
 end
 
 function M.toggle_sigil(mode, sigil)
@@ -184,7 +186,7 @@ function M.toggle_sigil(mode, sigil)
     local new_sigil = M.get_new_sigil(lines, sigil)
 
     if new_sigil then
-        M.lines.set{ mode = mode, lines = lines, sigil = new_sigil }
+        M.lines.set({mode = mode, lines = lines, sigil = new_sigil})
     end
 end
 

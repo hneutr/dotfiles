@@ -38,6 +38,7 @@ function _G.filereadable(path)
     return vim.fn.filereadable(path) == 1
 end
 
+
 --------------------------------------------------------------------------------
 -- makes directories for a given path.
 -- If the last component of the path has an extension, it won't make that part

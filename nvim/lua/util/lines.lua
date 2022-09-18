@@ -27,17 +27,17 @@ function M._do(args)
 end
 
 function M.get(args)
-    args = _G.default_args(args, { action = 'get' })
+    args = _G.default_args(args, {action = 'get'})
     return M._do(args)
 end
 
 function M.set(args)
-    args = _G.default_args(args, { action = 'set' })
+    args = _G.default_args(args, {action = 'set'})
     return M._do(args)
 end
 
 function M.cut(args)
-    args = _G.default_args(args, { action = 'set', replacement = {} })
+    args = _G.default_args(args, {action = 'set', replacement = {}})
     return M._do(args)
 end
 
