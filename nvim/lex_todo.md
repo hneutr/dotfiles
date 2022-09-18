@@ -1,15 +1,14 @@
 #-------------------------------------------------------------------------------
 # [misc todo]()
 #-------------------------------------------------------------------------------
-- imp: visual mapping open fuzzy menu to turn selected text into a reference
 - imp: specify files to be ignored by indexes in `.project`
 - imp: view a mark's references
 - imp: `X` list item type, indicates rejections
   - imp: command to move all `X` items into a rejections mirror
 - imp: make `mark-insert` respect capitalization (and capitalize character filenames)
 - imp: some method/place to store prose fragments, eg content about wildlife, hippos, Fennessez, etc
-- BUG: render italics/bold in toggled list items
-- BUG: fix `goals`: if file month-file doesn't exist, create one with the monthly/weekly/daily headers
+- imp: render italics/bold in toggled list items
+~ imp: visual mapping open fuzzy menu to turn selected text into a reference
 
 ----------------------------------------
 > [locations]()

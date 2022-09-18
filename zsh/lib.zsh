@@ -96,6 +96,10 @@ function nvim_mv() {
     nvim --headless -c "lua require'lex.move'.move('$1', '$2')" +q
 }
 
+function nvim_mv_debug() {
+    nvim -c "lua require'lex.move'.move('$1', '$2')"
+}
+
 function wr() {
     nvim $1 -c "lua require'lex.mirror'.open('outlines')" +bnext +GoyoToggle
 }
