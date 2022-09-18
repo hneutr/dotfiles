@@ -25,12 +25,12 @@ describe("move:", function()
                path.is_file = function() return false end
                assert.equal(m.infer.file_into_dir("dir", "other_dir"), "other_dir")
            end)
-         
+        
            it("file to file: no change", function()
                path.is_file = function() return true end
                assert.equal(m.infer.file_into_dir("dir/test.md", "dir/subdir/test.md"), "dir/subdir/test.md")
            end)
-         
+        
            it("file to dir: change", function()
                path.is_file = function() return true end
                assert.equal(m.infer.file_into_dir("dir/test.md", "dir/subdir"), "dir/subdir/test.md")
@@ -42,10 +42,14 @@ describe("move:", function()
                path.is_dir = function() return true end
                assert.equal(m.infer.dir_into_dir("subdir", "dir"), "dir/subdir")
            end)
-
+       
            it("dst doesn't exist: src → dst", function()
                path.is_dir = function(p) return p == 'subdir' end
                assert.equal(m.infer.dir_into_dir("subdir", "dir"), "dir")
+           end)
+           it("dst exists but is parent of src: no change", function()
+               path.is_dir = function() return true end
+               assert.equal(m.infer.dir_into_dir("dir/subdir", "dir"), "dir")
            end)
        end)
    end)
