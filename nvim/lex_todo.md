@@ -8,6 +8,11 @@
 - create some method/place to store prose fragments, eg content about wildlife, hippos, Fennessez, etc
 - view a mark's references
 - make `mark-insert` respect capitalization (and capitalize character filenames)
+  - define "labels" for locations (maybe in `.project`)
+    - e.g., define a directory as "title case" (for example, the characters dir)
+- define aliases for locations (maybe in `.project`)
+  - e.g., have the reference to `context/groups/na-hiasciari-manach-dall.md` be `NHMD`
+  - also support aliases/hardcoded strings for location labels
 - remap `d` in markdown project files to `scratch text` instead of deleting
   - (clean blank lines too)
   - maybe just use autocmd event `TextYankPost`?
