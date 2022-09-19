@@ -1,220 +1,227 @@
-local M = {}
+--------------------------------------------------------------------------------
+--                                                                            --
+--                                                                            --
+--                                     h1                                     --
+--                                                                            --
+--                                                                            --
+--------------------------------------------------------------------------------
 
-local ls = require"luasnip"
+--------------------------------------------------------------------------------
+--                                                                            --
+--                                     h2                                     --
+--                                                                            --
+--------------------------------------------------------------------------------
 
-local s = ls.snippet
+--------------------------------------------------------------------------------
+--                                     h3                                     --
+--------------------------------------------------------------------------------
+
+-------------------------------------[ h4 ]-------------------------------------
+
+--------------------------------------------------------------------------------
+-- fnb (function block)
+-- --------------------
+-- 
+--------------------------------------------------------------------------------
+
+local Object = require("util.object")
+
+local ls = require("luasnip")
 local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
 
---------------------------------------------------------------------------------
---                                   lines                                    --
---------------------------------------------------------------------------------
-function M.charline(args)
-    args = _G.default_args(args, { char = '-', len = 80, line_start = '', line_end = '' })
-    local str = args.line_start
-    while str:len() < args.len - args.line_end:len() do
-        str = str .. args.char
-    end
-
-    return str .. args.line_end
-end
+local WIDTH = 80
+local DIVIDER_FILL_CHAR = '-'
+local INPUT_FILL_CHAR = ' '
+local COMMENT = '-'
 
 --------------------------------------------------------------------------------
---                                headers                                     --
+--                                   Block                                    --
 --------------------------------------------------------------------------------
-local header = {
-    line = {
-        args = {
-            defaults = {
-                fill_char = ' ',
-                line_start = '',
-                line_end = '',
-                pre_text = '',
-                post_text = '',
-                min_fill_left = 0,
-                min_fill_right = 0,
-                len = 80,
-            },
-            inline_defaults = {
-                pre_text = '[ ',
-                post_text = ' ]',
-                fill_char = '-',
-            },
-        },
-        side = { args = {}, },
-    },
-    h1 = {},
-    h2 = {},
-    h3 = {},
-    divider = {}
+local Block = Object:extend()
+Block.arg_defaults = {
+    comment = COMMENT,
+    divider_fill_char = DIVIDER_FILL_CHAR,
+    input_fill_char = INPUT_FILL_CHAR,
+    width = WIDTH,
 }
 
-function header.divider.get(comment_str)
-    return M.charline{ line_start = comment_str, line_end = comment_str }
-end
-
-function header.line.side.args.get(args)
-    args = _G.default_args(args, { side = 'left', comment_str = '', line_type = 'multiline' })
-
-    header_args = header.line.args.get(args.line_type)
-    header_args.side = args.side
-    header_args.line_start = args.comment_str
-    header_args.line_end = args.comment_str
-
-    return header_args
-end
-
-function header.line.args.get(line_type)
-    local args = {}
-    if line_type == 'inline' then
-        args = _G.default_args(args, header.line.args.inline_defaults)
-    end
-
-    return _G.default_args(args, header.line.args.defaults)
-end
-
-function header.line.side.get(text, args)
-    local before_space = args.line_start:len() + args.pre_text:len()
-    local after_space = args.line_end:len() + args.post_text:len()
-    local available_space = args.len - text:len() - before_space - after_space
-
-    local left_space = math.max(math.floor(available_space / 2), args.min_fill_left)
-    local right_space = math.max(available_space - left_space, args.min_fill_right)
-
-    local before, space, after
-    if args.side == 'left' then
-        before, space, after = args.line_start, left_space, args.pre_text
-    else
-        before, space, after = args.post_text, right_space, args.line_end
-    end
-
-    return before .. string.rep(args.fill_char, space) .. after
-end
-
-function header.line.side.get_ls(args, snip, user_args)
-    if type(user_args) == 'table' and table.getn(user_args) > 0 then
-        user_args = user_args[1]
-    end
-
-    return header.line.side.get(args[1][1], user_args)
-end
-
-function header.line.get(args)
-    args = _G.default_args(args, { as_snippet = true, text = '', comment_str = '', line_type = 'multiline' })
-
-    local l_args = header.line.side.args.get{
-        side = 'left',
-        comment_str = args.comment_str,
-        line_type = args.line_type,
-    }
-
-    local r_args = header.line.side.args.get{
-        side = 'right',
-        comment_str = args.comment_str,
-        line_type = args.line_type,
-    }
-
-    if args.as_snippet then
-        return f(header.line.side.get_ls, {1}, { user_args = { l_args } }), i(1), f(header.line.side.get_ls, {1}, { user_args = { r_args }})
-    else
-        return header.line.side.get(args.text, l_args) .. args.text .. header.line.side.get(args.text, r_args)
+function Block:new(args)
+    args = _G.default_args(args, Block.arg_defaults)
+    for k, v in pairs(args) do
+        self[k] = v
     end
 end
 
-function header.h1.get(text, comment_str)
-    local divider = header.divider.get(comment_str)
-    local header_line = header.line.get{ text = text, as_snippet = false, comment_str = comment_str }
+function Block:divider()
+    local str = self.comment
+    str = str .. string.rep(self.divider_fill_char, self.width - (2 * str:len()))
+    str = str .. self.comment
+    return str
+end
 
+function Block:spacer()
+    local str = self.comment
+    str = str .. string.rep(' ', self.width - (2 * str:len()))
+    str = str .. self.comment
+    return str
+end
+
+function Block:set_text(text)
+    self.text = text or ''
+end
+
+function Block:snippet()
     return {
-        divider,
-        header_line,
-        divider,
-        comment_str .. " ",
-        divider,
+        t{self:divider(), self.comment .. " "},
+        i(1),
+        t{"", self:divider()},
     }
-end
-
-function header.h1.get_ls(comment_str)
-    local divider = header.divider.get(comment_str)
-    local left, text, right = header.line.get{ comment_str = comment_str }
-
-    return {
-        t{ divider,
-        "" }, left, text, right,
-        t{ "", divider,
-        comment_str .. " "}, i(2),
-        t{ "", divider }
-    }
-end
-
-function header.h2.get(text, comment_str)
-    local divider = header.divider.get(comment_str)
-    local header_line = header.line.get{ text = text, as_snippet = false, comment_str = comment_str }
-
-    return {
-        divider,
-        header_line,
-        divider,
-    }
-end
-
-function header.h2.get_ls(comment_str)
-    local divider = header.divider.get(comment_str)
-    local left, text, right = header.line.get{ comment_str = comment_str }
-
-    return {
-        t{ divider,
-        "" }, left, text, right,
-        t{ "", divider }
-    }
-end
-
-function header.h3.get(text, comment_str)
-    return { header.line.get{ text = text, as_snippet = false, comment_str = comment_str, line_type = 'inline' } }
-end
-
-function header.h3.get_ls(comment_str)
-    return { header.line.get{ comment_str = comment_str, line_type = 'inline' } }
 end
 
 --------------------------------------------------------------------------------
---                             standard snippets                              --
+--                                  Function                                  --
 --------------------------------------------------------------------------------
-function M.get_header_snippets(comment_str)
+local FunctionBlock = Block:extend()
+
+function FunctionBlock:underline()
+    return string.rep(self.divider_fill_char, self.text:len())
+end
+
+function FunctionBlock.fill_underline(args, _, user_args)
+    local text = args[1][1]
+    local obj = user_args[1]
+    obj:set_text(text)
+    return obj:underline()
+end
+
+function FunctionBlock:snippet()
     return {
-        s("h1", header.h1.get_ls(comment_str)),
-        s("h2", header.h2.get_ls(comment_str)),
-        s("h3", header.h3.get_ls(comment_str)),
+        t({self:divider(), self.comment .. " "}),
+        i(1),
+        t({"", self.comment .. " "}),
+        f(FunctionBlock.fill_underline, {1}, {user_args = {{self}}}),
+        t({"", self.comment .. " ", self:divider()}),
     }
 end
 
-function M.get_print_snippets(args)
-    args = _G.default_args(args, { print_fn = 'print', fn_open = '(', fn_close = ')'})
+--------------------------------------------------------------------------------
+--                                   Header                                   --
+--------------------------------------------------------------------------------
+local Header = Block:extend()
 
-    return {
-        s("p", { t(args.print_fn .. args.fn_open), i(1), t(args.fn_close) }),
-        s("qp", { t(args.print_fn .. args.fn_open .. '"'), i(1), t('"' .. args.fn_close) }),
-    }
-end
+function Header:before() return {} end
+function Header:after()
+    local before = self:before()
 
-function M._get_print_snippets(print_string)
-    local snips = {}
-    if print_string then
-        local print_open, print_close = print_string:match("^(.*)%%s(.*)$")
-
-        snips = {
-            s("p", {t(print_open), i(1), t(print_close)}),
-            s("qp", {t(print_open .. '"'), i(1), t('"' .. print_close)}),
-        }
+    local after = {}
+    for i = #before, 1, -1 do
+        table.insert(after, before[i])
     end
 
-    return snips
+    return after
 end
 
-function M.load_standard_snips_for_filetype(filetype, comment_str)
-    ls.add_snippets(filetype, M.get_header_snippets(comment_str))
-    ls.add_snippets(filetype, M._get_print_snippets(vim.tbl_get(vim.g.snip_ft_printstrings, filetype)))
+function Header:set_text(text)
+    Header.super.set_text(self, text)
+
+    self.to_fill = {total = self.width - self.text:len()}
+    self.to_fill.left = math.max(math.floor(self.to_fill.total / 2), self.comment:len())
+    self.to_fill.right = math.max(self.to_fill.total - self.to_fill.left, self.comment:len())
 end
 
-return M
+function Header:side_fill(side)
+    local str = self.comment
+    str = str .. string.rep(self.input_fill_char, self.to_fill[side] - str:len())
+
+    if side == 'right' then
+        str = str:reverse()
+    end
+
+    return str
+end
+
+function Header.side_fill_fn(args, _, user_args)
+    local text = args[1][1]
+    local obj, side = unpack(user_args)
+    obj:set_text(text)
+    return obj:side_fill(side)
+end
+
+function Header:get_text_snip(text)
+    if text then
+        return t(text)
+    end
+end
+
+function Header:snippet()
+    return {
+        self:get_text_snip(self:before()),
+        f(Header.side_fill_fn, {1}, {user_args = {{self, 'left'}}}),
+        i(1),
+        f(Header.side_fill_fn, {1}, {user_args = {{self, 'right'}}}),
+        self:get_text_snip(self:after()),
+    }
+end
+
+-------------------------------------[ H1 ]-------------------------------------
+H1 = Header:extend()
+function H1:before() return {self:divider(), self:spacer(), self:spacer(), ""} end
+
+-------------------------------------[ H2 ]-------------------------------------
+H2 = Header:extend()
+function H2:before() return {self:divider(), self:spacer(), ""} end
+
+-------------------------------------[ H3 ]-------------------------------------
+H3 = Header:extend()
+function H3:before() return {self:divider(), ""} end
+
+-------------------------------------[ H4 ]-------------------------------------
+H4 = Header:extend()
+H4.beside_text = { left = '[ ', right = ' ]'}
+
+function H4:side_fill(side)
+    local beside_text = H4.beside_text[side]
+    local to_fill = self.to_fill[side] - self.comment:len() - beside_text:len()
+
+    local str = self.comment .. string.rep(self.divider_fill_char, to_fill)
+
+    if side == 'right' then
+        str = beside_text .. str:reverse()
+    else
+        str = str .. beside_text
+    end
+
+    return str
+end
+
+-----------------------------------[ Print ]------------------------------------
+local Print = Object:extend()
+
+function Print:new(print_string)
+    self.print_string = print_string or 'print(%s)'
+    self.open, self.close = self.print_string:match("^(.*)%%s(.*)$")
+end
+
+function Print:snippet(add_quotes)
+    local open = self.open
+    local close = self.close
+
+    if add_quotes then
+        open = open .. '"'
+        close = '"' .. close
+    end
+
+    return {t(open), i(1), t(close)}
+end
+
+return {
+    Block = Block,
+    H1 = H1,
+    H2 = H2,
+    H3 = H3,
+    H4 = H4,
+    FunctionBlock = FunctionBlock,
+    Print = Print
+}

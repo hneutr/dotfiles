@@ -1,15 +1,28 @@
-local snip_utils = require'snips'
+local ls = require("luasnip")
+local s = ls.snippet
+
+local snips = require('snips')
 
 vim.api.nvim_create_autocmd({'BufEnter'}, {pattern="*", callback=function()
-    local filetypes_with_standard_snips_loaded = vim.tbl_get(vim.g, 'filetypes_with_standard_snips_loaded') or {} 
+    local loaded_fts = vim.tbl_get(vim.g, 'fts_with_standard_snips_loaded') or {} 
 
     local filetype = vim.bo.filetype
+    if not vim.tbl_get(loaded_fts, filetype) then
+        local comment_str = string.gsub(vim.bo.commentstring, "%s?%%s$", '')
+        local ft_print_string = vim.tbl_get(vim.g.snip_ft_printstrings, filetype)
 
-    if not vim.tbl_get(filetypes_with_standard_snips_loaded, filetype) then
-        local commentstring = string.gsub(vim.bo.commentstring, "%s?%%s$", '')
-        snip_utils.load_standard_snips_for_filetype(filetype, commentstring)
+        ls.add_snippets(filetype, {
+            s("block", snips.Block({comment=comment_str}):snippet()),
+            s("h1", snips.H1({comment=comment_str}):snippet()),
+            s("h2", snips.H2({comment=comment_str}):snippet()),
+            s("h3", snips.H3({comment=comment_str}):snippet()),
+            s("h4", snips.H4({comment=comment_str}):snippet()),
+            s("fnb", snips.FunctionBlock({comment=comment_str}):snippet()),
+            s("p", snips.Print(ft_print_string):snippet()),
+            s("qp", snips.Print(ft_print_string):snippet(true)),
+        })
 
-        filetypes_with_standard_snips_loaded[filetype] = true
-        vim.g.filetypes_with_standard_snips_loaded = filetypes_with_standard_snips_loaded
+        loaded_fts[filetype] = true
+        vim.g.fts_with_standard_snips_loaded = loaded_fts
     end
 end})

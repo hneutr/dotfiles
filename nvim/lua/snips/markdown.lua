@@ -1,15 +1,14 @@
 local M = {}
 
 local ls = require("luasnip")
-local su = require("snips")
 
 local s = ls.snippet
 local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
 
-local big_divider = su.charline{char = '-', line_start = '#'}
-local small_divider = su.charline{char = '-', len = 40}
+local big_divider = '#' .. string.rep("-", 80 - 1)
+local small_divider = string.rep("-", 40)
 
 function get_header_ls(text_start, divider)
     return {

@@ -1,32 +1,78 @@
 #-------------------------------------------------------------------------------
 # [misc todo]()
 #-------------------------------------------------------------------------------
-- imp: specify files to be ignored by indexes in `.project`
-- imp: view a mark's references
-- imp: `X` list item type, indicates rejections
-  - imp: command to move all `X` items into a rejections mirror
-- imp: make `mark-insert` respect capitalization (and capitalize character filenames)
-- imp: some method/place to store prose fragments, eg content about wildlife, hippos, Fennessez, etc
-- imp: render italics/bold in toggled list items
-~ imp: visual mapping open fuzzy menu to turn selected text into a reference
 
 ----------------------------------------
-> [locations]()
+> [features]()
 ----------------------------------------
-- switch `FILE_DELIMITER` to some untypable non-ascii character
-- remove `.md` from paths in a location (to shorten them)
-~ replace spaces with some invisible character?
-~ make links paths relative?
-  - implementation:
-    - if in same dir or child, start with: `./`
-    - if above, specify full project path, don't start path with `./`
+- create some method/place to store prose fragments, eg content about wildlife, hippos, Fennessez, etc
+- view a mark's references
+- make `mark-insert` respect capitalization (and capitalize character filenames)
+- remap `d` in markdown project files to `scratch text` instead of deleting
+  - (clean blank lines too)
+  - maybe just use autocmd event `TextYankPost`?
+- `X` list item type, indicates rejections
+  - command to move all `X` items into a rejections mirror (add a rejections mirror?)
+- visual mapping open fuzzy menu to turn selected text into a reference
+- specify files to be ignored by indexes in `.project`
+
+----------------------------------------
+> [unit testing]()
+----------------------------------------
+- `lex.move`
+- `lex.link.Reference`
+- `lex.mirror.MLocation:find_updates`
+~ `lex.index`
+
+----------------------------------------
+> [refactors]()
+----------------------------------------
+- `lex.sync`:
+  - make it work better with references
+  - implement a better mechanism for turning it on/off than lex.g.lex_sync_ignore
 
 ----------------------------------------
 > [questions]()
 ----------------------------------------
-- change the list item style text color so that it emphasizes questions, rather than mutes them
 - make `mq` snippet: inserts a `?` list item with a date flag (`[](d=TODAY)`)
 - implement way to view all questions by date/status (open/closed)
+
+----------------------------------------
+> [locations]()
+----------------------------------------
+- remove `.md` from paths in a location (to shorten them)
+~ make links paths relative?
+  - implementation:
+    - if in same dir or child, start with: `./`
+    - if above, specify full project path, don't start path with `./`
+  ~ would make updating links harder (could just solve by "un-relativizing" them when after running rg/etc)
+~ switch `FILE_DELIMITER` to some untypable non-ascii character
+~ replace spaces with some invisible character?
+
+#-------------------------------------------------------------------------------
+# [flags]()
+#-------------------------------------------------------------------------------
+- mark/reference: `[mark]()[](flags)`, flagset = `[](flags)`
+- file: `[name](path): flags` (stored in a "file flags" file that lists all files in the project)
+
+----------------------------------------
+> [things to support]()
+----------------------------------------
+- view things with a given flag
+- view questions associated with a mark
+- mechanism to associate a question with a mark
+  - implementations:
+    1. have questions file and have each question reference a mark
+    2. put questions in some file, give them a mark with a non-ascii key, add that key to the mark's flagset
+
+----------------------------------------
+> [flag ideas]()
+----------------------------------------
+- `!` = important
+- `*` = in progress (display visually in indexes)
+- `?` = question (maybe)
+- `+` = include in-file markers in the outline (when used within an outline)
+- `d=YYYYMMDD` = date flag
 
 #-------------------------------------------------------------------------------
 # [mirrors]()
@@ -58,31 +104,6 @@
 - open a file's mirrors
 - mechanism to indicate "this mirror is only for files of type x" (eg `fragments` is only for `text`)
 - gather all content in `issues` and output list of todos
-
-#-------------------------------------------------------------------------------
-# [flags]()
-#-------------------------------------------------------------------------------
-- mark/reference: `[mark]()[](flags)`, flagset = `[](flags)`
-- file: `[name](path): flags` (stored in a "file flags" file that lists all files in the project)
-
-----------------------------------------
-> [things to support]()
-----------------------------------------
-- view things with a given flag
-- view questions associated with a mark
-- mechanism to associate a question with a mark
-  - implementations:
-    1. have questions file and have each question reference a mark
-    2. put questions in some file, give them a mark with a non-ascii key, add that key to the mark's flagset
-
-----------------------------------------
-> [flag ideas]()
-----------------------------------------
-- `!` = important
-- `*` = in progress (display visually in indexes)
-- `?` = question (maybe)
-- `+` = include in-file markers in the outline (when used within an outline)
-- `d=YYYYMMDD` = date flag
 
 #-------------------------------------------------------------------------------
 # [plans]()

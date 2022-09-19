@@ -204,7 +204,7 @@ end
 
 
 function M.run_once(args)
-    args = _G.default_args(args, { scope = 'b', key = '', fn = function() return end })
+    args = _G.default_args(args, {scope = 'b', key = '', fn = function() return end })
     return function()
         if not vim[args.scope][args.key] then
             args.fn()

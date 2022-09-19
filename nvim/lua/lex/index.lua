@@ -1,6 +1,7 @@
 local M = {}
-local l = require'lex.link'
-local snips = require'snips.markdown'
+local l = require('lex.link')
+local snips = require('snips.markdown')
+local util = require('util')
 
 local default_index_path = vim.env.TMPDIR .. 'index.md'
 local stem_exclusions = {'.git', '.gitignore', '.mirrors', '.project'}
@@ -12,22 +13,22 @@ function M.open(open_command)
         M.get_dir_index(),
     })
 
-    require'util'.write_file(lines, default_index_path)
+    util.write_file(lines, default_index_path)
 
     local lex_config_path = vim.b.lex_config_path
-    require'util'.open_path(default_index_path, open_command)
+    util.open_path(default_index_path, open_command)
 
     vim.b.lex_sync_ignore = true
     vim.b.lex_config_path = lex_config_path
 
-    require'lex.opener'.map()
+    require('lex.opener').map()
 end
 
 
 function M.get_file_index(path)
     local marks = {}
     local min_indent = 1000
-    for i, str in ipairs(require'util.lines'.get()) do
+    for i, str in ipairs(require('util.lines').get()) do
         if l.Mark.str_is_a(str) then
             local mark = l.Mark.from_str(str)
 
