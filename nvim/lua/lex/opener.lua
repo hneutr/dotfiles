@@ -34,6 +34,7 @@ function M.set()
             ["<M-l>"] = "vsplit",
             ["<M-j>"] = "split",
             ["<M-e>"] = "edit",
+            ["<M-t>"] = "tabedit",
         },
         map_args = {},
     })

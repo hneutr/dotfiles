@@ -57,19 +57,43 @@ local maps = {
         -- change indent
         {"<c-h>", "<c-d>"},
         {"<c-l>", "<c-t>"},
-        -- digraphs are good
-        {"<M-->", "—"},
-        {"<M-=>", "≠"},
-        {"<M-Left>", "←"},
-        {"<M-Right>", "→"},
-        {"<M-Up>", "↑"},
-        {"<M-Down>", "↓"},
         -- move to end of line
         {"<c-a>", "<c-o>A"},
         -- paste like in terminal mode
         {"", '<c-r>"'},
         -- forward delete like macos
         {"<c-d>", "<del>"},
+        -----------------------------[ digraphs are good ]------------------------------
+        {"<M-->", "—"},
+        {"<M-0>", "°"},
+        -- math
+        {"<M-=>", "≠"},
+        {"<M-8>", "∞"},
+        {"<M-A>", "Ɐ"}, -- A
+        {"<M-e>", "∈"}, -- e
+        {"<M-)>", "∅"},
+        {"<M-C>", "ℂ"}, -- C
+        {"<M-S>", "∫"}, -- S
+        -- arrows
+        {"<M-Left>", "←"},
+        {"<M-Right>", "→"},
+        {"<M-Up>", "↑"},
+        {"<M-Down>", "↓"},
+        -- greek letters
+        {"<M-t>", "τ"}, -- t
+        {"<M-l>", "λ"}, -- l
+        {"<M-L>", "Λ"}, -- L
+        {"<M-d>", "δ"}, -- d
+        {"<M-D>", "Δ"}, -- D
+        {"<M-o>", "ω"}, -- o
+        {"<M-O>", "Ω"}, -- O
+        {"<M-g>", "γ"}, -- g
+        {"<M-G>", "Γ"}, -- G
+        {"<M-x>", "ξ"}, -- x
+        {"<M-X>", "Ξ"}, -- X
+        {"<M-p>", "φ"}, -- p 
+        {"<M-P>", "Φ"}, -- P
+        {"<M-u>", "μ"}, -- u
     },
     v = {
         -- keep visual selection after indent/unindent

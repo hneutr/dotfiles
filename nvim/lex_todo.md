@@ -20,10 +20,29 @@
   - command to move all `X` items into a rejections mirror (add a rejections mirror?)
 - visual mapping open fuzzy menu to turn selected text into a reference
 - specify files to be ignored by indexes in `.project`
+- normal mode mapping: grab word under cursor and open a fuzzy goto for it
+  - if there is only one match, go to it immediately
+- have a `start date` field in `.project`
+- parse `goals` to show what you've been working on
+- `lex.move`: support `dir to file`
+  - put the content from each file in the directory into the destination file
 
 ----------------------------------------
 > [unit testing]()
 ----------------------------------------
+- lex project framework:
+  - create project
+  - make file with content
+    - marker
+    - reference
+    - header + content
+  - make directory
+  - check file:
+    - existence
+    - content
+  - check directory:
+    - existence
+    - files
 - `lex.move`
 - `lex.link.Reference`
 - `lex.mirror.MLocation:find_updates`
