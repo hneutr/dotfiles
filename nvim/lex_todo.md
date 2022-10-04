@@ -107,19 +107,18 @@
       - `fragments`
   - `outlines` → `story/outlines`
     - `story/outlines/text.md` mirrors `text/text.md`
-  - `meta`: (remove `meta` mirror)
-    - structure 1:
-      - `issues` with sections for:
-        - `questions`
-        - `todos`
-      - `notes`
-        - `style`
-        - `ideas`
-      - have `gotos` to each of these sections, and treat them as _marks_
-    - structure 2:
-      - `questions`
-      - `todos`
-      - `notes`
+  - `.notes` dir:
+    - add:
+      - `questions` (prefix `q`)
+      - `todos` (prefix `t`)
+      - `notes` (prefix `n`)
+      - `log` (prefix `l`)
+      - `rejected` (prefix `r`)
+    - move:
+      - `meta` → `.notes/meta` (prefix `m`)
+      - `ideas` → `notes/alternatives` (prefix `a`)
+  - remove:
+    - `issues`
 
 ----------------------------------------
 > [things to support]()
