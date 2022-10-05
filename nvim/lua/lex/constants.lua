@@ -5,36 +5,43 @@ local M = {
     dir_file_name = '@.md',
     opener_prefix = "<leader>o",
     mirror_defaults = {
-        mirrors_dir_prefix = ".mirrors",
+        mirrors_dir_prefix = "",
         mirrors = {
+            -- chaff
             fragments = {
                 opener_prefix = "f",
-                dir_prefix = ".fragments",
+                dir_prefix = ".chaff/fragments",
                 mirror_other_mirrors = false,
             },
             scratch = {
                 opener_prefix = "s",
-                dir_prefix = ".scratch",
+                dir_prefix = ".chaff/scratch",
                 mirror_other_mirrors = true,
             },
-            issues = {
-                opener_prefix = "i",
-                dir_prefix = ".issues",
-                mirror_other_mirrors = false,
-            },
-            ideas = {
-                opener_prefix = "d",
-                dir_prefix = "ideas",
+            -- notes
+            alternatives = {
+                opener_prefix = "a",
+                dir_prefix = ".notes/alternatives",
                 mirror_other_mirrors = false,
             },
             outlines = {
                 opener_prefix = "o",
-                dir_prefix = "outlines",
+                dir_prefix = ".notes/outlines",
                 mirror_other_mirrors = false,
             },
             meta = {
-                opener_prefix = "x",
-                dir_prefix = "meta",
+                opener_prefix = "m",
+                dir_prefix = ".notes/meta",
+                mirror_other_mirrors = false,
+            },
+            questions = {
+                opener_prefix = "q",
+                dir_prefix = ".notes/questions",
+                mirror_other_mirrors = false,
+            },
+            rejections = {
+                opener_prefix = "r",
+                dir_prefix = ".notes/rejections",
                 mirror_other_mirrors = false,
             },
         },

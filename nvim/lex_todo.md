@@ -101,24 +101,6 @@
 #-------------------------------------------------------------------------------
 # [mirrors]()
 #-------------------------------------------------------------------------------
-- clean up mirrors
-  - `.chaff` (only for `text` files; could even put in `text/.chaff`)
-      - `scratch`
-      - `fragments`
-  - `outlines` → `story/outlines`
-    - `story/outlines/text.md` mirrors `text/text.md`
-  - `.notes` dir:
-    - add:
-      - `questions` (prefix `q`)
-      - `todos` (prefix `t`)
-      - `notes` (prefix `n`)
-      - `log` (prefix `l`)
-      - `rejected` (prefix `r`)
-    - move:
-      - `meta` → `.notes/meta` (prefix `m`)
-      - `ideas` → `notes/alternatives` (prefix `a`)
-  - remove:
-    - `issues`
 
 ----------------------------------------
 > [things to support]()
