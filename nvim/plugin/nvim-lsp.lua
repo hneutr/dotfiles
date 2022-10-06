@@ -13,11 +13,11 @@ local on_attach = function(client, buf)
     map(buf, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
 
     -- Set some keybinds conditional on server capabilities
-    if client.resolved_capabilities.document_formatting then
+    if client.server_capabilities.document_formatting then
         map(buf, "n", "<space>dlf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
     end
 
-    if client.resolved_capabilities.document_range_formatting then
+    if client.server_capabilities.document_range_formatting then
         map(buf, "v", "<space>dlf", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
     end
 end
