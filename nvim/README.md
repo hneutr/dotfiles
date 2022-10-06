@@ -14,5 +14,4 @@
   - turn off `spell`
 - tell `nvim-surround` to be less "smart" about quotes
   - I want them inserted even when the next char is a "surround" character
-- prefix greek characters with `<M-g><char>`?
 - command: load session file and then delete it
