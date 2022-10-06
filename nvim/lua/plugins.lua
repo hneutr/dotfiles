@@ -18,7 +18,7 @@ return require('packer').startup(function(use)
     use 'junegunn/goyo.vim'                                             -- distraction free + centered editing
     use 'tpope/vim-repeat'                                              -- repeat stuff
     use 'wellle/targets.vim'                                            -- more objects
-    use 'L3MON4D3/LuaSnip'                                              -- snippets
+    use({"L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*"})                -- snippets
     use 'windwp/nvim-autopairs'                                         -- close things
 
     ----------------------------------[ mappings ]----------------------------------

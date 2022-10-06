@@ -1,3 +1,4 @@
+local symbols = require('mappings.symbols')
 local leader = " "
 vim.g.mapleader = leader
 
@@ -63,48 +64,6 @@ local maps = {
         {"", '<c-r>"'},
         -- forward delete like macos
         {"<c-d>", "<del>"},
-        -----------------------------[ digraphs are good ]------------------------------
-        {"<M-->", "—"},
-        {"<M-0>", "°"},
-        -- superscripts
-        -- {"<M-@>", "ª"},
-        {"<M-^>n", "ⁿ"},
-        {"<M-^>+", "⁺"},
-        {"<M-^>1", "¹"},
-        -- math
-        {"<M-=>", "≠"},
-        {"<M-<>", "≤"},
-        {"<M->>", "≥"},
-        {"<M-8>", "∞"},
-        {"<M-A>", "Ɐ"}, -- A
-        {"<M-e>", "∈"}, -- e
-        {"<M-)>", "∅"},
-        -- {"<M-C>", "ℂ"}, -- C
-        {"<M-S>", "∫"}, -- S
-        -- arrows
-        {"<M-Left>", "←"},
-        {"<M-Right>", "→"},
-        {"<M-Up>", "↑"},
-        {"<M-Down>", "↓"},
-        -- greek letters
-        {"<M-c>", "σ"}, -- c 
-        {"<M-C>", "Σ"}, -- C
-        {"<M-t>", "τ"}, -- t
-        {"<M-l>", "λ"}, -- l
-        {"<M-L>", "Λ"}, -- L
-        {"<M-d>", "δ"}, -- d
-        {"<M-D>", "Δ"}, -- D
-        {"<M-o>", "ω"}, -- o
-        {"<M-O>", "Ω"}, -- O
-        {"<M-g>", "γ"}, -- g
-        {"<M-G>", "Γ"}, -- G
-        {"<M-x>", "ξ"}, -- x
-        {"<M-X>", "Ξ"}, -- X
-        {"<M-p>", "φ"}, -- p 
-        {"<M-P>", "Φ"}, -- P
-        {"<M-s>", "ψ"}, -- s 
-        {"<M-S>", "Ψ"}, -- S
-        {"<M-u>", "μ"}, -- u
     },
     v = {
         -- keep visual selection after indent/unindent
@@ -158,6 +117,10 @@ local maps = {
         {"A", ":<C-U>normal! mzggVG<CR>`z"},
     },
 }
+
+for _, mapping in ipairs(symbols) do
+    table.insert(maps.i, mapping)
+end
 
 for modes_str, maps in pairs(maps) do
     local modes = {}

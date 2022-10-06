@@ -11,11 +11,7 @@ ls.config.set_config({
 --------------------------------------------------------------------------------
 local map = vim.keymap.set
 
-map('i', "<Tab>", "luasnip#expandable() ? '<Plug>luasnip-expand-snippet' : '<Tab>'", {
-    remap = true,
-    silent = true,
-    expr = true
-})
+vim.cmd([[imap <silent><expr> <Tab> luasnip#expandable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>']])
 map("i", "<c-f>", function() require'luasnip'.jump(1) end, { silent = true })
 map("i", "<c-b>", function() require'luasnip'.jump(-1) end, { silent = true })
 
