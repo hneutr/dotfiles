@@ -1,7 +1,3 @@
-local symbols = require('mappings.symbols')
-local leader = " "
-vim.g.mapleader = leader
-
 local maps = {
     n = {
         -- select last paste/visual selection
@@ -22,17 +18,17 @@ local maps = {
         {'/', 'mp/'},
         {'?', 'mp?'},
         -- move to end/start of line easily
-        {leader .. "l", "$"},
-        {leader .. "h", "^"},
+        {vim.g.mapleader .. "l", "$"},
+        {vim.g.mapleader .. "h", "^"},
         -- Conditionally modify character at end of line
-        {leader .. ",", function() require'util'.modify_line_end(',') end, {silent = true }},
-        {leader .. ";", function() require'util'.modify_line_end(';') end, {silent = true }},
+        {vim.g.mapleader .. ",", function() require'util'.modify_line_end(',') end, {silent = true }},
+        {vim.g.mapleader .. ";", function() require'util'.modify_line_end(';') end, {silent = true }},
         -- run last command
-        {leader .. "c", ":<c-p><cr>"},
+        {vim.g.mapleader .. "c", ":<c-p><cr>"},
         -- quit with an arpeggiation (save the pinky)
-        {leader .. "q", ":q<cr>"},
+        {vim.g.mapleader .. "q", ":q<cr>"},
         -- kill the buffer with an arpeggiation (stp)
-        {leader .. "k", require'util'.kill_buffer_and_go_to_next, {silent = true}},
+        {vim.g.mapleader .. "k", require'util'.kill_buffer_and_go_to_next, {silent = true}},
         -- <BS> is useless in normal mode; map it to gE
         {"<BS>", "gE"},
         -- switch panes
@@ -40,14 +36,14 @@ local maps = {
         {"<c-j>", "<c-w>j"},
         {"<c-k>", "<c-w>k"},
         {"<c-l>", "<c-w>l"},
-        {leader .. "df", require'fzf-lua'.files},
-        {leader .. "dg", ":GoyoToggle<cr>"},
+        {vim.g.mapleader .. "df", require'fzf-lua'.files},
+        {vim.g.mapleader .. "dg", ":GoyoToggle<cr>"},
         -- tab/shift-tab through buffers
         {"<tab>", ":bnext<cr>"},
         {"<s-tab>", ":bprev<cr>"},
     },
     i = {
-        {"<esc>", "<esc>", { nowait = true}},
+        {"<esc>", "<esc>", {nowait = true}},
         -- save the pinky
         {"jk", "<esc>"},
         {"<c-c>", "<nop>"},
@@ -118,7 +114,7 @@ local maps = {
     },
 }
 
-for _, mapping in ipairs(symbols) do
+for _, mapping in ipairs(require('mappings.symbols')) do
     table.insert(maps.i, mapping)
 end
 

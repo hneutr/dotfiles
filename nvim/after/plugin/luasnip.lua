@@ -18,6 +18,8 @@ vim.api.nvim_create_autocmd({'BufEnter'}, {pattern="*", callback=function()
             s("h3", snips.H3({comment=comment_str}):snippet()),
             s("h4", snips.H4({comment=comment_str}):snippet()),
             s("fnb", snips.FunctionBlock({comment=comment_str}):snippet()),
+            s("bl", snips.BigLine({comment=comment_str}):snippet()),
+            s("l", snips.SmallLine({comment=comment_str}):snippet()),
             s("p", snips.Print(ft_print_string):snippet()),
             s("qp", snips.Print(ft_print_string):snippet(true)),
         })

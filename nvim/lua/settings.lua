@@ -1,5 +1,10 @@
 vim.g.python3_host_prog = vim.env.NVIM_PYTHON
 
+vim.g.mapleader = " "
+
+-- use "option-char" to insert non-ascii characters
+vim.g.symbol_insert_modifier = "M"
+
 -- write all the time
 vim.go.autowriteall = true
 
@@ -148,7 +153,7 @@ vim.g.snip_ft_printstrings = {
 }
 
 -- polyglot is super annoying
-vim.g.polyglot_disabled = { "autoindent" }
+vim.g.polyglot_disabled = {"autoindent"}
 
 -- default maps are stupid
 vim.g.vim_markdown_no_default_key_mappings = 1

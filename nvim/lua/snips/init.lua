@@ -32,6 +32,7 @@ local i = ls.insert_node
 local f = ls.function_node
 
 local WIDTH = 80
+local WIDTH_SMALL = 40
 local DIVIDER_FILL_CHAR = '-'
 local INPUT_FILL_CHAR = ' '
 local COMMENT = '-'
@@ -216,6 +217,32 @@ function Print:snippet(add_quotes)
     return {t(open), i(1), t(close)}
 end
 
+----------------------------------[ BigLine ]-----------------------------------
+local BigLine = Block:extend()
+
+function BigLine:divider()
+    local str = self.comment
+    str = str .. string.rep(self.divider_fill_char, self.width - (str:len()))
+    return str
+end
+
+
+function BigLine:snippet()
+    return {
+        t{self:divider(), ""},
+        i(1),
+    }
+end
+
+---------------------------------[ SmallLine ]----------------------------------
+local SmallLine = BigLine:extend()
+
+function SmallLine:new(args)
+    SmallLine.super.new(self, args)
+    self.width = WIDTH_SMALL
+end
+
+
 return {
     Block = Block,
     H1 = H1,
@@ -223,5 +250,7 @@ return {
     H3 = H3,
     H4 = H4,
     FunctionBlock = FunctionBlock,
-    Print = Print
+    Print = Print,
+    BigLine = BigLine,
+    SmallLine = SmallLine,
 }

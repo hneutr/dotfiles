@@ -1,5 +1,5 @@
 local ls = require('luasnip')
-local su = require('snips')
+local snips = require('snips')
 local mds = require('snips.markdown')
 
 local s = ls.snippet
@@ -19,8 +19,8 @@ ls.add_snippets("markdown", {
         mds.divider.small.str(), "", ""},
         i(1)
     }),
-    s("bl", mds.divider.big.ls),
-    s("l", mds.divider.small.ls),
+    s("bl", snips.BigLine({comment="#"}):snippet()),
+    s("l", snips.SmallLine():snippet()),
     s("journal", {
         t("["),
         f(function() return vim.fn.strftime("%Y%m%d") end), t{"]():",

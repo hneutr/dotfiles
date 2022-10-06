@@ -1,6 +1,3 @@
--- use option as the modifier key
-local modifier = 'M'
-
 local greek = {
     lowercase = {
         ["a"] = "α",
@@ -126,7 +123,7 @@ local symbols_map = {
 
 local symbols = {}
 for key, val in pairs(symbols_map) do
-    local lhs = "<" .. modifier .. "-" .. key .. ">"
+    local lhs = "<" .. vim.g.symbol_insert_modifier .. "-" .. key .. ">"
 
     if type(val) == "string" then
         table.insert(symbols, {lhs, val})
