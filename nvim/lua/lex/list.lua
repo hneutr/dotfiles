@@ -224,8 +224,6 @@ function M.map_item_toggles(lhs_prefix)
     for i, item_type in ipairs(vim.tbl_keys(Item.types)) do
         Item.map_toggle(lhs_prefix, item_type)
     end
-
-    vim.b.autolist_chars = vim.tbl_keys(Item.types)
 end
 
 return M

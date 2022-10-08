@@ -1,151 +1,32 @@
+require("util")
+require("util.tbl")
 local Object = require("util.object")
 local line_utils = require("util.lines")
+local line_type = require("list.line_type")
 
-local list_item_types = {
-    default = {
-        ListLineClass = ListLine,
+local list_type_settings = {
+    bullet = {
+        sigil = '-',
         nohl = true,
     },
     done = {
-        ListLineClass = ListLine.get_list_line_class_with_sigil('✓'),
+        sigil = '✓',
         map_lhs_suffix = 'd',
     },
     question = {
-        ListLineClass = ListLine.get_list_line_class_with_sigil('?'),
+        sigil = '?',
         map_lhs_suffix = 'q',
     },
     maybe = {
-        ListLineClass = ListLine.get_list_line_class_with_sigil('~'),
+        sigil = '~',
         map_lhs_suffix = 'm',
         regex_sigil = [[\~]],
     },
+    numbered = {
+        ListClass = line_type.NumberedListLine,
+        map_lhs_suffix = 'n',
+    },
 }
-
-function autolist()
-    chars = vim.b.autolist_chars or {}
-
-	local current_line = vim.fn.getline(vim.fn.line("."))
-    current_line = current_line:match("%s*(.*)")
-
-	local preceding_line = vim.fn.getline(vim.fn.line(".") - 1)
-    vim.g.testing = preceding_line
-
-    if preceding_line:match("^%s*%d+%.%s") then
-		local next_list_index = preceding_line:match("%d+") + 1
-		vim.fn.setline(".", preceding_line:match("^%s*") .. next_list_index .. ". ")
-        vim.api.nvim_input("<esc>A")
-    elseif vim.tbl_count(chars) > 0 then
-        for _, char in ipairs(chars) do
-            local pattern = "^%s*" .. _G.escape(char) .. "%s"
-            local matched_content = preceding_line:match(pattern)
-            if matched_content then
-                vim.fn.setline(".", matched_content .. current_line)
-                vim.api.nvim_input("<esc>A")
-                return
-            end
-        end
-	end
-end
---                                      
---------------------------------------------------------------------------------
---                                                                            --
---                                    Line                                    --
---                                                                            --
---------------------------------------------------------------------------------
-Line = Object:extend()
-Line.defaults = {
-    text = '',
-    line_number = 0,
-}
-
-function Line:new(args)
-    for key, val in pairs(_G.default_args(args, self.defaults)) do
-        self[key] = val
-    end
-end
-
-function Line:write()
-    line_utils.set({start_line = self.line_number, replacement = {tostring(self)}})
-end
-
-function Line:__tostring() return self.text end
-
-function Line:merge(other)
-    self.text = _G.rstrip(self.text) .. " " .. _G.lstrip(other.text)
-end
-
-function Line.get_if_str_is_a(str, line_number)
-    return Line({text = str, line_number = line_number})
-end
-
---------------------------------------------------------------------------------
---                                  ListLine                                  --
---------------------------------------------------------------------------------
-ListLine = Line:extend()
-ListLine.defaults = {
-    text = '',
-    indent = '',
-    line_number = 0,
-}
-ListLine.sigil = '-'
-
-function ListLine:__tostring()
-    return self.indent .. self.sigil .. " " .. self.text
-end
-
-function ListLine.get_sigil_pattern(sigil)
-    return "^(%s*)" .. _G.escape(sigil) .. "%s(.*)$"
-end
-
-function ListLine.get_if_str_is_a(str, line_number)
-    return ListLine._get_if_str_is_a(str, line_number, ListLine)
-end
-
-function ListLine._get_if_str_is_a(str, line_number, ListLineClass)
-    local indent, text = str:match(ListLineClass.get_sigil_pattern(ListLineClass.sigil))
-    if indent and text then
-        return ListLineClass({text = text, indent = indent, line_number = line_number})
-    end
-end
-
-function ListLine.get_list_line_class_with_sigil(sigil)
-    local ListLineClass = ListLine:extend()
-    ListLineClass.sigil = sigil
-
-    ListLineClass.get_if_str_is_a = function(str, line_number)
-        return ListLine._get_if_str_is_a(str, line_number, ListLineClass)
-    end
-
-    return ListLineClass
-end
-
---------------------------------------------------------------------------------
---                              NumberedListLine                              --
---------------------------------------------------------------------------------
-NumberedListLine = Line:extend()
-NumberedListLine.defaults = {
-    text = '',
-    indent = '',
-    line_number = 0,
-    number = 1,
-}
-NumberedListLine.pattern = "^(%s*)(%d+)%.%s(.*)$"
-
-function NumberedListLine:__tostring()
-    return self.indent .. self.number .. '. ' .. self.text
-end
-
-function NumberedListLine.get_if_str_is_a(str, line_number)
-    local indent, number, text = str:match(NumberedListLine.pattern)
-    if indent and number and text then
-        return NumberedListLine({
-            number = tonumber(number),
-            text = text,
-            indent = indent,
-            line_number = line_number,
-        })
-    end
-end
 
 --------------------------------------------------------------------------------
 --                                                                            --
@@ -157,15 +38,26 @@ end
 Buffer = Object:extend()
 Buffer.defaults = {
     buffer_id = 0,
-    list_line_types = {
-        ListLine,
-        NumberedListLine,
-    },
+    list_types = {"done"},
 }
+Buffer.default_list_types = {"bullet", "numbered"}
 
 function Buffer:new(args)
     for key, val in pairs(_G.default_args(args, self.defaults)) do
         self[key] = val
+    end
+
+    self:set_list_classes()
+end
+
+function Buffer:set_list_classes()
+    self.list_types = table.concatenate(self.default_list_types, self.list_types, vim.b.list_types)
+
+    self.list_classes = {}
+    for _, list_type in ipairs(self.list_types) do
+        local settings = list_type_settings[list_type]
+        local class = vim.tbl_get(settings, 'ListClass') or line_type.get_sigil_line_class(settings.sigil)
+        self.list_classes[list_type] = class
     end
 end
 
@@ -180,14 +72,14 @@ end
 
 function Buffer:parse_line(str, line_number)
     local line
-    for i, ListLineClass in ipairs(self.list_line_types) do
-        line = ListLineClass.get_if_str_is_a(str, line_number)
+    for _, ListClass in pairs(self.list_classes) do
+        line = ListClass.get_if_str_is_a(str, line_number)
         if line then
             return line
         end
     end
 
-    return Line({text=str, line_number=line_number})
+    return line_type.Line({text=str, line_number=line_number})
 end
 
 --------------------------------------------------------------------------------
@@ -332,10 +224,36 @@ end
     -- record the indent 0 index for the current line, only operate on that one
 -- end
 
+function autolist()
+    local chars = {}
+    for _, list_type in ipairs(Buffer().list_types) do
+        table.insert(chars, list_type_settings[list_type].sigil)
+    end
+
+	local current_line = vim.fn.getline(vim.fn.line("."))
+    current_line = current_line:match("%s*(.*)")
+
+	local preceding_line = vim.fn.getline(vim.fn.line(".") - 1)
+    vim.g.testing = preceding_line
+
+    if preceding_line:match("^%s*%d+%.%s") then
+		local next_list_index = preceding_line:match("%d+") + 1
+		vim.fn.setline(".", preceding_line:match("^%s*") .. next_list_index .. ". ")
+        vim.api.nvim_input("<esc>A")
+    elseif vim.tbl_count(chars) > 0 then
+        for _, char in ipairs(chars) do
+            local pattern = "^%s*" .. _G.escape(char) .. "%s"
+            local matched_content = preceding_line:match(pattern)
+            if matched_content then
+                vim.fn.setline(".", matched_content .. current_line)
+                vim.api.nvim_input("<esc>A")
+                return
+            end
+        end
+	end
+end
+
 return {
     autolist = autolist,
-    Line = Line,
-    ListLine = ListLine,
-    NumberedListLine = NumberedListLine,
     Buffer = Buffer,
 }

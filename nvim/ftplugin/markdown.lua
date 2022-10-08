@@ -56,6 +56,7 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
         if vim.b.lex_config_path then
             require('lex.opener').map()
             require('lex.list').map_item_toggles(vim.g.mapleader .. "t")
+            vim.b.list_types = {"question", "maybe"}
 
             local args = {silent = true, buffer = true}
 
@@ -68,12 +69,9 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
             -- delete the currently selected lines and move them to the scratch file
             vim.keymap.set("n", " s", function() require'lex.scratch'.move('n') end, args)
             vim.keymap.set("v", " s", [[:'<,'>lua require'lex.scratch'.move('v')<cr>]], args)
-        else
-            vim.b.autolist_chars = {'-'}
         end
 
         vim.keymap.set("i", "<cr>", [[<cr><cmd>lua require('list').autolist()<cr>]], {buffer = true})
-        vim.keymap.set("n", "o", [[o<cmd>lua require('list').autolist()<cr>]], {buffer = true})
     end
 })})
 

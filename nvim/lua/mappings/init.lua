@@ -3,7 +3,9 @@ local maps = {
         -- select last selection
         {'gV', '`[v`]'},
         -- restore cursor position after joining lines
-        {'J', "mjJ`j"},
+        {'J', function() require("list").Buffer():join_lines() end, {silent = true}},
+        -- continue lists
+        {'o', [[o<cmd>lua require('list').autolist()<cr>]], {buffer = true}},
         -- play 'q' macro
         {'Q', '@q'},
         -- <BS> is useless in normal mode
@@ -60,6 +62,9 @@ local maps = {
         -- move to start/end of line (shell)
         {"<c-e>", "<c-o>A"},
         {"<c-a>", "<c-o>I"},
+        -- continue lists
+        {"<cr>", [[<cr><cmd>lua require('list').autolist()<cr>]], {buffer = true}},
+        
     },
     v = {
         -- keep visual selection after indent/unindent
