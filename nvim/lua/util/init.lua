@@ -213,4 +213,36 @@ function M.run_once(args)
     end
 end
 
+--------------------------------------------------------------------------------
+-- strip
+-- -----
+-- - str: string to strip
+-- - char: option, char to remove from left and right sides of string. default is whitespace
+-- 
+-- strips char from the left/right of string
+--------------------------------------------------------------------------------
+function _G.strip(str, char)
+    str = _G.lstrip(str, char)
+    str = _G.rstrip(str, char)
+    return str
+end
+
+function _G.lstrip(str, char)
+    if char then
+        char = _G.escape(char)
+    end
+
+    char = char or '%s'
+    return string.gsub(str, "^" .. char .. "*", "", 1)
+end
+
+function _G.rstrip(str, char)
+    if char then
+        char = _G.escape(char)
+    end
+
+    char = char or '%s'
+    return string.gsub(str, char .. "*$", "", 1)
+end
+
 return M

@@ -15,3 +15,7 @@
 - tell `nvim-surround` to be less "smart" about quotes
   - I want them inserted even when the next char is a "surround" character
 - command: load session file and then delete it
+- convert general mappings format to be like `symbols`:
+  - ie, have it be a dictionary of sequenced keys where:
+    - the terminal value is the rhs
+    - all the keys before that get added together to make the rhs

@@ -1,4 +1,4 @@
-local util = require'util'
+local util = require('util')
 local aucmd = vim.api.nvim_create_autocmd
 
 local p = { "*.md" }
@@ -30,11 +30,11 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
 --------------------------------------------------------------------------------
 local lex_g = vim.api.nvim_create_augroup('lex_cmds', { clear = true })
 
-aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=require'lex.config'.set})
+aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=require('lex.config').set})
 
 ------------------------------------[ sync ]------------------------------------
 local sync_g = vim.api.nvim_create_augroup('lex_sync_cmds', { clear = true })
-local sync = require'lex.sync'
+local sync = require('lex.sync')
 
 local function if_sync(fn)
     return function()
@@ -55,9 +55,9 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
     fn = function()
         if vim.b.lex_config_path then
             require('lex.opener').map()
-            require('lex.list').map_item_toggles(" t")
+            require('lex.list').map_item_toggles(vim.g.mapleader .. "t")
 
-            local args = { silent = true, buffer = true }
+            local args = {silent = true, buffer = true}
 
             -- fuzzy find stuff
             vim.keymap.set("n", " df", function() require'lex.link'.fuzzy.goto() end, args)
@@ -72,9 +72,8 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
             vim.b.autolist_chars = {'-'}
         end
 
-
-        vim.keymap.set("i", "<cr>", [[<cr><cmd>lua require'util.list'.autolist()<cr>]], {buffer = true})
-        vim.keymap.set("n", "o", [[o<cmd>lua require'util.list'.autolist()<cr>]], {buffer = true})
+        vim.keymap.set("i", "<cr>", [[<cr><cmd>lua require('list').autolist()<cr>]], {buffer = true})
+        vim.keymap.set("n", "o", [[o<cmd>lua require('list').autolist()<cr>]], {buffer = true})
     end
 })})
 
