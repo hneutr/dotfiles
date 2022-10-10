@@ -5,7 +5,7 @@ local maps = {
         -- restore cursor position after joining lines
         {'J', function() require("list").Buffer():join_lines() end, {silent = true}},
         -- continue lists
-        {'o', [[o<cmd>lua require('list').autolist()<cr>]], {buffer = true}},
+        {'o', [[o<cmd>lua require('list').autolist()<cr>]]},
         -- play 'q' macro
         {'Q', '@q'},
         -- <BS> is useless in normal mode
@@ -63,8 +63,7 @@ local maps = {
         {"<c-e>", "<c-o>A"},
         {"<c-a>", "<c-o>I"},
         -- continue lists
-        {"<cr>", [[<cr><cmd>lua require('list').autolist()<cr>]], {buffer = true}},
-        
+        {"<cr>", require('list').continue_list_command, {silent = true}},
     },
     v = {
         -- keep visual selection after indent/unindent

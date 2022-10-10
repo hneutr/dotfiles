@@ -70,8 +70,6 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
             vim.keymap.set("n", " s", function() require'lex.scratch'.move('n') end, args)
             vim.keymap.set("v", " s", [[:'<,'>lua require'lex.scratch'.move('v')<cr>]], args)
         end
-
-        vim.keymap.set("i", "<cr>", [[<cr><cmd>lua require('list').autolist()<cr>]], {buffer = true})
     end
 })})
 

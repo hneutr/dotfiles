@@ -44,6 +44,11 @@ local M = {
                 dir_prefix = ".notes/rejections",
                 mirror_other_mirrors = false,
             },
+            churnlog = {
+                opener_prefix = "c",
+                dir_prefix = ".notes/churnlog",
+                mirror_other_mirrors = false,
+            },
         },
     },
 }
