@@ -104,6 +104,10 @@ function wr() {
     nvim $1 -c "lua require'lex.mirror'.open('outlines')" +bnext +GoyoToggle
 }
 
+function vload() {
+    nvim -c "source .Session.vim" -c "silent! !rm .Session.vim"
+}
+
 function start_project() {
     mkdir meta && touch meta/@.md
     mkdir story
