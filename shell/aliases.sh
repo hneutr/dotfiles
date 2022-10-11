@@ -4,11 +4,6 @@ alias lsla='ls -la'
 alias lsf='ls -p | grep -v /'
 alias lsfa='ls -pa | grep -v /'
 
-# exa
-[[ ! -z $(which exa) ]] && alias ls='exa --git --header --group'
-[[ ! -z $(which exa) ]] && alias lsla='exa --long --git -a --header --group'
-[[ ! -z $(which exa) ]] && alias tree='exa --tree --level=2 --long -a --header --git'
-
 # tree
 alias lst='tree --git-ignore -I .git\|.gitignore'
 
@@ -36,12 +31,6 @@ alias gptd="ga .; gc -m $(today); gp"
 
 # misc
 alias po="popen"
-
-# fd
-[[ ! -z $(which fd) ]] && alias find='fd'
-
-# rg
-[[ ! -z $(which rg) ]] && alias rgl="rg -l"
 
 # writing
 alias journal='_journal "journal = '"'"'catch all'"'"'"'
