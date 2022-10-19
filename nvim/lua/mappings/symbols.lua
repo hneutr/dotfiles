@@ -99,37 +99,143 @@ local subscripts = {
 }
 
 local logic = {
-    ["-"] = "⊢",
-    ["_"] = "⊣",
-    ["="] = "⊨",
+    ["+"] = "⊹",
     ["~"] = "≃",
     ["^"] = "∧",
     ["@"] = "⊙",
     ["l"] = "◀",
+    ["d"] = "∇",
     ["r"] = "▶",
-    ["t"] = "⊹",
-    ["u"] = "∪",
+    ["s"] = "∮",
+    ["t"] = {
+        ["h"] = "⊣",
+        ["j"] = "⊤",
+        ["k"] = "⊥",
+        ["l"] = "⊢",
+    },
+    ["T"] = {
+        ["l"] = "⊨",
+        ["h"] = "⫤",
+    },
+    ["u"] = {
+        ["h"] = "⊃",
+        ["j"] = "⋂",
+        ["k"] = "⋃",
+        ["l"] = "⊂",
+        ["."] = {
+            ["h"] = "⪾",
+            ["j"] = "⩀",
+            ["k"] = "⊍",
+            ["l"] = "⪽",
+        }
+    },
+    ["#"] = "⊡",
+    [")"] = "⟌",
     ["."] = "⋯",
     ["|"] = "⋮",
-    ["#"] = "⊡",
+    ["/"] = "⋰",
+    ["\\"] = "⋱",
+}
+
+-- lowercase = shape
+-- uppercase = hollow shape
+local shapes = {
+    -- triangle
+    ["t"] = {
+        ["h"] = "◀",
+        ["j"] = "▼",
+        ["k"] = "▲",
+        ["l"] = "▶",
+    },
+    ["T"] = {
+        ["h"] = "◁",
+        ["j"] = "▽",
+        ["k"] = "△",
+        ["l"] = "▷",
+    },
+    -- diamond
+    ["d"] = "◆",
+    ["D"] = "◇",
+    -- circle
+    ["c"] = "●",
+    ["C"] = "○",
+}
+
+local doublestruck = {
+    lowercase = {
+        a = "𝕒",
+        b = "𝕓",
+        c = "𝕔",
+        d = "𝕕",
+        e = "𝕖",
+        f = "𝕗",
+        g = "𝕘",
+        h = "𝕙",
+        i = "𝕚",
+        j = "𝕛",
+        k = "𝕜",
+        l = "𝕝",
+        m = "𝕞",
+        n = "𝕟",
+        o = "𝕠",
+        p = "𝕡",
+        q = "𝕢",
+        r = "𝕣",
+        s = "𝕤",
+        t = "𝕥",
+        u = "𝕦",
+        v = "𝕧",
+        w = "𝕨",
+        x = "𝕩",
+        y = "𝕪",
+        z = "𝕫",
+    },
+    uppercase = {
+        A = "𝔸",
+        B = "𝔹",
+        C = "ℂ",
+        D = "𝔻",
+        E = "𝔼",
+        F = "𝔽",
+        G = "𝔾",
+        H = "ℍ",
+        I = "𝕀",
+        J = "𝕁",
+        K = "𝕂",
+        L = "𝕃",
+        M = "𝕄",
+        N = "ℕ",
+        O = "𝕆",
+        P = "ℙ",
+        Q = "ℚ",
+        R = "ℝ",
+        S = "𝕊",
+        T = "𝕋",
+        U = "𝕌",
+        V = "𝕍",
+        W = "𝕎",
+        X = "𝕏",
+        Y = "𝕐",
+        Z = "ℤ",
+    }
 }
 
 local symbols_map = {
     -----------------------------[ lowercase letters ]------------------------------
+    ["d"] = doublestruck.lowercase,
     ["e"] = "∈",
+    ["f"] = "𝕗",
     ["g"] = greek.lowercase,
+    ["s"] = shapes,
     ["x"] = "⨯",
 
     -----------------------------[ uppercase letters ]------------------------------
     ["A"] = "Ɐ",
-    ["C"] = "ℂ", -- Ɔ
+    ["D"] = doublestruck.uppercase,
     ["E"] = "Ǝ",
-    ["F"] = "𝑓",
     ["G"] = greek.uppercase,
     ["M"] = "ꟽ",
     ["P"] = "ꟼ",
-    ["R"] = "ℝ",
-    ["S"] = "∫",
 
     ----------------------------------[ numbers ]-----------------------------------
     ["8"] = "∞",
@@ -154,16 +260,30 @@ local symbols_map = {
 -- `⇠ ⇥ ⟴  ⤏  ⤳ ⭇ ⭈`
 -- ~ `⊕ ⦵ ⌾ ⌽ ⍜ ◍ ￮ ⏁ ⏂ ○ ◌ ◯ ⚬ ⨷ `
 
+function get_nested_mapping(key, val)
+    prefix = prefix or ""
+
+    local mappings = {}
+    if type(val) == "string" then
+        table.insert(mappings, {key, val})
+        mappings[key] = val
+    else
+        for suffix, subval in pairs(val) do
+            for _, submapping in ipairs(get_nested_mapping(key .. suffix, subval)) do
+                table.insert(mappings, submapping)
+            end
+        end
+    end
+
+    return mappings
+end
+
 local symbols = {}
 for key, val in pairs(symbols_map) do
     local lhs = "<" .. vim.g.symbol_insert_modifier .. "-" .. key .. ">"
 
-    if type(val) == "string" then
-        table.insert(symbols, {lhs, val})
-    else
-        for suffix, _val in pairs(val) do
-            table.insert(symbols, {lhs .. suffix, _val})
-        end
+    for _, mapping in ipairs(get_nested_mapping(lhs, val)) do
+        table.insert(symbols, mapping)
     end
 end
 

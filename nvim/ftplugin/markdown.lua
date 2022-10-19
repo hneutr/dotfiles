@@ -26,6 +26,17 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
 })})
 
 --------------------------------------------------------------------------------
+--                              general mappings                              --
+--------------------------------------------------------------------------------
+aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
+    scope = 'b',
+    key = 'ft_maps_applied',
+    fn = function()
+        vim.keymap.set("i", "<cr>", require('list').continue_list_command, {silent = true})
+    end,
+})})
+
+--------------------------------------------------------------------------------
 --                            general lex commands                            --
 --------------------------------------------------------------------------------
 local lex_g = vim.api.nvim_create_augroup('lex_cmds', { clear = true })
