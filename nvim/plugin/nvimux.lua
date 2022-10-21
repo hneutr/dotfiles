@@ -10,6 +10,7 @@ nvimux.bindings.bind_all{
   {'j', ':Tsplit', {'n', 'v', 'i', 't'}},
   {'l', ':Tvsplit', {'n', 'v', 'i', 't'}},
   {'c', ':Ttab', {'n', 'v', 'i', 't'}},
+  {'X', ':tabclose', {'n', 'v', 'i', 't'}},
 }
 
 -- Nvimux configuration
