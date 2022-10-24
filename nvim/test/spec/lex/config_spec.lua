@@ -1,14 +1,13 @@
-local mock = require'luassert.mock'
 local stub = require'luassert.stub'
 local m = require'lex.config'
-require'util'
+require('util')
 
 describe(".config", function()
     local constants
 
     before_each(function()
-        m = require'lex.config'
-        constants = require'lex.constants'
+        m = require('lex.config')
+        constants = require('lex.constants')
     end)
 
     describe("file", function()
@@ -52,33 +51,27 @@ describe(".config", function()
             local raw_config = {
                 root = '/root',
                 mirrors = {
-                two = {
-                    mirror_other_mirrors = true,
-                },
-                three = {
-                    disable = true,
-                },
+                    two = {
+                        disable = true,
+                    },
                 },
             }
 
             local mirror_defaults = {
-                mirrors_dir_prefix = '',
                 mirrors = {
-                one = {
-                    opener_prefix = '1',
-                    dir_prefix = '1',
-                    mirror_other_mirrors = false,
-                },
-                two = {
-                    opener_prefix = '2',
-                    dir_prefix = '2',
-                    mirror_other_mirrors = false,
-                },
-                three = {
-                    opener_prefix = '3',
-                    dir_prefix = '3',
-                    mirror_other_mirrors = true,
-                },
+                    one = {
+                        opener_prefix = '1',
+                        dir_prefix = '1',
+                    },
+                    two = {
+                        opener_prefix = '2',
+                        dir_prefix = '2',
+                    },
+                    three = {
+                        opener_prefix = '3',
+                        dir_prefix = '3',
+                        mirror_other_mirrors = true,
+                    },
                 }
             }
 
@@ -96,24 +89,22 @@ describe(".config", function()
 
             it("reads a config", function()
                 local expected = {
-                mirrors = {
-                    one = {
-                        dir = "/1/2/3/1",
-                        dir_prefix = "1",
-                        mirror_other_mirrors = false,
-                        root = "/1/2/3",
-                        opener_prefix = "1"
-                    },
-                    two = {
-                        dir = "/1/2/3/2",
-                        dir_prefix = "2",
-                        mirror_other_mirrors = true,
-                        root = "/1/2/3",
-                        opener_prefix = "2"
+                    root = "/1/2/3",
+                    mirrors = {
+                        one = {
+                            dir = "/1/2/3/1",
+                            dir_prefix = "1",
+                            root = "/1/2/3",
+                            opener_prefix = "1"
+                        },
+                        three = {
+                            dir = "/1/2/3/3",
+                            dir_prefix = "3",
+                            root = "/1/2/3",
+                            opener_prefix = "3",
+                            mirror_other_mirrors = true,
+                        }
                     }
-                },
-                mirrors_root = '/1/2/3/',
-                root = "/1/2/3"
                 }
 
                 local actual = m.file.build("/1/2/3/4.md")

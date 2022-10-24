@@ -57,17 +57,12 @@ function MLocation:set_origin()
 end
 
 function MLocation:set_type()
-    local root = self.config.root
-    if vim.startswith(self.path, self.config.mirrors_root) then
-        root = self.config.mirrors_root
-    end
-
-    local path = self.path:gsub(_G.escape(root .. '/'), '', 1)
+    local path = require('util.path').remove_from_start(self.path, self.config.root)
 
     self.type = 'origin'
 
     for _type, _config in pairs(self.config.mirrors) do
-        if vim.startswith(path, _config.dir_prefix .. '/') then
+        if vim.startswith(path, _config.dir_prefix) then
             self.type = _type
             break
         end
@@ -87,7 +82,7 @@ function MLocation:remove_type()
     local root = self.config.root
 
     if self.type ~= 'origin' then
-        root = self.config.mirrors_root
+        root = self.config.root
     end
 
     return self.path:gsub(_G.escape(root .. '/'), '', 1)
@@ -159,7 +154,7 @@ M.MLocation = MLocation
 --------------------------------------------------------------------------------
 
 function M.open(mirror_type, open_command)
-    require'util'.open_path(MLocation():get_location(mirror_type).path, open_command)
+    require('util').open_path(MLocation():get_location(mirror_type).path, open_command)
 end
 
 return M

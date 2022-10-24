@@ -52,7 +52,6 @@ end
 
 function Buffer:set_list_classes()
     self.list_types = table.concatenate(self.default_list_types, self.list_types, vim.b.list_types)
-    vim.pretty_print(self.list_types)
 
     self.list_classes = {}
     for _, list_type in ipairs(self.list_types) do

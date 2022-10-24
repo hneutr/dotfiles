@@ -1,5 +1,5 @@
 local M = {}
-local constants = require'lex.constants'
+local constants = require('lex.constants')
 
 --------------------------------------------------------------------------------
 -- file
@@ -15,7 +15,7 @@ function M.file.find(start_path)
     for part in vim.gsplit(start_path, '/') do
         current_path = _G.joinpath(current_path, part)
 
-        local possible_path = _G.joinpath(current_path, require'lex.constants'.config_file_name)
+        local possible_path = _G.joinpath(current_path, require('lex.constants').config_file_name)
 
         if vim.fn.filereadable(possible_path) ~= 0 then
             path = possible_path
@@ -32,14 +32,11 @@ function M.file.build(path)
 
     local mirror_defaults = constants.mirror_defaults
 
-    local mirrors_dir_prefix = vim.tbl_get(config, "mirrors_dir_prefix") or mirror_defaults.mirrors_dir_prefix
-    config['mirrors_root'] = _G.joinpath(config['root'], mirrors_dir_prefix)
-
     local mirrors = {}
     for m_type, m_defaults in pairs(mirror_defaults['mirrors']) do
         local m_config = _G.default_args(vim.tbl_get(config, 'mirrors', m_type), m_defaults)
 
-        m_config['dir'] = _G.joinpath(config['mirrors_root'], m_config.dir_prefix)
+        m_config['dir'] = _G.joinpath(config['root'], m_config.dir_prefix)
         m_config['root'] = config['root']
 
         if not vim.tbl_get(m_config, "disable") then
