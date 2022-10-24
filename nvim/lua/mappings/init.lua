@@ -8,8 +8,8 @@ local maps = {
         {'o', [[o<cmd>lua require('list').autolist()<cr>]]},
         -- play 'q' macro
         {'Q', '@q'},
-        -- <BS> is useless in normal mode
-        {"<BS>", "gE"},
+        -- easier backstepping
+        {"<c-e>", "gE"},
         -- swap */# (match _W_ord) and g*/g# (match _w_ord)
         {'*', 'g*'},
         {'g*', '*'},

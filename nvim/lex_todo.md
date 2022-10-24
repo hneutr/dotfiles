@@ -1,6 +1,9 @@
 #-------------------------------------------------------------------------------
 # [misc todo]()
 #-------------------------------------------------------------------------------
+- idea:
+  - instead of having mirrors be in directories, have mirrors be in a `.` file in the same directory as the file
+    - eg, file named `dir/PATH`, meta mirror at `dir/.PATH.meta.md`
 
 ----------------------------------------
 > [features]()
@@ -18,7 +21,7 @@
   - maybe just use autocmd event `TextYankPost`?
 - `X` list item type, indicates rejections
   - command to move all `X` items into a rejections mirror (add a rejections mirror?)
-- visual mapping open fuzzy menu to turn selected text into a reference
+~ visual mapping open fuzzy menu to turn selected text into a reference
 - specify files to be ignored by indexes in `.project`
 - normal mode mapping: grab word under cursor and open a fuzzy goto for it
   - if there is only one match, go to it immediately
@@ -26,6 +29,9 @@
 - parse `goals` to show what you've been working on
 - `lex.move`: support `dir to file`
   - put the content from each file in the directory into the destination file
+- make `archive` command to move `PATH` to `.archive/PATH`
+- open all `notes` mirrors for a given file
+  - bind to "<leader>oN", always open in new tab
 
 ----------------------------------------
 > [unit testing]()

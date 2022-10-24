@@ -89,7 +89,7 @@ function goals() {
 }
 
 function _journal() {
-    nvim -c "lua require'util'.open_path(require'lex.journal'.path({ $1 }))"
+    nvim -c "lua require'util'.open_path(require'lex.journal'.path({ $1 }))" +GoyoToggle -c "1"
 }
 
 function nvim_mv() {

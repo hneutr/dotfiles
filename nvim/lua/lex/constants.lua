@@ -24,6 +24,11 @@ local M = {
                 dir_prefix = ".notes/alternatives",
                 mirror_other_mirrors = false,
             },
+            ideas = {
+                opener_prefix = "i",
+                dir_prefix = ".notes/ideas",
+                mirror_other_mirrors = false,
+            },
             outlines = {
                 opener_prefix = "o",
                 dir_prefix = ".notes/outlines",

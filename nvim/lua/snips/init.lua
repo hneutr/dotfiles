@@ -229,7 +229,7 @@ end
 
 function BigLine:snippet()
     return {
-        t{self:divider(), ""},
+        t{self:divider(), "", ""},
         i(1),
     }
 end
