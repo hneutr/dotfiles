@@ -1,84 +1,88 @@
-local M = {}
-local class = require'util.class'
-local config = require'lex.config'
+local Object = require("util.object")
+local config = require('lex.config')
+local Path = require('util.path')
 
---------------------------------------------------------------------------------
---                                Location                                    --
+--[ --------------------------------------------------------------------------------
+--                                   Mirror                                   --
 --------------------------------------------------------------------------------
 -- collected path functions in an object
 --
--- a location is a file.
+-- a mirror is a file.
 --
--- a location has a `type`:
+-- a mirror has a `type`:
 -- - origin
--- - mirror
+-- - MIRROR
 --------------------------------------------------------------------------------
-MLocation = class(function(self, args)
-    args = _G.default_args(args, { path = vim.fn.expand('%:p') })
+Mirror = Object:extend()
+
+function Mirror:new(args)
+    args = _G.default_args(args, {path = Path.current_file()})
     self.path = args.path
 
     self.config = config.get()
 
-    self:set_type()
-    self:set_origin()
-    self:set_mirrors_other_mirrors()
-end)
+    self.type = self.get_type(self.path, self.config)
+    self.type_config = vim.tbl_get(self.config.mirrors, self.type) or {}
+    self.origin = self:get_origin()
 
-function MLocation:set_origin()
+    self.mirrors_other_mirrors = vim.tbl_get(self.type_config, 'mirror_other_mirrors')
+
+    -- self:set_mirrors_other_mirrors()
+end
+
+
+function Mirror.get_type(path, config)
+    for mirror, mirror_data in pairs(config.mirrors) do
+        if vim.startswith(path, mirror_data.dir) then
+            return mirror
+        end
+    end
+
+    return 'origin'
+end
+
+function Mirror:remove_kind_from_path()
+    local type_dir = vim.tbl_get(self.type_config, 'dir') or self.config.root
+
+    path = Path.remove_from_start(self.path, type_dir)
+
+    if self.type ~= 'origin' then
+        path = Path.join(self.type, path)
+    end
+
+    return path
+end
+
+
+function Mirror:get_origin()
     -- if we didn't start in a mirrors dir, return the root path
     if self.type == 'origin' then
-        self.origin = self
-        return
+        return self
     end
 
-    local path = self:remove_type()
-
-    while true do
-        local subbed_this_round = false
-
-        for mirror_type, mirror_config in pairs(self.config.mirrors) do
-            local prefix = mirror_config.dir_prefix .. '/'
-
-            if vim.startswith(path, prefix) then
-                subbed_this_round = true
-                path = path:gsub(prefix, '', 1)
-                break
-            end
-        end
-
-        if subbed_this_round then
-            subbed_this_round = false
-        else
-            break
-        end
-    end
+    path = self:remove_kind_from_path()
+    path = Mirror._strip_mirrors(path, self.config)
     
-    self.origin = MLocation({path = _G.joinpath(self.config.root, path) })
+    return Mirror({path = Path.join(self.config.root, path) })
 end
 
-function MLocation:set_type()
-    local path = require('util.path').remove_from_start(self.path, self.config.root)
-
-    self.type = 'origin'
-
-    for _type, _config in pairs(self.config.mirrors) do
-        if vim.startswith(path, _config.dir_prefix) then
-            self.type = _type
-            break
+function Mirror._strip_mirrors(path, config)
+    for mirror, _ in pairs(config.mirrors) do
+        if vim.startswith(path, mirror) and path ~= mirror .. ".md" then
+            path = Path.remove_from_start(path, mirror)
+            return Mirror._strip_mirrors(path, config)
         end
     end
 
-    return
+    return path
+end
+
+function Mirror:set_mirrors_other_mirrors()
+    self.mirrors_other_mirrors = vim.tbl_get(self.config.mirrors, self.type, 'mirror_other_mirrors')
 end
 
 
-function MLocation:set_mirrors_other_mirrors()
-    local mirror_config = vim.tbl_get(self.config.mirrors, self.type) or {}
-    self.mirrors_other_mirrors = vim.tbl_get(mirror_config, 'mirror_other_mirrors') or false
-end
-
-
-function MLocation:remove_type()
+function Mirror:remove_type()
     local root = self.config.root
 
     if self.type ~= 'origin' then
@@ -89,24 +93,31 @@ function MLocation:remove_type()
 end
 
 
-function MLocation:get_location_of_type(location_type)
-    local path = self:remove_type()
-    path = _G.joinpath(self.config.mirrors[location_type].dir, path)
-    return MLocation({ path = path })
+function Mirror:get_mirror_of_type(mirror_type)
+    local mirror_type_config = self.config.mirrors[mirror_type]
+
+    local path
+    if vim.tbl_get(self.type_config, 'kind') == vim.tbl_get(mirror_type_config, 'kind') then
+        path = Mirror:remove_kind_from_path()
+    else
+        path = Path.remove_from_start(self.path, self.config.root)
+    end
+
+    return Mirror({path = Path.join(mirror_type_config.dir, path)})
 end
 
 
-function MLocation:get_location(location_type)
+function Mirror:get_location(location_type)
     if self.type == location_type then
         return self.origin
     elseif not self.mirrors_other_mirrors and self.config.mirrors[location_type].mirror_other_mirrors then
-        return self:get_location_of_type(location_type)
+        return self:get_mirror_of_type(location_type)
     else
-        return self.origin:get_location_of_type(location_type)
+        return self.origin:get_mirror_of_type(location_type)
     end
 end
 
-function MLocation:find_updates(new_location, updates)
+function Mirror:find_updates(new_location, updates)
     local do_not_mirror_other_mirrors = {}
     local mirror_other_mirrors = {}
     local types = {}
@@ -127,14 +138,14 @@ function MLocation:find_updates(new_location, updates)
     updates[origin.path] = new_origin.path
 
     for i, _type in ipairs(types) do
-        local m = origin:get_location_of_type(_type)
-        local new_m = new_origin:get_location_of_type(_type)
+        local m = origin:get_mirror_of_type(_type)
+        local new_m = new_origin:get_mirror_of_type(_type)
         updates[m.path] = new_m.path
 
         if vim.tbl_contains(do_not_mirror_other_mirrors, _type) then
             for j, o_type in ipairs(mirror_other_mirrors) do
-                local m_sub = m:get_location_of_type(o_type)
-                local new_m_sub = new_m:get_location_of_type(o_type)
+                local m_sub = m:get_mirror_of_type(o_type)
+                local new_m_sub = new_m:get_mirror_of_type(o_type)
                 updates[m_sub.path] = new_m_sub.path
             end
         end
@@ -149,12 +160,31 @@ function MLocation:find_updates(new_location, updates)
     return updates
 end
 
-M.MLocation = MLocation
+function Mirror.open_mirrors_of_kind(kind)
+    local origin = Mirror().origin
+
+    Path.open(origin.path, 'tabedit')
+
+    local open_command = "vsplit"
+    for mirror_type, mirror_data in pairs(config.get().mirrors) do
+        if mirror_data.kind == kind then
+            local mirror = origin:get_location(mirror_type)
+
+            if Path.is_file(mirror.path) then
+                Path.open(mirror.path, open_command)
+
+                if open_command == "vsplit" then
+                    open_command = "split"
+                end
+            end
+        end
+    end
+end
+
+function Mirror.open(mirror_type, open_command)
+    Path.open(Mirror():get_location(mirror_type).path, open_command)
+end
 
 --------------------------------------------------------------------------------
 
-function M.open(mirror_type, open_command)
-    require('util').open_path(MLocation():get_location(mirror_type).path, open_command)
-end
-
-return M
+return Mirror

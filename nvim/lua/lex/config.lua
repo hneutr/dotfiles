@@ -1,5 +1,6 @@
 local M = {}
 local constants = require('lex.constants')
+local Path = require('util.path')
 
 --------------------------------------------------------------------------------
 -- file
@@ -30,17 +31,16 @@ function M.file.build(path)
 
     config['root'] = vim.fn.fnamemodify(path, ':h')
 
-    local mirror_defaults = constants.mirror_defaults
-
     local mirrors = {}
-    for m_type, m_defaults in pairs(mirror_defaults['mirrors']) do
-        local m_config = _G.default_args(vim.tbl_get(config, 'mirrors', m_type), m_defaults)
+    for kind, kind_data in pairs(constants.mirror_defaults) do
+        for mirror, mirror_data in pairs(kind_data.mirrors) do
+            mirror_data = _G.default_args(vim.tbl_get(config, 'mirrors', mirror), mirror_data)
+            mirror_data.kind = kind
+            mirror_data.dir = Path.join(config['root'], kind_data.dir, mirror)
 
-        m_config['dir'] = _G.joinpath(config['root'], m_config.dir_prefix)
-        m_config['root'] = config['root']
-
-        if not vim.tbl_get(m_config, "disable") then
-            mirrors[m_type] = m_config
+            if not vim.tbl_get(mirror_data, "disable") then
+                mirrors[mirror] = mirror_data
+            end
         end
     end
 

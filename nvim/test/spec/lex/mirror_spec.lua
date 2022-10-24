@@ -1,28 +1,32 @@
 local mock = require('luassert.mock')
 local stub = require('luassert.stub')
-local m = require('lex.mirror')
+local Path = require('util.path')
 require('util')
 
 
 describe("Location", function()
-    local config = require'lex.config'
+    local config = require('lex.config')
     local _config = {
-        root = '/a',
+        root = '/root',
         mirrors = {
-            type_one = {
-                dir_prefix = 'type_one',
+            x = {
                 mirror_other_mirrors = false,
-                dir = '/a/type_one',
+                dir = '/root/a/x',
+                kind = 'a',
             },
-            type_two = {
-                dir_prefix = 'type_two/two',
-                mirror_other_mirrors = true,
-                dir = '/a/type_two/two',
+            y = {
+                kind = 'a',
+                dir = '/root/a/y',
             },
-            type_three = {
-                dir_prefix = 'type_three',
+            z = {
                 mirror_other_mirrors = true,
-                dir = '/a/type_three',
+                kind = 'b',
+                dir = '/root/b/z',
+            },
+            w = {
+                mirror_other_mirrors = true,
+                kind = 'c',
+                dir = '/root/c/w',
             },
         },
     }
@@ -30,6 +34,7 @@ describe("Location", function()
     local config_get = config.get
 
     before_each(function()
+        Mirror = require('lex.mirror')
         config.get = function() return _config end
     end)
 
@@ -39,71 +44,67 @@ describe("Location", function()
 
     describe("init", function()
         it("infers path", function()
-            local one = m.MLocation()
-            assert.equal(one.path, vim.fn.expand('%:p'))
+            assert.equal(Mirror().path, Path.current_file())
         end)
     end)
     
     describe("get_type", function()
         it("non-mirror", function()
-            local l = m.MLocation({ path = '/a/file.md'})
-            assert.equals(l.type, "origin")
+            assert.equals(Mirror.get_type('/root/file.md', config.get()), "origin")
         end)
-
+    
         it("mirror", function()
-            local l = m.MLocation({ path = '/a/type_one/file.md' })
-            assert.equals(l.type, "type_one")
+            assert.equals(Mirror.get_type('/root/a/x/file.md', config.get()), "x")
         end)
-
+           
         it("nested mirror", function()
-            local l = m.MLocation({ path = '/a/type_two/two/type_one/file.md'})
-            assert.equals(l.type, "type_two")
+            assert.equals(Mirror.get_type('/root/a/x/y/file.md', config.get()), "x")
         end)
     end)
 
     describe("get_origin", function()
-        it("non-mirrored path returns self", function()
-            local l = m.MLocation({ path = '/a/file.md'})
-            assert.equals(l.origin.path, "/a/file.md")
+        it("from origin", function()
+            local l = Mirror({path = '/root/file.md'})
+            assert.equals(l:get_origin(), l)
         end)
-    
+
         it("identifies the origin", function()
-            local one = m.MLocation({ path = '/a/type_two/two/type_one/file.md'})
-            assert.equals(one.origin.path, "/a/file.md")
+            local l = Mirror({path = '/root/a/x/y/file.md'})
+            local origin = Mirror({path = '/root/file.md'})
+            assert.are_same(l:get_origin(), origin)
         end)
     end)
-    
+
     describe("get_location", function()
         it("req = same type", function()
-            local l = m.MLocation()
+            local l = Mirror()
             l.origin = "origin"
             l.type = 1
             assert.equals(l:get_location(1), "origin")
         end)
     
         it("non-mirrors_other_mirrors and type_mirrors_other_mirrors", function()
-            local l = m.MLocation({ path = "/a/type_one/file.md" })
-            assert.is_false(l.mirrors_other_mirrors)
-    
-            local actual = l:get_location("type_two")
-            local expected = m.MLocation({ path = "/a/type_two/two/type_one/file.md" })
+            local l = Mirror({path = "/root/a/x/file.md"})
+            assert.is_not_true(l.mirrors_other_mirrors)
+           
+            local actual = l:get_location("z")
+            local expected = Mirror({path = "/root/b/z/a/x/file.md"})
             assert.equal(actual.path, expected.path)
         end)
-    
+           
         it("non-mirrors_other_mirrors and non-type_mirrors_other_mirrors", function()
-            local l = m.MLocation({ path = "/a/file.md" })
-    
-            assert.is_false(l.mirrors_other_mirrors)
-    
-            local actual = l:get_location("type_one")
-            local expected = m.MLocation({ path = "/a/type_one/file.md" })
+            local l = Mirror({path = "/root/a/x/file.md"})
+            assert.is_not_true(l.mirrors_other_mirrors)
+           
+            local actual = l:get_location("y")
+            local expected = Mirror({ path = "/root/a/y/file.md" })
             assert.equal(actual.path, expected.path)
         end)
-    
+           
         it("mirrors_other_mirrors and type_mirrors_other_mirrors", function()
-            local l = m.MLocation({ path = '/a/type_two/two/file.md'})
-            local actual = l:get_location("type_three")
-            local expected = m.MLocation({ path = "/a/type_three/file.md" })
+            local l = Mirror({ path = '/root/b/z/file.md'})
+            local actual = l:get_location("w")
+            local expected = Mirror({path = "/root/c/w/file.md"})
             assert.equal(actual.path, expected.path)
         end)
     end)

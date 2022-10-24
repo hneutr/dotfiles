@@ -1,7 +1,7 @@
 local M = {}
 local l = require('lex.link')
 local ulines = require('util.lines')
-local mirror = require('lex.mirror')
+local Mirror = require('lex.mirror')
 local util = require('util')
 local path = require('util.path')
 
@@ -118,8 +118,8 @@ function M.get_updates(src, dst)
 
         dst_path = M.handle_dir_into_parent(src, dst, src_path, dst_path)
 
-        local src_loc = mirror.MLocation({path = src_path})
-        local dst_loc = mirror.MLocation({path = dst_path})
+        local src_loc = Mirror({path = src_path})
+        local dst_loc = Mirror({path = dst_path})
 
         updates = vim.tbl_extend("keep", updates, src_loc:find_updates(dst_loc))
     end

@@ -58,6 +58,11 @@ function Path.is_path(thing)
     return Path.is(thing, Path)
 end
 
+------------------------------------[ misc ]------------------------------------
+function Path.current_file()
+    return vim.fn.expand('%:p')
+end
+
 ------------------------------[ output handling ]-------------------------------
 function Path.match_call_type(called_with, to_match)
     to_match = tostring(to_match)
@@ -83,14 +88,20 @@ function Path.rtrim(path)
     return Path.match_call_type(called_with, path)
 end
 
-------------------------------------[ join ]------------------------------------
-function Path.join(left, right)
-    local called_with = left
+function Path.trim(path)
+    return Path.ltrim(Path.rtrim(path))
+end
 
+------------------------------------[ join ]------------------------------------
+function Path.join(left, right, ...)
     local path = tostring(Path.rtrim(left)) .. '/' .. tostring(Path.ltrim(right))
     path = Path.rtrim(path)
 
-    return Path.match_call_type(called_with, path)
+    if ... then
+        path = Path.join(path, ...)
+    end
+    
+    return Path.match_call_type(left, path)
 end
 
 ----------------------------------[ resolve ]-----------------------------------

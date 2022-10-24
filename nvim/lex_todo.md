@@ -30,8 +30,6 @@
 - `lex.move`: support `dir to file`
   - put the content from each file in the directory into the destination file
 - make `archive` command to move `PATH` to `.archive/PATH`
-- open all `notes` mirrors for a given file
-  - bind to "<leader>oN", always open in new tab
 
 ----------------------------------------
 > [unit testing]()
@@ -51,7 +49,7 @@
     - files
 - `lex.move`
 - `lex.link.Reference`
-- `lex.mirror.MLocation:find_updates`
+- `lex.mirror:find_updates`
 ~ `lex.index`
 
 ----------------------------------------

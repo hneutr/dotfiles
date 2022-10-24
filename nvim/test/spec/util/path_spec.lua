@@ -174,6 +174,10 @@ describe("Path:", function()
 
            assert.are.same(m.join(left, right), joined)
        end)
+
+       it("> 2 args", function()
+           assert.are.same(m.join("/dir", "subdir", "file"), "/dir/subdir/file")
+       end)
    end)
 
    describe("resolve:", function()

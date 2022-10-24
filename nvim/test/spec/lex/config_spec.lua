@@ -51,27 +51,23 @@ describe(".config", function()
             local raw_config = {
                 root = '/root',
                 mirrors = {
-                    two = {
-                        disable = true,
-                    },
+                    y = {disable = true},
                 },
             }
 
             local mirror_defaults = {
-                mirrors = {
-                    one = {
-                        opener_prefix = '1',
-                        dir_prefix = '1',
+                a = {
+                    dir = "a",
+                    mirrors = {
+                        x = {opener_prefix = 'x'},
+                        y = {opener_prefix = 'y'},
                     },
-                    two = {
-                        opener_prefix = '2',
-                        dir_prefix = '2',
-                    },
-                    three = {
-                        opener_prefix = '3',
-                        dir_prefix = '3',
-                        mirror_other_mirrors = true,
-                    },
+                },
+                b = {
+                    dir = "b",
+                    mirrors = {
+                        z = {opener_prefix = 'z', mirror_other_mirrors = true},
+                    }
                 }
             }
 
@@ -91,19 +87,17 @@ describe(".config", function()
                 local expected = {
                     root = "/1/2/3",
                     mirrors = {
-                        one = {
-                            dir = "/1/2/3/1",
-                            dir_prefix = "1",
-                            root = "/1/2/3",
-                            opener_prefix = "1"
+                        x = {
+                            opener_prefix = 'x',
+                            dir = "/1/2/3/a/x",
+                            kind = "a",
                         },
-                        three = {
-                            dir = "/1/2/3/3",
-                            dir_prefix = "3",
-                            root = "/1/2/3",
-                            opener_prefix = "3",
+                        z = {
+                            opener_prefix = 'z',
                             mirror_other_mirrors = true,
-                        }
+                            dir = "/1/2/3/b/z",
+                            kind = "b",
+                        },
                     }
                 }
 
@@ -116,52 +110,52 @@ describe(".config", function()
     describe("set", function()
         local find = m.file.find
         local build = m.file.build
-
+    
         before_each(function()
             m.file.build = function() return { test = 1 } end
             vim.g.lex_configs = nil
         end)
-
+    
         after_each(function()
             m.file.find = find
             m.file.build = build
             vim.g.lex_configs = nil
         end)
-
+    
         it("doesn't find a file", function()
             m.file.find = function() return end
-
+    
             m.set()
             assert.is_nil(vim.b.lex_config_path)
             assert.is_true(vim.tbl_isempty(vim.g.lex_configs))
         end)
-
+    
         it("finds a file without predefined config", function()
             m.file.find = function() return "test" end
-
+    
             m.set()
             assert.equals(vim.b.lex_config_path, 'test')
             assert.equals(vim.tbl_count(vim.g.lex_configs.test), 1)
             assert.equals(vim.g.lex_configs.test.test, 1)
         end)
-
+    
         it("finds a file with predefined config", function()
             build = stub(m.file, "build")
-
+    
             m.file.find = function() return "test" end
             vim.g.lex_configs = { test = { test = 1 } }
-
+    
             m.set()
             assert.equals(vim.b.lex_config_path, 'test')
             assert.equals(vim.tbl_count(vim.g.lex_configs.test), 1)
             assert.equals(vim.g.lex_configs.test.test, 1)
-
+    
             assert.stub(build).was_not_called()
-
+    
             build:revert()
         end)
     end)
-
+    
     describe("get", function()
         it("checks that things are ok without anything defined", function()
             assert.is_true(vim.tbl_isempty(m.get()))

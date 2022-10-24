@@ -1,5 +1,6 @@
 local M = {}
 local ulines = require'util.lines'
+local Mirror = require('lex.mirror')
 
 function M.move(mode)
     local lines = ulines.selection.get({ mode = mode })
@@ -9,7 +10,7 @@ function M.move(mode)
       table.insert(lines, "")
     end
 
-    local scratch_file = require'lex.mirror'.MLocation():get_location('scratch').path
+    local scratch_file = Mirror():get_location('scratch').path
 
     if vim.fn.filereadable(scratch_file) ~= 0 then
         for line in io.lines(scratch_file) do
