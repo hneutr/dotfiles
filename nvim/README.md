@@ -13,3 +13,6 @@
   - turn off `spell`
 - tell `nvim-surround` to be less "smart" about quotes
   - I want them inserted even when the next char is a "surround" character
+- have sizes for lines/headers that are numerical
+  - ie, m1, m2, m3, m4, etc (probably m1 = 10 long, m2 = 20, etc)
+  - still keep a default `m`

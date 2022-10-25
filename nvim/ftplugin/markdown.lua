@@ -1,4 +1,5 @@
 local util = require('util')
+local Path = require('util.path')
 local aucmd = vim.api.nvim_create_autocmd
 
 local p = { "*.md" }
@@ -59,12 +60,13 @@ aucmd({'BufEnter'}, {pattern=p, group=sync_g, callback=if_sync(sync.buf_enter)})
 aucmd({'TextChanged', 'InsertLeave'}, {pattern=p, group=sync_g, callback=if_sync(sync.buf_change)})
 aucmd({'BufLeave', 'VimLeave'}, {pattern=p, group=sync_g, callback=if_sync(sync.buf_leave)})
 
-----------------------------------[ mappings ]----------------------------------
+------------------------------------[ lex ]-------------------------------------
 aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
     scope = 'b',
-    key = 'lex_maps_applied', 
+    key = 'lex_applied', 
     fn = function()
         if vim.b.lex_config_path then
+            ------------------------------------[ maps ]------------------------------------
             require('lex.opener').map()
             require('lex.list').map_item_toggles(vim.g.mapleader .. "t")
             vim.b.list_types = {"question", "maybe"}
@@ -80,23 +82,20 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
             -- delete the currently selected lines and move them to the scratch file
             vim.keymap.set("n", " s", function() require'lex.scratch'.move('n') end, args)
             vim.keymap.set("v", " s", [[:'<,'>lua require'lex.scratch'.move('v')<cr>]], args)
+
+            ----------------------------------[ commands ]----------------------------------
+            local cmd = vim.api.nvim_buf_create_user_command
+            local journal = require('lex.journal')
+
+            cmd(0, "Push", function() require'lex.config'.push() end, {})
+            cmd(0, "Journal", function() util.open_path(journal.path{journal = 'catch all'}) end, {})
+            cmd(0, "PJournal", function() util.open_path(journal.path()) end, {})
+            cmd(0, "WJournal", function() util.open_path(journal.path{journal = 'on writing'}) end, {})
+            cmd(0, "Goals", function() util.open_path(require'lex.goals'.path()) end, {})
+            cmd(0, "Index", function() require'lex.index'.open() end, {})
+
+            ---------------------------------[ statusline ]---------------------------------
+            vim.wo.statusline = require('lex.statusline')()
         end
-    end
-})})
-
-----------------------------------[ commands ]----------------------------------
-aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
-    scope = 'b',
-    key = 'lex_cmds_applied', 
-    fn = function()
-        local cmd = vim.api.nvim_buf_create_user_command
-        local journal = require('lex.journal')
-
-        cmd(0, "Push", function() require'lex.config'.push() end, {})
-        cmd(0, "Journal", function() util.open_path(journal.path{journal = 'catch all'}) end, {})
-        cmd(0, "PJournal", function() util.open_path(journal.path()) end, {})
-        cmd(0, "WJournal", function() util.open_path(journal.path{journal = 'on writing'}) end, {})
-        cmd(0, "Goals", function() util.open_path(require'lex.goals'.path()) end, {})
-        cmd(0, "Index", function() require'lex.index'.open() end, {})
     end
 })})
