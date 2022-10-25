@@ -109,7 +109,6 @@ function vload() {
 }
 
 function start_project() {
-    mkdir meta && touch meta/@.md
     mkdir story
     mkdir context
     mkdir text

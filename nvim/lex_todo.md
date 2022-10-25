@@ -19,9 +19,6 @@
 - remap `d` in markdown project files to `scratch text` instead of deleting
   - (clean blank lines too)
   - maybe just use autocmd event `TextYankPost`?
-- `X` list item type, indicates rejections
-  - command to move all `X` items into a rejections mirror (add a rejections mirror?)
-~ visual mapping open fuzzy menu to turn selected text into a reference
 - specify files to be ignored by indexes in `.project`
 - normal mode mapping: grab word under cursor and open a fuzzy goto for it
   - if there is only one match, go to it immediately
@@ -29,24 +26,11 @@
 - parse `goals` to show what you've been working on
 - `lex.move`: support `dir to file`
   - put the content from each file in the directory into the destination file
-- make `archive` command to move `PATH` to `.archive/PATH`
+- make `rm` command to move `PATH` to `.archive/PATH`
 
 ----------------------------------------
 > [unit testing]()
 ----------------------------------------
-- lex project framework:
-  - create project
-  - make file with content
-    - marker
-    - reference
-    - header + content
-  - make directory
-  - check file:
-    - existence
-    - content
-  - check directory:
-    - existence
-    - files
 - `lex.move`
 - `lex.link.Reference`
 - `lex.mirror:find_updates`

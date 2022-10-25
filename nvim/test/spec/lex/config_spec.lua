@@ -1,5 +1,5 @@
-local stub = require'luassert.stub'
-local m = require'lex.config'
+local stub = require('luassert.stub')
+local m = require('lex.config')
 require('util')
 
 describe(".config", function()

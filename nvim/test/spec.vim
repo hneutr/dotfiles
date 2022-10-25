@@ -6,3 +6,8 @@ set rtp^=../
 runtime plugin/plenary.vim
 
 lua require('plenary.busted')
+
+"--------------------------------[ additions ]---------------------------------"
+lua require('start')
+
+set rtp^=./vendor/lextest.nvim/

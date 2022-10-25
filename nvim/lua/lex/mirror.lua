@@ -26,8 +26,6 @@ function Mirror:new(args)
     self.origin = self:get_origin()
 
     self.mirrors_other_mirrors = vim.tbl_get(self.type_config, 'mirror_other_mirrors')
-
-    -- self:set_mirrors_other_mirrors()
 end
 
 
@@ -42,6 +40,7 @@ function Mirror.get_type(path, config)
 end
 
 function Mirror:remove_kind_from_path()
+    -- vim.pretty_print(self.type_config)
     local type_dir = vim.tbl_get(self.type_config, 'dir') or self.config.root
 
     path = Path.remove_from_start(self.path, type_dir)
@@ -98,7 +97,7 @@ function Mirror:get_mirror_of_type(mirror_type)
 
     local path
     if vim.tbl_get(self.type_config, 'kind') == vim.tbl_get(mirror_type_config, 'kind') then
-        path = Mirror:remove_kind_from_path()
+        path = self:remove_kind_from_path()
     else
         path = Path.remove_from_start(self.path, self.config.root)
     end

@@ -180,6 +180,11 @@ function Path.open(path, open_command)
     end
 end
 
+-----------------------------------[ touch ]------------------------------------
+function Path.touch(path)
+    vim.fn.system("touch " .. path)
+end
+
 ---------------------------------[ list_paths ]---------------------------------
 function Path.list_paths(path)
     local paths = {}
@@ -231,6 +236,24 @@ end
 ----------------------------------[ is_empty ]----------------------------------
 function Path.is_empty(path)
     return Path.is_dir(path) and vim.tbl_count(vim.fn.readdir(path)) == 0
+end
+
+-----------------------------------[ write ]------------------------------------
+function Path.write(path, content)
+    Path.make_dirs(path)
+    vim.fn.writefile(content, path)
+end
+
+------------------------------------[ read ]------------------------------------
+function Path.read(path)
+    return vim.fn.readfile(path)
+end
+
+-----------------------------------[ rmdir ]------------------------------------
+function Path.rmdir(path)
+    if Path.is_dir(path) then
+        vim.fn.system("rm -fr " .. path)
+    end
 end
 
 

@@ -153,6 +153,10 @@ function M.update_paths(updates)
 end
 
 function M.update_references(updates)
+    if vim.tbl_isempty(updates) then
+        return
+    end
+
     local root = require'lex.config'.get().root
     vim.g.lex_sync_ignore = true
 
