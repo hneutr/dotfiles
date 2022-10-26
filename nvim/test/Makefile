@@ -1,6 +1,6 @@
 SPEC=
 
-RUN=nvim --headless --noplugin -u spec.vim
+RUN=nvim --headless -u spec.vim
 
 .PHONY: all nvim test watch prepare
 
