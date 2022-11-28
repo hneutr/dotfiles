@@ -3,8 +3,6 @@ local Path = require('util.path')
 
 local m = require('lex.move')
 
-local eq = assert.are.same
-
 describe("move:", function()
    describe("infer:", function()
         before_each(function()

@@ -22,13 +22,14 @@ return require('packer').startup(function(use)
     use 'windwp/nvim-autopairs'                                         -- close things
 
     ----------------------------------[ mappings ]----------------------------------
+    use 'tpope/vim-commentary'                                          -- toggle comments
     use 'junegunn/vim-easy-align'                                       -- align text at a separator
     use 'justinmk/vim-sneak'                                            -- 2char motions
     use "kylechui/nvim-surround"                                        -- deal with surrounding things
-    use 'terrortylor/nvim-comment'                                      -- comments tuff out
     use 'tpope/vim-unimpaired'                                          -- paired options
     use 'vim-scripts/ReplaceWithRegister'                               -- paste without modifying registers
     use 'zirrostig/vim-schlepp'                                         -- move things up and down
+    use 'monaqa/dial.nvim'                                              -- cycle between dates, true/false, etc
 
     ---------------------------------[ languages ]----------------------------------
     use 'nvim-treesitter/nvim-treesitter'                               -- syntax/indent

@@ -11,3 +11,5 @@ lua require('plenary.busted')
 lua require('start')
 
 set rtp^=./vendor/lextest.nvim/
+
+lua rawset(_G, 'eq', assert.are.same)

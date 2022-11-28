@@ -1,27 +1,17 @@
-function table.concatenate(...)
-    return table._concatenate({}, ...)
-end
+function table.concatenate(tbl, other, ...)
+    tbl = tbl or {}
 
-function table._concatenate(...)
-    local args = {...}
-    local t1 = {}
-    
-    if #args > 0 then
-        t1 = table.remove(args, 1)
-    end
-    
-    if #args > 0 then
-        local t2 = table.remove(args, 1)
-        for _, v in ipairs(t2) do 
-            table.insert(t1, v)
+    if other and #other > 0 then
+        for _, v in ipairs(other) do 
+            table.insert(tbl, v)
         end
     end
-    
-    if #args > 0 then
-        t1 = table._concatenate(t1, unpack(args))
+
+    if ... then
+        tbl = table.concatenate(tbl, ...)
     end
-    
-    return t1
+        
+    return tbl
 end
 
 function table.removekey(tbl, key)

@@ -16,7 +16,7 @@ ls.add_snippets("markdown", {
     s("mhtd", {
         t{mds.divider.small.str(), "> ["},
         f(function() return vim.fn.strftime("%Y%m%d") end),  t{"]()",
-        mds.divider.small.str(), "", ""},
+        mds.divider.small.str(), ""},
         i(1)
     }),
     s("bl", snips.BigLine({comment="#"}):snippet()),

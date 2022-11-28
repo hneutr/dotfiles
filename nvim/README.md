@@ -9,6 +9,7 @@
     - (move this code out of `lex`)
   - `?` (question): change the text color to draw attention, rather fade
   - render italics/bold in non-standard colored list items
+  - make lists work within comments
 - have settings for terminal buffers
   - turn off `spell`
 - tell `nvim-surround` to be less "smart" about quotes

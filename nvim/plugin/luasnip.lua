@@ -4,6 +4,7 @@ ls.config.set_config({
     history = false,
     -- ensure tab behaves normally outside snips
     region_check_events = 'InsertEnter',
+    delete_check_events = 'InsertLeave'
 })
 
 --------------------------------------------------------------------------------

@@ -1,32 +1,45 @@
 #-------------------------------------------------------------------------------
+# [notes on usage]()
+#-------------------------------------------------------------------------------
+- some things I want in a different file (eg outlines)
+- somethings I want inline, but hidden (eg ideas/questions/todos)
+
+----------------------------------------
+> [needs]()
+----------------------------------------
+- support for inline content of particular types (ideas/questions/todos)
+- create some method/place to store prose fragments, eg content about wildlife, hippos, Fennessez, etc
+
+#-------------------------------------------------------------------------------
 # [misc todo]()
 #-------------------------------------------------------------------------------
 - idea:
   - instead of having mirrors be in directories, have mirrors be in a `.` file in the same directory as the file
     - eg, file named `dir/PATH`, meta mirror at `dir/.PATH.meta.md`
+  - assume filetype is `md` for all files in a project and drop the extension `.md`
+  - instead of question/todo mirrors, make more use of vim's `fold` feature
 
 ----------------------------------------
 > [features]()
 ----------------------------------------
-- create some method/place to store prose fragments, eg content about wildlife, hippos, Fennessez, etc
 - view a mark's references
 - make `mark-insert` respect capitalization (and capitalize character filenames)
-  - define "labels" for locations (maybe in `.project`)
-    - e.g., define a directory as "title case" (for example, the characters dir)
-- define aliases for locations (maybe in `.project`)
-  - e.g., have the reference to `context/groups/na-hiasciari-manach-dall.md` be `NHMD`
-  - also support aliases/hardcoded strings for location labels
-- remap `d` in markdown project files to `scratch text` instead of deleting
-  - (clean blank lines too)
-  - maybe just use autocmd event `TextYankPost`?
-- specify files to be ignored by indexes in `.project`
-- normal mode mapping: grab word under cursor and open a fuzzy goto for it
-  - if there is only one match, go to it immediately
-- have a `start date` field in `.project`
+- remap `d` in markdown project files to `scratch text` instead of deleting (clean blank lines too)
+  ~ just use autocmd event `TextYankPost`?
 - parse `goals` to show what you've been working on
 - `lex.move`: support `dir to file`
   - put the content from each file in the directory into the destination file
 - make `rm` command to move `PATH` to `.archive/PATH`
+
+----------------------------------------
+> [fuzzy]()
+----------------------------------------
+- normal mode mapping: grab word under cursor and open a fuzzy goto for it
+  - if there is only one match, go to it immediately
+- when fuzzy finding, have some way to open a particular mirror
+  - eg by binding `<c-PREFIX>` to open up the PREFIX mirror of a given file
+    - eg, `<c->` = open up the questions file
+    - ideally support opening it up in edit/split/vsplit/tab
 
 ----------------------------------------
 > [unit testing]()
@@ -61,6 +74,17 @@
 ~ switch `FILE_DELIMITER` to some untypable non-ascii character
 ~ replace spaces with some invisible character?
 
+----------------------------------------
+> [projects]()
+----------------------------------------
+- define aliases/labels for locations (maybe in `.project`)
+  - eg, have the reference to `context/groups/na-hiasciari-manach-dall.md` be `NHMD`
+  - eg, define a directory as "title case" (for example, the characters dir)
+  - also support aliases/hardcoded strings for location labels
+- specify files to be ignored by indexes in `.project`
+- have a `start date` field in `.project`
+- move project journals into the project directory
+
 #-------------------------------------------------------------------------------
 # [flags]()
 #-------------------------------------------------------------------------------
@@ -94,7 +118,6 @@
 > [things to support]()
 ----------------------------------------
 - view a file's mirrors (in a quickfixlist with `<c-j>/<c-l>` bound to open the item on the cursor's line)
-- open a file's mirrors
 - mechanism to indicate "this mirror is only for files of type x" (eg `fragments` is only for `text`)
 - gather all content in `issues` and output list of todos
 
