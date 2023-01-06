@@ -19,7 +19,7 @@ ls.add_snippets("markdown", {
         mds.divider.small.str(), ""},
         i(1)
     }),
-    s("bl", snips.BigLine({comment="#"}):snippet()),
+    s("bl", snips.BigLine():snippet()),
     s("l", snips.SmallLine():snippet()),
     s("journal", {
         t("["),

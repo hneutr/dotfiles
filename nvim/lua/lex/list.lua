@@ -15,9 +15,16 @@ end)
 
 Item.types = {
     ['-'] = {name = 'default', nohl = true},
-    ['✓'] = {name = 'done', map_lhs_suffix = 'd'},
-    ['?'] = {name = 'question', map_lhs_suffix = 'q'},
     ['~'] = {name = 'maybe', map_lhs_suffix = 'm', regex_sigil = [[\~]]},
+    ['✓'] = {name = 'done', map_lhs_suffix = 'd'},
+    ['◻'] = {name = 'item', map_lhs_suffix = 'i', hl_args = {
+        sigil = {link = "mkdListItem"},
+        text = {link = "Normal"},
+    }},
+    ['?'] = {name = 'question', map_lhs_suffix = 'q', hl_args = {
+        sigil = {link = "mkdListItem"},
+        text = {link = "Statement"},
+    }},
 }
 Item.default_type = '-'
 Item.default_hl_args = {

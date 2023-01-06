@@ -1,3 +1,13 @@
+-- searching: https://unicodeplus.com/search
+-- unicode: https://en.wikipedia.org/wiki/Unicode_block
+-- latin script: https://en.wikipedia.org/wiki/Latin_script_in_Unicode
+-- sub/superscript: https://en.wikipedia.org/wiki/Unicode_subscripts_and_superscripts
+-- greek: https://en.wikipedia.org/wiki/Greek_and_Coptic
+-- math: https://en.wikipedia.org/wiki/Mathematical_operators_and_symbols_in_Unicode
+-- arrows: https://en.wikipedia.org/wiki/Arrows_(Unicode_block)
+-- shapes: https://en.wikipedia.org/wiki/Geometric_Shapes_(Unicode_block)
+-- logical symbols: https://en.wikipedia.org/wiki/List_of_logic_symbols
+
 ---------------------------------[ duplicate ]----------------------------------
 ∁
 ∏
@@ -271,7 +281,6 @@
 ------------------------------------[ dots ]------------------------------------
 ⋮ ⋯ ⋰ ⋱ ∴ ∵	∶ ∷ ⦙
 
-
 -----------------------------------[ beads ]------------------------------------
 ⊶ ⊷ ⊸ ⫯ ⫰ ⫱ ⟜ ⟝ ⟞ ⟟⧟ ⧿
 
@@ -466,7 +475,7 @@
 
 
 -----------------------------------[ circle ]-----------------------------------
-◉ ○ ◦ ◯ ◌ ◍ ◎ ● ◐ ◑ ◒ ◓ ◔ ◕ ◖ ◗
+◉ ○ ● ◦ ◯ ◌ ◍ ◎ ◐ ◑ ◒ ◓ ◔ ◕ ◖ ◗
 ◘ ◙ ◚ ◛
 ◠ ◡
 ◴ ◵ ◶ ◷ ⊕ ⊖ ⊗ ⍟ ⊘ ⊙ ⊚ ⊛ ⊜ ⊝ ⦰ ⦱ ⦲ ⦳ ⦴ ⦵ ⦶ ⦷ ⦸ ⦹ ⦺ ⦻ ⦼ ⦽ ⦾ ⦿ ⧀ ⧁ ⧂ ⧃ ⨶ ⨭ ⨮ ⨴ ⨵ ⨸ ⎉ ⎊
