@@ -1,6 +1,8 @@
 local util = require('util')
 local Path = require('util.path')
+
 local aucmd = vim.api.nvim_create_autocmd
+local cmd = vim.api.nvim_buf_create_user_command
 
 local p = { "*.md" }
 
@@ -65,10 +67,13 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
     scope = 'b',
     key = 'lex_applied', 
     fn = function()
+        require('lex.list').map_item_toggles(vim.g.mapleader .. "t")
+
+        cmd(0, "Journal", function() util.open_path(require('lex.journal').path()) end, {})
+
         if vim.b.lex_config_path then
             ------------------------------------[ maps ]------------------------------------
             require('lex.opener').map()
-            require('lex.list').map_item_toggles(vim.g.mapleader .. "t")
             vim.b.list_types = {"question", "maybe"}
 
             local args = {silent = true, buffer = true}
@@ -84,13 +89,8 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
             vim.keymap.set("v", " s", [[:'<,'>lua require'lex.scratch'.move('v')<cr>]], args)
 
             ----------------------------------[ commands ]----------------------------------
-            local cmd = vim.api.nvim_buf_create_user_command
-            local journal = require('lex.journal')
 
             cmd(0, "Push", function() require'lex.config'.push() end, {})
-            cmd(0, "Journal", function() util.open_path(journal.path{journal = 'catch all'}) end, {})
-            cmd(0, "PJournal", function() util.open_path(journal.path()) end, {})
-            cmd(0, "WJournal", function() util.open_path(journal.path{journal = 'on writing'}) end, {})
             cmd(0, "Goals", function() util.open_path(require'lex.goals'.path()) end, {})
             cmd(0, "Index", function() require'lex.index'.open() end, {})
 

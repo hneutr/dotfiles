@@ -9,6 +9,10 @@ local list_type_settings = {
         sigil = '-',
         nohl = true,
     },
+    dot = {
+        sigil = '*',
+        nohl = true,
+    },
     done = {
         sigil = '✓',
         map_lhs_suffix = 'd',
@@ -40,7 +44,7 @@ Buffer.defaults = {
     buffer_id = 0,
     list_types = {"done"},
 }
-Buffer.default_list_types = {"bullet", "numbered"}
+Buffer.default_list_types = {"bullet", "dot", "numbered"}
 
 function Buffer:new(args)
     for key, val in pairs(_G.default_args(args, self.defaults)) do

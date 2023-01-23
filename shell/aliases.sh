@@ -31,8 +31,3 @@ alias gptd="ga .; gc -m $(today); gp"
 
 # misc
 alias po="popen"
-
-# writing
-alias journal='_journal "journal = '"'"'catch all'"'"'"'
-alias pjournal='_journal "set_config = true"'
-alias wjournal='_journal "journal = '"'"'on writing'"'"'"'

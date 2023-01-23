@@ -8,6 +8,7 @@ local symbols_map = {
     ["s"] = require('mappings.unicode.shapes'),
 
     -----------------------------[ uppercase letters ]------------------------------
+    ["A"] = require('mappings.unicode.accents'),
     ["M"] = "ꟽ",
     ["P"] = "ꟼ",
 
