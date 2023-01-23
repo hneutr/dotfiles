@@ -88,7 +88,6 @@
   - also support aliases/hardcoded strings for location labels
 - specify files to be ignored by indexes in `.project`
 - have a `start date` field in `.project`
-- move project journals into the project directory
 
 #-------------------------------------------------------------------------------
 # [flags]()
