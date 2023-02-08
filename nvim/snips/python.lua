@@ -7,7 +7,7 @@ ls.add_snippets("python", {
     -- imports
     s("die", { t("import sys; sys.exit()") }),
     s("idefd", { t("from collections import defaultdict") }),
-    s("ipath", { t("from pathlib import path") }),
+    s("ipath", { t("from pathlib import Path") }),
     s("ipd", { t("import pandas as pd") }),
     s("inp", { t("import numpy as np") }),
     s("iplt", { t("import matplotlib.pyplot as plt") }),
