@@ -12,23 +12,36 @@ local list_type_settings = {
     dot = {
         sigil = '*',
         nohl = true,
+        map_lhs_suffix = 'o',
+    },
+    numbered = {
+        ListClass = line_type.NumberedListLine,
+        map_lhs_suffix = 'n',
+    },
+    item = {
+        sigil = '◻',
+        map_lhs_suffix = 'i',
     },
     done = {
         sigil = '✓',
         map_lhs_suffix = 'd',
     },
-    question = {
-        sigil = '?',
-        map_lhs_suffix = 'q',
+    rejected = {
+        sigil = '⨉',
+        map_lhs_suffix = 'x',
     },
     maybe = {
         sigil = '~',
         map_lhs_suffix = 'm',
         regex_sigil = [[\~]],
     },
-    numbered = {
-        ListClass = line_type.NumberedListLine,
-        map_lhs_suffix = 'n',
+    question = {
+        sigil = '?',
+        map_lhs_suffix = 'q',
+    },
+    tag = {
+        sigil = '@',
+        map_lhs_suffix = 'a',
     },
 }
 

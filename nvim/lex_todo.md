@@ -23,6 +23,9 @@
     - eg, file named `dir/PATH`, meta mirror at `dir/.PATH.meta.md`
   - assume filetype is `md` for all files in a project and drop the extension `.md`
   - instead of question/todo mirrors, make more use of vim's `fold` feature
+- support `@example_tag` highlighting
+  - have way to view all `@tag`s for a given tag type
+- support referrencing links in dotfiles/mirrors
 
 ----------------------------------------
 > [features]()

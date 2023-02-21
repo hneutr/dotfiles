@@ -2,7 +2,7 @@
 # [todo]()
 #-------------------------------------------------------------------------------
 - `list`:
-  - move code out of `lex.list`
+  - HIGH PRIORITY: move code out of `lex.list`
   - auto-renumber numbered lists
   - only add `- ` if it doesn't already exist
   - add todo toggle mappings to non-project markdown files

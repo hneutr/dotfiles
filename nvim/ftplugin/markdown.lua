@@ -74,7 +74,7 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
         if vim.b.lex_config_path then
             ------------------------------------[ maps ]------------------------------------
             require('lex.opener').map()
-            vim.b.list_types = {"question", "maybe"}
+            vim.b.list_types = {"item", "done", "rejected", "maybe", "question", "tag"}
 
             local args = {silent = true, buffer = true}
 

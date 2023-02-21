@@ -21,6 +21,7 @@
 ## Execute the given command string.
 #c.InteractiveShellApp.code_to_run = ''
 
+# suppress the venv warning because who cars
 c.InteractiveShell.warn_venv = False
 
 ## Run the file referenced by the PYTHONSTARTUP environment variable at IPython
