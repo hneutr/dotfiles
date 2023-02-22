@@ -35,9 +35,18 @@ local size_to_info = {
 --------------------------------------------------------------------------------
 local TextOrInput = Object:extend()
 function TextOrInput:new(args)
-    args = _G.default_args(args, {text=''})
-    self.text = args.text
-    self.has_input = self.text:len() == 0
+    args = _G.default_args(args, {inner=''})
+    self.inner = args.inner
+    self.inner_type = type(self.inner)
+    self.has_input = self.inner_type == 'string' and self.inner:len() == 0
+
+    if self.inner_type == 'string' then
+        self.inner_value = self.inner
+    elseif self.inner_type == 'function' then
+        self.inner_value = self.inner()
+    else
+        self.inner_value = ''
+    end
 end
 
 function TextOrInput:snippet(args)
@@ -50,20 +59,23 @@ function TextOrInput:snippet(args)
     post[1] = (self.post_text or '') .. post[1]
 
     if self.has_input then
-        table.insert(post, "")
         return {t(pre), i(1), t(post)}
     else
-        local content = pre
-        content[#content] = content[#content] .. self.text .. table.remove(post, 1)
-        content = vim.list_extend(content, post)
-        return t(content)
+        if self.inner_type == 'string' then
+            local content = pre
+            content[#content] = content[#content] .. self.inner .. table.remove(post, 1)
+            content = vim.list_extend(content, post)
+            return t(content)
+        elseif self.inner_type == 'function' then
+            return {t(pre), f(self.inner), t(post)}
+        end
     end
 end
 
 function TextOrInput:str(args)
     args = _G.default_args(args, {pre={''}, post={''}})
 
-    local content = {self.text}
+    local content = {self.inner_value}
 
     if type(args.pre) == "string" then
         content[#content] = args.pre .. content[#content]
@@ -95,7 +107,7 @@ Link.post_text = "]()"
 
 function Link:str(args)
     args = _G.default_args(args, {pre='', post=''})
-    return args.pre .. self.pre_text .. self.text .. self.post_text .. args.post
+    return args.pre .. self.pre_text .. self.inner_value .. self.post_text .. args.post
 end
 
 --------------------------------------------------------------------------------
@@ -118,7 +130,7 @@ function Divider:new(args)
     end
 end
 
-function Divider:snippet() return {t({self:str(), "", ""})} end
+function Divider:snippet() return {t({self:str(), ""})} end
 function Divider:str()
     local str = self.start_string
     return str .. string.rep(self.fill_char, self.width - (str:len()))
@@ -129,9 +141,20 @@ end
 --------------------------------------------------------------------------------
 local Header = Object:extend()
 function Header:new(args)
-    args = _G.default_args(args, {size='small', as_link=false, text=''})
+    args = _G.default_args(args, {size='small', inner=''})
     for k, v in pairs(args) do
         self[k] = v
+    end
+
+    self.inner_type = type(self.inner)
+    self.has_input = self.inner_type == 'string' and self.inner:len() == 0
+
+    if self.inner_type == 'string' then
+        self.inner_value = self.inner
+    elseif self.inner_type == 'function' then
+        self.inner_value = self.inner()
+    else
+        self.inner_value = ''
     end
 
     self.size_info = size_to_info[args.size]
@@ -141,8 +164,8 @@ end
 function Header:str()
     local content = self.size_info.header.content_start or ''
 
-    if self.text:len() > 0 then
-        content = content .. " " .. self.text
+    if self.inner_value:len() > 0 then
+        content = content .. " " .. self.inner_value
     end
 
     lines = {
@@ -156,7 +179,7 @@ function Header:str()
 end
 
 function Header:snippet()
-    if self.text:len() > 0 then
+    if self.inner_value:len() > 0 then
         return {t(self:str())}
     else
         return {
@@ -180,7 +203,7 @@ local LinkHeader = Header:extend()
 function LinkHeader:str()
     return {
         self.divider:str(),
-        Link({text=self.text}):str({pre=self.size_info.header.content_start .. " "}),
+        Link({inner=self.inner}):str({pre=self.size_info.header.content_start .. " "}),
         self.divider:str(),
     }
 end
@@ -196,11 +219,11 @@ function LinkHeader:snippet()
         self.divider:str(),
     }
 
-    if self.text:len() > 0 then
+    if self.inner_value:len() > 0 then
         table.insert(post, "")
     end
 
-    return Link({text=self.text}):snippet({pre=pre, post=post})
+    return Link({inner=self.inner}):snippet({pre=pre, post=post})
 end
 
 --------------------------------------------------------------------------------

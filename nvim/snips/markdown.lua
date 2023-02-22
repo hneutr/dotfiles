@@ -25,11 +25,11 @@ ls.add_snippets("markdown", {
     s("mhm", mds.LinkHeader({size='medium'}):snippet()),
     s("mhb", mds.LinkHeader({size='big'}):snippet()),
     -- misc marker headers
-    s("mhtd", mds.LinkHeader({text=get_today()}):snippet()),
-    s("mhtdb", mds.LinkHeader({size='big', text=get_today()}):snippet()),
+    s("mhtd", mds.LinkHeader({inner=get_today}):snippet()),
+    s("mhtdb", mds.LinkHeader({size='big', inner=get_today}):snippet()),
     -- misc
     s("journal", {
-        t({mds.Link({text=get_today()}):str({post=":"}), "", ""}),
+        t({mds.Link({inner=get_today}):str({post=":"}), "", ""}),
         i(1), t{"", "", mds.Divider({size='big'}):str(), ""}
     }),
     s("quote", {
