@@ -24,5 +24,6 @@ bindkey "^[^[[D" backward-word
 bindkey "^[^[[C" forward-word
 
 if [ -z "$NVIM" ]; then
-    bindkey -s '^[t' 'deactivate_env && nvim -c "lua require'"'"'"'util'"'"'"'.open_two_vertical_terminals()"\n'
+    # bindkey -s '^[t' 'deactivate_env && nvim -c "lua require'"'"'"'util'"'"'"'.open_two_vertical_terminals()"\n'
+    bindkey -s '^[t' 'nvim -c "lua require'"'"'"'util'"'"'"'.open_two_vertical_terminals()"\n'
 fi

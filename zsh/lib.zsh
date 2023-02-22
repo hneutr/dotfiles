@@ -51,7 +51,7 @@ function cd_and_venv() {
 
 function deactivate_env() {
     if [ -f $PWD/env/bin/activate ]; then
-        type deactivate > /dev/null && deactivate
+        type deactivate > /dev/null && source deactivate
     fi
 }
 
@@ -130,7 +130,7 @@ function start_project() {
 #------------------------------------------------------------------------------#
 function chpwd {
   # activates an env if there is one
-  cd_and_venv
+  # cd_and_venv
 
   # sets a project root if there is one
   project_root_exists $PWD
