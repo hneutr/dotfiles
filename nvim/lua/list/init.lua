@@ -1,3 +1,20 @@
+-- to migrate from lex.list:
+-- - ftplugin/markdown:
+--      - lex.list.highlight_items
+--      - lex.list.map_item_toggles
+-- 
+-- features to add:
+--      - continuation type (eg, '✓' list items should continue with `-`, not '✓')
+--      - coloring for Sigil, Line:
+--          - background
+--          - underline
+--          - primary color
+--      - renumber list things based on scope (hard)
+--      - precontinue list when new line is inserted above a list item
+--      - insert list item on `r<cr>`
+--      - put cursor at start of list item when there's text beyond the element
+--      - BUG: don't delete subsequent text when breaking a numbered list item
+
 require("util")
 require("util.tbl")
 local Object = require("util.object")
