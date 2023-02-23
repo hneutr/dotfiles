@@ -15,7 +15,7 @@ end)
 
 Item.types = {
     ['-'] = {name = 'default', nohl = true},
-    ['*'] = {name = 'dot', map_lhs_suffix = 'o', regex_sigil = [[\~]]},
+    ['*'] = {name = 'dot', map_lhs_suffix = 'o', regex_sigil = [[\*]]},
 
     ['◻'] = {name = 'item', map_lhs_suffix = 'i', hl_args = {
         sigil = {link = "mkdListItem"},
