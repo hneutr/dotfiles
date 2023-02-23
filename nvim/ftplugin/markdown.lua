@@ -7,11 +7,6 @@ local cmd = vim.api.nvim_buf_create_user_command
 local p = { "*.md" }
 
 --------------------------------------------------------------------------------
---                                  filetype                                  --
---------------------------------------------------------------------------------
-aucmd({"BufEnter"}, {pattern = p, once = true, callback = require('lex.list').highlight_items})
-
---------------------------------------------------------------------------------
 --                                  settings                                  --
 --------------------------------------------------------------------------------
 aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
@@ -25,8 +20,14 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
         vim.bo.textwidth = 0
         vim.bo.shiftwidth = 2
         vim.bo.softtabstop = 2
+        vim.b.list_types = {"item", "reject", "maybe", "question", "tag"}
     end,
 })})
+
+--------------------------------------------------------------------------------
+--                                  filetype                                  --
+--------------------------------------------------------------------------------
+aucmd({"BufEnter"}, {pattern=p, once=true, callback=function() require('list').Buffer():set_highlights() end})
 
 --------------------------------------------------------------------------------
 --                              general mappings                              --
@@ -36,6 +37,7 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
     key = 'ft_maps_applied',
     fn = function()
         vim.keymap.set("i", "<cr>", require('list').continue_list_command, {silent = true})
+        require('list').Buffer():map_toggles(vim.g.mapleader .. "t")
     end,
 })})
 
@@ -67,11 +69,7 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
     scope = 'b',
     key = 'lex_applied', 
     fn = function()
-        require('lex.list').map_item_toggles(vim.g.mapleader .. "t")
-
         cmd(0, "Journal", function() util.open_path(require('lex.journal').path()) end, {})
-
-        vim.b.list_types = {"item", "done", "rejected", "maybe", "question", "tag"}
 
         if vim.b.lex_config_path then
             ------------------------------------[ maps ]------------------------------------

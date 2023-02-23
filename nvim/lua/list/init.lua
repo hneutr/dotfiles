@@ -1,8 +1,4 @@
--- to migrate from lex.list:
--- - ftplugin/markdown:
---      - lex.list.highlight_items
---      - lex.list.map_item_toggles
--- 
+-- move unit tests from test/spec/lex/list_spec.lua into test/spec/list/init_spec.lua
 -- features to add:
 --      - continuation type (eg, '✓' list items should continue with `-`, not '✓')
 --      - coloring for Sigil, Line:
@@ -14,53 +10,11 @@
 --      - insert list item on `r<cr>`
 --      - put cursor at start of list item when there's text beyond the element
 --      - BUG: don't delete subsequent text when breaking a numbered list item
-
 require("util")
 require("util.tbl")
 local Object = require("util.object")
 local line_utils = require("util.lines")
 local line_type = require("list.line_type")
-
-local list_type_settings = {
-    bullet = {
-        sigil = '-',
-        nohl = true,
-    },
-    dot = {
-        sigil = '*',
-        nohl = true,
-        map_lhs_suffix = 'o',
-    },
-    numbered = {
-        ListClass = line_type.NumberedListLine,
-        map_lhs_suffix = 'n',
-    },
-    item = {
-        sigil = '◻',
-        map_lhs_suffix = 'i',
-    },
-    done = {
-        sigil = '✓',
-        map_lhs_suffix = 'd',
-    },
-    rejected = {
-        sigil = '⨉',
-        map_lhs_suffix = 'x',
-    },
-    maybe = {
-        sigil = '~',
-        map_lhs_suffix = 'm',
-        regex_sigil = [[\~]],
-    },
-    question = {
-        sigil = '?',
-        map_lhs_suffix = 'q',
-    },
-    tag = {
-        sigil = '@',
-        map_lhs_suffix = 'a',
-    },
-}
 
 --------------------------------------------------------------------------------
 --                                                                            --
@@ -72,9 +26,8 @@ local list_type_settings = {
 Buffer = Object:extend()
 Buffer.defaults = {
     buffer_id = 0,
-    list_types = {"done"},
+    list_types = {"bullet", "dot", "number", "done"},
 }
-Buffer.default_list_types = {"bullet", "dot", "numbered"}
 
 function Buffer:new(args)
     for key, val in pairs(_G.default_args(args, self.defaults)) do
@@ -85,12 +38,12 @@ function Buffer:new(args)
 end
 
 function Buffer:set_list_classes()
-    self.list_types = table.concatenate(self.default_list_types, self.list_types, vim.b.list_types)
+    self.list_types = table.concatenate(self.list_types, vim.b.list_types)
 
     self.list_classes = {}
     for _, list_type in ipairs(self.list_types) do
-        local settings = list_type_settings[list_type]
-        local class = vim.tbl_get(settings, 'ListClass') or line_type.get_sigil_line_class(settings.sigil)
+        local settings = line_type.list_types[list_type]
+        local class = vim.tbl_get(settings, 'ListClass') or line_type.ListLine.get_class(list_type)
         self.list_classes[list_type] = class
     end
 end
@@ -151,8 +104,66 @@ function Buffer:join_lines()
     })
 end
 
+---------------------[ testing mappings and highlighting ]----------------------
+function Buffer:map_toggles(lhs_prefix)
+    for name, list_class in pairs(self.list_classes) do
+        list_class():map_toggle(lhs_prefix)
+    end
+end
 
+function Buffer:toggle(mode, toggle_line_class_name)
+    self.lines = self:parse(line_utils.selection.get({mode = mode}))
 
+    local new_line_class = Buffer:get_new_line_class(self.lines, toggle_line_class_name)
+
+    if new_line_class then
+        Buffer.set_selected_lines({mode = mode, lines = self.lines, new_line_class = new_line_class})
+    end
+end
+
+function Buffer.set_selected_lines(args)
+    args = _G.default_args(args, {mode = 'n', lines = {}, new_line_class = nil})
+
+    local new_lines = {}
+    for i, line in ipairs(args.lines) do
+        line = args.new_line_class({text = line.text, indent = line.indent, line_number = line.line_number})
+        table.insert(new_lines, tostring(line))
+    end
+
+    return line_utils.selection.set({mode = args.mode, replacement = new_lines})
+end
+
+function Buffer.get_min_indent_line(lines)
+    local min_indent, min_indent_line = 1000, nil
+    for _, line in ipairs(lines) do
+        if line.indent:len() < min_indent then
+            min_indent = line.indent:len()
+            min_indent_line = line
+        end
+    end
+
+    return min_indent_line
+end
+
+function Buffer:get_new_line_class(lines, toggle_line_type_name)
+    local min_indent_line = Buffer.get_min_indent_line(lines)
+
+    if min_indent_line then
+        if min_indent_line.name == toggle_line_type_name then
+            return ListLine.get_class(min_indent_line.toggle.to)
+        else
+            return ListLine.get_class(toggle_line_type_name)
+        end
+    end
+end
+
+function Buffer:set_highlights()
+    for name, item_class in pairs(self.list_classes) do
+        item_class():set_highlights()
+    end
+end
+
+--------------------------------[ end testing ]---------------------------------
 
 
 
@@ -261,7 +272,7 @@ end
 function autolist()
     local chars = {}
     for _, list_type in ipairs(Buffer().list_types) do
-        table.insert(chars, list_type_settings[list_type].sigil)
+        table.insert(chars, line_type.list_types[list_type].sigil)
     end
 
 	local current_line = vim.fn.getline(vim.fn.line("."))

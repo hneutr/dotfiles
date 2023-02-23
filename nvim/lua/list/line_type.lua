@@ -4,61 +4,48 @@ require('util.tbl')
 local line_utils = require("util.lines")
 
 
-local list_type_settings = {
+local list_types = {
     bullet = {
         sigil = '-',
-        nohl = true,
-        -- nohl = true,
+        highlights = {set = false},
     },
     dot = {
         sigil = '*',
-        map_lhs_suffix = 'o',
-        -- regex_sigil = [[\*]],
-    },
-    numbered = {
-        ListClass = NumberedListLine,
-        map_lhs_suffix = 'n',
+        toggle = {mapping = {lhs = 'o'}},
+        sigil_regex = [[\*]],
     },
     item = {
         sigil = '◻',
-        map_lhs_suffix = 'i',
-        -- hl_args = {
-        --     sigil = {link = "mkdListItem"},
-        --     text = {link = "Normal"},
-        -- },
+        toggle = {mapping = {lhs = 'i'}},
     },
     done = {
         sigil = '✓',
-        map_lhs_suffix = 'd',
+        toggle = {mapping = {lhs = 'd'}},
+        highlights = {sigil = {color = 'Comment'}, text = {color = 'Comment'}},
     },
-    rejected = {
+    reject = {
         sigil = '⨉',
-        map_lhs_suffix = 'x',
-        -- hl_args = {
-        --     sigil = {link = "Tag"},
-        -- },
+        toggle = {mapping = {lhs = 'x'}},
+        highlights = {sigil = {color = 'Tag'}, text = {color = 'Comment'}},
     },
     maybe = {
         sigil = '~',
-        map_lhs_suffix = 'm',
-        regex_sigil = [[\~]],
+        toggle = {mapping = {lhs = 'm'}},
+        sigil_regex = [[\~]],
+        highlights = {text = {color = 'Comment'}},
     },
     question = {
         sigil = '?',
-        map_lhs_suffix = 'q',
-        -- hl_args = {
-        --     sigil = {link = "mkdListItem"},
-        --     text = {link = "Statement"},
-        -- },
+        toggle = {mapping = {lhs = 'q'}},
+        highlights = {text = {color = 'Statement'}},
     },
     tag = {
         sigil = '@',
-        map_lhs_suffix = 'a',
-        -- hl_args = {
-        --     sigil = {link = "Tag"},
-        --     text = {link = "Normal"},
-        -- },
+        toggle = {mapping = {lhs = 'a'}},
+        highlights = {sigil = {color = 'Tag'}},
     },
+    -- prolly doesn't work
+    number = {ListClass = NumberedListLine, toggle = {mapping = {lhs = 'n'}}, sigil_regex = [[(\d+)\.]]},
 }
 
 
@@ -119,10 +106,14 @@ ListLine.defaults = {
             key = nil,
         },
     },
-    mapping = {
-        lhs_suffix = nil,
-        rhs = [[:lua require('list.line_type').toggle('MODE', 'NAME')<cr>]],
+    toggle = {
+        mapping = {
+            lhs = nil,
+            rhs = [[:lua require('list').Buffer():toggle('MODE', 'NAME')<cr>]],
+        },
+        to = 'bullet',
     },
+    -- continue_list_with
 }
 
 
@@ -162,117 +153,68 @@ function ListLine.get_sigil_class(sigil)
     return SigilClass
 end
 
-
-
-
 ----------------------------[ testing highlighting ]----------------------------
-function ListLine:set_highlighting()
+function ListLine:set_highlights()
     if not self.highlights.set then return end
-    hl = self.highlights
 
     -- sigils
-    hl.sigil.key = hl.sigil.key or self.name .. "ListLineSigil"
+    sigil_key = (self.highlights.sigil.key or self.name) .. "ListLineSigil"
+    sigil_pattern = self.highlights.sigil.pattern:gsub("STR", self.sigil_regex or self.sigil)
+    sigil_cmd = self.highlights.sigil.cmd:gsub("KEY", sigil_key)
+    sigil_cmd = sigil_cmd:gsub("PATTERN", sigil_pattern)
 
-    hl.sigil.pattern = hl.sigil.pattern:gsub("STR", self.sigil_regex or self.sigil)
-    hl.sigil.cmd = hl.sigil.cmd:gsub("KEY", hl.sigil.key)
-    hl.sigil.cmd = hl.sigil.cmd:gsub("PATTERN", hl.sigil.pattern)
-
-    vim.cmd(hl.sigil.cmd)
-    vim.api.nvim_set_hl(0, hl.sigil.key, {link = hl.sigil.color})
+    vim.cmd(sigil_cmd)
+    vim.api.nvim_set_hl(0, sigil_key, {link = self.highlights.sigil.color})
 
     -- sigils
-    hl.text.key = hl.text.key or self.name .. "ListLineText"
+    text_key = (self.highlights.text.key or self.name) .. "ListLineText"
 
-    hl.text.pattern = hl.text.pattern:gsub("SIGIL_PATTERN", hl.sigil.pattern)
-    hl.text.cmd = hl.text.cmd:gsub("KEY", hl.text.key)
-    hl.text.cmd = hl.text.cmd:gsub("PATTERN", hl.text.pattern)
-    hl.text.cmd = hl.text.cmd:gsub("SIGIL_KEY", hl.sigil.key)
+    text_pattern = self.highlights.text.pattern:gsub("SIGIL_PATTERN", sigil_pattern)
+    text_cmd = self.highlights.text.cmd:gsub("SIGIL_KEY", sigil_key)
+    text_cmd = text_cmd:gsub("PATTERN", text_pattern)
+    text_cmd = text_cmd:gsub("KEY", text_key)
 
-    vim.cmd(hl.text.cmd)
-    vim.api.nvim_set_hl(0, hl.text.key, {link = hl.text.color})
-
-    self.highlights = hl
+    vim.cmd(text_cmd)
+    vim.api.nvim_set_hl(0, text_key, {link = self.highlights.text.color})
 end
 
 --------------------------[ end testing highlighting ]--------------------------
 
 ---------------------------[ start testing mappings ]---------------------------
+function ListLine:map_toggle(lhs_prefix)
+    if not self.toggle.mapping.lhs then return end
 
--- function ListLine:map_toggle(lhs_prefix, item_type)
---     local lhs_suffix = vim.tbl_get(Item.types[item_type], 'map_lhs_suffix')
+    self.toggle.mapping.lhs = (lhs_prefix or '') .. self.toggle.mapping.lhs
 
---     if not lhs_suffix then
---         return
---     end
+    for _, mode in ipairs({'n', 'v'}) do
+        vim.keymap.set(
+            mode,
+            self.toggle.mapping.lhs,
+            self.toggle.mapping.rhs:gsub("MODE", mode):gsub("NAME", self.name),
+            {silent = true, buffer = true}
+        )
+    end
+end
 
---     local opts = {silent = true, buffer = true}
 
---     local lhs = lhs_prefix .. lhs_suffix
---     for i, mode in ipairs({'n', 'v'}) do
---         vim.keymap.set(mode, lhs, Item.map_rhs:gsub("MODE", mode):gsub("SIGIL", item_type), buffer)
---     end
--- end
+function ListLine.get_class(name)
+    local settings = list_types[name]
+    settings.name = name
 
--- function M.lines.set(args)
---     args = _G.default_args(args, {mode = 'n', lines = {}, sigil = nil})
+    if settings.ListClass == NumberedListLine then
+        return NumberedListLine
+    end
 
---     local new_lines = {}
---     for i, line in ipairs(args.lines) do
---         if args.sigil then
---             line.sigil = args.sigil
---         end
+    local ListClass = ListLine:extend()
 
---         table.insert(new_lines, line:str())
---     end
+    ListClass.defaults = table.default(settings, ListClass.defaults)
 
---     return ulines.selection.set({mode = args.mode, replacement = new_lines})
--- end
+    ListClass.get_if_str_is_a = function(str, line_number)
+        return ListLine._get_if_str_is_a(str, line_number, ListClass)
+    end
 
--- function M.toggle_sigil(mode, sigil)
---     local lines = M.lines.get(mode)
-
---     local new_sigil = M.get_new_sigil(lines, sigil)
-
---     if new_sigil then
---         M.lines.set({mode = mode, lines = lines, sigil = new_sigil})
---     end
--- end
-
--- function M.get_new_sigil(lines, toggle_sigil)
---     local min_indent_sigil = M.get_min_indent_sigil(lines)
-
---     if min_indent_sigil then
---         if min_indent_sigil == toggle_sigil then
---             return Item.default_type
---         else
---             return toggle_sigil
---         end
---     end
--- end
-
--- function M.get_min_indent_sigil(lines)
---     local min_indent, sigil = 1000, nil
---     for i, line in ipairs(lines) do
---         if line.indent < min_indent then
---             min_indent = line.indent
---             sigil = line.sigil
---         end
---     end
-
---     return sigil
--- end
-
--- function M.highlight_items()
---     for i, item_type in ipairs(vim.tbl_keys(Item.types)) do
---         Item.highlight(item_type)
---     end
--- end
-
--- function M.map_item_toggles(lhs_prefix)
---     for i, item_type in ipairs(vim.tbl_keys(Item.types)) do
---         Item.map_toggle(lhs_prefix, item_type)
---     end
--- end
+    return ListClass
+end
 
 ----------------------------[ end testing mappings ]----------------------------
 
@@ -322,6 +264,7 @@ end
 
 
 return {
+    list_types = list_types,
     Line = Line,
     ListLine = ListLine,
     NumberedListLine = NumberedListLine,

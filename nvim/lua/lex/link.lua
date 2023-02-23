@@ -51,7 +51,7 @@ Link = class(function(self, args)
     self.after = args.after
 end)
 
-Link.regex = "(.-)%[(.-)%]%((.-)%)(.*)"
+Link.regex = "%s*(.-)%[(.-)%]%((.-)%)(.*)"
 
 function Link:str()
     return "[" .. self.label .. "](" .. self.location .. ")"
@@ -235,7 +235,7 @@ function Mark:str()
 end
 
 
-Mark.allowed_befores = { "# ", "> " }
+Mark.allowed_befores = { "# ", "> ", "- " }
 Mark.rg_cmd = "rg '\\[.*\\]\\(\\)' --no-heading "
 
 
