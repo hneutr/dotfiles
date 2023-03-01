@@ -184,12 +184,12 @@ end
 function ListLine:map_toggle(lhs_prefix)
     if not self.toggle.mapping.lhs then return end
 
-    self.toggle.mapping.lhs = (lhs_prefix or '') .. self.toggle.mapping.lhs
+    lhs = (lhs_prefix or '') .. self.toggle.mapping.lhs
 
     for _, mode in ipairs({'n', 'v'}) do
         vim.keymap.set(
             mode,
-            self.toggle.mapping.lhs,
+            lhs,
             self.toggle.mapping.rhs:gsub("MODE", mode):gsub("NAME", self.name),
             {silent = true, buffer = true}
         )
