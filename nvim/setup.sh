@@ -15,3 +15,5 @@ function install_nvim_appimage() {
 }
 
 [ ! $(command -v nvim) ] && install_nvim_appimage
+
+ln -s $HOME/dotfiles/nvim $HOME/.config/nvim
