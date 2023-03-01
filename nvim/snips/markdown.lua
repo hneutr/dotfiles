@@ -7,9 +7,10 @@ local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
 
-local function get_today() return vim.fn.strftime("%Y%m%d") end
+local function get_today() return vim.fn.strftime("%Y%m%d %X") end
 
 ls.add_snippets("markdown", {
+    s("time", f(function() return vim.fn.strftime("%X") end)),
     -- lines
     s("l", mds.Divider():snippet()),
     s("lm", mds.Divider({size='medium'}):snippet()),
@@ -28,10 +29,7 @@ ls.add_snippets("markdown", {
     s("mhtd", mds.LinkHeader({inner=get_today}):snippet()),
     s("mhtdb", mds.LinkHeader({size='big', inner=get_today}):snippet()),
     -- misc
-    s("journal", {
-        t({mds.Link({inner=get_today}):str({post=":"}), "", ""}),
-        i(1), t{"", "", mds.Divider({size='big'}):str(), ""}
-    }),
+    s("journal", mds.Journal():snippet()),
     s("quote", {
         t{"---",
         ""}, i(1, ""), t{":",

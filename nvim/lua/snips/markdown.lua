@@ -30,6 +30,8 @@ local size_to_info = {
     },
 }
 
+local function get_today() return vim.fn.strftime("%Y%m%d %X") end
+
 --------------------------------------------------------------------------------
 --                                TextOrInput                                 --
 --------------------------------------------------------------------------------
@@ -227,6 +229,37 @@ function LinkHeader:snippet()
 end
 
 --------------------------------------------------------------------------------
+--                                  Journal                                   --
+--------------------------------------------------------------------------------
+local Journal = Object:extend()
+
+function Journal:new(args)
+    self.divider = Divider({size='big'})
+end
+
+function Journal:snippet()
+    return {
+        t("["), f(get_today), t({"]():", "", ""}),
+        i(1),
+        t{"", "", self.divider:str(), ""}
+    }
+end
+
+function Journal:str()
+    return {
+        t({
+            "[", get_today(), "]():", "",
+            "",
+            "",
+            "",
+            "",
+            self.divider:str(),
+            "",
+        }),
+    }
+end
+
+--------------------------------------------------------------------------------
 --                                 access                                     --
 --------------------------------------------------------------------------------
 return {
@@ -234,4 +267,5 @@ return {
     Divider = Divider,
     Header = Header,
     LinkHeader = LinkHeader,
+    Journal = Journal,
 }
