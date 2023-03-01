@@ -1,1 +1,1 @@
-source $HOME/.bashrc
+source $HOME/dotfiles/bash/rc.sh
