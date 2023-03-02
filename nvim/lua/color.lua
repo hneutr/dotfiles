@@ -50,7 +50,7 @@ local function set_highlight(args)
 
     for _, key in ipairs({'fg', 'bg'}) do
         if val[key] ~= nil then
-            val["cterm" .. key] = C.cterm[table.remove(val, key)]
+            val["cterm" .. key] = C.cterm[table.removekey(val, key)]
         end
     end
 

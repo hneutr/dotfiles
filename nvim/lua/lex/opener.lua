@@ -29,7 +29,7 @@ function M.set()
     end
 
     for i, mapping in ipairs(mappings) do
-        mapping.lhs_prefix = constants.opener_prefix .. table.remove(mapping, 'prefix')
+        mapping.lhs_prefix = constants.opener_prefix .. table.removekey(mapping, 'prefix')
     end
 
     table.insert(mappings, {

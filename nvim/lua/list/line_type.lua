@@ -43,7 +43,7 @@ local list_types = {
     tag = {
         sigil = '@',
         toggle = {mapping = {lhs = 'a'}},
-        highlights = {sigil = {fg = 'red'}, text = {underline = true, sp = 'red'}},
+        highlights = {sigil = {fg = 'red'}, text = {underline = true, bold = true}},
     },
     -- prolly doesn't work
     number = {ListClass = NumberedListLine, toggle = {mapping = {lhs = 'n'}}, sigil_regex = [[(\d+)\.]]},

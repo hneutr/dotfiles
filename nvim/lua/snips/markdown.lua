@@ -76,7 +76,7 @@ function TextOrInput:snippet(args)
     else
         if self.inner_type == 'string' then
             local content = pre
-            content[#content] = content[#content] .. self.inner .. table.remove(post, 1)
+            content[#content] = content[#content] .. self.inner .. table.removekey(post, 1)
             content = vim.list_extend(content, post)
             return t(content)
         elseif self.inner_type == 'function' then
@@ -177,6 +177,7 @@ Header.defaults = {
     content_start = '>',
     divider_args = size_info['small'],
 }
+Header.highlight_cmd = [[syn match KEY /^CONTENT_START\s/ contained]]
 
 function Header:new(args)
     args = _G.default_args(args, Header.defaults)
@@ -197,6 +198,8 @@ function Header:new(args)
     else
         self.inner_value = ''
     end
+
+    self.highlight_key = self.divider.size .. "HeaderStart" 
 end
 
 function Header.from_size(args)
@@ -241,6 +244,22 @@ function Header:snippet()
         }
     end
 end
+
+function Header:set_highlight()
+    cmd = self.highlight_cmd:gsub("KEY", self.highlight_key)
+    cmd = cmd:gsub("CONTENT_START", self.content_start)
+    vim.pretty_print(cmd)
+    vim.cmd(cmd)
+
+    color.set_highlight({name = self.highlight_key, val = {fg = self.divider.color}})
+end
+
+function Header.set_highlights()
+    for size, _ in pairs(size_info) do
+        Header.from_size({size = size}):set_highlight()
+    end
+end
+
 
 --------------------------------------------------------------------------------
 --                                LinkHeaders                                 --
