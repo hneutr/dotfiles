@@ -14,7 +14,7 @@ function _G.tbl_default(...)
 end
 
 function _G.default_args(args, defaults)
-    return vim.tbl_extend("keep", args or {}, defaults)
+    return vim.tbl_extend("keep", {}, args or {}, defaults)
 end
 
 function _G.joinpath(left, right)

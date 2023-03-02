@@ -1,5 +1,6 @@
 local Object = require("util.object")
 
+local color = require('color')
 local ls = require("luasnip")
 
 local s = ls.snippet
@@ -7,28 +8,38 @@ local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
 
-local size_to_info = {
+local size_info = {
     big = {
-        width = 80,
-        header = {
-            divider_start = '#',
-            content_start = '#',
-        },
+        header = { content_start = '#' },
+        divider = {
+            width = 80,
+            start_string = '#',
+            color = 'orange',
+        }
     },
     medium = {
-        width = 60,
-        header = {
-            divider_start = '=',
-            content_start = '=',
+        header = { content_start = '=' },
+        divider = {
+            width = 60,
+            start_string = '=',
+            color = 'yellow',
         },
     },
     small = {
-        width = 40,
-        header = {
-            content_start = '>',
+        header = { content_start = '>' },
+        divider = {
+            width = 40,
+            color = 'blue',
         },
     },
 }
+
+local width_to_size = {
+    [40] = 'small',
+    [60] = 'medium',
+    [80] = 'big',
+}
+
 
 local function get_today() return vim.fn.strftime("%Y%m%d %X") end
 
@@ -116,21 +127,26 @@ end
 --                                  dividers                                  --
 --------------------------------------------------------------------------------
 local Divider = Object:extend()
+Divider.defaults = {
+    width = 40,
+    fill_char = '-',
+    start_string = '',
+    color = 'blue',
+}
+Divider.highlight_cmd = [[syn region KEY start="^\s*DIVIDER$" end="$" containedin=ALL]]
 
 function Divider:new(args)
-    args = _G.default_args(args, {size='small', as_header=false, fill_char='-', start_string=''})
+    args = _G.default_args(args, Divider.defaults)
     for k, v in pairs(args) do
         self[k] = v
     end
 
-    self.size_info = size_to_info[args.size]
-
-    self.width = self.size_info.width
-
-    if self.as_header then
-        self.start_string = self.size_info.header.divider_start or ''
-    end
+    self.size = width_to_size[self.width]
+    self.highlight_key = self.size .. "Line"
 end
+
+function Divider.from_size(size) return Divider(size_info[size].divider) end
+
 
 function Divider:snippet() return {t({self:str(), ""})} end
 function Divider:str()
@@ -138,12 +154,35 @@ function Divider:str()
     return str .. string.rep(self.fill_char, self.width - (str:len()))
 end
 
+function Divider:set_highlight()
+    cmd = self.highlight_cmd:gsub("KEY", self.highlight_key)
+    cmd = cmd:gsub("DIVIDER", self:str())
+    vim.cmd(cmd)
+
+    color.set_highlight({name = self.highlight_key, val = {fg = self.color}})
+end
+
+function Divider.set_highlights()
+    for size, _ in pairs(size_info) do
+        Divider.from_size(size):set_highlight()
+    end
+end
+
 --------------------------------------------------------------------------------
 --                                  headers                                   --
 --------------------------------------------------------------------------------
 local Header = Object:extend()
+Header.defaults = {
+    inner = '',
+    content_start = '>',
+    divider_args = size_info['small'],
+}
+
 function Header:new(args)
-    args = _G.default_args(args, {size='small', inner=''})
+    args = _G.default_args(args, Header.defaults)
+
+    self.divider = Divider(args.divider_args)
+
     for k, v in pairs(args) do
         self[k] = v
     end
@@ -158,13 +197,18 @@ function Header:new(args)
     else
         self.inner_value = ''
     end
+end
 
-    self.size_info = size_to_info[args.size]
-    self.divider = Divider({size=args.size, as_header=true})
+function Header.from_size(args)
+    args = _G.default_args(args, {size = 'small', inner = ''})
+    return Header(_G.default_args(size_info[args.size].header, {
+        inner = args.inner,
+        divider_args = size_info[args.size].divider,
+    }))
 end
 
 function Header:str()
-    local content = self.size_info.header.content_start or ''
+    local content = self.content_start
 
     if self.inner_value:len() > 0 then
         content = content .. " " .. self.inner_value
@@ -187,7 +231,7 @@ function Header:snippet()
         return {
             t({
                 self.divider:str(),
-                self.size_info.header.content_start .. " ",
+                self.content_start .. " ",
             }),
             i(1),
             t({
@@ -205,7 +249,7 @@ local LinkHeader = Header:extend()
 function LinkHeader:str()
     return {
         self.divider:str(),
-        Link({inner=self.inner}):str({pre=self.size_info.header.content_start .. " "}),
+        Link({inner=self.inner}):str({pre=self.content_start .. " "}),
         self.divider:str(),
     }
 end
@@ -213,7 +257,7 @@ end
 function LinkHeader:snippet()
     local pre = {
         self.divider:str(),
-        self.size_info.header.content_start .. " ",
+        self.content_start .. " ",
     }
 
     local post = {
@@ -226,6 +270,14 @@ function LinkHeader:snippet()
     end
 
     return Link({inner=self.inner}):snippet({pre=pre, post=post})
+end
+
+function LinkHeader.from_size(args)
+    args = _G.default_args(args, {size = 'small', inner = ''})
+    return LinkHeader(_G.default_args(size_info[args.size].header, {
+        inner = args.inner,
+        divider_args = size_info[args.size].divider,
+    }))
 end
 
 --------------------------------------------------------------------------------

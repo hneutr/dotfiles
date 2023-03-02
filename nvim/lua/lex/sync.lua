@@ -215,7 +215,7 @@ function M.process_renames(renames, deletions, creations, references)
         references[old_loc] = nil
 
         if vim.tbl_get(deletions, new) then
-            table.removekey(renames, old)
+            table.remove(renames, old)
         elseif not vim.tbl_get(creations, old) and vim.tbl_get(references, new_loc) then
             table.insert(updates, { old_location = old_loc, new_location = new_loc })
         end
@@ -236,11 +236,11 @@ function M.process_creations(creations, renames, old_deletions, references)
         local new_location = link.Location{ text = marker }
 
         if vim.tbl_get(renames, marker) then
-            new_location.text = table.removekey(renames, marker)
+            new_location.text = table.remove(renames, marker)
         end
 
         if vim.tbl_get(old_deletions, marker) then
-            old_location.path = table.removekey(old_deletions, marker)
+            old_location.path = table.remove(old_deletions, marker)
         end
 
         new = new_location:str()

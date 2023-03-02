@@ -1,6 +1,7 @@
 local Object = require("util.object")
 require('util.tbl')
 
+local color = require('color')
 local line_utils = require("util.lines")
 
 
@@ -21,28 +22,28 @@ local list_types = {
     done = {
         sigil = '✓',
         toggle = {mapping = {lhs = 'd'}},
-        highlights = {sigil = {color = 'Comment'}, text = {color = 'Comment'}},
+        highlights = {sigil = {fg = 'gray'}, text = {fg = 'gray', strikethrough = true}},
     },
     reject = {
         sigil = '⨉',
         toggle = {mapping = {lhs = 'x'}},
-        highlights = {sigil = {color = 'Tag'}, text = {color = 'Comment'}},
+        highlights = {sigil = {fg = 'red'}, text = {fg = 'gray'}},
     },
     maybe = {
         sigil = '~',
         toggle = {mapping = {lhs = 'm'}},
         sigil_regex = [[\~]],
-        highlights = {text = {color = 'Comment'}},
+        highlights = {sigil = {fg = 'gray'}, text = {fg = 'gray'}},
     },
     question = {
         sigil = '?',
         toggle = {mapping = {lhs = 'q'}},
-        highlights = {text = {color = 'Statement'}},
+        highlights = {sigil = {fg = 'magenta'}, text = {italic = true, underline = true, sp = 'gray'}},
     },
     tag = {
         sigil = '@',
         toggle = {mapping = {lhs = 'a'}},
-        highlights = {sigil = {color = 'Tag'}},
+        highlights = {sigil = {fg = 'red'}, text = {underline = true, sp = 'red'}},
     },
     -- prolly doesn't work
     number = {ListClass = NumberedListLine, toggle = {mapping = {lhs = 'n'}}, sigil_regex = [[(\d+)\.]]},
@@ -61,7 +62,6 @@ Line.defaults = {
 }
 
 function Line:new(args)
-    -- for key, val in pairs(_G.default_args(args, self.defaults)) do
     for key, val in pairs(table.default(args, self.defaults)) do
         self[key] = val
     end
@@ -94,13 +94,12 @@ ListLine.defaults = {
     highlights = {
         set = true,
         sigil = {
-            color = "mkdListItem",
+            fg = "blue",
             pattern = [[^\s*STR\s]],
             cmd = [[syn match KEY /PATTERN/ contained]],
             key = nil,
         },
         text = {
-            color = 'Normal',
             pattern = [[start="SIGIL_PATTERN\+" end="$"]],
             cmd = [[syn region KEY PATTERN containedin=ALL contains=SIGIL_KEY,mkdLink]],
             key = nil,
@@ -153,7 +152,6 @@ function ListLine.get_sigil_class(sigil)
     return SigilClass
 end
 
-----------------------------[ testing highlighting ]----------------------------
 function ListLine:set_highlights()
     if not self.highlights.set then return end
 
@@ -164,9 +162,9 @@ function ListLine:set_highlights()
     sigil_cmd = sigil_cmd:gsub("PATTERN", sigil_pattern)
 
     vim.cmd(sigil_cmd)
-    vim.api.nvim_set_hl(0, sigil_key, {link = self.highlights.sigil.color})
+    color.set_highlight({name = sigil_key, val = self.highlights.sigil})
 
-    -- sigils
+    -- text
     text_key = (self.highlights.text.key or self.name) .. "ListLineText"
 
     text_pattern = self.highlights.text.pattern:gsub("SIGIL_PATTERN", sigil_pattern)
@@ -175,12 +173,9 @@ function ListLine:set_highlights()
     text_cmd = text_cmd:gsub("KEY", text_key)
 
     vim.cmd(text_cmd)
-    vim.api.nvim_set_hl(0, text_key, {link = self.highlights.text.color})
+    color.set_highlight({name = text_key, val = self.highlights.text})
 end
 
---------------------------[ end testing highlighting ]--------------------------
-
----------------------------[ start testing mappings ]---------------------------
 function ListLine:map_toggle(lhs_prefix)
     if not self.toggle.mapping.lhs then return end
 
@@ -215,10 +210,6 @@ function ListLine.get_class(name)
 
     return ListClass
 end
-
-----------------------------[ end testing mappings ]----------------------------
-
-
 
 --------------------------------------------------------------------------------
 --                              NumberedListLine                              --
