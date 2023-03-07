@@ -45,7 +45,7 @@ describe("Buffer", function()
             buffer = m.Buffer()
         
             actual = buffer:parse_line("? text", 1)
-            expected = line_type.get_sigil_line_class("?")({text="text", line_number = 1})
+            expected = line_type.ListLine.get_class("question")({text="text", line_number = 1})
         
             assert.are.same(actual, expected)
         end)

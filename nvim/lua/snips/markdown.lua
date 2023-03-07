@@ -41,7 +41,7 @@ local width_to_size = {
 }
 
 
-local function get_today() return vim.fn.strftime("%Y%m%d %X") end
+local function get_today() return vim.fn.strftime("%Y%m%d") end
 
 --------------------------------------------------------------------------------
 --                                TextOrInput                                 --
@@ -248,7 +248,6 @@ end
 function Header:set_highlight()
     cmd = self.highlight_cmd:gsub("KEY", self.highlight_key)
     cmd = cmd:gsub("CONTENT_START", self.content_start)
-    vim.pretty_print(cmd)
     vim.cmd(cmd)
 
     color.set_highlight({name = self.highlight_key, val = {fg = self.divider.color}})
@@ -305,7 +304,8 @@ end
 local Journal = Object:extend()
 
 function Journal:new(args)
-    self.divider = Divider({size='big'})
+    self.divider = Divider.from_size('big')
+    -- self.divider.start_string = '-'
 end
 
 function Journal:snippet()

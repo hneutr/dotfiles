@@ -46,7 +46,12 @@ local list_types = {
         highlights = {sigil = {fg = 'red'}, text = {underline = true, bold = true}},
     },
     -- prolly doesn't work
-    number = {ListClass = NumberedListLine, toggle = {mapping = {lhs = 'n'}}, sigil_regex = [[(\d+)\.]]},
+    number = {
+        number = 1,
+        ListClass = 'number',
+        toggle = {mapping = {lhs = 'n'}},
+        sigil_regex = [[(\d+)\.]],
+    },
 }
 
 
@@ -118,8 +123,6 @@ ListLine.defaults = {
 
 function ListLine:new(args)
     ListLine.super.new(self, args)
-
-    -- self.set_highlighting()
 end
 
 function ListLine:__tostring()
@@ -196,16 +199,17 @@ function ListLine.get_class(name)
     local settings = list_types[name]
     settings.name = name
 
-    if settings.ListClass == NumberedListLine then
-        return NumberedListLine
+    local ListClass
+    if name == 'number' then
+        ListClass = NumberedListLine
+    else
+        ListClass = ListLine:extend()
     end
-
-    local ListClass = ListLine:extend()
 
     ListClass.defaults = table.default(settings, ListClass.defaults)
 
     ListClass.get_if_str_is_a = function(str, line_number)
-        return ListLine._get_if_str_is_a(str, line_number, ListClass)
+        return ListClass._get_if_str_is_a(str, line_number, ListClass)
     end
 
     return ListClass
@@ -214,20 +218,14 @@ end
 --------------------------------------------------------------------------------
 --                              NumberedListLine                              --
 --------------------------------------------------------------------------------
-NumberedListLine = Line:extend()
-NumberedListLine.defaults = {
-    text = '',
-    indent = '',
-    line_number = 0,
-    number = 1,
-}
+NumberedListLine = ListLine:extend()
 NumberedListLine.pattern = "^(%s*)(%d+)%.%s(.*)$"
 
 function NumberedListLine:__tostring()
     return self.indent .. self.number .. '. ' .. self.text
 end
 
-function NumberedListLine.get_if_str_is_a(str, line_number)
+function NumberedListLine._get_if_str_is_a(str, line_number)
     local indent, number, text = str:match(NumberedListLine.pattern)
     if indent and number and text then
         return NumberedListLine({
@@ -239,25 +237,9 @@ function NumberedListLine.get_if_str_is_a(str, line_number)
     end
 end
 
---------------------------------------------------------------------------------
---                            get_sigil_line_class                            --
---------------------------------------------------------------------------------
-function get_sigil_line_class(sigil)
-    local SigilClass = ListLine:extend()
-    SigilClass.defaults = table.default({sigil = sigil}, SigilClass.defaults)
-
-    SigilClass.get_if_str_is_a = function(str, line_number)
-        return ListLine._get_if_str_is_a(str, line_number, SigilClass)
-    end
-
-    return SigilClass
-end
-
-
 return {
     list_types = list_types,
     Line = Line,
     ListLine = ListLine,
     NumberedListLine = NumberedListLine,
-    get_sigil_line_class = get_sigil_line_class,
 }

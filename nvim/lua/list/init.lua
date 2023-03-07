@@ -43,7 +43,7 @@ function Buffer:set_list_classes()
     self.list_classes = {}
     for _, list_type in ipairs(self.list_types) do
         local settings = line_type.list_types[list_type]
-        local class = vim.tbl_get(settings, 'ListClass') or line_type.ListLine.get_class(list_type)
+        local class = line_type.ListLine.get_class(list_type)
         self.list_classes[list_type] = class
     end
 end
@@ -59,6 +59,7 @@ end
 
 function Buffer:parse_line(str, line_number)
     local line
+
     for _, ListClass in pairs(self.list_classes) do
         line = ListClass.get_if_str_is_a(str, line_number)
         if line then
@@ -104,7 +105,6 @@ function Buffer:join_lines()
     })
 end
 
----------------------[ testing mappings and highlighting ]----------------------
 function Buffer:map_toggles(lhs_prefix)
     for name, list_class in pairs(self.list_classes) do
         list_class():map_toggle(lhs_prefix)
@@ -162,9 +162,6 @@ function Buffer:set_highlights()
         item_class():set_highlights()
     end
 end
-
---------------------------------[ end testing ]---------------------------------
-
 
 
 --------------------------------------------------------------------------------
@@ -279,7 +276,6 @@ function autolist()
     current_line = current_line:match("%s*(.*)")
 
 	local preceding_line = vim.fn.getline(vim.fn.line(".") - 1)
-    vim.g.testing = preceding_line
 
     if preceding_line:match("^%s*%d+%.%s") then
 		local next_list_index = preceding_line:match("%d+") + 1

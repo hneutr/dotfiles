@@ -113,32 +113,33 @@ describe("*", function()
     end)
 
 
-    describe("get_sigil_line_class", function()
-        local CustomListLineClass
+    -- TODO: replace with tests for ListLine.get_class
+    -- describe("get_sigil_line_class", function()
+    --     local CustomListLineClass
 
-        before_each(function()
-            CustomListLineClass = m.get_sigil_line_class('?')
-        end)
+    --     before_each(function()
+    --         CustomListLineClass = m.get_sigil_line_class('?')
+    --     end)
 
-        describe(":tostring", function()
-            it("works", function()
-                local item = CustomListLineClass({text = 'text', indent = '    '})
-                -- vim.pretty_print(item)
-                assert.equal(tostring(item), "    ? text")
-            end)
-        end)
+    --     describe(":tostring", function()
+    --         it("works", function()
+    --             local item = CustomListLineClass({text = 'text', indent = '    '})
+    --             -- vim.pretty_print(item)
+    --             assert.equal(tostring(item), "    ? text")
+    --         end)
+    --     end)
 
-        describe(".get_if_str_is_a", function()
-            it("-", function()
-                assert.is_nil(CustomListLineClass.get_if_str_is_a("- string", 0))
-            end)
+    --     describe(".get_if_str_is_a", function()
+    --         it("-", function()
+    --             assert.is_nil(CustomListLineClass.get_if_str_is_a("- string", 0))
+    --         end)
 
-            it("+", function()
-                assert.are.same(
-                    CustomListLineClass.get_if_str_is_a("    ? string", 0),
-                    CustomListLineClass({text = "string", indent = "    ", line_number = 0})
-                )
-            end)
-        end)
-    end)
+    --         it("+", function()
+    --             assert.are.same(
+    --                 CustomListLineClass.get_if_str_is_a("    ? string", 0),
+    --                 CustomListLineClass({text = "string", indent = "    ", line_number = 0})
+    --             )
+    --         end)
+    --     end)
+    -- end)
 end)
