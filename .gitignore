@@ -6,3 +6,4 @@ nvim/doc
 nvim/plugin/packer_compiled.lua
 zsh/plugins
 nvim/app
+.zcompdump

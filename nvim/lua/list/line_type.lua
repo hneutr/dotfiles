@@ -29,6 +29,11 @@ local list_types = {
         toggle = {mapping = {lhs = 'x'}},
         highlights = {sigil = {fg = 'red'}, text = {fg = 'gray'}},
     },
+    change = {
+        sigil = 'Δ',
+        toggle = {mapping = {lhs = 'c'}},
+        highlights = {sigil = {fg = 'magenta'}},
+    },
     maybe = {
         sigil = '~',
         toggle = {mapping = {lhs = 'm'}},
@@ -38,7 +43,7 @@ local list_types = {
     question = {
         sigil = '?',
         toggle = {mapping = {lhs = 'q'}},
-        highlights = {sigil = {fg = 'magenta'}, text = {italic = true, underline = true, sp = 'gray'}},
+        highlights = {sigil = {fg = 'yellow'}, text = {italic = true, underline = true, sp = 'gray'}},
     },
     tag = {
         sigil = '@',
