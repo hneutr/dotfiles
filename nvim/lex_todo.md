@@ -74,13 +74,13 @@
 > [locations]()
 ----------------------------------------
 - remove `.md` from paths in a location (to shorten them)
-~ make links paths relative?
+- make link paths relative
   - implementation:
     - if in same dir or child, start with: `./`
     - if above, specify full project path, don't start path with `./`
   ~ would make updating links harder (could just solve by "un-relativizing" them when after running rg/etc)
 ~ switch `FILE_DELIMITER` to some untypable non-ascii character
-~ replace spaces with some invisible character?
+- replace spaces with some non-ascii character?
 
 ----------------------------------------
 > [projects]()
@@ -90,7 +90,6 @@
   - eg, define a directory as "title case" (for example, the characters dir)
   - also support aliases/hardcoded strings for location labels
 - specify files to be ignored by indexes in `.project`
-- have a `start date` field in `.project`
 
 #-------------------------------------------------------------------------------
 # [flags]()

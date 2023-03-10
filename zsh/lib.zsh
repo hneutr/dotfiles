@@ -89,6 +89,10 @@ function goals() {
 }
 
 function journal() {
+    if [[ $# -gt 0 ]]; then
+        cd $(hnetext project-root -n $1)
+    fi
+
     nvim -c "lua require'util'.open_path(require'lex.journal'.path())" +GoyoToggle -c "1"
 }
 
@@ -106,23 +110,6 @@ function wr() {
 
 function vload() {
     nvim -c "source .Session.vim" -c "silent! !rm .Session.vim"
-}
-
-function start_project() {
-    mkdir story
-    mkdir context
-    mkdir text
-
-    git init > /dev/null
-
-    echo ".DS_Store\n.project" > .gitignore
-
-    local contents=""
-    if [[ $# -gt 0 ]]; then
-        contents='"name": "'$1'"'
-    fi
-
-    echo "{"$contents"}" > .project
 }
 
 #------------------------------------------------------------------------------#
