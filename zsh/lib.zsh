@@ -90,7 +90,7 @@ function goals() {
 
 function journal() {
     if [[ $# -gt 0 ]]; then
-        cd $(hnetext project-root -n $1)
+        cd $(hnetext project print-root -n $1)
     fi
 
     nvim -c "lua require'util'.open_path(require'lex.journal'.path())" +GoyoToggle -c "1"
