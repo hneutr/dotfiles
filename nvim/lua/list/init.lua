@@ -26,7 +26,7 @@ local line_type = require("list.line_type")
 Buffer = Object:extend()
 Buffer.defaults = {
     buffer_id = 0,
-    list_types = {"bullet", "dot", "number", "done"},
+    list_types = {"bullet", "dot", "number", "todo", "done", "reject"},
 }
 
 function Buffer:new(args)

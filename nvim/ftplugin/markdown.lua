@@ -20,7 +20,16 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
         vim.bo.textwidth = 0
         vim.bo.shiftwidth = 2
         vim.bo.softtabstop = 2
-        vim.b.list_types = {"item", "reject", "maybe", "question", "tag", "change"}
+        vim.b.list_types = {"uncertainty", "question", "important", "change", "detail", "possibility"}
+        -- -: bullet
+        -- *: dot
+        -- ◻: todo
+        -- ✓: done
+        -- ⨉: reject
+        -- Δ: change
+        -- ~: maybe
+        -- ?: question: italics
+        -- !: important: bold, underline
     end,
 })})
 

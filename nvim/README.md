@@ -6,6 +6,7 @@
   - only add `- ` if it doesn't already exist
   - render italics/bold in non-standard colored list items
   - make lists work within comments
+  - when toggling numbered lists into something else, keep the number but precede it with the new sigil
 - have settings for terminal buffers
   - turn off `spell`
 - have sizes for lines/headers that are numerical

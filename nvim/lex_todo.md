@@ -22,7 +22,6 @@
   - eg by binding `<c-PREFIX>` to open up the PREFIX mirror of a given file
     - eg, `<c->` = open up the questions file
     - ideally support opening it up in edit/split/vsplit/tab
-- make `mark-insert` respect capitalization (and capitalize character filenames)
 
 ----------------------------------------
 > [locations]()
@@ -39,7 +38,6 @@
 ----------------------------------------
 > [projects]()
 ----------------------------------------
-- define a directory as "title case" (for example, the characters dir)
 ~ define aliases/labels for locations (maybe in `.project`)
   ~ eg, have the reference to `context/groups/na-hiasciari-manach-dall.md` be `NHMD`
   ~ also support aliases/hardcoded strings for location labels

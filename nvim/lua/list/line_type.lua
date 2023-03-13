@@ -15,9 +15,9 @@ local list_types = {
         toggle = {mapping = {lhs = 'o'}},
         sigil_regex = [[\*]],
     },
-    item = {
+    todo = {
         sigil = '◻',
-        toggle = {mapping = {lhs = 'i'}},
+        toggle = {mapping = {lhs = 't'}},
     },
     done = {
         sigil = '✓',
@@ -34,23 +34,34 @@ local list_types = {
         toggle = {mapping = {lhs = 'c'}},
         highlights = {sigil = {fg = 'magenta'}},
     },
-    maybe = {
+    uncertainty = {
         sigil = '~',
-        toggle = {mapping = {lhs = 'm'}},
+        toggle = {mapping = {lhs = 'u'}},
         sigil_regex = [[\~]],
         highlights = {sigil = {fg = 'gray'}, text = {fg = 'gray'}},
     },
     question = {
         sigil = '?',
         toggle = {mapping = {lhs = 'q'}},
-        highlights = {sigil = {fg = 'yellow'}, text = {italic = true, underline = true, sp = 'gray'}},
+        highlights = {sigil = {fg = 'yellow'}, text = {underline = true, italic = true}},
     },
-    tag = {
-        sigil = '@',
+    important = {
+        sigil = '!',
         toggle = {mapping = {lhs = 'a'}},
         highlights = {sigil = {fg = 'red'}, text = {underline = true, bold = true}},
+        -- highlights = {sigil = {fg = 'red'}, text = {underline = true, bold = true}},
     },
-    -- prolly doesn't work
+    detail = {
+        sigil = '+',
+        toggle = {mapping = {lhs = 'a'}},
+        highlights = {sigil = {fg = 'magenta'}},
+    },
+    possibility = {
+        sigil = '@',
+        toggle = {mapping = {lhs = 'p'}},
+        highlights = {sigil = {fg = 'green'}, text = {italic = true}},
+        -- sigil_regex = [[%]],
+    },
     number = {
         number = 1,
         ListClass = 'number',
