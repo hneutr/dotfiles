@@ -15,7 +15,6 @@ ls.add_snippets("markdown", {
     s("l", mds.Divider.from_size('small'):snippet()),
     s("lm", mds.Divider.from_size('medium'):snippet()),
     s("lb", mds.Divider.from_size('big'):snippet()),
-
     -- headers
     s("h", mds.Header():snippet()),
     s("hm", mds.Header.from_size({size='medium'}):snippet()),

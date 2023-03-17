@@ -1,3 +1,4 @@
+local Object = require("util.object")
 local class = require('util.class')
 local util = require('util')
 local ulines = require('util.lines')
@@ -75,11 +76,12 @@ M.Link = Link
 --------------------------------------------------------------------------------
 -- format: path:text
 --------------------------------------------------------------------------------
-Location = class(function(self, args)
-    args = _G.default_args(args, { path = vim.fn.expand('%:p'), text = '' })
+Location = Object:extend()
+function Location:new(args)
+    args = _G.default_args(args, {path = vim.fn.expand('%:p'), text = ''})
     self.path = args.path
     self.text = args.text
-end)
+end
 
 function Location:str()
     local str = M.path.shorten(self.path)
@@ -104,21 +106,21 @@ function Location.from_str(str)
 
     path = M.path.expand(path)
 
-    return Location{ path = path, text = text }
+    return Location({path = path, text = text})
 end
 
 function Location.from_mark_rg_str(str)
     local path, str = unpack(vim.fn.split(str, ':'))
     local mark = Mark.from_str(str)
 
-    return Location{path = path, text = mark.text}
+    return Location({path = path, text = mark.text})
 end
 
 Location.list = {}
 Location.list.files_cmd = "fd -tf '' "
 
 function Location.list.all(args)
-    args = _G.default_args(args, { as_str = true })
+    args = _G.default_args(args, {as_str = true})
 
     local locations = {}
     for i, location in ipairs(Location.list.marks(args)) do
@@ -135,7 +137,7 @@ function Location.list.all(args)
 end
 
 function Location.list.marks(args)
-    args = _G.default_args(args, { as_str = true })
+    args = _G.default_args(args, {as_str = true})
 
     local cmd = Mark.rg_cmd .. config.get()['root']
 
@@ -156,7 +158,7 @@ function Location.list.marks(args)
 end
 
 function Location.list.files(args)
-    args = _G.default_args(args, { as_str = true })
+    args = _G.default_args(args, {as_str = true})
     local cmd = Location.list.files_cmd .. config.get()['root']
 
     local locations = {}
@@ -235,7 +237,7 @@ function Mark:str()
 end
 
 
-Mark.allowed_befores = { "# ", "> ", "- " }
+Mark.allowed_befores = {"# ", "> ", "- "}
 Mark.rg_cmd = "rg '\\[.*\\]\\(\\)' --no-heading "
 
 
@@ -417,8 +419,86 @@ M.Reference = Reference
 -- precededb by: Mark or Reference
 -- followed by: any
 --------------------------------------------------------------------------------
+Flag = Object:extend()
+Flag.types = {
+    {name = 'question', symbol = '?', regex_symbol = '%?'},
+    {name = 'brainstorm', symbol = '*', regex_symbol = '%*'},
+}
+Flag.region_start = '|'
 
+function Flag:new(args)
+    for key, val in pairs(args or {}) do
+        self[key] = val
+    end
+end
 
+function Flag.regex()
+    local flag_characters = ""
+    for _, flag_info in ipairs(Flag.types) do
+        flag_characters = flag_characters .. flag_info.regex_symbol
+    end
+
+    return "(.*)" .. Flag.region_start .. "([" .. flag_characters .. "]+)$"
+end
+
+function Flag:__tostring()
+    local text = ""
+
+    for _, flag_info in ipairs(self.types) do
+        if self[flag_info.name] then
+            text = text .. flag_info.symbol
+        end
+    end
+
+    return text
+end
+
+function Flag.str_has_flags(str)
+    if str:find(Flag.region_start) then
+        local _, flags = str:match(Flag.regex())
+
+        if flags and flags:len() then
+            return true
+        end
+    end
+    
+    return false
+end
+
+function Flag:add_to_str(str)
+    local text = tostring(self)
+
+    if text:len() > 0 then
+        str = str .. self.region_start .. text
+    end
+
+    return str
+end
+
+function Flag.remove_from_str(str)
+    if Flag.str_has_flags(str) then
+        str, _ = str:match(Flag.regex())
+    end
+
+    return str
+end
+
+function Flag.from_str(str)
+    local args = {}
+    if Flag.str_has_flags(str) then
+        _, flags_string = str:match(Flag.regex())
+
+        for _, flag_info in ipairs(Flag.types) do
+            if flags_string:find(flag_info.regex_symbol) then
+                args[flag_info.name] = true
+            end
+        end
+    end
+
+    return Flag(args)
+end
+
+M.Flag = Flag
 --------------------------------------------------------------------------------
 --                                fuzzy finding                                
 --------------------------------------------------------------------------------
@@ -496,7 +576,7 @@ function M.get_nearest_link()
     local str = ulines.cursor.get()
     local cursor_col = vim.api.nvim_win_get_cursor(0)[2]
 
-    local _start, _end = 1, 1
+    local _start, _end = 0, 1
     local start_to_link = {}
     local end_to_link = {}
     while true do
@@ -506,7 +586,7 @@ function M.get_nearest_link()
             _start = _end + link.before:len()
             start_to_link[_start] = link
 
-            _end = _start + link:str():len()
+            _end = _start + link:str():len() + 1
             end_to_link[_end] = link
 
             str = link.after

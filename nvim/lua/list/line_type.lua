@@ -34,9 +34,9 @@ local list_types = {
         toggle = {mapping = {lhs = 'c'}},
         highlights = {sigil = {fg = 'magenta'}},
     },
-    uncertainty = {
+    maybe = {
         sigil = '~',
-        toggle = {mapping = {lhs = 'u'}},
+        toggle = {mapping = {lhs = 'm'}},
         sigil_regex = [[\~]],
         highlights = {sigil = {fg = 'gray'}, text = {fg = 'gray'}},
     },
@@ -47,7 +47,7 @@ local list_types = {
     },
     important = {
         sigil = '!',
-        toggle = {mapping = {lhs = 'a'}},
+        toggle = {mapping = {lhs = 'i'}},
         highlights = {sigil = {fg = 'red'}, text = {underline = true, bold = true}},
         -- highlights = {sigil = {fg = 'red'}, text = {underline = true, bold = true}},
     },
@@ -60,7 +60,6 @@ local list_types = {
         sigil = '@',
         toggle = {mapping = {lhs = 'p'}},
         highlights = {sigil = {fg = 'green'}, text = {italic = true}},
-        -- sigil_regex = [[%]],
     },
     number = {
         number = 1,
