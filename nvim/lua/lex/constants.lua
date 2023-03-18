@@ -1,28 +1,22 @@
-return {
-    goals_directory = '/Users/hne/Documents/text/written/nonfiction/on-writing/goals',
-    journals_directory = '/Users/hne/Documents/text/written/reflections/journals/content',
-    config_file_name = '.project',
-    dir_file_name = '@.md',
-    opener_prefix = "<leader>o",
-    mirror_defaults = {
-        chaff = {
-            dir = ".chaff",
-            mirrors = {
-                fragments = {opener_prefix = "f"},
-                scratch = {opener_prefix = "s", mirror_other_mirrors = true},
-            },
-        },
-        notes = {
-            dir = ".notes",
-            mirrors = {
-                alternatives = {opener_prefix = "a"},
-                ideas = {opener_prefix = "i"},
-                outlines = {opener_prefix = "o"},
-                meta = {opener_prefix = "m"},
-                questions = {opener_prefix = "q"},
-                rejections = {opener_prefix = "r"},
-                churnlog = {opener_prefix = "c"},
-            },
-        },
-    },
-}
+local Path = require("util.path")
+
+local constants_dir = "/Users/hne/dotfiles/lex/constants"
+local initialize_with = 'init'
+
+function load()
+    local constants = {}
+    for _, file in ipairs(Path.list_paths(constants_dir)) do
+        local name = Path.stem(file)
+        local subconstants = vim.fn.json_decode(Path.read(file))
+
+        if name == initialize_with then
+            constants = vim.tbl_extend("keep", subconstants, constants)
+        else
+            constants[name] = subconstants
+        end
+    end
+
+    return constants
+end
+
+return load()

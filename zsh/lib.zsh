@@ -96,6 +96,14 @@ function journal() {
     nvim -c "lua require'util'.open_path(require'lex.journal'.path())" +GoyoToggle -c "1"
 }
 
+function flags() {
+    local file="/tmp/flags-list.sh"
+    nvim --headless -c "lua require('lex.link').Flag.write_find_command('$1', '$file')" +q
+    chmod +x $file
+    eval $file
+    rm $file
+}
+
 function nvim_mv() {
     nvim --headless -c "lua require'lex.move'.move('$1', '$2')" +q
 }

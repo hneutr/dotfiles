@@ -21,6 +21,8 @@ ls.add_snippets("markdown", {
     s("hb", mds.Header.from_size({size='big'}):snippet()),
     -- markers
     s("m", mds.Link():snippet()),
+    -- flags
+    s("f", mds.Flags():snippet()),
     -- marker headers
     s("mh", mds.LinkHeader():snippet()),
     s("mhm", mds.LinkHeader.from_size({size='medium'}):snippet()),

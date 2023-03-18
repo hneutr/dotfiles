@@ -1,17 +1,19 @@
 #-------------------------------------------------------------------------------
-# [high priority]()
+# [todos]()
 #-------------------------------------------------------------------------------
+
+=-----------------------------------------------------------
+= [high priority]()
+=-----------------------------------------------------------
 - `bug`: references to links within mirrors
-- `feature`: flags
-- `feature`: view all questions
-- `feature`: hidden in-line/file content (eg questions); use vim folds
+- `feature`: support hidden in-line/file content (eg questions); use vim folds
 - `feature`: create some method/place for prose fragments (eg about wildlife, Fennessez, etc)
 - `feature`: `dir-to-file`: put content from each file in the directory in the destination file
 - `improvement`: remove `.md` from location paths
 
-#-------------------------------------------------------------------------------
-# [misc todo]()
-#-------------------------------------------------------------------------------
+=-----------------------------------------------------------
+= [misc]()
+=-----------------------------------------------------------
 - make `rm` command to move `PATH` to `.archive/PATH`
 - view a mark's references
 
@@ -34,6 +36,11 @@
     - if in same dir or child, start with: `./`
     - if above, specify full project path, don't start path with `./`
   ~ would make updating links harder (could just solve by "un-relativizing" them when after running rg/etc)
+
+----------------------------------------
+> [flags]()
+----------------------------------------
+- file: `[name](path): flags` (stored in a "file flags" file that lists all files in the project)
 
 ----------------------------------------
 > [projects]()
@@ -66,25 +73,17 @@
 # [flags]()
 #-------------------------------------------------------------------------------
 - mark/reference: `[mark]()[](flags)`, flagset = `[](flags)`
-- file: `[name](path): flags` (stored in a "file flags" file that lists all files in the project)
-
-----------------------------------------
-> [things to support]()
-----------------------------------------
-- view things with a given flag
-- view questions associated with a mark
-- mechanism to associate a question with a mark
-  - implementations:
-    1. have questions file and have each question reference a mark
-    2. put questions in some file, give them a mark with a non-ascii key, add that key to the mark's flagset
+- list flags of a given type via: `flag {flag_type}` 
+- flag types:
+  - `?`: question
+  - `*`: brainstorm
+- `f` snippet: inserts a flag (`[]($1)`)
 
 ----------------------------------------
 > [flag ideas]()
 ----------------------------------------
 - `!` = important
 - `*` = in progress (display visually in indexes)
-- `?` = question (maybe)
-  - `mq` snippet: inserts a `?` list item with a date flag (`[](d=TODAY)`)
 - `+` = include in-file markers in the outline (when used within an outline)
 - `d=YYYYMMDD` = date flag
 

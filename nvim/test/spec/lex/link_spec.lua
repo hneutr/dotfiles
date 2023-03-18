@@ -74,53 +74,67 @@ describe("Link", function()
          assert.is_false(m.Link.str_is_a("not a link"))
       end)
    end)
-end)
 
-describe("Location", function()
-   local get_config = config.get
+   describe("get_nearest", function()
+      local function set_up(line, cursor_col)
+         local buf = vim.api.nvim_create_buf(false, true)
+         vim.api.nvim_command("buffer " .. buf)
+         vim.api.nvim_buf_set_lines(0, 0, -1, true, { line })
+         vim.api.nvim_win_set_cursor(0, {1, cursor_col})
+      end
 
-   before_each(function()
-      config.get = function() return {root = 'root'} end
-	 end)
-
-   after_each(function()
-      config.get = get_config
-   end)
-
-   describe("str()", function() 
-      local expand = vim.fn.expand
-
-      before_each(function()
-         vim.fn.expand = function() return "root/test_path.md" end
+      it("1 link: cursor in link", function()
+          local line = "a [b](c) d"
+          set_up(line, string.find(line, 'b'))
+          assert.equal(m.Link.get_nearest():str(), "[b](c)")
       end)
 
-      after_each(function()
-         vim.fn.expand = expand
+      it("1 link: cursor before link", function()
+          local line = "a [b](c) d"
+          set_up(line, string.find(line, 'a'))
+          assert.equal(m.Link.get_nearest():str(), "[b](c)")
       end)
 
-      it("makes location", function()
-         local one = m.Location{ path = 'a', text = 'b' }
-         local two = m.Location{ path = 'c' }
-         local three = m.Location{ text = 'd'}
-         assert.equals("a:b", one:str())
-         assert.equals("c", two:str())
-         assert.equals("test_path.md:d", three:str())
-      end)
-   end)
-
-   describe("from_str()", function() 
-      it("path and str", function()
-         local actual = m.Location.from_str("test.md:label")
-         local expected = m.Location{ path = 'root/test.md', text = 'label' }
-
-         assert.are.same(actual, expected)
+      it("1 link: cursor after link", function()
+          local line = "a [b](c) d"
+          set_up(line, string.find(line, 'd'))
+          assert.equal(m.Link.get_nearest():str(), "[b](c)")
       end)
 
-      it("path only", function()
-         local actual = m.Location.from_str("test.md")
-         local expected = m.Location{ path = 'root/test.md' }
+      it("2 links: cursor before link 1", function()
+          local line = "a [b](c) d [e](f) g"
+          set_up(line, string.find(line, 'a'))
+          assert.equal(m.Link.get_nearest():str(), "[b](c)")
+      end)
 
-         assert.are.same(actual, expected)
+      it("2 links: cursor in link 1", function()
+          local line = "a [b](c) d [e](f) g"
+          set_up(line, string.find(line, 'b'))
+          assert.equal(m.Link.get_nearest():str(), "[b](c)")
+      end)
+
+      it("2 links: cursor in between links", function()
+          local line = "a [b](c) d [e](f) g"
+          set_up(line, string.find(line, 'd'))
+          assert.equal(m.Link.get_nearest():str(), "[b](c)")
+      end)
+
+      it("2 links: cursor in link 2", function()
+          local line = "a [b](c) d [e](f) g"
+          set_up(line, string.find(line, 'e'))
+          assert.equal(m.Link.get_nearest():str(), "[e](f)")
+      end)
+
+      it("2 links: cursor in after link 2", function()
+          local line = "a [b](c) d [e](f) g"
+          set_up(line, string.find(line, 'g'))
+          assert.equal(m.Link.get_nearest():str(), "[e](f)")
+      end)
+
+      it("3 links: cursor between link 2 and 3", function()
+          local line = "a [b](c) d [e](f) g [h](i) j"
+          set_up(line, string.find(line, 'g'))
+          assert.equal(m.Link.get_nearest():str(), "[e](f)")
       end)
    end)
 end)
@@ -147,18 +161,6 @@ describe("Mark", function()
 
       it("link with location: reject", function()
          assert.is_false(m.Mark.str_is_a("[a](b)"))
-      end)
-
-      it("valid before 1: accept", function()
-         assert.is_true(m.Mark.str_is_a("# [a]()"))
-      end)
-
-      it("valid before 2: accept", function()
-         assert.is_true(m.Mark.str_is_a("> [a]()"))
-      end)
-
-      it("invalid before: reject", function()
-         assert.is_false(m.Mark.str_is_a("before [a]()"))
       end)
    end)
 
@@ -225,67 +227,53 @@ describe("Mark", function()
          assert.stub(nvim_win_set_cursor).was_called_with(0, {3, 0})
       end)
    end)
+end)
 
-   describe("get_nearest_link", function()
-      local function set_up(line, cursor_col)
-         local buf = vim.api.nvim_create_buf(false, true)
-         vim.api.nvim_command("buffer " .. buf)
-         vim.api.nvim_buf_set_lines(0, 0, -1, true, { line })
-         vim.api.nvim_win_set_cursor(0, {1, cursor_col})
-      end
+describe("Location", function()
+   local get_config = config.get
 
-      it("1 link: cursor in link", function()
-          local line = "a [b](c) d"
-          set_up(line, string.find(line, 'b'))
-          assert.equal(m.get_nearest_link():str(), "[b](c)")
+   before_each(function()
+      config.get = function() return {root = 'root'} end
+	 end)
+
+   after_each(function()
+      config.get = get_config
+   end)
+
+   describe("str()", function() 
+      local expand = vim.fn.expand
+
+      before_each(function()
+         vim.fn.expand = function() return "root/test_path.md" end
       end)
 
-      it("1 link: cursor before link", function()
-          local line = "a [b](c) d"
-          set_up(line, string.find(line, 'a'))
-          assert.equal(m.get_nearest_link():str(), "[b](c)")
+      after_each(function()
+         vim.fn.expand = expand
       end)
 
-      it("1 link: cursor after link", function()
-          local line = "a [b](c) d"
-          set_up(line, string.find(line, 'd'))
-          assert.equal(m.get_nearest_link():str(), "[b](c)")
+      it("makes location", function()
+         local one = m.Location{ path = 'a', text = 'b' }
+         local two = m.Location{ path = 'c' }
+         local three = m.Location{ text = 'd'}
+         assert.equals("a:b", one:str())
+         assert.equals("c", two:str())
+         assert.equals("test_path.md:d", three:str())
+      end)
+   end)
+
+   describe("from_str()", function() 
+      it("path and str", function()
+         local actual = m.Location.from_str("test.md:label")
+         local expected = m.Location{ path = 'root/test.md', text = 'label' }
+
+         assert.are.same(actual, expected)
       end)
 
-      it("2 links: cursor before link 1", function()
-          local line = "a [b](c) d [e](f) g"
-          set_up(line, string.find(line, 'a'))
-          assert.equal(m.get_nearest_link():str(), "[b](c)")
-      end)
+      it("path only", function()
+         local actual = m.Location.from_str("test.md")
+         local expected = m.Location{ path = 'root/test.md' }
 
-      it("2 links: cursor in link 1", function()
-          local line = "a [b](c) d [e](f) g"
-          set_up(line, string.find(line, 'b'))
-          assert.equal(m.get_nearest_link():str(), "[b](c)")
-      end)
-
-      it("2 links: cursor in between links", function()
-          local line = "a [b](c) d [e](f) g"
-          set_up(line, string.find(line, 'd'))
-          assert.equal(m.get_nearest_link():str(), "[b](c)")
-      end)
-
-      it("2 links: cursor in link 2", function()
-          local line = "a [b](c) d [e](f) g"
-          set_up(line, string.find(line, 'e'))
-          assert.equal(m.get_nearest_link():str(), "[e](f)")
-      end)
-
-      it("2 links: cursor in after link 2", function()
-          local line = "a [b](c) d [e](f) g"
-          set_up(line, string.find(line, 'g'))
-          assert.equal(m.get_nearest_link():str(), "[e](f)")
-      end)
-
-      it("3 links: cursor between link 2 and 3", function()
-          local line = "a [b](c) d [e](f) g [h](i) j"
-          set_up(line, string.find(line, 'g'))
-          assert.equal(m.get_nearest_link():str(), "[e](f)")
+         assert.are.same(actual, expected)
       end)
    end)
 end)
@@ -293,61 +281,46 @@ end)
 describe("Flag", function()
     describe("str()", function() 
         it("makes an empty Flag region", function()
-            assert.equals("", tostring(m.Flag()))
+            assert.equals("[]()", tostring(m.Flag()))
         end)
 
         it("makes a Flag region", function()
-            assert.equals("?*", tostring(m.Flag({question = true, brainstorm = true})))
+            assert.equals("[](?*)", tostring(m.Flag({question = true, brainstorm = true})))
         end)
     end)
 
-    describe("str_has_flags", function()
-        it("empty string", function()
-            assert.is_false(m.Flag.str_has_flags(""))
+    describe("str_is_a", function()
+        it("rejects text", function()
+            assert.is_false(m.Flag.str_is_a("abcde"))
         end)
 
-        it("flagless string", function()
-            assert.is_false(m.Flag.str_has_flags("~/Desktop/test.md:hello"))
+        it("rejects a link with a body", function()
+            assert.is_false(m.Flag.str_is_a("yello [hunter](?) hi"))
         end)
 
-        it("flagged string", function()
-            assert.is_true(m.Flag.str_has_flags("~/Desktop/test.md:hello|*"))
-        end)
-    end)
-
-    describe("add_to_str", function()
-        it("doesn't add when no flags", function()
-            assert.equals("a", m.Flag():add_to_str("a"))
+        it("rejects a link with bad location content", function()
+            assert.is_false(m.Flag.str_is_a("[](steve)"))
         end)
 
-        it("doesn't add when no flags", function()
-            assert.equals("a|?", m.Flag({question = true}):add_to_str("a"))
-        end)
-    end)
-
-    describe("remove_from_str", function()
-        it("does nothing when no flags are present", function()
-            assert.equals("abcde", m.Flag.remove_from_str("abcde"))
+        it("accepts a link with good location content", function()
+            assert.is_true(m.Flag.str_is_a("[](?)"))
         end)
 
-        it("removes flags when present", function()
-            assert.equals("abcde", m.Flag.remove_from_str("abcde|?*"))
+        it("kitchen sink acceptance", function()
+            assert.is_true(m.Flag.str_is_a("before [](?*) after"))
         end)
     end)
 
     describe("from_str", function()
-        it("empty flags when no flags present", function()
-            assert.equals("", tostring(m.Flag.from_str("abcde")))
-        end)
-
-        it("correct flags when flags present", function()
-            local expected = tostring(m.Flag({question = true}))
-            assert.equals(expected, tostring(m.Flag.from_str("abcde|?")))
+        it("correct flags when present", function()
+            local expected = m.Flag({before = 'a ', after = ' z', question = true})
+            assert.are.same(expected, m.Flag.from_str("a [](?) z"))
         end)
 
         it("multiple flags when flags present", function()
-            local expected = tostring(m.Flag({question = true, brainstorm = true}))
-            assert.equals(expected, tostring(m.Flag.from_str("abcde|?*")))
+            local expected = m.Flag({before = 'a ', after = ' z', question = true, brainstorm = true})
+            assert.are.same(expected, m.Flag.from_str("a [](?*) z"))
         end)
     end)
 end)
+

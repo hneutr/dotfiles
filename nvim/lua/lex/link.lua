@@ -1,7 +1,7 @@
 local Object = require("util.object")
-local class = require('util.class')
 local util = require('util')
 local ulines = require('util.lines')
+local Path = require('util.path')
 
 local config = require('lex.config')
 
@@ -44,31 +44,73 @@ end
 -- preceded by: any
 -- followed by: any
 --------------------------------------------------------------------------------
-Link = class(function(self, args)
-    args = _G.default_args(args, { label = '', location = '', before = '', after = '' })
-    self.label = args.label
-    self.location = args.location
-    self.before = args.before
-    self.after = args.after
-end)
+Link = Object:extend()
 
 Link.regex = "%s*(.-)%[(.-)%]%((.-)%)(.*)"
+Link.defaults = {
+    label = '',
+    location = '',
+    before = '',
+    after = '',
+}
 
-function Link:str()
-    return "[" .. self.label .. "](" .. self.location .. ")"
+function Link:new(args)
+    for key, val in pairs(_G.default_args(args, Link.defaults)) do
+        self[key] = val
+    end
 end
+
+function Link.str_is_a(str) return str:match(Link.regex) ~= nil end
+
+function Link:str() return "[" .. self.label .. "](" .. self.location .. ")" end
 
 function Link.from_str(str)
     str = str or ulines.cursor.get()
 
     local before, label, location, after = str:match(Link.regex)
 
-    return Link({ label = label, location = location, before = before, after = after })
+    return Link({label = label, location = location, before = before, after = after})
 end
 
-function Link.str_is_a(str)
-    return str:match(Link.regex) ~= nil
+function Link.get_nearest()
+    local str = ulines.cursor.get()
+    local cursor_col = vim.api.nvim_win_get_cursor(0)[2]
+
+    local _start, _end = 0, 1
+    local start_to_link = {}
+    local end_to_link = {}
+    while true do
+        if Link.str_is_a(str) then
+            local link = Link.from_str(str)
+
+            _start = _end + link.before:len()
+            start_to_link[_start] = link
+
+            _end = _start + link:str():len() + 1
+            end_to_link[_end] = link
+
+            str = link.after
+        else
+            break
+        end
+    end
+
+    local starts = vim.tbl_keys(start_to_link)
+    table.sort(starts, function(a, b) return math.abs(a - cursor_col) < math.abs(b - cursor_col) end)
+
+    local ends = vim.tbl_keys(end_to_link)
+    table.sort(ends, function(a, b) return math.abs(a - cursor_col) < math.abs(b - cursor_col) end)
+
+    local nearest_start = starts[1]
+    local nearest_end = ends[1]
+
+    if math.abs(nearest_start - cursor_col) <= math.abs(nearest_end - cursor_col) then
+        return start_to_link[nearest_start]
+    else
+        return end_to_link[nearest_end]
+    end
 end
+
 
 M.Link = Link
 --------------------------------------------------------------------------------
@@ -77,6 +119,9 @@ M.Link = Link
 -- format: path:text
 --------------------------------------------------------------------------------
 Location = Object:extend()
+
+Location.regex = "(.-)" .. location_path_text_delimiter .."(.*)"
+
 function Location:new(args)
     args = _G.default_args(args, {path = vim.fn.expand('%:p'), text = ''})
     self.path = args.path
@@ -93,14 +138,16 @@ function Location:str()
     return str
 end
 
-Location.regex = "(.-):(.*)"
+function Location.str_has_text(str) return str:find(location_path_text_delimiter) end
 
 function Location.from_str(str)
-    str = str or M.get_nearest_link().location
+    str = str or Link.get_nearest().location
 
-    local path, text = str:match(Location.regex)
+    local path, text
 
-    if not path then
+    if Location.str_has_text(str) then
+        path, text = str:match(Location.regex)
+    else
         path = str
     end
 
@@ -117,19 +164,15 @@ function Location.from_mark_rg_str(str)
 end
 
 Location.list = {}
-Location.list.files_cmd = "fd -tf '' "
+Location.list.find_files_cmd = "fd -tf '' "
+
+function Location.list.find_files(path)
+    path = path or config.get()['root']
+    return vim.fn.systemlist(Location.list.find_files_cmd .. path)
+end
 
 function Location.list.all(args)
-    args = _G.default_args(args, {as_str = true})
-
-    local locations = {}
-    for i, location in ipairs(Location.list.marks(args)) do
-        table.insert(locations, location)
-    end
-
-    for i, location in ipairs(Location.list.files(args)) do
-        table.insert(locations, location)
-    end
+    local locations = table.concatenate(Location.list.marks(args), Location.list.files(args))
 
     table.sort(locations, function(a, b) return a < b end)
 
@@ -139,10 +182,8 @@ end
 function Location.list.marks(args)
     args = _G.default_args(args, {as_str = true})
 
-    local cmd = Mark.rg_cmd .. config.get()['root']
-
     local locations = {}
-    for i, str in ipairs(vim.fn.systemlist(cmd)) do
+    for i, str in ipairs(Mark.find_all()) do
         if Mark.rg_str_is_a(str) then
             local location = Location.from_mark_rg_str(str)
 
@@ -159,11 +200,10 @@ end
 
 function Location.list.files(args)
     args = _G.default_args(args, {as_str = true})
-    local cmd = Location.list.files_cmd .. config.get()['root']
 
     local locations = {}
-    for i, path in ipairs(vim.fn.systemlist(cmd)) do
-        local location = Location{path = path}
+    for i, path in ipairs(Location.list.find_files()) do
+        local location = Location({path = path})
 
         if args.as_str then
             location = location:str()
@@ -188,12 +228,11 @@ function Location.goto(open_command, str)
 end
 
 function Location.update(args)
-    args = _G.default_args(args, { old_location = nil, new_location = nil, scope = 'buffer' })
+    args = _G.default_args(args, {old_location = nil, new_location = nil, scope = 'buffer'})
 
     local old = args.old_location:gsub('/', '\\/')
     local new = args.new_location:gsub('/', '\\/')
 
-    vim.g.testing = 1
     if args.scope == 'buffer' then
         local cursor = vim.api.nvim_win_get_cursor(0)
 
@@ -202,44 +241,47 @@ function Location.update(args)
         vim.api.nvim_win_set_cursor(0, cursor)
     elseif args.scope == 'project' then
         -- turns out this is a lot slower than just using python...
-        local root = require'lex.config'.get()['root']
+        local root = require('lex.config').get()['root']
 
         local pattern = '\\](' .. old .. ')'
         local replace = '\\](' .. new .. ')'
         local sed_exp = "s/" .. pattern .. "/" .. replace .. "/gI"
         local cmd = "cd " .. root .. " && find . -type f -exec gsed -i '" .. sed_exp .. "' {} \\;"
 
-        vim.g.cmd = cmd
         vim.fn.system(cmd)
     end
 end
 
 
 M.Location = Location
+
 --------------------------------------------------------------------------------
 --                                    Mark                                     
 --------------------------------------------------------------------------------
 -- format: [text]()
--- preceded by: "# ", "> ", or none
+-- preceded by: any
 -- followed by: Flag or none
 --------------------------------------------------------------------------------
-Mark = class(function(self, args)
-    args = _G.default_args(args, { text = '', before = '', after = '', flagset = nil })
-    self.text = args.text
-    self.before = args.before
-    self.after = args.after
-    self.flagset = args.flagset
-end)
-
-
-function Mark:str()
-    return Link{label = self.text}:str()
-end
-
-
-Mark.allowed_befores = {"# ", "> ", "- "}
+Mark = Object:extend()
+Mark.defaults = {
+    text = '',
+    before = '',
+    after = '',
+}
 Mark.rg_cmd = "rg '\\[.*\\]\\(\\)' --no-heading "
 
+function Mark:new(args)
+    for key, val in pairs(_G.default_args(args, self.defaults)) do
+        self[key] = val
+    end
+end
+
+function Mark:str() return Link({label = self.text}):str() end
+
+function Mark.find_all(path)
+    path = path or config.get()['root']
+    return vim.fn.systemlist(Mark.rg_cmd .. path)
+end
 
 function Mark.str_is_a(str)
     str = str or ulines.cursor.get()
@@ -250,10 +292,6 @@ function Mark.str_is_a(str)
 
     local before, label, location, after = str:match(Link.regex)
 
-    if before:len() > 0 and not vim.tbl_contains(Mark.allowed_befores, before) then
-        return false
-    end
-
     if location:len() > 0 then
         return false
     end
@@ -263,7 +301,6 @@ end
 
 function Mark.rg_str_is_a(str)
     local path, str = unpack(vim.fn.split(str, ':'))
-
     return Mark.str_is_a(str)
 end
 
@@ -271,8 +308,7 @@ function Mark.from_str(str)
     str = str or ulines.cursor.get()
 
     local before, text, location, after = str:match(Link.regex)
-
-    return Mark{ text = text, before = before, after = after, flagset = nil}
+    return Mark({text = text, before = before, after = after})
 end
 
 function Mark.goto(str)
@@ -297,14 +333,21 @@ M.Mark = Mark
 -- preceded by: any
 -- followed by: any
 --------------------------------------------------------------------------------
-Reference = class(function(self, args)
-    args = _G.default_args(args, { text = '', location = nil, before = '', after = '', flagset = nil })
+Reference = Object:extend()
+Reference.defaults = {
+    text = '',
+    location = nil,
+    before = '',
+    after = '',
+}
+
+function Reference:new(args)
+    args = _G.default_args(args, self.defaults)
     self.location = args.location
     self.before = args.before
     self.after = args.after
-    self.flagset = args.flagset
     self.text = Reference.default_text(args.text, self.location)
-end)
+end
 
 Reference.rg_cmd = "rg '\\[.*\\]\\(.+\\)' --no-heading --no-filename --no-line-number --hidden " 
 Reference.by_file_rg_cmd = "rg '\\[.*\\]\\(.+\\)' --no-heading --line-number --hidden " 
@@ -329,13 +372,11 @@ function Reference.default_text(text, location)
 end
 
 
-function Reference.str_is_a(str)
-    return Link.str_is_a(str)
-end
+function Reference.str_is_a(str) return Link.str_is_a(str) end
 
 
 function Reference:str()
-    return Link{ label = self.text, location = self.location:str() }:str()
+    return Link({label = self.text, location = self.location:str()}):str()
 end
 
 
@@ -343,9 +384,9 @@ function Reference.from_str(str)
     str = str or ulines.cursor.get()
 
     local before, text, location, after = str:match(Link.regex)
-    location = Location{ text = text }
+    location = Location({text = text})
 
-    return Reference{ text = text, location = location, before = before, after = after, flagset = nil}
+    return Reference({text = text, location = location, before = before, after = after})
 end
 
 function Reference.from_path(path)
@@ -355,7 +396,7 @@ end
 
 
 function Reference.list(args)
-    args = _G.default_args(args, { include_path_references = false, path = config.get()['root'] })
+    args = _G.default_args(args, {include_path_references = false, path = config.get()['root']})
 
     local cmd = Reference.rg_cmd .. args.path
 
@@ -420,14 +461,14 @@ M.Reference = Reference
 -- followed by: any
 --------------------------------------------------------------------------------
 Flag = Object:extend()
-Flag.types = {
-    {name = 'question', symbol = '?', regex_symbol = '%?'},
-    {name = 'brainstorm', symbol = '*', regex_symbol = '%*'},
+Flag.defaults = {
+    before = '',
+    after = '',
 }
-Flag.region_start = '|'
+Flag.types = require('lex.constants').flags
 
 function Flag:new(args)
-    for key, val in pairs(args or {}) do
+    for key, val in pairs(_G.default_args(args, Flag.defaults)) do
         self[key] = val
     end
 end
@@ -438,7 +479,30 @@ function Flag.regex()
         flag_characters = flag_characters .. flag_info.regex_symbol
     end
 
-    return "(.*)" .. Flag.region_start .. "([" .. flag_characters .. "]+)$"
+    local before_re = "(.-)"
+    local link_start_re = "%[%]%("
+    local flags_re = "([" .. flag_characters .. "]+)"
+    local link_end_re = "%)"
+    local after_re = "(.*)"
+
+    return before_re .. link_start_re .. flags_re .. link_end_re .. after_re
+end
+
+function Flag.str_is_a(str) 
+    local before, location, after = str:match(Flag.regex())
+
+    if location ~= nil then
+        local partial_location = location
+        for _, flag_info in ipairs(Flag.types) do
+            partial_location = partial_location:gsub(flag_info.regex_symbol, '')
+        end
+
+        if partial_location:len() == 0 then
+            return true
+        end
+    end
+
+    return false
 end
 
 function Flag:__tostring()
@@ -450,52 +514,47 @@ function Flag:__tostring()
         end
     end
 
-    return text
-end
-
-function Flag.str_has_flags(str)
-    if str:find(Flag.region_start) then
-        local _, flags = str:match(Flag.regex())
-
-        if flags and flags:len() then
-            return true
-        end
-    end
-    
-    return false
-end
-
-function Flag:add_to_str(str)
-    local text = tostring(self)
-
-    if text:len() > 0 then
-        str = str .. self.region_start .. text
-    end
-
-    return str
-end
-
-function Flag.remove_from_str(str)
-    if Flag.str_has_flags(str) then
-        str, _ = str:match(Flag.regex())
-    end
-
-    return str
+    return "[](" .. text .. ")"
 end
 
 function Flag.from_str(str)
-    local args = {}
-    if Flag.str_has_flags(str) then
-        _, flags_string = str:match(Flag.regex())
+    str = str or ulines.cursor.get()
 
-        for _, flag_info in ipairs(Flag.types) do
-            if flags_string:find(flag_info.regex_symbol) then
-                args[flag_info.name] = true
-            end
+    local args = {}
+    local before, flags_string, after = str:match(Flag.regex())
+
+    args.before = before
+    args.after = after
+
+    for _, flag_info in ipairs(Flag.types) do
+        if flags_string:find(flag_info.regex_symbol) then
+            args[flag_info.name] = true
         end
     end
 
     return Flag(args)
+end
+
+
+function Flag.write_find_command(flag_type, file_path)
+    local other_flags_re = "["
+    local symbol
+    for _, flag_info in ipairs(Flag.types) do
+        if flag_info.name ~= flag_type then
+            other_flags_re = other_flags_re .. "\\" .. flag_info.symbol
+        else
+            symbol = flag_info.symbol
+        end
+    end
+
+    other_flags_re = other_flags_re .. "]?"
+    local location_re = other_flags_re .. [[\]] .. symbol .. other_flags_re
+
+    local pwd = vim.env.PWD
+    config.set(pwd)
+    local path = path or config.get()['root']
+    local command = [[rg --no-heading "\[\]\(]] .. location_re ..  [[\)"]]
+    Path.write(file_path, {"cd " .. path, command, "cd " .. pwd})
 end
 
 M.Flag = Flag
@@ -567,48 +626,6 @@ function M.fuzzy.insert_selection(selection)
 
     vim.api.nvim_win_set_cursor(0, {line_number, new_column})
     vim.api.nvim_input(insert_command)
-end
-
---------------------------------------------------------------------------------
---                                    misc                                    --
---------------------------------------------------------------------------------
-function M.get_nearest_link()
-    local str = ulines.cursor.get()
-    local cursor_col = vim.api.nvim_win_get_cursor(0)[2]
-
-    local _start, _end = 0, 1
-    local start_to_link = {}
-    local end_to_link = {}
-    while true do
-        if Link.str_is_a(str) then
-            local link = Link.from_str(str)
-
-            _start = _end + link.before:len()
-            start_to_link[_start] = link
-
-            _end = _start + link:str():len() + 1
-            end_to_link[_end] = link
-
-            str = link.after
-        else
-            break
-        end
-    end
-
-    local starts = vim.tbl_keys(start_to_link)
-    table.sort(starts, function(a, b) return math.abs(a - cursor_col) < math.abs(b - cursor_col) end)
-
-    local ends = vim.tbl_keys(end_to_link)
-    table.sort(ends, function(a, b) return math.abs(a - cursor_col) < math.abs(b - cursor_col) end)
-
-    local nearest_start = starts[1]
-    local nearest_end = ends[1]
-
-    if math.abs(nearest_start - cursor_col) <= math.abs(nearest_end - cursor_col) then
-        return start_to_link[nearest_start]
-    else
-        return end_to_link[nearest_end]
-    end
 end
 
 return M
