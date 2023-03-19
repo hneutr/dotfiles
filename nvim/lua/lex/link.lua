@@ -119,7 +119,6 @@ end
 function Location.from_mark_rg_str(str)
     local path, str = unpack(vim.fn.split(str, ':'))
     local mark = Mark.from_str(str)
-
     return Location({path = path, text = mark.text})
 end
 
@@ -132,9 +131,7 @@ end
 
 function Location.list.all(args)
     local locations = table.concatenate(Location.list.marks(args), Location.list.files(args))
-
     table.sort(locations, function(a, b) return a < b end)
-
     return locations
 end
 
@@ -231,10 +228,7 @@ function Mark:new(args) self = table.default(self, args, self.defaults) end
 
 function Mark:str() return Link({label = self.text}):str() end
 
-function Mark.find_all(path)
-    path = path or config.get()['root']
-    return vim.fn.systemlist(Mark.rg_cmd .. path)
-end
+function Mark.find_all() return vim.fn.systemlist(Mark.rg_cmd .. config.get()['root']) end
 
 function Mark.str_is_a(str)
     str = str or ulines.cursor.get()
@@ -275,7 +269,6 @@ function Mark.goto(str)
         end
     end
 end
-
 
 --------------------------------------------------------------------------------
 --                                  Reference                                  
@@ -328,15 +321,12 @@ end
 
 function Reference.from_str(str)
     str = str or ulines.cursor.get()
-
     local before, text, location, after = str:match(Link.regex)
-    location = Location({text = text})
-
-    return Reference({text = text, location = location, before = before, after = after})
+    return Reference({text = text, location = Location({text = text}), before = before, after = after})
 end
 
 function Reference.list(args)
-    args = table.default(args, {include_path_references = false, path = config.get()['root']})
+    args = table.default(args, {path = config.get()['root']})
 
     local cmd = Reference.rg_cmd .. args.path
 
@@ -348,7 +338,7 @@ function Reference.list(args)
             if not vim.startswith(raw_location, "http") then
                 location = Location.from_str(raw_location)
 
-                if location.text:len() > 0 or args.include_path_references then
+                if location.text:len() > 0 then
                     references[location:str()] = true
                 end
             end
@@ -361,9 +351,7 @@ function Reference.list(args)
 end
 
 function Reference.list_by_file(args)
-    args = table.default(args, {path = config.get()['root']})
-
-    local cmd = Reference.by_file_rg_cmd .. args.path
+    local cmd = Reference.by_file_rg_cmd .. config.get()['root']
 
     local references = {}
     for i, str in ipairs(vim.fn.systemlist(cmd)) do
@@ -533,20 +521,20 @@ function fuzzy._do(fn)
 end
 
 function fuzzy.goto()
-    fuzzy._do(function(selected, action) Location.goto(action, selected) end)
+    fuzzy._do(function(location, action) Location.goto(action, location) end)
 end
 
 function fuzzy.put()
-    fuzzy._do(function(selected)
-        vim.api.nvim_put({Reference({location = Location.from_str(selected)}):str()} , 'c', 1, 0)
+    fuzzy._do(function(location)
+        vim.api.nvim_put({Reference({location = Location.from_str(location)}):str()} , 'c', 1, 0)
     end)
 end
 
 function fuzzy.insert()
-    fuzzy._do(function(selected) fuzzy.insert_selection(selected) end)
+    fuzzy._do(fuzzy.insert_selection)
 end
 
-function fuzzy.insert_selection(selection)
+function fuzzy.insert_selection(location)
     local line = ulines.cursor.get()
     local line_number, column = unpack(vim.api.nvim_win_get_cursor(0))
 
@@ -559,7 +547,7 @@ function fuzzy.insert_selection(selection)
         insert_command = 'a'
     end
 
-    local content = Reference({location = Location.from_str(selection)}):str()
+    local content = Reference({location = Location.from_str(location)}):str()
 
     local new_line = line:sub(1, column) .. content .. line:sub(column + 1)
     local new_column = column + content:len()
