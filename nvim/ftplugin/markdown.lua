@@ -21,6 +21,9 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
         vim.bo.shiftwidth = 2
         vim.bo.softtabstop = 2
         vim.b.list_types = {"maybe", "question", "important", "change", "detail", "possibility"}
+        
+        vim.cmd([[call matchadd("Conceal", "{.*}", 10)]])
+
         -- -: bullet
         -- *: dot
         -- ◻: todo

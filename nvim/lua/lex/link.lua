@@ -577,12 +577,12 @@ function Flag.list(flag_type, file_path)
         text = text:gsub("%]%(.*%)", "")
         text = text:gsub("%[", "")
         text = text:gsub("^%s*", "")
+        text = text:gsub("^>%s*", "")
+
         vim.b.list_types = {"maybe", "question", "important", "change", "detail", "possibility"}
         text = require("list").Buffer():parse_line(text, 1).text
 
-        if not text:match("^>") then
-            table.insert(items, path .. ": " .. text)
-        end
+        table.insert(items, path .. ": " .. text)
     end
 
     Path.write(file_path, items)
