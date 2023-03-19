@@ -537,7 +537,7 @@ function Flag.from_str(str)
 end
 
 
-function Flag.write_find_command(flag_type, file_path)
+function Flag.find_all(flag_type)
     local other_flags_re = "["
     local symbol
     for _, flag_info in ipairs(Flag.types) do
@@ -551,11 +551,34 @@ function Flag.write_find_command(flag_type, file_path)
     other_flags_re = other_flags_re .. "]?"
     local location_re = other_flags_re .. [[\]] .. symbol .. other_flags_re
 
-    local pwd = vim.env.PWD
-    config.set(pwd)
-    local path = path or config.get()['root']
-    local command = [[rg --no-heading "\[\]\(]] .. location_re ..  [[\)"]]
-    Path.write(file_path, {"cd " .. path, command, "cd " .. pwd})
+    config.set(vim.env.PWD)
+    local command = [[rg --no-heading "\[\]\(]] .. location_re ..  [[\)" ]]
+
+    return vim.fn.systemlist(command .. config.get()['root'])
+end
+
+
+function Flag.list(flag_type, file_path)
+    config.set(vim.env.PWD)
+    local project_root = config.get()['root']
+    local items = {}
+    for _, line in ipairs(Flag.find_all(flag_type)) do
+        local path, text = line:match("(.-)%.md%:(.*)")
+
+        path = Path.remove_from_start(path, project_root)
+
+        if Path.name(path) == '@' then
+            path = Path.parent(path)
+        end
+
+        text = text:gsub("%]%(.*%)", "")
+        text = text:gsub("%[", "")
+        text = text:gsub("^%s*", "")
+
+        table.insert(items, Path.name(path) .. ": " .. text)
+    end
+
+    Path.write(file_path, items)
 end
 
 M.Flag = Flag

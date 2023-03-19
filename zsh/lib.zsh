@@ -97,10 +97,9 @@ function journal() {
 }
 
 function flags() {
-    local file="/tmp/flags-list.sh"
-    nvim --headless -c "lua require('lex.link').Flag.write_find_command('$1', '$file')" +q
-    chmod +x $file
-    eval $file
+    local file="/tmp/flags-list.txt"
+    nvim --headless -c "lua require('lex.link').Flag.list('$1', '$file')" +q
+    cat $file
     rm $file
 }
 

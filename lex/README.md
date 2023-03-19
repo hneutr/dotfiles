@@ -14,7 +14,7 @@
 =-----------------------------------------------------------
 = [misc]()
 =-----------------------------------------------------------
-- make `rm` command to move `PATH` to `.archive/PATH`
+- `feature`: `rm` to move `PATH` to `.archive/PATH`
 - view a mark's references
 
 ----------------------------------------
