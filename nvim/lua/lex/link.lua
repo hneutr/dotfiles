@@ -571,11 +571,17 @@ function Flag.list(flag_type, file_path)
             path = Path.parent(path)
         end
 
+        path = Path.name(path)
+        path = path:gsub("%-", " ")
+
         text = text:gsub("%]%(.*%)", "")
         text = text:gsub("%[", "")
         text = text:gsub("^%s*", "")
+        text = require("list").Buffer():parse_line(text, 1).text
 
-        table.insert(items, Path.name(path) .. ": " .. text)
+        if not text:match("^>") then
+            table.insert(items, path .. ": " .. text)
+        end
     end
 
     Path.write(file_path, items)

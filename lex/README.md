@@ -41,6 +41,7 @@
 > [flags]()
 ----------------------------------------
 - file: `[name](path): flags` (stored in a "file flags" file that lists all files in the project)
+- add mappings for to toggle flags eg `<leader>fq` toggles a question flag on the line
 
 ----------------------------------------
 > [projects]()
