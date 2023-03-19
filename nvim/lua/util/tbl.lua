@@ -21,7 +21,7 @@ function table.removekey(tbl, key)
 end
 
 
-function table.default(tbl, other)
+function table.default(tbl, other, ...)
     tbl = tbl or {}
     for k, v in pairs(other) do
         if tbl[k] == nil then
@@ -31,6 +31,10 @@ function table.default(tbl, other)
         end
     end
 
+    if ... then
+        tbl = table.default(tbl, ...)
+    end
+        
     return tbl
 end
 

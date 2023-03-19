@@ -1,0 +1,6 @@
+{
+    "default": "edit",
+    "ctrl-j": "split",
+    "ctrl-l": "vsplit",
+    "ctrl-t": "tabedit"
+}

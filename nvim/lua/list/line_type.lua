@@ -1,6 +1,6 @@
 local Object = require("util.object")
-require('util.tbl')
 
+require('util.tbl')
 local color = require('color')
 local line_utils = require("util.lines")
 
@@ -49,7 +49,6 @@ local list_types = {
         sigil = '!',
         toggle = {mapping = {lhs = 'i'}},
         highlights = {sigil = {fg = 'red'}, text = {underline = true, bold = true}},
-        -- highlights = {sigil = {fg = 'red'}, text = {underline = true, bold = true}},
     },
     detail = {
         sigil = '+',

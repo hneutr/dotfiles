@@ -2,8 +2,7 @@ local M = {}
 local l = require('lex.link')
 local ulines = require('util.lines')
 local Mirror = require('lex.mirror')
-local util = require('util')
-local path = require('util.path')
+local Path = require('util.path')
 
 
 local DIR_FILE_NAME = require('lex.constants').dir_file_name
@@ -12,8 +11,8 @@ local DIR_FILE_NAME = require('lex.constants').dir_file_name
 --                                    move                                    --
 --------------------------------------------------------------------------------
 function M.move(src, dst)
-    src = path.resolve(src)
-    dst = path.resolve(dst)
+    src = Path.resolve(src)
+    dst = Path.resolve(dst)
 
     require('lex.config').set(vim.env.PWD)
     vim.g.lex_sync_ignore = true
@@ -48,7 +47,7 @@ function M.remove_mark_lines(src)
     local end_line
 
     local mark_lines = {}
-    for i, line in ipairs(require('util.lines').get()) do
+    for i, line in ipairs(ulines.get()) do
         if i > start_line + 2 and M.line_is_divider(line) then
             end_line = i - 1
             break
@@ -57,7 +56,7 @@ function M.remove_mark_lines(src)
         end
     end
 
-    require('util.lines').cut({start_line = start_line - 1, end_line = end_line})
+    ulines.cut({start_line = start_line - 1, end_line = end_line})
 
     return mark_lines
 end
@@ -109,12 +108,12 @@ end
 --------------------------------------------------------------------------------
 function M.get_updates(src, dst)
     local root = require'lex.config'.get().root
-    local src_stem = path.remove_from_start(src, root)
-    local dst_stem = path.remove_from_start(dst, root)
+    local src_stem = Path.remove_from_start(src, root)
+    local dst_stem = Path.remove_from_start(dst, root)
 
     local updates = {}
-    for _, src_path in ipairs(path.list_paths(src)) do
-        dst_path = path.gsub(src_path, src_stem, dst_stem, 1)
+    for _, src_path in ipairs(Path.list_paths(src)) do
+        dst_path = Path.gsub(src_path, src_stem, dst_stem, 1)
 
         dst_path = M.handle_dir_into_parent(src, dst, src_path, dst_path)
 
@@ -132,8 +131,8 @@ end
 -- rename the `@.md` file to the name of the directory
 --------------------------------------------------------------------------------
 function M.handle_dir_into_parent(src, dst, src_path, dst_path)
-    if path.is_dir(src) and path.parent(src) == dst and src_path == path.join(src, DIR_FILE_NAME) then
-        return tostring(path.join(dst, path.stem(src) .. ".md"))
+    if Path.is_dir(src) and Path.parent(src) == dst and src_path == Path.join(src, DIR_FILE_NAME) then
+        return tostring(Path.join(dst, Path.stem(src) .. ".md"))
     end
 
     return dst_path
@@ -141,12 +140,12 @@ end
 
 function M.update_paths(updates)
     for old, new in pairs(updates) do
-        util.make_directories(new)
+        Path.make_dirs(new)
         vim.fn.system("/bin/mv " .. old .. " " .. new)
     end
 
-    for i, dir in ipairs(path.list_dirs(require'lex.config'.get().root)) do
-        if path.is_empty(dir) then
+    for i, dir in ipairs(Path.list_dirs(require'lex.config'.get().root)) do
+        if Path.is_empty(dir) then
             vim.fn.system("rmdir " .. dir)
         end
     end
@@ -166,17 +165,17 @@ function M.update_references(updates)
     local refs_by_file = l.Reference.list_by_file()
 
     for src, dst in pairs(updates) do
-        src = _G.escape(path.remove_from_start(src, root))
+        src = _G.escape(Path.remove_from_start(src, root))
 
         for file, ln_to_ref_str in pairs(refs_by_file) do
             for ln, ref_str in pairs(ln_to_ref_str) do
                 if string.find(ref_str, src) then
                     if current_file ~= file then
-                        path.open(file)
+                        Path.open(file)
                         current_file = file
                     end
 
-                    local replacement = ref_str:gsub(src, path.remove_from_start(dst, root))
+                    local replacement = ref_str:gsub(src, Path.remove_from_start(dst, root))
         
                     ulines.line.set({start_line = ln - 1, replacement = {replacement}})
                 end
@@ -186,8 +185,8 @@ function M.update_references(updates)
 
     vim.cmd("silent! wall")
     
-    if current_file ~= starting_file and path.is_file(starting_file) then
-        path.open(starting_file)
+    if current_file ~= starting_file and Path.is_file(starting_file) then
+        Path.open(starting_file)
     end
 
     vim.g.lex_sync_ignore = false
@@ -215,9 +214,9 @@ end
 --  dst → dst/DIR_FILE_NAME
 --------------------------------------------------------------------------------
 function M.infer.file_to_dir(src, dst)
-    if path.is_file(src) and path.suffix(src) ~= path.suffix(dst) then
-        if path.stem(src) == path.stem(dst) then
-            dst = path.join(dst, DIR_FILE_NAME)
+    if Path.is_file(src) and Path.suffix(src) ~= Path.suffix(dst) then
+        if Path.stem(src) == Path.stem(dst) then
+            dst = Path.join(dst, DIR_FILE_NAME)
         end
     end
 
@@ -232,8 +231,8 @@ end
 --  dst → dst/src.name (move src into dst)
 --------------------------------------------------------------------------------
 function M.infer.file_into_dir(src, dst)
-    if path.is_file(src) and path.suffix(src) ~= path.suffix(dst) then
-        dst = path.join(dst, path.name(src))
+    if Path.is_file(src) and Path.suffix(src) ~= Path.suffix(dst) then
+        dst = Path.join(dst, Path.name(src))
     end
 
     return dst
@@ -248,8 +247,8 @@ end
 --  dst → dst/src.name (move src into dst)
 --------------------------------------------------------------------------------
 function M.infer.dir_into_dir(src, dst)
-    if path.is_dir(src) and path.is_dir(dst) and path.parent(src) ~= dst then
-        dst = path.join(dst, path.name(src))
+    if Path.is_dir(src) and Path.is_dir(dst) and Path.parent(src) ~= dst then
+        dst = Path.join(dst, Path.name(src))
     end
 
     return dst

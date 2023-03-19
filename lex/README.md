@@ -28,8 +28,7 @@
 ----------------------------------------
 > [locations]()
 ----------------------------------------
-- remove `.md` from paths
-- replace spaces with some non-ascii character
+- remove `.md` from path
 - replace `FILE_DELIMITER` with some non-ascii character
 - make paths relative
   - implementation:
@@ -41,7 +40,7 @@
 > [flags]()
 ----------------------------------------
 - file: `[name](path): flags` (stored in a "file flags" file that lists all files in the project)
-- add mappings for to toggle flags eg `<leader>fq` toggles a question flag on the line
+- add mappings to toggle flags eg `<leader>fq` toggles a question flag on the line
 
 ----------------------------------------
 > [projects]()
@@ -73,12 +72,12 @@
 #-------------------------------------------------------------------------------
 # [flags]()
 #-------------------------------------------------------------------------------
-- mark/reference: `[mark]()[](flags)`, flagset = `[](flags)`
+- flagset = `{flags}`
 - list flags of a given type via: `flag {flag_type}` 
 - flag types:
   - `?`: question
   - `*`: brainstorm
-- `f` snippet: inserts a flag (`[]($1)`)
+- `f` snippet: inserts a flag (`{$1}`)
 
 ----------------------------------------
 > [flag ideas]()
