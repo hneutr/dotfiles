@@ -1,4 +1,3 @@
-local openApplicationChord = {"cmd", "ctrl"}
 local keyToApplication = {
     a = "kitty",
     b = "bitwarden",
@@ -16,7 +15,8 @@ local keyToApplication = {
     z = "https://calendar.google.com/calendar/u/1/r",
 }
 
-function bindApplicationOpeners()
+function getKeyToFunction()
+    local keyToFunction = {}
     for key, value in pairs(keyToApplication) do
         local opener = hs.application.open
 
@@ -24,7 +24,10 @@ function bindApplicationOpeners()
             opener =  hs.urlevent.openURL
         end
 
-        hs.hotkey.bind(openApplicationChord, key, function() opener(value) end)
+        keyToFunction[key] = function() opener(value) end
     end
+
+    return keyToFunction
 end
-bindApplicationOpeners()
+
+return getKeyToFunction()

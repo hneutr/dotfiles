@@ -1,2 +1,3 @@
+require('util')
 require('reloader')
-require('binder')
+require('hotkeys')
