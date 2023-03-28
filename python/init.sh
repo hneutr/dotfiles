@@ -1,2 +1,2 @@
-init_dot_dir python/matplotlib
-init_dot_dir python/ipython
+init_dotdir python/matplotlib
+init_dotdir python/ipython

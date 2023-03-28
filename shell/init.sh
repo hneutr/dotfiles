@@ -1,1 +1,1 @@
-init_dot_dir $SHELL_NAME
+init_dotdir $SHELL_NAME

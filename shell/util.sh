@@ -25,13 +25,13 @@ function dotpath() {
 }
 
 #------------------------------------------------------------------------------#
-# init_dot_dir
+# init_dotdir
 # ------------
-# - looks for a file called `$1/init.sh`
+# - looks for a file called `$DOT_DIR/$1/init.sh`
 # - if it exists:
 #   - makes it executable
 #   - runs it
 #------------------------------------------------------------------------------#
-function init_dot_dir() {
+function init_dotdir() {
     hard_source "$(dotpath $1/init.sh)"
 }
