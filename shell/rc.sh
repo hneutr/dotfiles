@@ -1,4 +1,4 @@
 source $HOME/dotfiles/shell/exports.sh
-source $HOME/dotfiles/shell/lib.sh
-source $HOME/dotfiles/shell/aliases.sh
-source $HOME/dotfiles/shell/plugins.sh
+source "$(dotpath shell/lib.sh)"
+source "$(dotpath shell/aliases.sh)"
+source "$(dotpath shell/plugins.sh)"

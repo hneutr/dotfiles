@@ -1,18 +1,21 @@
-pdf.use14corefonts: True
-ps.useafm: True
-pdf.fonttype: 42
-ps.fonttype: 42
-
 ################################################################################
 # Lines
 ################################################################################
-lines.linewidth   : .5
-lines.color       : 191414
+lines.linewidth: .5
+lines.color: 5E5E5E
 lines.solid_capstyle: butt
+
+################################################################################
+# Patches
+################################################################################
+patch.linewidth: .5
+patch.facecolor: 5E5E5E
+patch.edgecolor: 5E5E5E
 
 ################################################################################
 # Hatches
 ################################################################################
+hatch.color: 5E5E5E
 hatch.linewidth: 0.5
 
 ################################################################################
@@ -20,6 +23,7 @@ hatch.linewidth: 0.5
 ################################################################################
 font.family: sans-serif
 font.sans-serif: Helvetica Neue, SF Pro
+font.size: 5.0
 
 ################################################################################
 # Text
@@ -31,6 +35,8 @@ text.color: 191414 # Spotify's blackish color
 ################################################################################
 axes.unicode_minus: False
 
+axes.titlesize: 8.0
+axes.labelsize: 7.0
 axes.edgecolor : 191414
 axes.labelcolor: 191414
 axes.linewidth: .65
@@ -40,7 +46,6 @@ axes.labelpad: 2.0
 axes.spines.top: False
 axes.spines.right: False
 
-# Default to Spotify colors (sam), but put a nice blue first (hunter)
 axes.prop_cycle: cycler('color', ['45A1F8', 'FF6437', '4B917D', 'F037A5', '2EBD59', 'FFC864', 'C87D55', '1E3264'])
 
 ################################################################################
@@ -49,22 +54,46 @@ axes.prop_cycle: cycler('color', ['45A1F8', 'FF6437', '4B917D', 'F037A5', '2EBD5
 xtick.color: 191414
 ytick.color: 191414
 
+xtick.major.size: 2
+ytick.major.size: 2
+
 xtick.major.width: .5
 ytick.major.width: .5
 
-xtick.major.size: 2
-ytick.major.size: 2
+xtick.labelsize: 6
+ytick.labelsize: 6
 
 xtick.major.pad: 1
 ytick.major.pad: 1
 
 ################################################################################
+# Grids
+################################################################################
+grid.color: 5E5E5E
+grid.linewidth: 0.35
+
+
+################################################################################
 # Legend
 ################################################################################
-legend.frameon     : False
+legend.frameon: False
+legend.fontsize: 6.0
+legend.title_fontsize: 7.0
 
 ################################################################################
 # Figure
 ################################################################################
-figure.dpi       : 600.
-figure.figsize   : 3.5, 3.5
+figure.titlesize: 8.0
+figure.figsize: 3.5, 3.5
+figure.dpi: 600.
+figure.max_open_warning: 0
+figure.autolayout: True
+
+################################################################################
+# saving figures
+################################################################################
+ps.useafm: True
+ps.fonttype: 42
+
+pdf.fonttype: 42
+pdf.use14corefonts: True

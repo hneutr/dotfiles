@@ -1,5 +1,3 @@
-export IS_MACOS=1
-
 # locale
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US
@@ -16,7 +14,6 @@ export LC_TELEPHONE="en_US.UTF-8"
 export LC_MEASUREMENT="en_US.UTF-8"
 export LC_IDENTIFICATION="en_US.UTF-8"
 export LC_ALL=
-
 
 # don't remember what this is for
 export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/sqlite/lib -L/usr/local/opt/bzip2/lib"

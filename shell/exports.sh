@@ -1,9 +1,7 @@
-export DOTDIR=$HOME/dotfiles
+source $HOME/dotfiles/shell/util.sh
 
-export XDG_CONFIG_HOME=$HOME/.config
+export SHELL_NAME="$(basename $SHELL)"
 
-[[ "$(uname)" = "Darwin" ]] && source $DOTDIR/shell/exports.macos.sh
-
-source $DOTDIR/shell/exports.python.sh
-
-source $DOTDIR/shell/exports.nvim.sh
+source "$(dotpath os/exports.sh)"
+source "$(dotpath python/exports.sh)"
+source "$(dotpath nvim/exports.sh)"
