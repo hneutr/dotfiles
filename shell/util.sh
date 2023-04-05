@@ -24,14 +24,28 @@ function dotpath() {
     echo "$DOT_DIR/$(path_from_args $@)"
 }
 
-#------------------------------------------------------------------------------#
-# init_dotdir
-# ------------
-# - looks for a file called `$DOT_DIR/$1/init.sh`
-# - if it exists:
-#   - makes it executable
-#   - runs it
-#------------------------------------------------------------------------------#
-function init_dotdir() {
-    hard_source "$(dotpath $1/init.sh)"
+function OS() {
+    if [ "$(uname)" = "Darwin" ]; then
+        echo "macos"
+    fi
+}
+
+function setup_dotdir() {
+    hard_source $1/setup.sh
+    if [ -d "$1/extra" ]; then
+        for extra in "$(fd 'setup.sh' $1/extra)"; do
+            setup_dir "$(dirname $extra)"
+        done
+    fi
+}
+
+function rc_init_dir() {
+    hard_source $1/rc.sh
+    if [ -d "$1/extra" ]; then
+        for extra in "$(fd 'rc.sh' $1/extra)"; do
+            if [ ! -z $extra ]; then
+                rc_init_dir "$(dirname $extra)"
+            fi
+        done
+    fi
 }

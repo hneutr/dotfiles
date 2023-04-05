@@ -1,7 +1,3 @@
-source $HOME/dotfiles/shell/util.sh
+export DOT_DIR=$HOME/dotfiles
 
 export SHELL_NAME="$(basename $SHELL)"
-
-source "$(dotpath os/exports.sh)"
-source "$(dotpath python/exports.sh)"
-source "$(dotpath nvim/exports.sh)"
