@@ -145,7 +145,8 @@ vim.api.nvim_create_autocmd({"BufEnter"}, { pattern="*", callback=require'util'.
 --------------------------------------------------------------------------------
 vim.g.snip_ft_printstrings = {
     javascript = 'console.log(%s)',
-    lua = 'vim.pretty_print(%s)',
+    -- lua = 'vim.pretty_print(%s)',
+    lua = 'print(require("inspect")(%s))',
     python = 'print(%s)',
     vim = 'echo %s',
     zsh = 'echo %s',

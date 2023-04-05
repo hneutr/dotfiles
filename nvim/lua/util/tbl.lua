@@ -14,6 +14,7 @@ function table.concatenate(tbl, other, ...)
     return tbl
 end
 
+
 function table.removekey(tbl, key)
     local element = tbl[key]
     tbl[key] = nil
@@ -37,4 +38,3 @@ function table.default(tbl, other, ...)
         
     return tbl
 end
-
