@@ -40,7 +40,6 @@ function Mirror.get_type(path, config)
 end
 
 function Mirror:remove_kind_from_path()
-    -- vim.pretty_print(self.type_config)
     local type_dir = vim.tbl_get(self.type_config, 'dir') or self.config.root
 
     path = Path.remove_from_start(self.path, type_dir)

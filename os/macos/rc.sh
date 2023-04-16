@@ -23,3 +23,6 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:/usr/local/lib/fst
 # colors
 export CLICOLOR=1
 export LSCOLORS=gxfxbEaEBxxEhEhBaDaCaD
+
+# set deployment target for packer.nvim's luarocks
+export MACOSX_DEPLOYMENT_TARGET=10.15

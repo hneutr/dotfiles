@@ -174,12 +174,10 @@ function M.modify_line_end(char)
     line = line:gsub('%s*$', '')
 
     for i, _char in ipairs(delimiters) do
-        vim.pretty_print(_char)
         if vim.endswith(line, _char) then
             found_delimiter = true
 
             line = line:sub(1, line:len() - 1)
-            vim.pretty_print(_char .. char)
 
             if _char ~= char then
                 line = line .. char

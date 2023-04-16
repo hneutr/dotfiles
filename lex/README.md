@@ -5,6 +5,8 @@
 =-----------------------------------------------------------
 = [high priority]()
 =-----------------------------------------------------------
+- `bug`: fix `lex.link.Flag.list_all`
+  - how: avoid `vim.fn.systemlist` ([see](https://stackoverflow.com/questions/9676113/lua-os-execute-return-value))
 - `bug`: references to links within mirrors
 - `feature`: support hidden in-line/file content (eg questions); use vim folds
 - `feature`: create some method/place for prose fragments (eg about wildlife, Fennessez, etc)

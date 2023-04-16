@@ -37,8 +37,10 @@ return require('packer').startup(function(use)
     use 'neovim/nvim-lspconfig'
     use 'sheerun/vim-polyglot'
 
-    -- before running `PackerUpdate`, run: vim.fn.setenv("MACOSX_DEPLOYMENT_TARGET", "10.15")
+    use 'hneutr/hnetxt-nvim'
+
     use_rocks 'inspect'
+    use_rocks 'lyaml'
 
     ----------------------------------[ testing ]-----------------------------------
 
