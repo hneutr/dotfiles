@@ -20,10 +20,8 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
         vim.bo.textwidth = 0
         vim.bo.shiftwidth = 2
         vim.bo.softtabstop = 2
-        vim.b.list_types = {"maybe", "question", "important", "change", "detail", "possibility"}
         
-        vim.cmd([[call matchadd("Conceal", "{.*}", 10)]])
-
+        vim.b.list_types = {"maybe", "question", "important", "change", "detail", "possibility"}
         -- -: bullet
         -- *: dot
         -- ◻: todo
@@ -33,6 +31,10 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
         -- ~: maybe
         -- ?: question: italics
         -- !: important: bold, underline
+
+        vim.cmd([[call matchadd("Conceal", "{.*}", 10)]])
+
+        require("lex.fold").set_options()
     end,
 })})
 
@@ -98,6 +100,10 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
             -- delete the currently selected lines and move them to the scratch file
             vim.keymap.set("n", " s", function() require'lex.scratch'.move('n') end, args)
             vim.keymap.set("v", " s", [[:'<,'>lua require'lex.scratch'.move('v')<cr>]], args)
+
+            -- fold stuff
+            vim.keymap.set("n", " f", function() require('lex.fold').toggle('n') end, args)
+            vim.keymap.set("v", " f", [[:'<,'>lua require('lex.fold').toggle('v')<cr>]], args)
 
             ----------------------------------[ commands ]----------------------------------
 
