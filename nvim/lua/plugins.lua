@@ -40,7 +40,6 @@ return require('packer').startup(function(use)
     use 'hneutr/hnetxt-nvim'
 
     use_rocks 'inspect'
-    use_rocks 'lyaml'
     use_rocks {'hneutil-lua', server = "https://luarocks.org/manifests/hneutr"}
 
     ----------------------------------[ testing ]-----------------------------------

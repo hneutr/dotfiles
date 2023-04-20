@@ -13,15 +13,16 @@ See `design` for details on particular components.
 - rename `on-writing` to `meta`
 
 ----------------------------------------
-> [where to start]()
+> [current goal]()
 ----------------------------------------
-- implement `lua:project.in_project`
-- implement `lua:element:mark.lua`
+- support contextual flags
+  - todo:
+    - implement `nvim:document/init.lua:Document`
+    - implement `nvim:document/fold.lua`
 
 ----------------------------------------
 > [misc]()
 ----------------------------------------
-- move `nvim/lua/list/list_type.list_types` into `dotfiles/hnetxt/constants/list.yaml`
 - change `journal` files to be by day
   - cmd: view journals by month/year/last x entries
 - view a mark's references
@@ -71,7 +72,6 @@ See `design` for details on particular components.
 - move `lex/scratch.lua` → `project/scratch.lua`
 - move `lex/sync.lua` → `project/sync.lua`
 - move `list/init.lua:Buffer` → `doc/init.lua:Document`
-- move `list/line_type.lua` → `doc/element/list.lua`
 - move `list/init.lua:autolist` → `doc/element/list.lua:List.continue`
 - move `snip/markdown` → `doc/element` + `ui/snippet`
 

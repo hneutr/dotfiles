@@ -1,0 +1,15 @@
+default_size: small
+fill_char: '-'
+sizes:
+    small:
+        width: 40
+        color: blue
+        start_string: ''
+    medium:
+        width: 60
+        start_string: '='
+        color: yellow
+    large:
+        width: 80
+        start_string: '#'
+        color: orange

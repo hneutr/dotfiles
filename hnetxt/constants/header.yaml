@@ -1,0 +1,11 @@
+default_size: small
+sizes:
+    small:
+        content_start: '>'
+        fold_level: 3
+    medium:
+        content_start: '='
+        fold_level: 2
+    large:
+        content_start: '#'
+        fold_level: 1

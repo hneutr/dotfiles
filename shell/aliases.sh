@@ -33,4 +33,5 @@ alias gptd="ga .; gc -m $(today); gp"
 alias po="popen"
 
 # lua
+alias lua="lua5.1"
 alias lrr="luarocks make &> /dev/null && lua -l src/setup "
