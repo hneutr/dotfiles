@@ -40,4 +40,8 @@ ls.add_snippets("markdown", {
         "",
         "quote"}
     }),
+    -- testheaders
+    s("th", mds.TestHeader():snippet()),
+    s("thm", mds.TestHeader({size='medium'}):snippet()),
+    s("thb", mds.TestHeader({size='large'}):snippet()),
 })

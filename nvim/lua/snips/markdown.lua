@@ -331,6 +331,26 @@ function Journal:str()
     }
 end
 
+----------------------------------[ TESTING ]-----------------------------------
+local TestHeader = require('hnetxt-nvim.document.element.header'):extend()
+function TestHeader:snippet()
+    if self.content_value:len() > 0 then
+        return {t(tostring(self))}
+    else
+        return {
+            t({
+                tostring(self.divider),
+                self.content_start .. " ",
+            }),
+            i(1),
+            t({
+                "",
+                tostring(self.divider),
+            }),
+        }
+    end
+end
+
 --------------------------------------------------------------------------------
 --                                 access                                     --
 --------------------------------------------------------------------------------
@@ -341,4 +361,5 @@ return {
     Header = Header,
     LinkHeader = LinkHeader,
     Journal = Journal,
+    TestHeader = TestHeader,
 }
