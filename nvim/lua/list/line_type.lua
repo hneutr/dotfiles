@@ -15,6 +15,12 @@ local list_types = {
         toggle = {mapping = {lhs = 'o'}},
         sigil_regex = [[\*]],
     },
+    number = {
+        number = 1,
+        ListClass = 'number',
+        toggle = {mapping = {lhs = 'n'}},
+        sigil_regex = [[(\d+)\.]],
+    },
     todo = {
         sigil = '◻',
         toggle = {mapping = {lhs = 't'}},
@@ -28,11 +34,6 @@ local list_types = {
         sigil = '⨉',
         toggle = {mapping = {lhs = 'x'}},
         highlights = {sigil = {fg = 'red'}, text = {fg = 'gray'}},
-    },
-    change = {
-        sigil = 'Δ',
-        toggle = {mapping = {lhs = 'c'}},
-        highlights = {sigil = {fg = 'magenta'}},
     },
     maybe = {
         sigil = '~',
@@ -56,15 +57,9 @@ local list_types = {
         highlights = {sigil = {fg = 'magenta'}},
     },
     possibility = {
-        sigil = '@',
+        sigil = '⋊',
         toggle = {mapping = {lhs = 'p'}},
         highlights = {sigil = {fg = 'green'}, text = {italic = true}},
-    },
-    number = {
-        number = 1,
-        ListClass = 'number',
-        toggle = {mapping = {lhs = 'n'}},
-        sigil_regex = [[(\d+)\.]],
     },
 }
 

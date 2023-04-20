@@ -5,6 +5,13 @@ local Constants = require('lex.constants')
 
 local config = require('lex.config')
 
+local fuzzy_actions = {
+    ["default"] = "edit",
+    ["ctrl-j"] = "split",
+    ["ctrl-l"] = "vsplit",
+    ["ctrl-t"] = "tabedit",
+}
+
 --------------------------------------------------------------------------------
 --                                    Link                                     
 --------------------------------------------------------------------------------
@@ -513,7 +520,7 @@ fuzzy = { sink = {} }
 
 function fuzzy._do(fn)
     local actions = {}
-    for key, action in pairs(Constants.fuzzy_actions) do
+    for key, action in pairs(fuzzy_actions) do
         actions[key] = function(selected) fn(selected[1], action) end
     end
 

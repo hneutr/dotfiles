@@ -19,8 +19,6 @@ function M.move(mode)
     end
 
     require'util'.write_file(lines, scratch_file)
-
-    -- vim.api.nvim_input('<esc>')
 end
 
 return M

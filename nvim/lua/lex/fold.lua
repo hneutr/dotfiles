@@ -1,3 +1,6 @@
+--[[
+foldexpr setup: https://github.com/nvim-treesitter/nvim-treesitter/blob/master/autoload/nvim_treesitter.vim
+--]]
 local Lines = require("util.lines")
 local Color = require("color")
 string = require("hneutil.string")

@@ -1,9 +1,0 @@
-question:
-    symbol: "?"
-    regex_symbol: "%?"
-brainstorm:
-    symbol: "*"
-    regex_symbol: "%*"
-important:
-    symbol: "!"
-    regex_symbol: "%!"

@@ -21,19 +21,8 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
         vim.bo.shiftwidth = 2
         vim.bo.softtabstop = 2
         
-        vim.b.list_types = {"maybe", "question", "important", "change", "detail", "possibility"}
-        -- -: bullet
-        -- *: dot
-        -- ◻: todo
-        -- ✓: done
-        -- ⨉: reject
-        -- Δ: change
-        -- ~: maybe
-        -- ?: question: italics
-        -- !: important: bold, underline
-
+        vim.b.list_types = {"question", "important", "maybe", "detail", "possibility"}
         vim.cmd([[call matchadd("Conceal", "{.*}", 10)]])
-
         require("lex.fold").set_options()
     end,
 })})

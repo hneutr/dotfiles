@@ -15,6 +15,7 @@ local size_info = {
             width = 80,
             start_string = '#',
             color = 'orange',
+            size = 'big',
         }
     },
     medium = {
@@ -23,6 +24,7 @@ local size_info = {
             width = 60,
             start_string = '=',
             color = 'yellow',
+            size = 'medium',
         },
     },
     small = {
@@ -30,16 +32,10 @@ local size_info = {
         divider = {
             width = 40,
             color = 'blue',
+            size = 'small',
         },
     },
 }
-
-local width_to_size = {
-    [40] = 'small',
-    [60] = 'medium',
-    [80] = 'big',
-}
-
 
 local function get_today() return vim.fn.strftime("%Y%m%d") end
 
@@ -139,6 +135,7 @@ Divider.defaults = {
     fill_char = '-',
     start_string = '',
     color = 'blue',
+    size = 'small',
 }
 Divider.highlight_cmd = [[syn region KEY start="^\s*DIVIDER$" end="$" containedin=ALL]]
 
@@ -148,12 +145,10 @@ function Divider:new(args)
         self[k] = v
     end
 
-    self.size = width_to_size[self.width]
     self.highlight_key = self.size .. "Line"
 end
 
 function Divider.from_size(size) return Divider(size_info[size].divider) end
-
 
 function Divider:snippet() return {t({self:str(), ""})} end
 function Divider:str()
@@ -312,7 +307,6 @@ local Journal = Object:extend()
 
 function Journal:new(args)
     self.divider = Divider.from_size('big')
-    -- self.divider.start_string = '-'
 end
 
 function Journal:snippet()
