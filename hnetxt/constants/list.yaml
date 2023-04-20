@@ -1,92 +1,78 @@
-bullet:
-    sigil: '-'
-    highlights:
-        set: false
-dot:
-    sigil: '*'
-    sigil_regex: "\\*"
-    toggle:
-        mapping:
-            lhs: o
-number:
-    toggle:
-        mapping:
-            lhs: n
-    sigil_regex: "(\\d+)\\."
-todo:
-    sigil: '◻'
-    toggle:
-        mapping:
-            lhs: t
-done:
-    sigil: '✓'
-    toggle:
-        mapping:
-            lhs: d
-    highlights:
-        sigil: 
-            fg: gray
-        text:
-            fg: gray
-            strikethrough: true
-reject:
-    sigil: '⨉'
-    toggle:
-        mapping:
-            lhs: x
-    highlights: 
-        sigil: 
-            fg: red
-        text:
-            fg: gray
-maybe:
-    sigil: '~'
-    toggle:
-        mapping:
-            lhs: m
-    sigil_regex: "\\~"
-    highlights:
-        sigil:
-            fg: gray
-        text:
-            fg: gray
-question:
-    sigil: "?"
-    toggle: 
-        mapping:
-            lhs: q
-    highlights:
-        sigil: 
-            fg: yellow
-        text:
-            underline: true
-            italic: true
-important:
-    sigil: "!"
-    toggle:
-        mapping: 
-            lhs: i
-    highlights:
-        sigil:
-            fg: red
-        text:
-            underline: true
-            bold: true
-detail:
-    sigil: '+'
-    toggle:
-        mapping:
-            lhs: a
-    highlights:
-        sigil:
-            fg: magenta
-possibility:
-    sigil: '⋊'
-    toggle: 
-        mapping:
-            lhs: p
-    highlights: 
-        sigil:
-            fg: green
-        text:
-            italic: true
+types:
+    bullet:
+        sigil: '-'
+    dot:
+        sigil: '*'
+        sigil_regex: "\\*"
+        toggle_key: o
+    number:
+        toggle_key: n
+        sigil_regex: "(\\d+)\\."
+    todo:
+        sigil: '◻'
+        toggle_key: t
+    done:
+        sigil: '✓'
+        toggle_key: d
+        highlights:
+            sigil: 
+                fg: gray
+            text:
+                fg: gray
+                strikethrough: true
+    reject:
+        sigil: '⨉'
+        toggle_key: x
+        highlights: 
+            sigil: 
+                fg: red
+            text:
+                fg: gray
+    maybe:
+        sigil: '~'
+        toggle_key: m
+        sigil_regex: "\\~"
+        highlights:
+            sigil:
+                fg: gray
+            text:
+                fg: gray
+    question:
+        sigil: "?"
+        toggle_key: q
+        highlights:
+            sigil: 
+                fg: yellow
+            text:
+                underline: true
+                italic: true
+    important:
+        sigil: "!"
+        toggle_key: i
+        highlights:
+            sigil:
+                fg: red
+            text:
+                underline: true
+                bold: true
+    detail:
+        sigil: '+'
+        toggle_key: a
+        highlights:
+            sigil:
+                fg: magenta
+    possibility:
+        sigil: '⋊'
+        toggle_key: p
+        highlights: 
+            sigil:
+                fg: green
+            text:
+                italic: true
+default_types:
+    - bullet
+    - dot
+    - number 
+    - todo
+    - done
+    - reject

@@ -1,5 +1,6 @@
 local util = require('util')
 local Path = require('util.path')
+local List = require("hnetxt-nvim.document.element.list")
 
 local aucmd = vim.api.nvim_create_autocmd
 local cmd = vim.api.nvim_buf_create_user_command
@@ -30,7 +31,7 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
 --------------------------------------------------------------------------------
 --                                  filetype                                  --
 --------------------------------------------------------------------------------
-aucmd({"BufEnter"}, {pattern=p, once=true, callback=function() require('list').Buffer():set_highlights() end})
+aucmd({"BufEnter"}, {pattern=p, once=true, callback=function() List.Parser():set_highlights() end})
 
 --------------------------------------------------------------------------------
 --                              general mappings                              --
@@ -39,8 +40,10 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
     scope = 'b',
     key = 'ft_maps_applied',
     fn = function()
-        vim.keymap.set("i", "<cr>", require('list').continue_list_command, {silent = true})
-        require('list').Buffer():map_toggles(vim.g.mapleader .. "t")
+        local args = {silent = true, buffer = true}
+        vim.keymap.set("i", "<cr>", List.Parser.continue_cmd, args)
+
+        List.Parser():map_toggles(vim.g.mapleader .. "t")
     end,
 })})
 

@@ -71,9 +71,6 @@ See `design` for details on particular components.
 - move `lex/opener.lua` → `ui`
 - move `lex/scratch.lua` → `project/scratch.lua`
 - move `lex/sync.lua` → `project/sync.lua`
-- move `list/init.lua:Buffer` → `doc/init.lua:Document`
-- move `list/init.lua:autolist` → `doc/element/list.lua:List.continue`
-- move `snip/markdown` → `doc/element` + `ui/snippet`
 
 ----------------------------------------
 > [flags]()

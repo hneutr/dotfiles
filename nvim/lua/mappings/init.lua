@@ -3,9 +3,9 @@ local maps = {
         -- select last selection
         {'gV', '`[v`]'},
         -- restore cursor position after joining lines
-        {'J', function() require("list").Buffer():join_lines() end, {silent = true}},
+        {'J', function() require("hnetxt-nvim.document.element.list").Parser():join_lines() end, {silent = true}},
         -- continue lists
-        {'o', [[o<cmd>lua require('list').autolist()<cr>]]},
+        {'o', [[o<cmd>lua require("hnetxt-nvim.document.element.list").Parser():continue()<cr>]]},
         -- play 'q' macro
         {'Q', '@q'},
         -- easier backstepping
@@ -63,7 +63,7 @@ local maps = {
         {"<c-e>", "<c-o>A"},
         {"<c-a>", "<c-o>I"},
         -- continue lists
-        {"<cr>", require('list').continue_list_command, {silent = true}},
+        {"<cr>", require("hnetxt-nvim.document.element.list").Parser.continue_cmd, {silent = true}},
     },
     v = {
         -- keep visual selection after indent/unindent
