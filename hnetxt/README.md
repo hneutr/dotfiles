@@ -15,10 +15,6 @@ See `design` for details on particular components.
 ----------------------------------------
 > [current goal]()
 ----------------------------------------
-- support contextual flags
-  - todo:
-    - implement `nvim:document/init.lua:Document`
-    - implement `nvim:document/fold.lua`
 
 ----------------------------------------
 > [misc]()

@@ -11,6 +11,7 @@ types:
     todo:
         sigil: '◻'
         toggle_key: t
+        fold: true
     done:
         sigil: '✓'
         toggle_key: d
@@ -46,6 +47,7 @@ types:
             text:
                 underline: true
                 italic: true
+        fold: true
     important:
         sigil: "!"
         toggle_key: i
@@ -69,6 +71,7 @@ types:
                 fg: green
             text:
                 italic: true
+        fold: true
 default_types:
     - bullet
     - dot
