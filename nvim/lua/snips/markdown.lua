@@ -129,211 +129,14 @@ Flags.post_text = "}"
 --------------------------------------------------------------------------------
 --                                  dividers                                  --
 --------------------------------------------------------------------------------
-local Divider = Object:extend()
-Divider.defaults = {
-    width = 40,
-    fill_char = '-',
-    start_string = '',
-    color = 'blue',
-    size = 'small',
-}
-Divider.highlight_cmd = [[syn region KEY start="^\s*DIVIDER$" end="$" containedin=ALL]]
-
-function Divider:new(args)
-    args = _G.default_args(args, Divider.defaults)
-    for k, v in pairs(args) do
-        self[k] = v
-    end
-
-    self.highlight_key = self.size .. "Line"
-end
-
-function Divider.from_size(size) return Divider(size_info[size].divider) end
-
-function Divider:snippet() return {t({self:str(), ""})} end
-function Divider:str()
-    local str = self.start_string
-    return str .. string.rep(self.fill_char, self.width - (str:len()))
-end
-
-function Divider:set_highlight()
-    cmd = self.highlight_cmd:gsub("KEY", self.highlight_key)
-    cmd = cmd:gsub("DIVIDER", self:str())
-    vim.cmd(cmd)
-
-    color.set_highlight({name = self.highlight_key, val = {fg = self.color}})
-end
-
-function Divider.set_highlights()
-    for size, _ in pairs(size_info) do
-        Divider.from_size(size):set_highlight()
-    end
-end
+local Divider = require('hnetxt-nvim.document.element.divider'):extend()
+function Divider:snippet() return {t({tostring(self), ""})} end
 
 --------------------------------------------------------------------------------
 --                                  headers                                   --
 --------------------------------------------------------------------------------
-local Header = Object:extend()
-Header.defaults = {
-    inner = '',
-    content_start = '>',
-    divider_args = size_info['small'],
-}
-Header.highlight_cmd = [[syn match KEY /^CONTENT_START\s/ contained]]
-
-function Header:new(args)
-    args = _G.default_args(args, Header.defaults)
-
-    self.divider = Divider(args.divider_args)
-
-    for k, v in pairs(args) do
-        self[k] = v
-    end
-
-    self.inner_type = type(self.inner)
-    self.has_input = self.inner_type == 'string' and self.inner:len() == 0
-
-    if self.inner_type == 'string' then
-        self.inner_value = self.inner
-    elseif self.inner_type == 'function' then
-        self.inner_value = self.inner()
-    else
-        self.inner_value = ''
-    end
-
-    self.highlight_key = self.divider.size .. "HeaderStart" 
-end
-
-function Header.from_size(args)
-    args = _G.default_args(args, {size = 'small', inner = ''})
-    return Header(_G.default_args(size_info[args.size].header, {
-        inner = args.inner,
-        divider_args = size_info[args.size].divider,
-    }))
-end
-
-function Header:str()
-    local content = self.content_start
-
-    if self.inner_value:len() > 0 then
-        content = content .. " " .. self.inner_value
-    end
-
-    lines = {
-        self.divider:str(),
-        content,
-        self.divider:str(),
-        "",
-    }
-
-    return lines
-end
-
+local Header = require('hnetxt-nvim.document.element.header'):extend()
 function Header:snippet()
-    if self.inner_value:len() > 0 then
-        return {t(self:str())}
-    else
-        return {
-            t({
-                self.divider:str(),
-                self.content_start .. " ",
-            }),
-            i(1),
-            t({
-                "",
-                self.divider:str(),
-            }),
-        }
-    end
-end
-
-function Header:set_highlight()
-    cmd = self.highlight_cmd:gsub("KEY", self.highlight_key)
-    cmd = cmd:gsub("CONTENT_START", self.content_start)
-    vim.cmd(cmd)
-
-    color.set_highlight({name = self.highlight_key, val = {fg = self.divider.color}})
-end
-
-function Header.set_highlights()
-    for size, _ in pairs(size_info) do
-        Header.from_size({size = size}):set_highlight()
-    end
-end
-
-
---------------------------------------------------------------------------------
---                                LinkHeaders                                 --
---------------------------------------------------------------------------------
-local LinkHeader = Header:extend()
-function LinkHeader:str()
-    return {
-        self.divider:str(),
-        Link({inner=self.inner}):str({pre=self.content_start .. " "}),
-        self.divider:str(),
-    }
-end
-
-function LinkHeader:snippet()
-    local pre = {
-        self.divider:str(),
-        self.content_start .. " ",
-    }
-
-    local post = {
-        "",
-        self.divider:str(),
-    }
-
-    if self.inner_value:len() > 0 then
-        table.insert(post, "")
-    end
-
-    return Link({inner=self.inner}):snippet({pre=pre, post=post})
-end
-
-function LinkHeader.from_size(args)
-    args = _G.default_args(args, {size = 'small', inner = ''})
-    return LinkHeader(_G.default_args(size_info[args.size].header, {
-        inner = args.inner,
-        divider_args = size_info[args.size].divider,
-    }))
-end
-
---------------------------------------------------------------------------------
---                                  Journal                                   --
---------------------------------------------------------------------------------
-local Journal = Object:extend()
-
-function Journal:new(args)
-    self.divider = Divider.from_size('big')
-end
-
-function Journal:snippet()
-    return {
-        t("["), f(get_today), t({"]():", "", ""}),
-        i(1),
-        t{"", "", self.divider:str(), ""}
-    }
-end
-
-function Journal:str()
-    return {
-        t({
-            "[", get_today(), "]():", "",
-            "",
-            "",
-            "",
-            "",
-            self.divider:str(),
-            "",
-        }),
-    }
-end
-
-----------------------------------[ TESTING ]-----------------------------------
-local TestHeader = require('hnetxt-nvim.document.element.header'):extend()
-function TestHeader:snippet()
     if self.content_value:len() > 0 then
         return {t(tostring(self))}
     else
@@ -352,6 +155,67 @@ function TestHeader:snippet()
 end
 
 --------------------------------------------------------------------------------
+--                                LinkHeaders                                 --
+--------------------------------------------------------------------------------
+local LinkHeader = Header:extend()
+function LinkHeader:str()
+    return {
+        tostring(self.divider),
+        Link({inner=self.content}):str({pre=self.content_start .. " "}),
+        tostring(self.divider),
+    }
+end
+
+function LinkHeader:snippet()
+    local pre = {
+        tostring(self.divider),
+        self.content_start .. " ",
+    }
+
+    local post = {
+        "",
+        tostring(self.divider),
+    }
+
+    if self.content_value:len() > 0 then
+        table.insert(post, "")
+    end
+
+    return Link({inner=self.content}):snippet({pre=pre, post=post})
+end
+
+--------------------------------------------------------------------------------
+--                                  Journal                                   --
+--------------------------------------------------------------------------------
+local Journal = Object:extend()
+
+function Journal:new(args)
+    self.divider = Divider('large')
+end
+
+function Journal:snippet()
+    return {
+        t("["), f(get_today), t({"]():", "", ""}),
+        i(1),
+        t{"", "", tostring(self.divider), ""}
+    }
+end
+
+function Journal:str()
+    return {
+        t({
+            "[", get_today(), "]():", "",
+            "",
+            "",
+            "",
+            "",
+            tostring(self.divider),
+            "",
+        }),
+    }
+end
+
+--------------------------------------------------------------------------------
 --                                 access                                     --
 --------------------------------------------------------------------------------
 return {
@@ -361,5 +225,4 @@ return {
     Header = Header,
     LinkHeader = LinkHeader,
     Journal = Journal,
-    TestHeader = TestHeader,
 }
