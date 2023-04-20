@@ -42,8 +42,8 @@ function Link.from_str(str)
     return Link({label = label, location = location, before = before, after = after})
 end
 
-function Link.get_nearest()
-    local str = ulines.cursor.get()
+function Link.get_nearest(str)
+    str = str or ulines.cursor.get()
     local cursor_col = vim.api.nvim_win_get_cursor(0)[2]
 
     local _start, _end = 0, 1
@@ -108,7 +108,7 @@ end
 function Location.str_has_text(str) return str:find(Constants.path_label_delimiter) end
 
 function Location.from_str(str)
-    str = str or Link.get_nearest().location
+    str = str or Link.get_nearest(ulines.cursor.get()).location
 
     local path, text
 
@@ -399,7 +399,7 @@ Flag.defaults = {
 }
 Flag.types = Constants.flags
 
-function Flag:new(args) self = table.default(self, args, self.defaults) end
+function Flag:new(args) self = table.default(self, args or {}, self.defaults) end
 
 function Flag.regex()
     local flag_characters = ""

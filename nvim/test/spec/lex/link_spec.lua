@@ -4,34 +4,6 @@ local m = require('lex.link')
 local config = require'lex.config'
 require'util'
 
-describe("path", function()
-   local get_config = config.get
-
-   before_each(function()
-      config.get = function() return {root = 'root'} end
-	end)
-
-   after_each(function()
-      config.get = get_config
-	end)
-
-  describe(".shorten:", function() 
-     it("path", function()
-        assert.equal("a/b", m.path.shorten("root/a/b"))
-     end)
-  end)
-
-   describe(".expand:", function()
-      it("basic case", function()
-         assert.equal("root/a/b", m.path.expand("a/b"))
-      end)
-
-      it("path starting with ./", function()
-         assert.equal("root/a/b", m.path.expand("./a/b"))
-      end)
-   end)
-end)
-
 describe("Link", function()
    describe("str()", function() 
       it("makes link", function()

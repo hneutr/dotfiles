@@ -13,6 +13,12 @@ See `design` for details on particular components.
 - rename `on-writing` to `meta`
 
 ----------------------------------------
+> [where to start]()
+----------------------------------------
+- implement `lua:project.in_project`
+- implement `lua:element:mark.lua`
+
+----------------------------------------
 > [misc]()
 ----------------------------------------
 - move `nvim/lua/list/list_type.list_types` into `dotfiles/hnetxt/constants/list.yaml`
@@ -32,9 +38,7 @@ See `design` for details on particular components.
 ----------------------------------------
 > [migrations]()
 ----------------------------------------
-- `lex/link.Link` → `element/link.lua`
 - `lex/link.Location` → `element/location.lua`
-  - `lex/move.lua` → `element/location.lua`
 - `lex/link.Mark` → `element/mark.lua`
 - `lex/link.reference` → `element/reference.lua`
 - `lex/link.flag` → `element/flag.lua`
@@ -43,6 +47,7 @@ See `design` for details on particular components.
 - `lex/journal.lua` → `project/journal.lua`
 - `lex/goals.lua` → `goals.lua`
 - `lex/constants.lua` → `config.lua`
+- `lex/move.lua` → `element/location.lua`
 
 ----------------------------------------
 > [locations]()

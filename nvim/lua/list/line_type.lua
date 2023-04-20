@@ -229,6 +229,7 @@ end
 --------------------------------------------------------------------------------
 NumberedListLine = ListLine:extend()
 NumberedListLine.pattern = "^(%s*)(%d+)%.%s(.*)$"
+NumberedListLine.defaults = table.default({number = 1, ListClass = 'number'}, ListLine.defaults)
 
 function NumberedListLine:__tostring()
     return self.indent .. self.number .. '. ' .. self.text
@@ -236,6 +237,7 @@ end
 
 function NumberedListLine._get_if_str_is_a(str, line_number)
     local indent, number, text = str:match(NumberedListLine.pattern)
+
     if indent and number and text then
         return NumberedListLine({
             number = tonumber(number),

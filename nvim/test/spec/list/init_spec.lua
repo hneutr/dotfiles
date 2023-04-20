@@ -23,7 +23,7 @@ describe("Buffer", function()
         it("list line", function()
             assert.are.same(
                 buffer:parse_line("- text", 1),
-                line_type.ListLine({text="text", line_number = 1})
+                line_type.ListLine.get_class("bullet")({text="text", line_number = 1})
             )
         end)
 
