@@ -24,7 +24,8 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
         
         vim.b.list_types = {"question", "important", "maybe", "detail", "possibility"}
         vim.cmd([[call matchadd("Conceal", "{.*}", 10)]])
-        require("lex.fold").set_options()
+
+        require("hnetxt-nvim.document.fold").set_options()
     end,
 })})
 
@@ -40,9 +41,7 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
     scope = 'b',
     key = 'ft_maps_applied',
     fn = function()
-        local args = {silent = true, buffer = true}
-        vim.keymap.set("i", "<cr>", List.Parser.continue_cmd, args)
-
+        vim.keymap.set("i", "<cr>", List.Parser.continue_cmd, {silent = true, buffer = true})
         List.Parser():map_toggles(vim.g.mapleader .. "t")
     end,
 })})
@@ -92,10 +91,6 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
             -- delete the currently selected lines and move them to the scratch file
             vim.keymap.set("n", " s", function() require'lex.scratch'.move('n') end, args)
             vim.keymap.set("v", " s", [[:'<,'>lua require'lex.scratch'.move('v')<cr>]], args)
-
-            -- fold stuff
-            vim.keymap.set("n", " f", function() require('lex.fold').toggle('n') end, args)
-            vim.keymap.set("v", " f", [[:'<,'>lua require('lex.fold').toggle('v')<cr>]], args)
 
             ----------------------------------[ commands ]----------------------------------
 

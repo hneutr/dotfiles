@@ -7,4 +7,5 @@ nvim/plugin/packer_compiled.lua
 zsh/plugins
 nvim/app
 nvim/lua/hnetxt-nvim
+nvim/autoload/hnetxt_nvim.vim
 .zcompdump

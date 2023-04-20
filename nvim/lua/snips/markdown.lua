@@ -1,41 +1,11 @@
 local Object = require("util.object")
 
-local color = require('color')
 local ls = require("luasnip")
 
 local s = ls.snippet
 local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
-
-local size_info = {
-    big = {
-        header = { content_start = '#' },
-        divider = {
-            width = 80,
-            start_string = '#',
-            color = 'orange',
-            size = 'big',
-        }
-    },
-    medium = {
-        header = { content_start = '=' },
-        divider = {
-            width = 60,
-            start_string = '=',
-            color = 'yellow',
-            size = 'medium',
-        },
-    },
-    small = {
-        header = { content_start = '>' },
-        divider = {
-            width = 40,
-            color = 'blue',
-            size = 'small',
-        },
-    },
-}
 
 local function get_today() return vim.fn.strftime("%Y%m%d") end
 

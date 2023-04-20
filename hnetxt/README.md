@@ -15,6 +15,10 @@ See `design` for details on particular components.
 ----------------------------------------
 > [current goal]()
 ----------------------------------------
+- get `hnetxt-lua` up and running
+  - implement `lua:project`
+  - remove `lex.config`
+  - implement `hnetxt-cli:project`
 
 ----------------------------------------
 > [misc]()
