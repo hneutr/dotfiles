@@ -99,13 +99,13 @@ Flags.post_text = "}"
 --------------------------------------------------------------------------------
 --                                  dividers                                  --
 --------------------------------------------------------------------------------
-local Divider = require('hnetxt-nvim.document.element.divider'):extend()
+local Divider = require('hnetxt-nvim.text.divider'):extend()
 function Divider:snippet() return {t({tostring(self), ""})} end
 
 --------------------------------------------------------------------------------
 --                                  headers                                   --
 --------------------------------------------------------------------------------
-local Header = require('hnetxt-nvim.document.element.header'):extend()
+local Header = require('hnetxt-nvim.text.header'):extend()
 function Header:snippet()
     if self.content_value:len() > 0 then
         return {t(tostring(self))}

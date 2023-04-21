@@ -505,7 +505,7 @@ function Flag.list(flag_type, file_path)
         text = text:gsub("^>%s*", "")
 
         vim.b.list_types = {"maybe", "question", "important", "change", "detail", "possibility"}
-        text = require("hnetxt-nvim.document.element.list").Parser():parse_line(text, 1).text
+        text = require("hnetxt-nvim.text.list").Parser():parse_line(text, 1).text
 
         table.insert(items, path .. ": " .. text)
     end

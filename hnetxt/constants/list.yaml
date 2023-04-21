@@ -1,13 +1,16 @@
 types:
     bullet:
         sigil: '-'
+        highlight: false
     dot:
         sigil: '*'
         sigil_regex: "\\*"
         toggle_key: o
+        highlight: false
     number:
         toggle_key: n
         sigil_regex: "(\\d+)\\."
+        highlight: false
     todo:
         sigil: '◻'
         toggle_key: t

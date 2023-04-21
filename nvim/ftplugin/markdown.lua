@@ -1,11 +1,9 @@
 local util = require('util')
-local Path = require('util.path')
-local List = require("hnetxt-nvim.document.element.list")
 
 local aucmd = vim.api.nvim_create_autocmd
 local cmd = vim.api.nvim_buf_create_user_command
 
-local p = { "*.md" }
+local p = {"*.md"}
 
 --------------------------------------------------------------------------------
 --                                  settings                                  --
@@ -22,27 +20,7 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
         vim.bo.shiftwidth = 2
         vim.bo.softtabstop = 2
         
-        vim.b.list_types = {"question", "important", "maybe", "detail", "possibility"}
         vim.cmd([[call matchadd("Conceal", "{.*}", 10)]])
-
-        require("hnetxt-nvim.document.fold").set_options()
-    end,
-})})
-
---------------------------------------------------------------------------------
---                                  filetype                                  --
---------------------------------------------------------------------------------
-aucmd({"BufEnter"}, {pattern=p, once=true, callback=function() List.Parser():set_highlights() end})
-
---------------------------------------------------------------------------------
---                              general mappings                              --
---------------------------------------------------------------------------------
-aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
-    scope = 'b',
-    key = 'ft_maps_applied',
-    fn = function()
-        vim.keymap.set("i", "<cr>", List.Parser.continue_cmd, {silent = true, buffer = true})
-        List.Parser():map_toggles(vim.g.mapleader .. "t")
     end,
 })})
 
