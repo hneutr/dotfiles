@@ -1,1 +1,4 @@
-filename: ".project"
+metadata_filename: ".project"
+registry_filename: "registry.yaml"
+data_dir: "/Users/hne/dotfiles/hnetxt/data/project"
+journal_dir: ".journal"
