@@ -13,3 +13,4 @@ nvim/autoload/hnetxt_nvim.vim
 nvim/after/syntax/markdown.lua
 nvim/ftplugin/markdown
 nvim/plugin/hnetxt-nvim.lua
+nvim/after/ftplugin/markdown/mappings.lua
