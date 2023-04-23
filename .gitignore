@@ -7,10 +7,3 @@ nvim/plugin/packer_compiled.lua
 zsh/plugins
 nvim/app
 .zcompdump
-
-nvim/lua/hnetxt-nvim
-nvim/autoload/hnetxt_nvim.vim
-nvim/after/syntax/markdown.lua
-nvim/ftplugin/markdown
-nvim/plugin/hnetxt-nvim.lua
-nvim/after/ftplugin/markdown/mappings.lua

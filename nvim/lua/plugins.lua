@@ -37,7 +37,7 @@ return require('packer').startup(function(use)
     use 'neovim/nvim-lspconfig'
     use 'sheerun/vim-polyglot'
 
-    use 'hneutr/hnetxt-nvim'
+    use "~/lib/hnetxt-nvim"
 
     use_rocks 'inspect'
     use_rocks {'hneutil-lua', server = "https://luarocks.org/manifests/hneutr"}
