@@ -60,12 +60,6 @@ types:
             text:
                 underline: true
                 bold: true
-    detail:
-        sigil: '+'
-        toggle_key: a
-        highlights:
-            sigil:
-                fg: magenta
     possibility:
         sigil: '⋊'
         toggle_key: p
@@ -74,6 +68,13 @@ types:
                 fg: green
             text:
                 italic: true
+        fold: true
+    detail:
+        sigil: '+'
+        toggle_key: a
+        highlights:
+            sigil:
+                fg: magenta
         fold: true
 default_types:
     - bullet

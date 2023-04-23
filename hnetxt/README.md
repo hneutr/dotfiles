@@ -15,6 +15,9 @@ See `design` for details on particular components.
 ----------------------------------------
 > [current goal]()
 ----------------------------------------
+- have `Fold` invalidate `vim.b.fold_levels` on insert leave and (ideally) recompute folds
+- link `hnetxt-nvim` into `packer` instead of linking individual files (and remove individual files)
+- get `hnetxt-cli:journal` running
 - get `hnetxt-lua` up and running
   - remove `lex.config`
   - implement `hnetxt-cli:project`
