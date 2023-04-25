@@ -1,4 +1,5 @@
 local M = {}
+local yaml = require("hneutil.yaml")
 local constants = require('lex.constants')
 local Path = require('util.path')
 
@@ -27,7 +28,7 @@ function M.file.find(start_path)
 end
 
 function M.file.build(path)
-    local config = vim.fn.json_decode(vim.fn.readfile(path))
+    local config = yaml.read(path)
 
     config['root'] = vim.fn.fnamemodify(path, ':h')
 

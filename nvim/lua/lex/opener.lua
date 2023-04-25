@@ -1,6 +1,6 @@
 local constants = require('lex.constants')
-local link = require('lex.link')
 local Mirror = require('lex.mirror')
+local Location = require("hnetxt-nvim.text.location")
 local M = {}
 
 local default_lhs_to_cmd = { e = 'e', o = 'e', l = 'vs', v = 'vs', j = 'sp', s = 'sp' }
@@ -16,7 +16,7 @@ end
 function M.set()
     local mappings = {
         { prefix = 'g', fn = function(open_cmd) require('lex.index').open(open_cmd) end },
-        { prefix = 'n', fn = function(open_cmd) link.Location.goto(open_cmd) end },
+        { prefix = 'n', fn = function(open_cmd) Location.goto(open_cmd) end },
     }
 
     for kind, kind_data in pairs(constants.mirror_defaults) do
@@ -33,7 +33,7 @@ function M.set()
     end
 
     table.insert(mappings, {
-        fn = function(open_cmd) link.Location.goto(open_cmd) end,
+        fn = function(open_cmd) Location.goto(open_cmd) end,
         lhs_to_cmd = {
             ["<M-l>"] = "vsplit",
             ["<M-j>"] = "split",

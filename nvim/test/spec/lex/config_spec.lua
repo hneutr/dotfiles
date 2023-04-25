@@ -1,4 +1,5 @@
 local stub = require('luassert.stub')
+local yaml = require("hneutil.yaml")
 local m = require('lex.config')
 require('util')
 
@@ -46,6 +47,7 @@ describe(".config", function()
         describe("build:", function() 
             local original_mirror_defaults = constants.mirror_defaults
             local json_decode = vim.fn.json_decode
+            local yaml_read = yaml.read
             local readfile = vim.fn.readfile
 
             local raw_config = {
@@ -72,12 +74,14 @@ describe(".config", function()
             }
 
             before_each(function()
+                yaml.read = function() return raw_config end
                 vim.fn.json_decode = function() return raw_config end
                 vim.fn.readfile = function() return {} end
                 constants.mirror_defaults = mirror_defaults
             end)
 
             after_each(function()
+                yaml.read = yaml_read
                 constants.mirror_defaults = original_mirror_defaults
                 vim.fn.json_decode = json_decode
                 vim.fn.readfile = readfile

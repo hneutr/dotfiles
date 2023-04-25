@@ -20,7 +20,10 @@
 --   - add it back onto the "deleted" list
 --------------------------------------------------------------------------------
 local ulines = require'util.lines'
-local link = require'lex.link'
+local Location = require("hnetxt-nvim.text.location")
+local Reference = require("hnetxt-lua.element.reference")
+local Path = require("hneutil-nvim.path")
+local Mark = require("hnetxt-lua.element.mark")
 
 local M = {}
 
@@ -30,7 +33,11 @@ function M.buf_enter()
     end
 
     if not vim.g.referenced_markers then
-        vim.g.referenced_markers = link.Reference.list()
+        local referenced_markers = {}
+        for i, location in ipairs(Reference.get_referenced_mark_locations(vim.b.hnetxt_project_root)) do
+            referenced_markers[tostring(location)] = true
+        end
+        vim.g.referenced_markers = referenced_markers
     end
 
     vim.b.markers = M.read_markers() -- format: marker: path
@@ -42,8 +49,8 @@ end
 function M.read_markers()
     local markers = {}
     for i, str in ipairs(ulines.get()) do
-        if link.Mark.str_is_a(str) then
-            markers[link.Mark.from_str(str).text] = i
+        if Mark.str_is_a(str) then
+            markers[Mark.from_str(str).label] = i
         end
     end
 
@@ -107,10 +114,10 @@ end
 
 function M.update_renames(old_marker, new_marker, renames)
     if old_marker:len() > 0 and new_marker:len() > 0 then
-        link.Location.update({
-            old_location = link.Location{ text = old_marker }:str(),
-            new_location = link.Location{ text = new_marker }:str(),
-        })
+        Location.update(
+            tostring(Location({label = old_marker})),
+            tostring(Location({label = new_marker}))
+        )
     end
 
     for other_old_marker, other_new_marker in pairs(renames) do
@@ -208,8 +215,8 @@ function M.process_renames(renames, deletions, creations, references)
     local updates = {}
 
     for old, new in pairs(renames) do
-        local old_loc = link.Location{ text = old }:str()
-        local new_loc = link.Location{ text = new }:str()
+        local old_loc = tostring(Location({label = old}))
+        local new_loc = tostring(Location({label = new}))
 
         references[new_loc] = vim.tbl_get(references, old_loc)
         references[old_loc] = nil
@@ -223,7 +230,11 @@ function M.process_renames(renames, deletions, creations, references)
     end
 
     -- updates `references` with things referenced in this file
-    references = vim.tbl_extend("keep", references, link.Reference.list({ path = vim.fn.expand('%:p' )}))
+    local referenced_markers = {}
+    for i, location in ipairs(Reference.get_referenced_mark_locations(Path.current_file())) do
+        referenced_markers[tostring(location)] = true
+    end
+    references = vim.tbl_extend("keep", references, referenced_markers)
 
     return updates, renames, references
 end
@@ -231,20 +242,20 @@ end
 
 function M.process_creations(creations, renames, old_deletions, references)
     local updates = {}
-    for marker, i in pairs(creations) do
-        local old_location = link.Location{ text = marker }
-        local new_location = link.Location{ text = marker }
+    for marker, _ in pairs(creations) do
+        local old_location = Location({label = marker})
+        local new_location = Location({label = marker})
 
         if vim.tbl_get(renames, marker) then
-            new_location.text = table.removekey(renames, marker)
+            new_location.label = table.removekey(renames, marker)
         end
 
         if vim.tbl_get(old_deletions, marker) then
             old_location.path = table.removekey(old_deletions, marker)
         end
 
-        new = new_location:str()
-        old = old_location:str()
+        new = tostring(new_location)
+        old = tostring(old_location)
 
         references[new] = vim.tbl_get(references, new) or vim.tbl_get(references, old)
         references[old] = nil
@@ -260,8 +271,8 @@ end
 
 function M.process_deletions(deletions, old_deletions, references)
     for marker, i in pairs(deletions) do
-        local location = link.Location{ text = marker }
-        if vim.tbl_get(references, location:str()) then
+        local location = Location({label = marker})
+        if vim.tbl_get(references, tostring(location)) then
             old_deletions[marker] = location.path
         end
     end

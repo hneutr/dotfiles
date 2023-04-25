@@ -1,11 +1,13 @@
 local M = {}
-local l = require('lex.link')
 local ulines = require('util.lines')
 local Mirror = require('lex.mirror')
+local Location = require("hnetxt-nvim.text.location")
+local Reference = require("hnetxt-lua.element.reference")
+local Config = require("hnetxt-lua.config")
 local Path = require('util.path')
 
 
-local DIR_FILE_NAME = require('lex.constants').dir_file_name
+local DIR_FILE_NAME = Config.get("directory_file").name
 
 --------------------------------------------------------------------------------
 --                                    move                                    --
@@ -14,6 +16,7 @@ function M.move(src, dst)
     src = Path.resolve(src)
     dst = Path.resolve(dst)
 
+    require('hnetxt-nvim.project').set(vim.env.PWD)
     require('lex.config').set(vim.env.PWD)
     vim.g.lex_sync_ignore = true
     
@@ -41,7 +44,7 @@ function M.move_location(src, dst)
 end
 
 function M.remove_mark_lines(src)
-    l.Location.goto('edit', src)
+    Location.goto('edit', src)
 
     local start_line = vim.fn.getpos('.')[2] - 1
     local end_line
@@ -74,7 +77,7 @@ function M.move_mark_lines(lines, dst)
         table.remove(lines, #lines)
     end
 
-    l.Location.goto('edit', dst)
+    Location.goto('edit', dst)
     vim.api.nvim_input('G')
 
     if vim.fn.getline('.') ~= '' then
@@ -107,7 +110,7 @@ end
 --                                get_updates                                 --
 --------------------------------------------------------------------------------
 function M.get_updates(src, dst)
-    local root = require'lex.config'.get().root
+    local root = vim.b.hnetxt_project_root
     local src_stem = Path.remove_from_start(src, root)
     local dst_stem = Path.remove_from_start(dst, root)
 
@@ -144,7 +147,7 @@ function M.update_paths(updates)
         vim.fn.system("/bin/mv " .. old .. " " .. new)
     end
 
-    for i, dir in ipairs(Path.list_dirs(require'lex.config'.get().root)) do
+    for i, dir in ipairs(Path.list_dirs(vim.b.hnetxt_project_root)) do
         if Path.is_empty(dir) then
             vim.fn.system("rmdir " .. dir)
         end
@@ -156,13 +159,13 @@ function M.update_references(updates)
         return
     end
 
-    local root = require'lex.config'.get().root
+    local root = vim.b.hnetxt_project_root
     vim.g.lex_sync_ignore = true
 
     local starting_file = vim.fn.expand('%:p')
     local current_file
 
-    local refs_by_file = l.Reference.list_by_file()
+    local refs_by_file = Reference.get_reference_locations(root)
 
     for src, dst in pairs(updates) do
         src = _G.escape(Path.remove_from_start(src, root))

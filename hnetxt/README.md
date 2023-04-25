@@ -15,8 +15,6 @@ See `design` for details on particular components.
 ----------------------------------------
 > [current goal]()
 ----------------------------------------
-- migrate `lex.link.Mark` over to `hnetxt-lua.element.Mark`
-- migrate `lex.link.Reference` over to `hnetxt-lua.element.Reference`
 - move `hnetxt-cli` into `hnetxt-lua/src/hnetxt-cli` (put it in the same repository)
   - cmd: `list LIST_TYPE`: lists elements of the particular list type, eg `list todo`
 - migrate `lex.config` to `hnetxt-nvim.project`
@@ -33,8 +31,6 @@ See `design` for details on particular components.
 ----------------------------------------
 - `lex/config` → `project/init.lua`
 - `lex/mirrors.lua` → `project/mirror.lua`
-- `lex/journal.lua` → `project/journal.lua`
-- `lex/goals.lua` → `goals.lua`
 - `lex/constants.lua` → `config.lua`
 - `lex/move.lua` → `element/location.lua`
 
@@ -64,7 +60,6 @@ See `design` for details on particular components.
 ----------------------------------------
 > [migrations]()
 ----------------------------------------
-- move `lex/statusline.lua` → `ui`
 - move `lex/opener.lua` → `ui`
 - move `lex/scratch.lua` → `project/scratch.lua`
 - move `lex/sync.lua` → `project/sync.lua`

@@ -1,21 +1,15 @@
 local mock = require('luassert.mock')
 local stub = require('luassert.stub')
 local m = require'lex.sync'
-local config = require'lex.config'
+local Reference = require("hnetxt-lua.element.reference")
 
 require'util'
 require'util.tbl'
 
 describe("sync", function()
-   local get_config = config.get
-
    before_each(function()
       m = require'lex.sync'
-      config.get = function() return { root = 'root' } end
-   end)
-
-   after_each(function()
-      config.get = get_config
+      vim.b.hnetxt_project_root = 'root'
    end)
 
    describe("on enter", function()
@@ -63,146 +57,146 @@ describe("sync", function()
       end)
    end)
 
-   describe("on change", function()
-      local link = require'lex.link'
+    describe("on change", function()
+        local Location = require("hnetxt-nvim.text.location")
 
-      before_each(function()
-         local buf = vim.api.nvim_create_buf(false, true)
-         vim.api.nvim_command("buffer " .. buf)
+        before_each(function()
+            local buf = vim.api.nvim_create_buf(false, true)
+            vim.api.nvim_command("buffer " .. buf)
 
-         link.Location.update = function() return  end
-      end)
+            Location.update = function() return end
+        end)
 
-      after_each(function()
-         link.Location.update = location_update
-      end)
+        after_each(function()
+            Location.update = location_update
+        end)
 
-      describe(".get_deletions", function()
-         it("finds deletions", function()
+        describe(".get_deletions", function()
+            it("finds deletions", function()
             local old = { one = 1, two = 2 }
             local new = { one = 1 }
 
             assert.are.same(m.get_deletions(old, new), { "two" })
-         end)
-      end)
+            end)
+        end)
 
-      describe(".get_creations", function()
-         it("finds creations", function()
+        describe(".get_creations", function()
+            it("finds creations", function()
             local old = { one = 1 }
             local new = { one = 1, two = 2 }
 
             assert.are.same(m.get_creations(old, new), { "two" })
-         end)
-      end)
+            end)
+        end)
 
-      describe(".check_rename", function()
-         it("finds rename", function()
+        describe(".check_rename", function()
+            it("finds rename", function()
             local old_markers = { one = 1, two_a = 2 }
             local new_markers = { one = 1, two_b = 2 }
             local deletions = {"two_a"}
             local creations = {"two_b"}
 
             assert.is_true(m.check_rename(old_markers, new_markers, creations, deletions))
-         end)
+            end)
 
-         it("doesn't find rename", function()
+            it("doesn't find rename", function()
             local old_markers = { one = 1, two = 2 }
             local new_markers = { one = 1, one_and_a_half = 2, two = 3 }
             local deletions = {}
             local creations = {"one_and_a_half"}
 
             assert.is_false(m.check_rename(old_markers, new_markers, creations, deletions))
-         end)
+            end)
 
-         it("doesn't find rename (2)", function()
+            it("doesn't find rename (2)", function()
             local old_markers = { one = 1, two = 2 }
             local new_markers = { one = 1, three = 3 }
             local deletions = {"two"}
             local creations = {"three"}
 
             assert.is_false(m.check_rename(old_markers, new_markers, creations, deletions))
-         end)
-      end)
+            end)
+        end)
 
-      describe(".record_rename", function()
-         it("basic case", function()
+        describe(".record_rename", function()
+            it("basic case", function()
             local actual = m.update_renames("old", "new", {})
             assert.are.same(actual, { old = 'new' })
-         end)
+            end)
 
-         it("rename of something else", function()
+            it("rename of something else", function()
             local actual = m.update_renames("old", "new", {older = 'old'})
             assert.are.same(actual, { older = 'new' })
-         end)
+            end)
 
-         it("doesn't overwrite stuff", function()
+            it("doesn't overwrite stuff", function()
             local actual = m.update_renames("old", "new", {other_old = 'other_new'})
             assert.are.same(actual, { old = 'new', other_old = 'other_new' })
-         end)
-      end)
+            end)
+        end)
 
-      describe(".update_creations", function()
-         it("base case", function()
+        describe(".update_creations", function()
+            it("base case", function()
             local actual = m.update_creations({"old"}, {"new"}, {old = true, other = true})
             assert.are.same(actual, { other = true, new = true })
-         end)
-      end)
+            end)
+        end)
 
-      describe(".update_deletions", function()
-         it("base case", function()
+        describe(".update_deletions", function()
+            it("base case", function()
             local actual = m.update_deletions({"old"}, {"new"}, {new = true, other = true})
             assert.are.same(actual, { other = true, old = true })
-         end)
-      end)
+            end)
+        end)
 
-      it("records a rename", function()
-         local old_text = { "[marker 1]()" }
-         vim.api.nvim_buf_set_lines(0, 0, -1, true, old_text)
-         m.buf_enter()
+        it("records a rename", function()
+            local old_text = { "[marker 1]()" }
+            vim.api.nvim_buf_set_lines(0, 0, -1, true, old_text)
+            m.buf_enter()
 
-         vim.b.renamed_markers = { ['marker 2'] = 'marker 2a'}
+            vim.b.renamed_markers = { ['marker 2'] = 'marker 2a'}
 
-         local new_text = { "[marker 1a]()" }
-         vim.api.nvim_buf_set_lines(0, 0, -1, true, new_text)
-         m.buf_change()
+            local new_text = { "[marker 1a]()" }
+            vim.api.nvim_buf_set_lines(0, 0, -1, true, new_text)
+            m.buf_change()
 
-         assert.are.same(vim.b.renamed_markers, { ['marker 1'] = 'marker 1a', ['marker 2'] = 'marker 2a'})
-      end)
+            assert.are.same(vim.b.renamed_markers, { ['marker 1'] = 'marker 1a', ['marker 2'] = 'marker 2a'})
+        end)
 
-      it("records a deletion", function()
-         local old_text = { "[marker 1]()" }
-         vim.api.nvim_buf_set_lines(0, 0, -1, true, old_text)
-         m.buf_enter()
+        it("records a deletion", function()
+            local old_text = { "[marker 1]()" }
+            vim.api.nvim_buf_set_lines(0, 0, -1, true, old_text)
+            m.buf_enter()
 
-         vim.b.created_markers = { ['marker 1'] = true}
+            vim.b.created_markers = { ['marker 1'] = true}
 
-         local new_text = {}
-         vim.api.nvim_buf_set_lines(0, 0, -1, true, new_text)
-         m.buf_change()
+            local new_text = {}
+            vim.api.nvim_buf_set_lines(0, 0, -1, true, new_text)
+            m.buf_change()
 
-         assert.are.same(vim.b.deleted_markers, { ['marker 1'] = true })
-         assert.is_true(vim.tbl_isempty(vim.b.created_markers))
-         assert.is_true(vim.tbl_isempty(vim.b.markers))
-      end)
+            assert.are.same(vim.b.deleted_markers, { ['marker 1'] = true })
+            assert.is_true(vim.tbl_isempty(vim.b.created_markers))
+            assert.is_true(vim.tbl_isempty(vim.b.markers))
+        end)
 
-      it("records a creation", function()
-         local old_text = {}
-         vim.api.nvim_buf_set_lines(0, 0, -1, true, old_text)
-         m.buf_enter()
+        it("records a creation", function()
+            local old_text = {}
+            vim.api.nvim_buf_set_lines(0, 0, -1, true, old_text)
+            m.buf_enter()
 
-         vim.b.deleted_markers = { ['marker 1'] = true}
+            vim.b.deleted_markers = { ['marker 1'] = true}
 
-         local new_text = { "[marker 1]()" }
+            local new_text = { "[marker 1]()" }
 
-         vim.api.nvim_buf_set_lines(0, 0, -1, true, new_text)
-         m.buf_change()
+            vim.api.nvim_buf_set_lines(0, 0, -1, true, new_text)
+            m.buf_change()
 
-         assert.are.same(vim.b.created_markers, { ['marker 1'] = true })
-         assert.is_true(vim.tbl_isempty(vim.b.deleted_markers))
-         assert.are.same(vim.b.markers, { ['marker 1'] = 1 })
-      end)
+            assert.are.same(vim.b.created_markers, { ['marker 1'] = true })
+            assert.is_true(vim.tbl_isempty(vim.b.deleted_markers))
+            assert.are.same(vim.b.markers, { ['marker 1'] = 1 })
+        end)
 
-   end)
+    end)
 
    describe("on leave", function()
       local expand = vim.fn.expand
@@ -253,22 +247,21 @@ describe("sync", function()
          end)
 
          it("adds references", function()
-            local link = require'lex.link'
-            local references_list = link.Reference.list
+            local references_list = Reference.get_referenced_mark_locations
 
-            link.Reference.list = function() return { new = true } end
+            Reference.get_referenced_mark_locations = function() return {"new"} end
 
             local renames = {one = 'one a', two = 'two a'}
-            local refs = { ['path:one'] = true }
+            local refs = {['path:one'] = true}
             local creations = {}
-            local deletions = { ["two a"] = true }
+            local deletions = {["two a"] = true}
 
             local a_updates, a_renames, a_references = m.process_renames(renames, deletions, creations, refs)
-            assert.are.same(a_updates, {{ new_location = "path:one a", old_location = "path:one" }})
-            assert.are.same(a_references, { ["path:one a"] = true, new = true })
-            assert.are.same(a_renames, renames)
+            assert.are.same({{new_location = "path:one a", old_location = "path:one"}}, a_updates)
+            assert.are.same({["path:one a"] = true, new = true}, a_references)
+            assert.are.same(renames, a_renames)
 
-            link.Reference.list = references_list
+            Reference.get_referenced_mark_locations = references_list
          end)
       end)
 
@@ -287,16 +280,16 @@ describe("sync", function()
          end)
 
          it("handles a rename", function()
-            local creations = { two = true }
+            local creations = {two = true}
             local renames = {one = 'one a', two = 'two a'}
-            local deletions = { two = "path/to/two" }
-            local refs = { ['path/to/two:two'] = true }
+            local deletions = {two = "path/to/two"}
+            local refs = {['path/to/two:two'] = true}
 
             local updates, deletions, refs = m.process_creations(creations, renames, deletions, refs)
 
-            assert.are.same(updates, {{ new_location = "path:two a", old_location = "path/to/two:two"}})
-            assert.are.same(deletions, {})
-            assert.are.same(refs, {['path:two a'] = true})
+            assert.are.same({{new_location = "path:two a", old_location = "path/to/two:two"}}, updates)
+            assert.are.same({}, deletions)
+            assert.are.same({['path:two a'] = true}, refs)
          end)
       end)
 

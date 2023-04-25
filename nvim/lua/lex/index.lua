@@ -1,7 +1,10 @@
 local M = {}
-local l = require('lex.link')
 local snips = require('snips.markdown')
 local util = require('util')
+
+local Location = require("hnetxt-nvim.text.location")
+local Mark = require("hnetxt-nvim.text.mark")
+local Reference = require("hnetxt-lua.element.reference")
 
 local default_index_path = vim.env.TMPDIR .. 'index.md'
 local stem_exclusions = {'.git', '.gitignore', '.mirrors', '.project'}
@@ -29,8 +32,8 @@ function M.get_file_index(path)
     local marks = {}
     local min_indent = 1000
     for i, str in ipairs(require('util.lines').get()) do
-        if l.Mark.str_is_a(str) then
-            local mark = l.Mark.from_str(str)
+        if Mark.str_is_a(str) then
+            local mark = Mark.from_str(str)
 
             if mark.before == '> ' then
                 min_indent = math.min(min_indent, 1)
@@ -55,8 +58,8 @@ function M.get_file_index(path)
             end
         end
 
-        local reference = l.Reference({ location = l.Location({ text = mark.text }) })
-        local str = prefix .. reference:str()
+        local reference = Reference({location = Location({label = mark.label})})
+        local str = prefix .. tostring(reference)
 
         table.insert(mark_reference_lines, str)
     end
@@ -141,7 +144,7 @@ function tree(dir)
         if not vim.tbl_contains(stem_exclusions, stem) then
             path = _G.joinpath(dir, stem)
 
-            local key = l.Reference({ location = l.Location({path = path}) }):str()
+            local key = tostring(Reference({location = Location({path = path})}))
 
             if vim.fn.isdirectory(path) ~= 0 then
                 results[key] = tree(path)

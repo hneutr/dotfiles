@@ -40,7 +40,7 @@ function Mirror.get_type(path, config)
 end
 
 function Mirror:remove_kind_from_path()
-    local type_dir = vim.tbl_get(self.type_config, 'dir') or self.config.root
+    local type_dir = vim.tbl_get(self.type_config, 'dir') or vim.b.hnetxt_project_root
 
     path = Path.remove_from_start(self.path, type_dir)
 
@@ -61,7 +61,7 @@ function Mirror:get_origin()
     path = self:remove_kind_from_path()
     path = Mirror._strip_mirrors(path, self.config)
     
-    return Mirror({path = Path.join(self.config.root, path) })
+    return Mirror({path = Path.join(vim.b.hnetxt_project_root, path) })
 end
 
 function Mirror._strip_mirrors(path, config)
@@ -81,10 +81,10 @@ end
 
 
 function Mirror:remove_type()
-    local root = self.config.root
+    local root = vim.b.hnetxt_project_root
 
     if self.type ~= 'origin' then
-        root = self.config.root
+        root = vim.b.hnetxt_project_root
     end
 
     return self.path:gsub(_G.escape(root .. '/'), '', 1)
@@ -98,7 +98,7 @@ function Mirror:get_mirror_of_type(mirror_type)
     if vim.tbl_get(self.type_config, 'kind') == vim.tbl_get(mirror_type_config, 'kind') then
         path = self:remove_kind_from_path()
     else
-        path = Path.remove_from_start(self.path, self.config.root)
+        path = Path.remove_from_start(self.path, vim.b.hnetxt_project_root)
     end
 
     return Mirror({path = Path.join(mirror_type_config.dir, path)})

@@ -50,19 +50,11 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
     scope = 'b',
     key = 'lex_applied', 
     fn = function()
-        cmd(0, "Journal", function() util.open_path(require('lex.journal').path()) end, {})
-
         if vim.b.lex_config_path then
             ------------------------------------[ maps ]------------------------------------
             require('lex.opener').map()
 
             local args = {silent = true, buffer = true}
-
-            -- fuzzy find stuff
-            vim.keymap.set("n", " df", function() require'lex.link'.fuzzy.goto() end, args)
-            -- "  is <c-/> (the mapping only works if it's the literal character)
-            vim.keymap.set("n", "", function() require'lex.link'.fuzzy.put() end, args)
-            vim.keymap.set("i", "", function() require'lex.link'.fuzzy.insert() end, args)
 
             -- delete the currently selected lines and move them to the scratch file
             vim.keymap.set("n", " s", function() require'lex.scratch'.move('n') end, args)
@@ -71,11 +63,6 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
             ----------------------------------[ commands ]----------------------------------
 
             cmd(0, "Push", function() require'lex.config'.push() end, {})
-            cmd(0, "Goals", function() util.open_path(require'lex.goals'.path()) end, {})
-            cmd(0, "Index", function() require'lex.index'.open() end, {})
-
-            ---------------------------------[ statusline ]---------------------------------
-            vim.wo.statusline = require('lex.statusline')()
         end
     end
 })})
