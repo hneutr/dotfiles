@@ -15,21 +15,9 @@ See `design` for details on particular components.
 ----------------------------------------
 > [current goal]()
 ----------------------------------------
-- have `Fold` invalidate `vim.b.fold_levels` on insert leave and (ideally) recompute folds
-- link `hnetxt-nvim` into `packer` instead of linking individual files (and remove individual files)
-- get `hnetxt-cli:journal` running
-- get `hnetxt-lua` up and running
-  - remove `lex.config`
-  - implement `hnetxt-cli:project`
-
-----------------------------------------
-> [misc]()
-----------------------------------------
-- change `journal` files to be by day
-  - cmd: view journals by month/year/last x entries
-- view a mark's references
-- support file flags (store in a "file flags" file that lists all files in the project)
-- mechanism to indicate "this mirror is only for files of type x" (eg `fragments` is only for `text`)
+- migrate `lex.config` to `hnetxt-nvim.project`
+- move `hnetxt-cli` into `hnetxt-lua/src/hnetxt-cli` (put it in the same repository)
+  - cmd: `list LIST_TYPE`: lists elements of the particular list type, eg `list todo`
 
 =-----------------------------------------------------------
 = [lua]()
@@ -41,9 +29,6 @@ See `design` for details on particular components.
 ----------------------------------------
 > [migrations]()
 ----------------------------------------
-- `lex/link.Location` → `element/location.lua`
-- `lex/link.Mark` → `element/mark.lua`
-- `lex/link.reference` → `element/reference.lua`
 - `lex/link.flag` → `element/flag.lua`
 - `lex/config` → `project/init.lua`
 - `lex/mirrors.lua` → `project/mirror.lua`
@@ -61,6 +46,15 @@ See `design` for details on particular components.
   - implementation:
     - if in same dir or child, start with: `./`
     - if above, specify full project path, don't start path with `./`
+
+----------------------------------------
+> [misc]()
+----------------------------------------
+- change `journal` files to be by day
+  - cmd: view journals by month/year/last x entries
+- view a mark's references
+- support file flags (store in a "file flags" file that lists all files in the project)
+- mechanism to indicate "this mirror is only for files of type x" (eg `fragments` is only for `text`)
 
 =-----------------------------------------------------------
 = [nvim]()
@@ -93,6 +87,7 @@ See `design` for details on particular components.
 =-----------------------------------------------------------
 - cmd: list yaml files in dir by date field
 - cmd: make yaml file with date field populated
+- cmd: add way to have auto-dated "reflections", be able to list them, mark them as "solved"/"irrelevant"/etc
 - cmd: `rm`: move `PATH` to `.archive/PATH`
 - cmd: `dir-to-file`: put content from each file in the directory in the destination file
 

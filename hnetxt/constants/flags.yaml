@@ -1,9 +1,12 @@
 question:
     symbol: "?"
     regex_symbol: "%?"
+    order: 1
 brainstorm:
     symbol: "*"
     regex_symbol: "%*"
+    order: 2
 important:
-    symbol: "!"
+    symbol: "#"
     regex_symbol: "%!"
+    order: 3

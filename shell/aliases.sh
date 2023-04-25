@@ -34,4 +34,5 @@ alias po="popen"
 
 # lua
 alias lua="lua5.1"
-alias lrr="luarocks make &> /dev/null && lua -l src/setup "
+# alias lrr="luarocks make &> /dev/null && lua -l src/setup "
+alias lm="luarocks make &> /dev/null && lua "
