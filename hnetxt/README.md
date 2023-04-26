@@ -16,8 +16,6 @@ See `design` for details on particular components.
 > [current goal]()
 ----------------------------------------
 - finish migrations:
-  - `lex.config` → `hnetxt-nvim.project`
-  - remove `lex.constants`
   - `lex.move`
   - `lex.sync`
   - `hnetxt-nvim.text.location.update`: unit test
@@ -32,8 +30,6 @@ See `design` for details on particular components.
 ----------------------------------------
 > [migrations]()
 ----------------------------------------
-- `lex/config` → `project/init.lua`
-- `lex/constants.lua` → `config.lua`
 - `lex/move.lua` → `element/location.lua`
 
 ----------------------------------------
