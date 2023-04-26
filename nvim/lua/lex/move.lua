@@ -1,7 +1,7 @@
 local BufferLines = require("hneutil-nvim.buffer_lines")
 local Mirror = require('hnetxt-nvim.project.mirror')
 local Location = require("hnetxt-nvim.text.location")
-local Reference = require("hnetxt-lua.element.reference")
+local Reference = require("hnetxt-lua.text.reference")
 local Config = require("hnetxt-lua.config")
 local Path = require('util.path')
 

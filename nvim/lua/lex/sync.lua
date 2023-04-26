@@ -24,8 +24,8 @@ local BufferLines = require("hneutil-nvim.buffer_lines")
 local Path = require("hneutil-nvim.path")
 
 local Location = require("hnetxt-nvim.text.location")
-local Reference = require("hnetxt-lua.element.reference")
-local Mark = require("hnetxt-lua.element.mark")
+local Reference = require("hnetxt-lua.text.reference")
+local Mark = require("hnetxt-lua.text.mark")
 
 local M = {}
 

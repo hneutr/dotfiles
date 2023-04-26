@@ -1,7 +1,7 @@
 local mock = require('luassert.mock')
 local stub = require('luassert.stub')
 local m = require'lex.sync'
-local Reference = require("hnetxt-lua.element.reference")
+local Reference = require("hnetxt-lua.text.reference")
 
 require'util'
 require'util.tbl'
