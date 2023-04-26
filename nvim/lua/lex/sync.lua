@@ -19,7 +19,7 @@
 --   - remove it from the "delete move" list
 --   - add it back onto the "deleted" list
 --------------------------------------------------------------------------------
-local ulines = require'util.lines'
+local BufferLines = require("hneutil-nvim.buffer_lines")
 
 local Path = require("hneutil-nvim.path")
 
@@ -50,7 +50,7 @@ end
 
 function M.read_markers()
     local markers = {}
-    for i, str in ipairs(ulines.get()) do
+    for i, str in ipairs(BufferLines.get()) do
         if Mark.str_is_a(str) then
             markers[Mark.from_str(str).label] = i
         end

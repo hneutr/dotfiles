@@ -1,3 +1,4 @@
+local BufferLines = require("hneutil-nvim.buffer_lines")
 local M = {}
 
 
@@ -170,7 +171,7 @@ end
 function M.modify_line_end(char)
     local delimiters = {',', ';', ':'}
     local found_delimiter
-    local line = require'util.lines'.cursor.get()
+    local line = BufferLines.cursor.get()
     line = line:gsub('%s*$', '')
 
     for i, _char in ipairs(delimiters) do
@@ -191,7 +192,7 @@ function M.modify_line_end(char)
         line = line .. char
     end
 
-    require'util.lines'.cursor.set({ replacement = {line} })
+    BufferLines.cursor.set({ replacement = {line} })
 end
 
 function M.kill_buffer_and_go_to_next()

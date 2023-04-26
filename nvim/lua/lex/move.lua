@@ -1,11 +1,11 @@
-local M = {}
-local ulines = require('util.lines')
+local BufferLines = require("hneutil-nvim.buffer_lines")
 local Mirror = require('hnetxt-nvim.project.mirror')
 local Location = require("hnetxt-nvim.text.location")
 local Reference = require("hnetxt-lua.element.reference")
 local Config = require("hnetxt-lua.config")
 local Path = require('util.path')
 
+local M = {}
 
 local DIR_FILE_NAME = Config.get("directory_file").name
 
@@ -49,7 +49,7 @@ function M.remove_mark_lines(src)
     local end_line
 
     local mark_lines = {}
-    for i, line in ipairs(ulines.get()) do
+    for i, line in ipairs(BufferLines.get()) do
         if i > start_line + 2 and M.line_is_divider(line) then
             end_line = i - 1
             break
@@ -58,7 +58,7 @@ function M.remove_mark_lines(src)
         end
     end
 
-    ulines.cut({start_line = start_line - 1, end_line = end_line})
+    BufferLines.cut({start_line = start_line - 1, end_line = end_line})
 
     return mark_lines
 end
@@ -176,7 +176,7 @@ function M.update_references(updates)
 
                     local replacement = ref_str:gsub(src, Path.remove_from_start(dst, root))
         
-                    ulines.line.set({start_line = ln - 1, replacement = {replacement}})
+                    BufferLines.line.set({start_line = ln - 1, replacement = {replacement}})
                 end
             end
         end
