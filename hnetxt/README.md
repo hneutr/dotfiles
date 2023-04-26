@@ -62,7 +62,6 @@ See `design` for details on particular components.
 ----------------------------------------
 > [migrations]()
 ----------------------------------------
-- move `lex/opener.lua` → `ui`
 - move `lex/sync.lua` → `project/sync.lua`
 
 ----------------------------------------

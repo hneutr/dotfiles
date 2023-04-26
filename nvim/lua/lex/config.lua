@@ -77,14 +77,4 @@ function M.get()
     return vim.tbl_get(vim.g.lex_configs or {}, vim.b.lex_config_path) or {}
 end
 
---------------------------------------------------------------------------------
--- commands
---------------------------------------------------------------------------------
-function M.push()
-    vim.fn.system("cd " .. vim.tbl_get(M.get(), 'root') or '.')
-    vim.fn.system("git add .")
-    vim.fn.system("git commit -m " .. vim.fn.strftime("%Y%m%d"))
-    vim.fn.system("git push")
-end
-
 return M

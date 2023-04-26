@@ -1,7 +1,6 @@
 local util = require('util')
 
 local aucmd = vim.api.nvim_create_autocmd
-local cmd = vim.api.nvim_buf_create_user_command
 
 local p = {"*.md"}
 
@@ -44,18 +43,3 @@ end
 aucmd({'BufEnter'}, {pattern=p, group=sync_g, callback=if_sync(sync.buf_enter)})
 aucmd({'TextChanged', 'InsertLeave'}, {pattern=p, group=sync_g, callback=if_sync(sync.buf_change)})
 aucmd({'BufLeave', 'VimLeave'}, {pattern=p, group=sync_g, callback=if_sync(sync.buf_leave)})
-
-------------------------------------[ lex ]-------------------------------------
-aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
-    scope = 'b',
-    key = 'lex_applied', 
-    fn = function()
-        if vim.b.lex_config_path then
-            ------------------------------------[ maps ]------------------------------------
-            require('lex.opener').map()
-
-            ----------------------------------[ commands ]----------------------------------
-            cmd(0, "Push", function() require'lex.config'.push() end, {})
-        end
-    end
-})})
