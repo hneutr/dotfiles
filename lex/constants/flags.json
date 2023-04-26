@@ -1,5 +1,0 @@
-[
-    {"name": "question", "symbol": "?", "regex_symbol": "%?"},
-    {"name": "brainstorm", "symbol": "*", "regex_symbol": "%*"},
-    {"name": "important", "symbol": "!", "regex_symbol": "%!"}
-]

@@ -5,9 +5,8 @@ describe("move:", function()
         Path = require('util.path')
         m = require('lex.move')
 
-        config = require("lex.config")
         Projector.create()
-        root = config.get().root
+        root = "root"
         _path = function(path) return Path.join(root, path) end
 
         pwd = vim.env.PWD

@@ -1,9 +1,0 @@
-{
-    "goals_directory": "/Users/hne/Documents/text/written/nonfiction/on-writing/goals",
-    "journals_directory": "/Users/hne/Documents/text/written/reflections/journals/content",
-    "config_file_name": ".project",
-    "dir_file_stem": "@",
-    "dir_file_name": "@.md",
-    "path_label_delimiter": ":",
-    "opener_prefix": "<leader>o"
-}

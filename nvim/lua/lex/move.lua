@@ -17,7 +17,6 @@ function M.move(src, dst)
     dst = Path.resolve(dst)
 
     require('hnetxt-nvim.project').set(vim.env.PWD)
-    require('lex.config').set(vim.env.PWD)
     vim.g.lex_sync_ignore = true
     
     if M.is_location(src) then

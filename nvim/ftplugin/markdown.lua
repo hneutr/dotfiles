@@ -24,17 +24,13 @@ aucmd({'BufEnter'}, {pattern=p, callback=util.run_once({
 --------------------------------------------------------------------------------
 --                            general lex commands                            --
 --------------------------------------------------------------------------------
-local lex_g = vim.api.nvim_create_augroup('lex_cmds', { clear = true })
-
-aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=require('lex.config').set})
-
 ------------------------------------[ sync ]------------------------------------
 local sync_g = vim.api.nvim_create_augroup('lex_sync_cmds', { clear = true })
 local sync = require('lex.sync')
 
 local function if_sync(fn)
     return function()
-        if vim.b.lex_config_path and not vim.b.lex_sync_ignore and not vim.g.lex_sync_ignore then
+        if vim.b.hnetxt_project_root and not vim.b.lex_sync_ignore and not vim.g.lex_sync_ignore then
             fn()
         end
     end
