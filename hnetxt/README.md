@@ -15,22 +15,24 @@ See `design` for details on particular components.
 ----------------------------------------
 > [current goal]()
 ----------------------------------------
+- finish migrations:
+  - `lex.config` → `hnetxt-nvim.project`
+  - remove `lex.constants`
+  - `lex.move`
+  - `lex.sync`
+  - `hnetxt-nvim.text.location.update`: unit test
 - move `hnetxt-cli` into `hnetxt-lua/src/hnetxt-cli` (put it in the same repository)
   - cmd: `list LIST_TYPE`: lists elements of the particular list type, eg `list todo`
-- migrate `lex.config` to `hnetxt-nvim.project`
 
 =-----------------------------------------------------------
 = [lua]()
 =-----------------------------------------------------------
-+ bug: Flag.list_all doesn't work
-  - avoid `vim.fn.systemlist` ([see](https://stackoverflow.com/questions/9676113/lua-os-execute-return-value))
 + support references to links within mirrors
 
 ----------------------------------------
 > [migrations]()
 ----------------------------------------
 - `lex/config` → `project/init.lua`
-- `lex/mirrors.lua` → `project/mirror.lua`
 - `lex/constants.lua` → `config.lua`
 - `lex/move.lua` → `element/location.lua`
 
@@ -61,7 +63,6 @@ See `design` for details on particular components.
 > [migrations]()
 ----------------------------------------
 - move `lex/opener.lua` → `ui`
-- move `lex/scratch.lua` → `project/scratch.lua`
 - move `lex/sync.lua` → `project/sync.lua`
 
 ----------------------------------------
@@ -91,8 +92,6 @@ See `design` for details on particular components.
 > [migrations]()
 ----------------------------------------
 - `lex/move.lua` → `move`
-- `python hnetext project start`
-- `python hnetext project print-root`
 - `python hnetext project set-metadata`
 - `python hnetext project set-status`
 - `python hnetext project show-by-status`

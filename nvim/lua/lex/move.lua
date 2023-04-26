@@ -1,6 +1,6 @@
 local M = {}
 local ulines = require('util.lines')
-local Mirror = require('lex.mirror')
+local Mirror = require('hnetxt-nvim.project.mirror')
 local Location = require("hnetxt-nvim.text.location")
 local Reference = require("hnetxt-lua.element.reference")
 local Config = require("hnetxt-lua.config")
@@ -120,10 +120,7 @@ function M.get_updates(src, dst)
 
         dst_path = M.handle_dir_into_parent(src, dst, src_path, dst_path)
 
-        local src_loc = Mirror({path = src_path})
-        local dst_loc = Mirror({path = dst_path})
-
-        updates = vim.tbl_extend("keep", updates, src_loc:find_updates(dst_loc))
+        updates = vim.tbl_extend("keep", updates, Mirror.find_updates(src_path, dst_path))
     end
 
     return updates

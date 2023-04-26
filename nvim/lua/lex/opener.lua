@@ -1,5 +1,5 @@
 local constants = require('lex.constants')
-local Mirror = require('lex.mirror')
+local Mirror = require('hnetxt-nvim.project.mirror')
 local Location = require("hnetxt-nvim.text.location")
 local M = {}
 
@@ -19,11 +19,12 @@ function M.set()
         { prefix = 'n', fn = function(open_cmd) Location.goto(open_cmd) end },
     }
 
-    for kind, kind_data in pairs(constants.mirror_defaults) do
-        for mirror, mirror_data in pairs(kind_data.mirrors) do
+    for mirror_type, type_config in pairs(Mirror.type_configs) do
+        local mirror_keymap_prefix = type_config.keymap_prefix
+        if type(mirror_keymap_prefix) == 'string' and mirror_keymap_prefix:len() > 0 then
             table.insert(mappings, {
-                prefix = mirror_data.opener_prefix,
-                fn = function(open_cmd) Mirror.open(mirror, open_cmd) end,
+                prefix = mirror_keymap_prefix,
+                fn = function(open_cmd) Mirror.open(mirror_type, open_cmd) end,
             })
         end
     end
@@ -80,14 +81,6 @@ function M.map()
     for i, mapping in ipairs(M.get()) do
         vim.keymap.set('n', mapping.lhs, mapping.rhs, mapping.args)
     end
-
-    -- open notes
-    vim.keymap.set(
-        "n",
-        constants.opener_prefix .. "N",
-        function() Mirror.open_mirrors_of_kind("notes") end,
-        {silent = true, buffer = 0}
-    )
 end
 
 return M

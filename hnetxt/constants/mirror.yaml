@@ -1,0 +1,37 @@
+categories:
+    sources:
+        dir: ""
+        categories_to_mirror: []
+    notes:
+        dir: .notes
+        categories_to_mirror:
+            - sources
+    chaff:
+        dir: .chaff
+        categories_to_mirror:
+            - sources
+            - notes
+types:
+    source:
+        category: sources
+    fragments:
+        keymap_prefix: f
+        category: chaff
+    scratch:
+        keymap_prefix: s
+        category: chaff
+    alternatives: 
+        keymap_prefix: a
+        category: notes
+    ideas: 
+        keymap_prefix: i
+        category: notes
+    outlines: 
+        keymap_prefix: o
+        category: notes
+    meta: 
+        keymap_prefix: m
+        category: notes
+    churnlog: 
+        keymap_prefix: c
+        category: notes

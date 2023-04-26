@@ -2,6 +2,8 @@ local M = {}
 local snips = require('snips.markdown')
 local util = require('util')
 
+local Path = require('hneutil-nvim.path')
+
 local Location = require("hnetxt-nvim.text.location")
 local Mark = require("hnetxt-nvim.text.mark")
 local Reference = require("hnetxt-lua.element.reference")
@@ -58,7 +60,7 @@ function M.get_file_index(path)
             end
         end
 
-        local reference = Reference({location = Location({label = mark.label})})
+        local reference = Reference({location = Location({path = Path.current_file(), label = mark.label})})
         local str = prefix .. tostring(reference)
 
         table.insert(mark_reference_lines, str)

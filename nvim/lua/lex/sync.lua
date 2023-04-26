@@ -20,9 +20,11 @@
 --   - add it back onto the "deleted" list
 --------------------------------------------------------------------------------
 local ulines = require'util.lines'
+
+local Path = require("hneutil-nvim.path")
+
 local Location = require("hnetxt-nvim.text.location")
 local Reference = require("hnetxt-lua.element.reference")
-local Path = require("hneutil-nvim.path")
 local Mark = require("hnetxt-lua.element.mark")
 
 local M = {}
@@ -115,8 +117,8 @@ end
 function M.update_renames(old_marker, new_marker, renames)
     if old_marker:len() > 0 and new_marker:len() > 0 then
         Location.update(
-            tostring(Location({label = old_marker})),
-            tostring(Location({label = new_marker}))
+            tostring(Location({path = Path.current_file(), label = old_marker})),
+            tostring(Location({path = Path.current_file(), label = new_marker}))
         )
     end
 
@@ -215,8 +217,8 @@ function M.process_renames(renames, deletions, creations, references)
     local updates = {}
 
     for old, new in pairs(renames) do
-        local old_loc = tostring(Location({label = old}))
-        local new_loc = tostring(Location({label = new}))
+        local old_loc = tostring(Location({path = Path.current_file(), label = old}))
+        local new_loc = tostring(Location({path = Path.current_file(), label = new}))
 
         references[new_loc] = vim.tbl_get(references, old_loc)
         references[old_loc] = nil
@@ -243,8 +245,8 @@ end
 function M.process_creations(creations, renames, old_deletions, references)
     local updates = {}
     for marker, _ in pairs(creations) do
-        local old_location = Location({label = marker})
-        local new_location = Location({label = marker})
+        local old_location = Location({path = Path.current_file(), label = marker})
+        local new_location = Location({path = Path.current_file(), label = marker})
 
         if vim.tbl_get(renames, marker) then
             new_location.label = table.removekey(renames, marker)
@@ -271,7 +273,7 @@ end
 
 function M.process_deletions(deletions, old_deletions, references)
     for marker, i in pairs(deletions) do
-        local location = Location({label = marker})
+        local location = Location({path = Path.current_file(), label = marker})
         if vim.tbl_get(references, tostring(location)) then
             old_deletions[marker] = location.path
         end

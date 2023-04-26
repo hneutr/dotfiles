@@ -54,14 +54,7 @@ aucmd({"BufEnter"}, {pattern=p, group=lex_g, callback=util.run_once({
             ------------------------------------[ maps ]------------------------------------
             require('lex.opener').map()
 
-            local args = {silent = true, buffer = true}
-
-            -- delete the currently selected lines and move them to the scratch file
-            vim.keymap.set("n", " s", function() require'lex.scratch'.move('n') end, args)
-            vim.keymap.set("v", " s", [[:'<,'>lua require'lex.scratch'.move('v')<cr>]], args)
-
             ----------------------------------[ commands ]----------------------------------
-
             cmd(0, "Push", function() require'lex.config'.push() end, {})
         end
     end
