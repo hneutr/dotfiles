@@ -15,22 +15,12 @@ See `design` for details on particular components.
 ----------------------------------------
 > [current goal]()
 ----------------------------------------
-- finish migrations:
-  - `lex.move`
-  - `lex.sync`
-  - `hnetxt-nvim.text.location.update`: unit test
-- move `hnetxt-cli` into `hnetxt-lua/src/hnetxt-cli` (put it in the same repository)
-  - cmd: `list LIST_TYPE`: lists elements of the particular list type, eg `list todo`
+- test: make sure `Reference` finds references in hidden files
 
 =-----------------------------------------------------------
 = [lua]()
 =-----------------------------------------------------------
-+ support references to links within mirrors
-
-----------------------------------------
-> [migrations]()
-----------------------------------------
-- `lex/move.lua` → `element/location.lua`
++ support references to links within mirrors/hidden files
 
 ----------------------------------------
 > [locations]()
@@ -56,11 +46,6 @@ See `design` for details on particular components.
 =-----------------------------------------------------------
 
 ----------------------------------------
-> [migrations]()
-----------------------------------------
-- move `lex/sync.lua` → `project/sync.lua`
-
-----------------------------------------
 > [flags]()
 ----------------------------------------
 - ui: toggle flags mappings eg `<leader>fq` toggles a question flag on the line
@@ -77,6 +62,8 @@ See `design` for details on particular components.
 =-----------------------------------------------------------
 = [cli]()
 =-----------------------------------------------------------
+- move `hnetxt-cli` into `hnetxt-lua/src/hnetxt-cli` (put it in the same repository)
+  - cmd: `list LIST_TYPE`: lists elements of the particular list type, eg `list todo`
 - cmd: list yaml files in dir by date field
 - cmd: make yaml file with date field populated
 - cmd: add way to have auto-dated "reflections", be able to list them, mark them as "solved"/"irrelevant"/etc
@@ -86,7 +73,6 @@ See `design` for details on particular components.
 ----------------------------------------
 > [migrations]()
 ----------------------------------------
-- `lex/move.lua` → `move`
 - `python hnetext project set-metadata`
 - `python hnetext project set-status`
 - `python hnetext project show-by-status`

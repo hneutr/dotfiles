@@ -10,6 +10,4 @@ lua require('plenary.busted')
 "--------------------------------[ additions ]---------------------------------"
 lua require('start')
 
-set rtp^=./vendor/lextest.nvim/
-
 lua rawset(_G, 'eq', assert.are.same)

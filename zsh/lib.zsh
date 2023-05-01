@@ -65,7 +65,7 @@ function project_root_exists() {
     local project_file="$directory/.project"
 
     if [ -f $project_file ]; then
-        alias mv=nvim_mv
+        alias mv=hnetxt_mv
         export PROJECT_ROOT=$directory
     else
         local parent=$(dirname $directory)
@@ -103,12 +103,8 @@ function flags() {
     rm $file
 }
 
-function nvim_mv() {
-    nvim --headless -c "lua require'lex.move'.move('$1', '$2')" +q
-}
-
-function nvim_mv_debug() {
-    nvim -c "lua require'lex.move'.move('$1', '$2')"
+function hnetxt_mv() {
+    lua $HOME/lib/hnetxt-cli/src/hnetxt-cli/init.lua move $1 $2
 }
 
 function wr() {
