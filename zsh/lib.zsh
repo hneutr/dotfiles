@@ -84,16 +84,20 @@ function project_root_exists() {
     fi
 }
 
+function hnetxt_mv() {
+    lua $HOME/lib/hnetxt-cli/src/hnetxt-cli/init.lua move $1 $2
+}
+
 function goals() {
-    nvim -c "lua require'util'.open_path(require'lex.goals'.path())"
+    nvim $(lua $HOME/lib/hnetxt-cli/src/hnetxt-cli/init.lua goals)
 }
 
 function journal() {
-    if [[ $# -gt 0 ]]; then
-        cd $(hnetext project print-root -p $1)
-    fi
+    nvim $(lua $HOME/lib/hnetxt-cli/src/hnetxt-cli/init.lua journal $@) +GoyoToggle -c "1" 
+}
 
-    nvim -c "lua require'util'.open_path(require'lex.journal'.path())" +GoyoToggle -c "1"
+function wr() {
+    nvim $1 -c "lua require'lex.mirror'.open('outlines')" +bnext +GoyoToggle
 }
 
 function flags() {
@@ -101,14 +105,6 @@ function flags() {
     nvim --headless -c "lua require('lex.link').Flag.list('$1', '$file')" +q
     cat $file
     rm $file
-}
-
-function hnetxt_mv() {
-    lua $HOME/lib/hnetxt-cli/src/hnetxt-cli/init.lua move $1 $2
-}
-
-function wr() {
-    nvim $1 -c "lua require'lex.mirror'.open('outlines')" +bnext +GoyoToggle
 }
 
 function vload() {

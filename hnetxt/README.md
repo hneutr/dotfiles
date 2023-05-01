@@ -15,7 +15,8 @@ See `design` for details on particular components.
 ----------------------------------------
 > [current goal]()
 ----------------------------------------
-- test: make sure `Reference` finds references in hidden files
++ test: make sure `Reference` finds references in hidden files
+- implement `wr` in `hnetxt-cli`
 
 =-----------------------------------------------------------
 = [lua]()
@@ -62,13 +63,13 @@ See `design` for details on particular components.
 =-----------------------------------------------------------
 = [cli]()
 =-----------------------------------------------------------
++ fix `wr` snippet, it currently calls `lex.mirror`
 - move `hnetxt-cli` into `hnetxt-lua/src/hnetxt-cli` (put it in the same repository)
-  - cmd: `list LIST_TYPE`: lists elements of the particular list type, eg `list todo`
+- cmd: `list LIST_TYPE`: lists elements of the particular list type, eg `list todo`
 - cmd: list yaml files in dir by date field
 - cmd: make yaml file with date field populated
 - cmd: add way to have auto-dated "reflections", be able to list them, mark them as "solved"/"irrelevant"/etc
 - cmd: `rm`: move `PATH` to `.archive/PATH`
-- cmd: `dir-to-file`: put content from each file in the directory in the destination file
 
 ----------------------------------------
 > [migrations]()
