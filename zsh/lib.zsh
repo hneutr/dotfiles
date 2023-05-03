@@ -84,6 +84,18 @@ function project_root_exists() {
     fi
 }
 
+function hnetxt() {
+    lua $HOME/lib/hnetxt-cli/src/hnetxt-cli/init.lua $@
+}
+
+function hnetxt_test() {
+    local START_DIR=$PWD
+    cd $HOME/lib/hnetxt-cli
+    luarocks make > /dev/null
+    cd $START_DIR
+    hnetxt $@
+}
+
 function hnetxt_mv() {
     lua $HOME/lib/hnetxt-cli/src/hnetxt-cli/init.lua move $1 $2
 }

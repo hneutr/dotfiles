@@ -1,7 +1,7 @@
 This is where I'm going to keep information on all of the various `hnetxt` projects:
 - `hnetxt-lua`: holds all code that is used by the other `hnetxt` repositories
-- `hnetxt-cli`: command line interface
 - `hnetxt-nvim`: nvim plugin
+- `hnetxt-cli`: command line interface
 
 See `design` for details on particular components.
 
@@ -10,7 +10,6 @@ See `design` for details on particular components.
 #-------------------------------------------------------------------------------
 - create some method/place for prose fragments (eg about wildlife, Fennessez, etc)
 - find an alternative to hidden mirrors for important content (eg `questions`, `meta`)
-- rename `on-writing` to `meta`
 
 ----------------------------------------
 > [current goal]()
@@ -27,7 +26,6 @@ See `design` for details on particular components.
 > [locations]()
 ----------------------------------------
 - remove `.md` from path
-- replace `FILE_DELIMITER` with some non-ascii character
 - make paths relative
   - implementation:
     - if in same dir or child, start with: `./`
