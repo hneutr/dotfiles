@@ -16,6 +16,7 @@ See `design` for details on particular components.
 ----------------------------------------
 + test: make sure `Reference` finds references in hidden files
 - implement `wr` in `hnetxt-cli`
+- cmd: `list LIST_TYPE`: lists elements of the particular list type, eg `list todo`
 
 =-----------------------------------------------------------
 = [lua]()
@@ -63,7 +64,6 @@ See `design` for details on particular components.
 =-----------------------------------------------------------
 + fix `wr` snippet, it currently calls `lex.mirror`
 - move `hnetxt-cli` into `hnetxt-lua/src/hnetxt-cli` (put it in the same repository)
-- cmd: `list LIST_TYPE`: lists elements of the particular list type, eg `list todo`
 - cmd: list yaml files in dir by date field
 - cmd: make yaml file with date field populated
 - cmd: add way to have auto-dated "reflections", be able to list them, mark them as "solved"/"irrelevant"/etc
@@ -75,7 +75,6 @@ See `design` for details on particular components.
 - `python hnetext project set-metadata`
 - `python hnetext project set-status`
 - `python hnetext project show-by-status`
-- `python hnetext project flags`
 - `python hnetext words unknown`
 - `python hnetext catalyze`
 - `python hnetext session start`
