@@ -109,14 +109,7 @@ function journal() {
 }
 
 function wr() {
-    nvim $1 -c "lua require'lex.mirror'.open('outlines')" +bnext +GoyoToggle
-}
-
-function flags() {
-    local file="/tmp/flags-list.txt"
-    nvim --headless -c "lua require('lex.link').Flag.list('$1', '$file')" +q
-    cat $file
-    rm $file
+    nvim $1 -c "lua require('hnetxt-nvim.project.mirror').open('outlines')" +bnext +GoyoToggle
 }
 
 function vload() {

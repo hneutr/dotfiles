@@ -15,7 +15,6 @@ See `design` for details on particular components.
 > [current goal]()
 ----------------------------------------
 + test: make sure `Reference` finds references in hidden files
-- implement `wr` in `hnetxt-cli`
 - cmd: `list LIST_TYPE`: lists elements of the particular list type, eg `list todo`
 
 =-----------------------------------------------------------
@@ -62,7 +61,6 @@ See `design` for details on particular components.
 =-----------------------------------------------------------
 = [cli]()
 =-----------------------------------------------------------
-+ fix `wr` snippet, it currently calls `lex.mirror`
 - move `hnetxt-cli` into `hnetxt-lua/src/hnetxt-cli` (put it in the same repository)
 - cmd: list yaml files in dir by date field
 - cmd: make yaml file with date field populated
