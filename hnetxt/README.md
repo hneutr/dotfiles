@@ -40,8 +40,6 @@ See `design` for details on particular components.
 #-------------------------------------------------------------------------------
 # [tech]()
 #-------------------------------------------------------------------------------
-- rename modules: 
-  - `hnetxt-cli` → `htc`
 - start using `Penlight` stuff
   - change things from `table.list_extend` to `List.extend`
 - symlink stuff:
