@@ -85,7 +85,7 @@ function project_root_exists() {
 }
 
 function hnetxt() {
-    lua $HOME/lib/hnetxt-cli/src/hnetxt-cli/init.lua $@
+    lua $HOME/lib/hnetxt-cli/src/htc/init.lua $@
 }
 
 function hnetxt_test() {
@@ -97,23 +97,23 @@ function hnetxt_test() {
 }
 
 function hnetxt_mv() {
-    lua $HOME/lib/hnetxt-cli/src/hnetxt-cli/init.lua move $1 $2
+    lua $HOME/lib/hnetxt-cli/src/htc/init.lua move $1 $2
 }
 
 function goals() {
-    nvim $(lua $HOME/lib/hnetxt-cli/src/hnetxt-cli/init.lua goals)
+    nvim $(lua $HOME/lib/hnetxt-cli/src/htc/init.lua goals)
 }
 
 function journal() {
-    nvim $(lua $HOME/lib/hnetxt-cli/src/hnetxt-cli/init.lua journal $@) +GoyoToggle -c "1" 
+    nvim $(lua $HOME/lib/hnetxt-cli/src/htc/init.lua journal $@) +GoyoToggle -c "1" 
 }
 
 function wr() {
-    nvim $1 -c "lua require('hnetxt-nvim.project.mirror').open('outlines')" +bnext +GoyoToggle
+    nvim $1 -c "lua require('htn.project.mirror').open('outlines')" +bnext +GoyoToggle
 }
 
 function new_entry() {
-    nvim $(lua $HOME/lib/hnetxt-cli/src/hnetxt-cli/init.lua yaml entry new $@) +
+    nvim $(lua $HOME/lib/hnetxt-cli/src/htc/init.lua yaml entry new $@) +
 }
 
 function vload() {
