@@ -112,6 +112,10 @@ function wr() {
     nvim $1 -c "lua require('hnetxt-nvim.project.mirror').open('outlines')" +bnext +GoyoToggle
 }
 
+function new_entry() {
+    nvim $(lua $HOME/lib/hnetxt-cli/src/hnetxt-cli/init.lua yaml entry new $@) +
+}
+
 function vload() {
     nvim -c "source .Session.vim" -c "silent! !rm .Session.vim"
 }

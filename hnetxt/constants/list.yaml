@@ -43,6 +43,7 @@ types:
                 fg: gray
     question:
         sigil: "?"
+        rg_regex: "\\?"
         toggle_key: q
         highlights:
             sigil: 

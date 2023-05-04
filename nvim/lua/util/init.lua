@@ -1,4 +1,4 @@
-local BufferLines = require("hneutil-nvim.buffer_lines")
+local BufferLines = require("hn.buffer_lines")
 local M = {}
 
 

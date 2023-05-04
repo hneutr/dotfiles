@@ -21,13 +21,13 @@ These are my dotfiles. Things are set up so that:
 - os:
   - `macOS`:
     - `hammerspoon`: hotkey binding
-    - `bettertouchtool`: touchbar management (would love an alternative/to migrate to `hammerspoon`)
 - shell:
   - `fzf`: fuzzy finding
 - languages:
   - `python`:
     - `ipython`: better interactive interpreter
     - `matplotlib`: plotting
+    - `pyenv`: python version management
 
 ---
 
@@ -51,6 +51,7 @@ These are my dotfiles. Things are set up so that:
 - zsh:
     - fix `fvim` command so that it outputs last line to commandline for repetition
 
-> # this gets the location of this script
-> echo $0
-> echo $0:A
+----------------------------------------
+
+notes on setting up a new computer:
+- must fix zsh plugins
