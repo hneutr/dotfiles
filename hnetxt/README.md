@@ -68,8 +68,9 @@ See `design` for details on particular components.
 ----------------------------------------
 > [misc]()
 ----------------------------------------
-- change `journal` files to be by day
-  - cmd: view journals by month/year/last x entries
+- change `journal` and `goal` files to be by day (store in `yyyy/mm/dd.md`?)
+  - cmd: view goals/journals by month/year/last x entries
+  - involves parsing previous entries and splitting them up
 - view a mark's references
 - support file flags (store in a "file flags" file that lists all files in the project)
 - mechanism to indicate "this mirror is only for files of type x" (eg `fragments` is only for `text`)
@@ -79,6 +80,12 @@ See `design` for details on particular components.
 =-----------------------------------------------------------
 - cmd: add way to have auto-dated "reflections", be able to list them, mark them as "solved"/"irrelevant"/etc
 - cmd: `rm`: move `PATH` to `.archive/PATH`
+
+----------------------------------------
+> [yaml]()
+----------------------------------------
+- cmd: update a field/field value for all yaml files
+- cmd: update a field/field value for a file
 
 ----------------------------------------
 > [migrations]()

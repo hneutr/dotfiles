@@ -1,3 +1,2 @@
-export DOT_DIR=$HOME/dotfiles
-
 export SHELL_NAME="$(basename $SHELL)"
+export XDG_CONFIG_HOME=$HOME/.config

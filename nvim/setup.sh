@@ -9,5 +9,4 @@ function install_nvim_appimage() {
 
 [ ! $(command -v nvim) ] && install_nvim_appimage
 
-export THIS_DIR="$(dirname -- $(readlink -f "$0"))"
-ln -sf $THIS_DIR $XDG_CONFIG_HOME/nvim
+ln -s $DOTFILES/nvim $XDG_CONFIG_HOME/nvim

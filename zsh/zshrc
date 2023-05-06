@@ -1,4 +1,4 @@
-source ~/dotfiles/shell/rc.sh
+source $DOTFILES/shell/rc.sh
 
 source ~/.zsh/settings.zsh
 source ~/.zsh/lib.zsh

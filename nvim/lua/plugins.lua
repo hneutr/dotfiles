@@ -37,10 +37,11 @@ return require('packer').startup(function(use)
     use 'neovim/nvim-lspconfig'
     use 'sheerun/vim-polyglot'
 
-    use "~/lib/hnetxt-nvim"
 
     use_rocks 'inspect'
+    use_rocks {'lyaml', env = {YAML_DIR = "/opt/homebrew"}}
     use_rocks {'hneutil-lua', server = "https://luarocks.org/manifests/hneutr"}
+    use "~/lib/hnetxt-nvim"
 
     ----------------------------------[ testing ]-----------------------------------
 

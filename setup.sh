@@ -1,12 +1,12 @@
-source $HOME/dotfiles/shell/util.sh
+source $DOTFILES/shell/util.sh
+source $DOTFILES/shell/exports.sh
 
-source $DOT_DIR/shell/exports.sh
+setup_dotdir $DOTFILES/os
+setup_dotdir $DOTFILES/kitty
+setup_dotdir $DOTFILES/git
 
-setup_dotdir $DOT_DIR/os
-setup_dotdir $DOT_DIR/shell
+setup_dotdir $DOTFILES/shell
 
-setup_dotdir $DOT_DIR/git
-setup_dotdir $DOT_DIR/python
+setup_dotdir $DOTFILES/python
 
-setup_dotdir $DOT_DIR/kitty
-setup_dotdir $DOT_DIR/nvim
+setup_dotdir $DOTFILES/nvim

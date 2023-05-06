@@ -1,4 +1,4 @@
-export THIS_DIR="$(dirname -- $(readlink -f "$0"))"
-ln -sf $THIS_DIR $HOME/.zsh
-ln -sf $THIS_DIR/zshrc $HOME/.zshrc
-ln -sf $THIS_DIR/zshenv $HOME/.zshenv
+export ZSH_DOTFILES=$DOTFILES/zsh
+ln -s $ZSH_DOTFILES $HOME/.zsh
+ln -s $ZSH_DOTFILES/zshrc $HOME/.zshrc
+ln -s $ZSH_DOTFILES/zshenv $HOME/.zshenv

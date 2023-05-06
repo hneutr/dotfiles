@@ -1,2 +1,1 @@
-export THIS_DIR="$(dirname -- $(readlink -f "$0"))"
-ln -sf $THIS_DIR $HOME/.hammerspoon
+ln -s $DOTFILES/os/macos/extra/hammerspoon $HOME/.hammerspoon

@@ -1,27 +1,8 @@
-export DOT_DIR=$HOME/dotfiles
-
 function hard_source() {
     if [ -f "$1" ]; then
         chmod +x $1
         source $1
     fi
-}
-
-function path_from_args() {
-    local p=""
-
-    for part in "$@"; do 
-        if [ ! -z "$p" ]; then
-            p="$p/"
-        fi
-        p="$p$part"
-    done
-
-    echo $p
-}
-
-function dotpath() {
-    echo "$DOT_DIR/$(path_from_args $@)"
 }
 
 function OS() {
@@ -31,12 +12,16 @@ function OS() {
 }
 
 function setup_dotdir() {
-    hard_source $1/setup.sh
-    if [ -d "$1/extra" ]; then
-        for extra in "$(fd 'setup.sh' $1/extra)"; do
-            setup_dir "$(dirname $extra)"
-        done
-    fi
+	#echo $1
+	# echo $1/setup.sh
+     hard_source $1/setup.sh
+     if [ -d "$1/extra" ]; then
+	echo $(which fd)
+         for extra in "$(fd 'setup.sh' $1/extra)"; do
+		echo $extra
+             setup_dotdir "$(dirname $extra)"
+         done
+     fi
 }
 
 function rc_init_dir() {

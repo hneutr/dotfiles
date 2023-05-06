@@ -41,6 +41,7 @@ These are my dotfiles. Things are set up so that:
   - `extra`: a dir of other tool dirs which have the same structure
 
 ---
+
 # todo
 - shell:
   - move `zsh` and `bash` into `shell`
@@ -55,3 +56,6 @@ These are my dotfiles. Things are set up so that:
 
 notes on setting up a new computer:
 - must fix zsh plugins
+- copy over `~/.ssh/config`
+- instead of having setup files in each directory, have a map file that maps files to their links
+- restructure `nvim` so that plugin content isn't in `plugins` and we can actually bootstrap Packer on a new machine

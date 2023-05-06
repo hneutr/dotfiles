@@ -1,1 +1,1 @@
-setup_dotdir $SHELL_NAME
+setup_dotdir $DOTFILES/$SHELL_NAME
