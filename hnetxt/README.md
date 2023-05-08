@@ -36,15 +36,28 @@ See `design` for details on particular components.
 ----------------------------------------
 > [current goal]()
 ----------------------------------------
+- implement `entries`:
+  - config:
+    - EntryField
+    - EntryValue
+    - Entry
+    - PromptEntry
+    - ResponseEntry
+    - ListEntry
+  - commands:
+    - `field`: rename, remove
+    - `value`: rename, remove
+    - `entry`: new, mv, rm, path, edit, set, flip
+      - `prompt`: close, open, respond, response
+      - `list`: path
+      - `response`: path, paths, select, deselect
+    - `list`: entries, fields
 
 #-------------------------------------------------------------------------------
 # [tech]()
 #-------------------------------------------------------------------------------
 - start using `Penlight` stuff
   - change things from `table.list_extend` to `List.extend`
-- symlink stuff:
-  - `hneutil-lua` into: `hnetxt-lua`, `hnetxt-nvim`, `hnetxt-cli`
-  - `hnetxt-lua` into: `hnetxt-nvim`, `hnetxt-cli`
 
 =-----------------------------------------------------------
 = [lua]()
