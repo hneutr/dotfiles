@@ -124,7 +124,7 @@ on-writing.entries:
             entries:
                 prompts:
                     type: prompt
-                    response_dir: "../reflections"
+                    response_key: ".."
         techniques:
             fields: [source]
 the-surface.entries:
@@ -134,7 +134,7 @@ the-surface.entries:
         opinions:
         questions:
             type: prompt
-            response_entry: answers
+            response_key: answers
         kinds: 
             fields:
                 of: [sentence]

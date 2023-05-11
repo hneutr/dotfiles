@@ -21,6 +21,7 @@ These are my dotfiles. Things are set up so that:
 - os:
   - `macOS`:
     - `hammerspoon`: hotkey binding
+    - `dozer`: menubar prettifying (`brew install --cask dozer`)
 - shell:
   - `fzf`: fuzzy finding
 - languages:
@@ -43,19 +44,29 @@ These are my dotfiles. Things are set up so that:
 ---
 
 # todo
+- instead of having setup files in each directory, have a map file that maps files to their links
+- nvim:
+  - move plugin content out of `plugins` so that we can actually bootstrap Packer on a new machine
 - shell:
   - move `zsh` and `bash` into `shell`
-- init:
-  - `fzf`
-  - `pyenv`
-    - `pyenv-virtualenv`
 - zsh:
     - fix `fvim` command so that it outputs last line to commandline for repetition
+- lua:
+  - link `approot.lua` into `/opt/homebrew/share/lua/5.1/approot.lua`
+- init: (these happen through brew)
+  - brew:
+    - `neovim`
+    - `fzf`
+    - `pyenv`
+    - `pyenv-virtualenv`
+    - `ripgrep`
+    - `pandoc`
+    - `libyaml`
+    - `exa`
+    - `tapianator/tap/bfs`
 
 ----------------------------------------
 
 notes on setting up a new computer:
-- must fix zsh plugins
+- fix zsh plugins (maybe; maybe I don't actually want/need completion, it's nice having things so fast...)
 - copy over `~/.ssh/config`
-- instead of having setup files in each directory, have a map file that maps files to their links
-- restructure `nvim` so that plugin content isn't in `plugins` and we can actually bootstrap Packer on a new machine
