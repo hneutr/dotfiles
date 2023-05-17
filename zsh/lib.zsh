@@ -66,17 +66,22 @@ function project_root_exists() {
 
     if [ -f $project_file ]; then
         alias mv=hnetxt_mv
+        alias rm=hnetxt_rm
         export PROJECT_ROOT=$directory
     else
         local parent=$(dirname $directory)
 
         if [ $parent = '/' ]; then
-        unset PROJECT_ROOT
+            unset PROJECT_ROOT
 
-        # unset the alias
-        if [ ${+aliases[mv]} -eq 1 ]; then
-            unalias mv
-        fi
+            # unset the aliases
+            if [ ${+aliases[mv]} -eq 1 ]; then
+                unalias mv
+            fi
+
+            if [ ${+aliases[rm]} -eq 1 ]; then
+                unalias rm
+            fi
         else
             # call recursively if we're not bottomed out yet
             project_root_exists $parent
@@ -98,6 +103,10 @@ function hnetxt_test() {
 
 function hnetxt_mv() {
     lua $HOME/lib/hnetxt-cli/src/htc/init.lua move $1 $2
+}
+
+function hnetxt_rm() {
+    lua $HOME/lib/hnetxt-cli/src/htc/init.lua remove $1
 }
 
 function goals() {

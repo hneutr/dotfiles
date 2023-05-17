@@ -9,6 +9,44 @@ See `design` for details on particular components.
 # [todo]()
 #-------------------------------------------------------------------------------
 
+----------------------------------------
+> [current goal]()
+----------------------------------------
+- finish `notes`:
+  - implement: `notes.get_entry_set_from_path`
+  - implement: `notes.get_entry_sets_from_path`
+  - cmd: `touch`
+  - cmd: `vim`
+  - cmd: `ls`
+  - implement: `notes.config.filters`: default metadata filters
+  - implement: `TopicEntry`
+  - implement: `QuestionEntry`
+  - remove: `PromptEntry`
+  - remove: `ResponseEntry`
+  - fix: `on-writing` config
+  - fix: `the-surface` config
+
+=-----------------------------------------------------------
+= [cli]()
+=-----------------------------------------------------------
+- cmd: `mv`: don't move notes dirs
+- cmd: `mv`: if source/destination outside the project, move normally
+- cmd: `log`:
+  - log things like:
+    - words written
+    - prose experiments
+    - hours spent writing (start/stop)
+
+----------------------------------------
+> [migrations]()
+----------------------------------------
+- `python hnetext project set-metadata`
+- `python hnetext project set-status`
+- `python hnetext project show-by-status`
+- `python hnetext words unknown`
+- `python hnetext catalyze`
+- `python hnetext session start`
+
 =-----------------------------------------------------------
 = [writing]()
 =-----------------------------------------------------------
@@ -33,35 +71,15 @@ See `design` for details on particular components.
 - maybe have a place to put raw descriptions of things in a scene
   - associate it/navigate to it from `structure`?
 
-----------------------------------------
-> [current goal]()
-----------------------------------------
-- implement `entries`:
-  - config:
-    - EntryField
-    - EntryValue
-    - Entry
-    - PromptEntry
-    - ResponseEntry
-    - ListEntry
-  - commands:
-    - `field`: rename, remove
-    - `value`: rename, remove
-    - `entry`: new, mv, rm, path, edit, set, flip
-      - `prompt`: close, open, respond, response
-      - `list`: path
-      - `response`: path, paths, select, deselect
-    - `list`: entries, fields
-
-#-------------------------------------------------------------------------------
-# [tech]()
-#-------------------------------------------------------------------------------
-- start using `Penlight` stuff
-  - change things from `table.list_extend` to `List.extend`
-
 =-----------------------------------------------------------
 = [lua]()
 =-----------------------------------------------------------
+- change `journal` and `goal` files to be by day (store in `yyyy/mm/dd.md`?)
+  - cmd: view goals/journals by month/year/last x entries
+  - involves parsing previous entries and splitting them up
+- view a mark's references
+- support file flags (store in a "file flags" file that lists all files in the project)
+- mechanism to indicate "this mirror is only for files of type x" (eg `fragments` is only for `text`)
 - idea: `facets` or `parallels` in addition to mirrors
   - eg:
     - `text/amnesis/ch1.md`
@@ -77,38 +95,6 @@ See `design` for details on particular components.
   - implementation:
     - if in same dir or child, start with: `./`
     - if above, specify full project path, don't start path with `./`
-
-----------------------------------------
-> [misc]()
-----------------------------------------
-- change `journal` and `goal` files to be by day (store in `yyyy/mm/dd.md`?)
-  - cmd: view goals/journals by month/year/last x entries
-  - involves parsing previous entries and splitting them up
-- view a mark's references
-- support file flags (store in a "file flags" file that lists all files in the project)
-- mechanism to indicate "this mirror is only for files of type x" (eg `fragments` is only for `text`)
-
-=-----------------------------------------------------------
-= [cli]()
-=-----------------------------------------------------------
-- cmd: add way to have auto-dated "reflections", be able to list them, mark them as "solved"/"irrelevant"/etc
-- cmd: `rm`: move `PATH` to `.archive/PATH`
-
-----------------------------------------
-> [yaml]()
-----------------------------------------
-- cmd: update a field/field value for all yaml files
-- cmd: update a field/field value for a file
-
-----------------------------------------
-> [migrations]()
-----------------------------------------
-- `python hnetext project set-metadata`
-- `python hnetext project set-status`
-- `python hnetext project show-by-status`
-- `python hnetext words unknown`
-- `python hnetext catalyze`
-- `python hnetext session start`
 
 =-----------------------------------------------------------
 = [nvim]()
@@ -127,3 +113,9 @@ See `design` for details on particular components.
   - eg by binding `<c-PREFIX>` to open up the PREFIX mirror of a given file
     - eg, `<c->` = open up the questions file
     - ideally support opening it up in edit/split/vsplit/tab
+
+=-----------------------------------------------------------
+= [misc tech]()
+=-----------------------------------------------------------
+- start using `Penlight` stuff
+  - change things from `table.list_extend` to `List.extend`

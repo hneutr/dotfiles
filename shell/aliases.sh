@@ -4,6 +4,9 @@ alias lsla='ls -la'
 alias lsf='ls -p | grep -v /'
 alias lsfa='ls -pa | grep -v /'
 
+# mv
+alias rmv='$(which mv)'
+
 # tree
 alias lst='tree --git-ignore -I .git\|.gitignore'
 

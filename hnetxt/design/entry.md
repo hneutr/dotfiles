@@ -1,155 +1,156 @@
 An entry is a file with metadata in a yaml frontmatter, followed by content.
 
 #-------------------------------------------------------------------------------
-# [implementation]()
-#-------------------------------------------------------------------------------
-- config:
-  - EntryField
-  - EntryValue
-  - Entry
-  - PromptEntry
-  - ListEntry
-  - ResponseEntry
-
-#-------------------------------------------------------------------------------
 # [commands]()
 #-------------------------------------------------------------------------------
-- common params:
-  * `-t --type`: entry type. inferred from the current dir if missing
-  * `-f --field`: field to set a value for (repeatable: `-f FIELD1 -v VALUE1 -f FIELD2 -v VALUE2`)
-  * `-v --value`: value of the field
-- `field`:
-    1. field
-    * `-t`
-  - `rename`: change a field's name
-    2. new name
-  - `remove`: remove a field
-- `value`:
-    1. field
-    2. value
-    * `-t`
-  - `rename`: change a field's value
-    3. new value
-  - `remove`: remove a particular field value
-- `entry`:
-    1. entry name
-    * `-t`
-    * `-d --date`: date. default: today
-    * `-r --response`: operate on a response. default: false
-    * `-i --index`: index of the entry to operate on. default: 1
-  ----------------------------------------
-  - `new`: create + set field values
-    * `-f`
-    * `-v`
-  - `mv`
-  - `rm`
-  - `path`: print the entry's path
-  - `edit`: edit the entry
-  - `set`: set field values
-    * `-f`
-    * `-v`
-  - `flip`: flip a boolean field's value
-    * `-f`
-  ----------------------------------------
-  for prompt entries:
-  - `close`: close the prompt
-  - `reopen`: open the prompt
-  - `respond`: create and edit a new response
-  - `response`: show the response(s) to the entry
-    * `-a --all`: show all responses. default: false
-    - if `-a` or there is no selected response: show all responses
-    - else: show the selected response
-  ----------------------------------------
-  for response entries:
-  - `select`: select the response
-  - `unselect`: unselect the response
-  - `paths`: print response paths
-  ----------------------------------------
-  for list entries:
-  - `paths`: print list entry paths
-- `list`: list elements
-  1. element_type: what to list (`entries` or `fields`). default: `entries`
-  * `-t`
-  * `-f`: require a particular field
-  * `-v`: require a particular field value
-  * `--sort-by-date`: sort by date. default: true
-  * `--by-field`: group by a field
+- things should be as seamless as possible
+- define as few new commands as possible
+- modify behavior of existing commands whenever possible
+- make browsing entries easy
+- avoid super-nesting of directories
+- all commands _expect to be in the project_. all paths will be resolved.
 
-----------------------------------------
-> [prompt]()
-----------------------------------------
-- fields:
-  - open: whether the prompt is open or not
-    - values: [false, true]
-    - default: true
-
-----------------------------------------
-> [response]()
-----------------------------------------
-- fields:
-  - date:
-  - selected: whether this is "the" response to the question. Only 1 response can be selected at a time.
-    - values: [false, true]
-      - true: this is the "response" to the question
-    - default: false
-- the path for a response is based on the date
-
-----------------------------------------
-> [list]()
-----------------------------------------
-- an list is a type of entry that may not have a unique path
+=-----------------------------------------------------------
+= [commands]()
+=-----------------------------------------------------------
+- `rm`:
+  - args:
+    - `-f --field`: remove field from entries
+    - `-v --value`: remove field value from entries (format: `FIELD:VALUE`)
+  - notes:
+    - does not modify the entries config
+- `mv`:
+  - args:
+    - `-f --field`: rename field in entries
+    - `-v --value`: rename field value in entries (format: `FIELD:VALUE`)
+  - notes:
+    - does not modify the entries config
+- `touch`: if new, create with metadata defaults
+  - `-d --date [f/t]`: if true and `PATH` is null, create a file with today's date
+- `vim`: `touch` and then edit
+- `ls`: list notes if in a notes dir
+  - args:
+    - `-s --group-by-entry-set [t/f]`: group items by entry set
+    - `-f --group-by-field FIELD`: group items by `FIELD` value
+    - `-v --group-by-value [f/t]`: group entries by field value.
+    - `-u --group-by-unexpected-value [t/f]`: like `-v` but exclude expected field values
+    - `-V --list-values [f/t]`: list field values instead of entries.
+    - `-U --list-unexpected-values [f/t]`: like `-V` but exclude expected field values
+    - `-m --metadata FILTER`: filter entries by their metadata
+      - `FILTER` format:
+        - `FIELD=VAL`: require `metadata[FIELD] == VAL`
+        - `FIELD` ≈ `FIELD=true` for boolean fields
+        - `-FIELD` ≈ `FIELD=false` for boolean fields
+    - `-M --no-default-metadata-filters [f/t]`: remove default metadata filters
+    - `--sort-by-date [t/f]`: sort entries by date
+    - `-p --show-entry-path [t/f]`: show entry path.
+    - `-b --show-entry-blurb [f/t]`: show entry blurb instead of path. overrides `-p`.
+    - `-d --show-entry-date [f/t]`: show entry date.
+  - usage:
+    - `ls`: list entries
+    - `ls -f topic`: list entries by topic
+    - `ls -m active`: list entries with `metadata.active == true`
+    - `ls -v`: list entries by field value
+    - `ls -u`: list entries unexpected field value
+    - `ls -V`: list field values
+    - `ls -U`: list unexpected field values
 
 #-------------------------------------------------------------------------------
-# [config]()
+# [types]()
 #-------------------------------------------------------------------------------
-- entry configs are stored in `.project`
+
+----------------------------------------
+> [Entry]()
+----------------------------------------
+- a list of files
+- dir structure:
+  - `entry_set`:
+    - `*.md` : file
+
+----------------------------------------
+> [TopicEntry]()
+----------------------------------------
+- inherit from: `Entry`
+- a set of `topics`
+- dir structure:
+  - `topic_set`:
+    - `topic`:
+      - `@.md`: statement
+      - `*.md`: file
+    - ...
+- cmd:
+  - `ls`:
+    - `topic_set`: list topics
+    - `topic_set/topic`: list topic files
+  - `touch`:
+    - `topic_set/topic/@.md`: if new, create with default `statement` metadata
+    - `topic_set/topic.md`: call `touch` with `topic_set/topic/@.md`
+    - `topic_set/topic/file.md`: if new, create with default `file` metadata
+    - `topic_set/topic/.`: call `touch` with `topic_set/topic/X.md`, where `X` is the lowest available number
+- config structure:
+  - `statement`:
+    - fields
+    - filters
+  - `file`:
+    - fields
+    - filters
+  - `topics`: define topic-specific statement/file defaults
+    - TOPIC:
+          `statement`
+          `file`
+
+----------------------------------------
+> [QuestionEntry]()
+----------------------------------------
+- inherit from: `TopicEntry`
+- a set of `questions`
+- defaults:
+  - `statement`:
+    - fields:
+      - open: [t/f]
+    - filters:
+      - open: true
+  - `file`:
+    - fields:
+      - pinned: [f/t]
+    - filters:
+      - pinned: true
+
+#-------------------------------------------------------------------------------
+# [notes]()
+#-------------------------------------------------------------------------------
 
 =-----------------------------------------------------------
 = [configs to make]()
 =-----------------------------------------------------------
-on-writing.entries:
-    fields:
-        active: true
-        topic: [goals, meta, middle, outlining, prose, starting, work]
-    entries:
-        processes: (holds things currently in `things-to-do`)
-            fields:
-                task: [ideate, journal, log, plan]
-                duration:
-        catalysts:
-        reminders:
-        reflections:
-            fields:
-                topic: (remove the topic field)
-            entries:
-                prompts:
-                    type: prompt
-                    response_key: ".."
-        techniques:
-            fields: [source]
-the-surface.entries:
+the-surface.notes:
     fields:
         topic: [...]
     entries:
         opinions:
         questions:
-            type: prompt
-            response_key: answers
+            type: question
         kinds: 
             fields:
                 of: [sentence]
-Documents.text.entries:
-    entries:
-        words:
-            entries:
-                cool:
-                created:
-                unknown:
-                    type: list
+Documents.text.notes:
+    words:
+        type: topic
+        topics:
+            cool:
+            created:
+            unused:
+                statement:
                     fields: [author, work]
-        sentences: 
-            type: list
-            fields: [author, work, page]
-        quotes:
-            type: list
-            fields: [author, work, page]
+    sentences:
+        type: topic
+        statement:
+            fields: [author, work]
+        file:
+            fields: [page]
+    quotes:
+        type: topic
+        statement:
+            fields: [author, work]
+        file:
+            fields: [page]

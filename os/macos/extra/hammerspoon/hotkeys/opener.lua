@@ -5,6 +5,7 @@ local keyToApplication = {
     d = "dictionary",
     g = "https://mail.google.com/mail/u/1/#inbox",
     i = "https://mail.google.com/mail/u/0/#inbox",
+    e = "https://www.etymonline.com",
     m = "messages",
     p = "system settings",
     q = "spotify",
