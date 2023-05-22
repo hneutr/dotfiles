@@ -12,16 +12,14 @@ function OS() {
 }
 
 function setup_dotdir() {
-	#echo $1
-	# echo $1/setup.sh
-     hard_source $1/setup.sh
-     if [ -d "$1/extra" ]; then
-	echo $(which fd)
-         for extra in "$(fd 'setup.sh' $1/extra)"; do
-		echo $extra
-             setup_dotdir "$(dirname $extra)"
-         done
-     fi
+    hard_source $1/setup.sh
+    if [ -d "$1/extra" ]; then
+	      echo $(which fd)
+        for extra in "$(fd 'setup.sh' $1/extra)"; do
+            echo $extra
+            setup_dotdir "$(dirname $extra)"
+        done
+    fi
 }
 
 function rc_init_dir() {

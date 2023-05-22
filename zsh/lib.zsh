@@ -1,3 +1,5 @@
+source $DOTFILES/hnetxt/lib.sh
+
 #------------------------------------------------------------------------------#
 #                                    misc                                      #
 #------------------------------------------------------------------------------#
@@ -38,130 +40,10 @@ function fvim() {
     [[ -n "$files" ]] && vim "${files[@]}"
 }
 
-#------------------------------------------------------------------------------#
-#                       handling virtual environments                          #
-#------------------------------------------------------------------------------#
-function cd_and_venv() {
-    # refresh the virtual environment if its there
-    if [ -f $PWD/env/bin/activate ]; then
-        type deactivate > /dev/null && deactivate
-        source $PWD/env/bin/activate
-    fi
-}
-
-function deactivate_env() {
-    if [ -f $PWD/env/bin/activate ]; then
-        type deactivate > /dev/null && source deactivate
-    fi
-}
-
-#------------------------------------------------------------------------------#
-#                                 lex stuff                                    #
-#------------------------------------------------------------------------------#
-# finds the project root if it exists and aliases mv to pmv;
-# otherwise, unaliases mv
-function project_root_exists() {
-    local directory=$1
-    local project_file="$directory/.project"
-
-    if [ -f $project_file ]; then
-        alias mv=hnetxt_mv
-        alias rm=hnetxt_rm
-        alias touch=hnetxt_touch
-        alias vim=hnetxt_vim
-        alias ns=hnetxt_ls
-        alias meta=hnetxt_meta
-        export PROJECT_ROOT=$directory
-    else
-        local parent=$(dirname $directory)
-
-        if [ $parent = '/' ]; then
-            unset PROJECT_ROOT
-
-            # unset the aliases
-            if [ ${+aliases[mv]} -eq 1 ]; then
-                unalias mv
-            fi
-
-            if [ ${+aliases[rm]} -eq 1 ]; then
-                unalias rm
-            fi
-
-            if [ ${+aliases[touch]} -eq 1 ]; then
-                unalias touch
-            fi
-
-            if [ ${+aliases[ns]} -eq 1 ]; then
-                unalias ns
-            fi
-
-            if [ ${+aliases[meta]} -eq 1 ]; then
-                unalias meta
-            fi
-
-            alias vim=nvim
-        else
-            # call recursively if we're not bottomed out yet
-            project_root_exists $parent
-        fi
-    fi
-}
-
-function hnetxt() {
-    lua $HOME/lib/hnetxt-cli/src/htc/init.lua $@
-}
-
-function hnetxt_test() {
-    local START_DIR=$PWD
-    cd $HOME/lib/hnetxt-cli
-    luarocks make > /dev/null
-    cd $START_DIR
-    hnetxt $@
-}
-
-function hnetxt_mv() {
-    lua $HOME/lib/hnetxt-cli/src/htc/init.lua move $@
-}
-
-function hnetxt_rm() {
-    lua $HOME/lib/hnetxt-cli/src/htc/init.lua remove $@
-}
-
-function hnetxt_touch() {
-    lua $HOME/lib/hnetxt-cli/src/htc/init.lua notes touch $@
-}
-
-function hnetxt_ls() {
-    lua $HOME/lib/hnetxt-cli/src/htc/init.lua notes list $@
-}
-
-function hnetxt_vim() {
-    nvim $(lua $HOME/lib/hnetxt-cli/src/htc/init.lua notes touch $@)
-}
-
-function hnetxt_meta() {
-    nvim $(lua $HOME/lib/hnetxt-cli/src/htc/init.lua notes meta $@)
-}
-
-function goals() {
-    nvim $(lua $HOME/lib/hnetxt-cli/src/htc/init.lua goals)
-}
-
-function journal() {
-    nvim $(lua $HOME/lib/hnetxt-cli/src/htc/init.lua journal $@) +GoyoToggle -c "1" 
-}
-
-function wr() {
-    nvim $1 -c "lua require('htn.project.mirror').open('outlines')" +bnext +GoyoToggle
-}
-
-function new_entry() {
-    nvim $(lua $HOME/lib/hnetxt-cli/src/htc/init.lua yaml entry new $@) +
-}
-
 function vload() {
     nvim -c "source .Session.vim" -c "silent! !rm .Session.vim"
 }
+
 
 #------------------------------------------------------------------------------#
 #                         change directory functions                           #
