@@ -39,6 +39,7 @@ return require('packer').startup(function(use)
 
 
     use_rocks 'inspect'
+    use_rocks 'penlight'
     use_rocks {'lyaml', env = {YAML_DIR = "/opt/homebrew"}}
     use_rocks {'hneutil-lua', server = "https://luarocks.org/manifests/hneutr"}
     use "~/lib/hnetxt-nvim"

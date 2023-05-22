@@ -67,6 +67,10 @@ function project_root_exists() {
     if [ -f $project_file ]; then
         alias mv=hnetxt_mv
         alias rm=hnetxt_rm
+        alias touch=hnetxt_touch
+        alias vim=hnetxt_vim
+        alias ns=hnetxt_ls
+        alias meta=hnetxt_meta
         export PROJECT_ROOT=$directory
     else
         local parent=$(dirname $directory)
@@ -82,6 +86,20 @@ function project_root_exists() {
             if [ ${+aliases[rm]} -eq 1 ]; then
                 unalias rm
             fi
+
+            if [ ${+aliases[touch]} -eq 1 ]; then
+                unalias touch
+            fi
+
+            if [ ${+aliases[ns]} -eq 1 ]; then
+                unalias ns
+            fi
+
+            if [ ${+aliases[meta]} -eq 1 ]; then
+                unalias meta
+            fi
+
+            alias vim=nvim
         else
             # call recursively if we're not bottomed out yet
             project_root_exists $parent
@@ -102,11 +120,27 @@ function hnetxt_test() {
 }
 
 function hnetxt_mv() {
-    lua $HOME/lib/hnetxt-cli/src/htc/init.lua move $1 $2
+    lua $HOME/lib/hnetxt-cli/src/htc/init.lua move $@
 }
 
 function hnetxt_rm() {
-    lua $HOME/lib/hnetxt-cli/src/htc/init.lua remove $1
+    lua $HOME/lib/hnetxt-cli/src/htc/init.lua remove $@
+}
+
+function hnetxt_touch() {
+    lua $HOME/lib/hnetxt-cli/src/htc/init.lua notes touch $@
+}
+
+function hnetxt_ls() {
+    lua $HOME/lib/hnetxt-cli/src/htc/init.lua notes list $@
+}
+
+function hnetxt_vim() {
+    nvim $(lua $HOME/lib/hnetxt-cli/src/htc/init.lua notes touch $@)
+}
+
+function hnetxt_meta() {
+    nvim $(lua $HOME/lib/hnetxt-cli/src/htc/init.lua notes meta $@)
 }
 
 function goals() {

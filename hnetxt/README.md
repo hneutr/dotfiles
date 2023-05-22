@@ -13,23 +13,11 @@ See `design` for details on particular components.
 > [current goal]()
 ----------------------------------------
 - finish `notes`:
-  - implement: `notes.get_entry_set_from_path`
-  - implement: `notes.get_entry_sets_from_path`
-  - cmd: `touch`
-  - cmd: `vim`
-  - cmd: `ls`
-  - implement: `notes.config.filters`: default metadata filters
-  - implement: `TopicEntry`
-  - implement: `QuestionEntry`
-  - remove: `PromptEntry`
-  - remove: `ResponseEntry`
-  - fix: `on-writing` config
   - fix: `the-surface` config
 
 =-----------------------------------------------------------
 = [cli]()
 =-----------------------------------------------------------
-- cmd: `mv`: don't move notes dirs
 - cmd: `mv`: if source/destination outside the project, move normally
 - cmd: `log`:
   - log things like:
