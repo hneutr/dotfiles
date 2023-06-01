@@ -10,7 +10,6 @@ function project_root_exists() {
         alias touch=hnetxt_touch
         alias vim=hnetxt_vim
         alias ns=hnetxt_ls
-        alias meta=hnetxt_meta
         export PROJECT_ROOT=$directory
     else
         local parent=$(dirname $directory)
@@ -33,10 +32,6 @@ function project_root_exists() {
 
             if [ ${+aliases[ns]} -eq 1 ]; then
                 unalias ns
-            fi
-
-            if [ ${+aliases[meta]} -eq 1 ]; then
-                unalias meta
             fi
 
             alias vim=nvim
@@ -71,6 +66,10 @@ function hnetxt_touch() {
     hnetxt notes touch $@
 }
 
+function hnetxt_notes() {
+    hnetxt notes $@
+}
+
 function hnetxt_vim() {
     nvim $(hnetxt notes touch $@)
 }
@@ -80,7 +79,7 @@ function hnetxt_ls() {
 }
 
 function hnetxt_meta() {
-    nvim $(hnetxt notes meta $@)
+    hnetxt notes meta $@
 }
 
 function goals() {
@@ -94,3 +93,6 @@ function journal() {
 function wr() {
     nvim $1 -c "lua require('htn.project.mirror').open('outlines')" +bnext +GoyoToggle
 }
+
+alias meta=hnetxt_meta
+alias notes=hnetxt_notes
