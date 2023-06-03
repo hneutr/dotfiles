@@ -11,38 +11,15 @@ See `design` for details on particular components.
 - fix: `the-surface` config
 ~ maybe: allow for nested note sets/topics. use case: quotes: dir for author, dir for book: files = quotes
 - support todos with priorities, fmt: ◻:1, ◻:2, ◻:...
-- new note_set type: `hl.notes.set.goal`:
-  - goal types:
-    - yearly: `YYYY.md`
-    - monthly: `YYYYMM.md`
-    - weekly: `YYYYMMDD-YYYYMMDD.md`
-    - daily: `YYYYMMDD.md`
-    - undated: `TEXT.md`
-  - behavior:
-    - prompt to:
-      - create a yearly/monthly/weekly/daily goal when one doesn't exist
-      - close out-of-range yearly/monthly/weekly/daily goals that have `◻` elements
-  - cmds:
-    - list scopes:
-      - in: `{a:b:c, a:b:d, x:y}`
-      - out: `{a = {b = {c, d}}, x = {y}}`
-    - move scopes en mass
-- make new `hl.notes.note.goal`:
-  - a list of `◻`/`✓`/`⨉` items
-    - items will be gathered by scope, levels marked by `:` content, eg:
-      - `◻ a:b:x`: {scopes = {a, b, x}, start = date, end = date, succeeded = true/false}
-  - statuses:
-    - open: at least one `◻`
-    - closed: zero `◻`'s
-- make a new `hl.notes.note.undated_goal`: same as `hl.notes.note.goal` but with date/start/stop metadata
+- goals converter
 
-- new note_set type: `hl.notes.set.intention`:
-  - able to list ALL intentions (across all projects) at once
-  - intention metadata:
-    - start/end (optional)
-    - scope
-    - scale: `yearly`/`monthly`/`weekly`/`daily`
-  - can ingest all intentions and spit out new todo file at a given scale
+----------------------------------------
+> [goal formatting]()
+----------------------------------------
+- `scope: object [qualifier] {project}`
+- cmds:
+  - list scopes
+  - move scopes en mass
 
 =-----------------------------------------------------------
 = [the big clean]()
@@ -153,5 +130,3 @@ See `design` for details on particular components.
 =-----------------------------------------------------------
 = [misc tech]()
 =-----------------------------------------------------------
-- start using `Penlight` stuff
-  - change things from `table.list_extend` to `List.extend`

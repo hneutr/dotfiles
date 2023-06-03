@@ -1,2 +1,40 @@
-dir: "/Users/hne/Documents/text/written/meta/on-writing/goals"
+dir: "/Users/hne/Documents/text/written/mirror/goals"
 template_filename: ".template.md"
+qualifiers:
+    finish:
+        unit: f
+        has_number: false
+    hours:
+        unit: h
+        has_number: true
+    minutes:
+        unit: m
+        has_number: true
+    words:
+        unit: w
+        has_number: true
+    thousand words:
+        unit: kw
+        has_number: true
+    pages:
+        unit: p
+        has_number: true
+    number:
+        unit: n
+        has_number: true
+scopes:
+- write
+- outline
+- edit
+- review
+- read
+- journal
+format:
+    project:
+        open: "{"
+        close: "}"
+    qualifier:
+        open: "["
+        close: "]"
+    scope:
+        delimiter: ":"
