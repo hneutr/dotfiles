@@ -10,6 +10,7 @@ function project_root_exists() {
         alias touch=hnetxt_touch
         alias vim=hnetxt_vim
         alias ns=hnetxt_ls
+        alias new=hnetxt_new
         export PROJECT_ROOT=$directory
     else
         local parent=$(dirname $directory)
@@ -32,6 +33,10 @@ function project_root_exists() {
 
             if [ ${+aliases[ns]} -eq 1 ]; then
                 unalias ns
+            fi
+
+            if [ ${+aliases[new]} -eq 1 ]; then
+                unalias new
             fi
 
             alias vim=nvim
@@ -76,6 +81,10 @@ function hnetxt_vim() {
 
 function hnetxt_ls() {
     hnetxt notes list $@
+}
+
+function hnetxt_new() {
+    hnetxt notes new $@
 }
 
 function hnetxt_meta() {
