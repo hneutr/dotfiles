@@ -12,16 +12,14 @@ See `design` for details on particular components.
 - support todos with priorities, fmt: ◻:1, ◻:2, ◻:...
 - reorganize `hnetxt-cli` commands:
   - bare commands:
-    - `move`
-    - `remove`
     - `journal` ← `journal touch`
     - `register` ← `project create` (add `-u` flag to unregister)
     - `note` ← `notes touch` (make `notes new` behavior default when no arguments)
   - groups:
     - `projects`: project cmds
-    - `journals`: journal cmds
-    - `notes`: notes cmds
-    - `meta`: note metadata cmds
+    - `journals` ← `journal`
+    - `notes`
+    - `meta` ← `notes meta`
 - cmd `goals`: `cd`: move to goals dir
 - converter: `goals`
 - converter: `quotes`
