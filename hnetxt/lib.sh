@@ -71,10 +71,6 @@ function hnetxt_touch() {
     hnetxt notes touch $@
 }
 
-function hnetxt_notes() {
-    hnetxt notes $@
-}
-
 function hnetxt_vim() {
     nvim $(hnetxt notes touch $@)
 }
@@ -87,12 +83,8 @@ function hnetxt_new() {
     hnetxt notes new $@
 }
 
-function hnetxt_meta() {
-    hnetxt notes meta $@
-}
-
-function goals() {
-    nvim $(hnetxt goals $@)
+function aim() {
+    nvim $(hnetxt aim $@)
 }
 
 function journal() {
@@ -103,5 +95,6 @@ function wr() {
     nvim $1 -c "lua require('htn.project.mirror').open('outlines')" +bnext +GoyoToggle
 }
 
-alias meta=hnetxt_meta
-alias notes=hnetxt_notes
+alias goals="hnetxt goals"
+alias meta="hnetxt notes meta"
+alias notes="hnetxt notes"

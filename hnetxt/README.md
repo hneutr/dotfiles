@@ -8,26 +8,32 @@ See `design` for details on particular components.
 #-------------------------------------------------------------------------------
 # [todo]()
 #-------------------------------------------------------------------------------
-- fix: `the-surface` config
 ~ maybe: allow for nested note sets/topics. use case: quotes: dir for author, dir for book: files = quotes
 - support todos with priorities, fmt: ◻:1, ◻:2, ◻:...
-- goals converter
-
-----------------------------------------
-> [goal formatting]()
-----------------------------------------
-- `scope: object [qualifier] {project}`
-- cmds:
-  - list scopes
-  - move scopes en mass
+- reorganize `hnetxt-cli` commands:
+  - bare commands:
+    - `move`
+    - `remove`
+    - `journal` ← `journal touch`
+    - `register` ← `project create` (add `-u` flag to unregister)
+    - `note` ← `notes touch` (make `notes new` behavior default when no arguments)
+  - groups:
+    - `projects`: project cmds
+    - `journals`: journal cmds
+    - `notes`: notes cmds
+    - `meta`: note metadata cmds
+- cmd `goals`: `cd`: move to goals dir
+- converter: `goals`
+- converter: `quotes`
+- converter: `words`
 
 =-----------------------------------------------------------
 = [the big clean]()
 =-----------------------------------------------------------
 - `text/catch-all` → ⨉
 - `text/people` → notify + fold into `text/written/scraps/people`
-- `text/quotes` → notify (make old → new converter)
-- `text/words` → notify (make old → new converter)
+- `text/quotes` → notify
+- `text/words` → notify
 - `text/years` → `text/mirror/goals`
 - `text/written/ideas` → clean
 - `text/written/scraps/phenomena` → `text/written/ideas/phenomena`
@@ -35,15 +41,18 @@ See `design` for details on particular components.
 - `text/written/reflections/on-my-life/future` → `text/written/mirror/future`
 - `text/written/reflections/on-my-life/*` → `text/written/mirror/reflections`
 - `text/written/reflections/thoughts` → notify → `text/written/mirror/thoughts`, as appropriate
-- `text/written/meta/on-writing/goals` → split into project specific goals (make old → new converter)
+- `text/written/meta/on-writing/goals` → migrate old goals
 - `text/written/meta/on-writing/catalysts` → clean
 - `text/written/meta/on-writing/processes` → `intentions` + clean
 - `text/written/meta/on-writing/logs` → notify
 - `text/written/meta/on-writing/reminders` → clean + split apart by topic?
+- `text/written/meta/the-surface`: clean + fix config
 
 =-----------------------------------------------------------
 = [cli]()
 =-----------------------------------------------------------
+- cmd `goals`: list scopes
+- cmd `goals`: change a scope across all goals
 - cmd: `mv`: if source/destination outside the project, move normally
 - cmd: `log`:
   - log things like:
