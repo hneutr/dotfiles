@@ -20,35 +20,35 @@ See `design` for details on particular components.
     - `journals` ← `journal`
     - `notes`
     - `meta` ← `notes meta`
-- cmd `goals`: `cd`: move to goals dir
-- converter: `goals`
+- converter: `goals/months`
 - converter: `quotes`
 - converter: `words`
 
 =-----------------------------------------------------------
 = [the big clean]()
 =-----------------------------------------------------------
-- `text/catch-all` → ⨉
-- `text/people` → notify + fold into `text/written/scraps/people`
-- `text/quotes` → notify
-- `text/words` → notify
-- `text/years` → `text/mirror/goals`
-- `text/written/ideas` → clean
-- `text/written/scraps/phenomena` → `text/written/ideas/phenomena`
-- `text/written/scraps/quips` → `text/written/ideas/quips`
-- `text/written/reflections/on-my-life/future` → `text/written/mirror/future`
-- `text/written/reflections/on-my-life/*` → `text/written/mirror/reflections`
-- `text/written/reflections/thoughts` → notify → `text/written/mirror/thoughts`, as appropriate
-- `text/written/meta/on-writing/goals` → migrate old goals
+- `text/phrases`: notify
+- `text/quotes`: notify
+- `text/words`: notify
+- `text/written/materials/ideas`: notify + clean
+- `text/written/materials/people`: notify + clean
+- `text/written/materials/phenomena`: notify + clean
+- `text/written/materials/quips`: notify + clean
 - `text/written/meta/on-writing/catalysts` → clean
-- `text/written/meta/on-writing/processes` → `intentions` + clean
 - `text/written/meta/on-writing/logs` → notify
+- `text/written/meta/on-writing/processes` → clean
 - `text/written/meta/on-writing/reminders` → clean + split apart by topic?
 - `text/written/meta/the-surface`: clean + fix config
+- `text/written/mirror/goals/to-migrate`: migrate
+- `text/written/reflections/on-my-life/*` → `text/written/mirror/reflections`
+- `text/written/reflections/on-my-life/future` → `text/written/mirror/future`
+- `text/written/reflections/thoughts` → notify → `text/written/mirror/thoughts`, as appropriate
 
 =-----------------------------------------------------------
 = [cli]()
 =-----------------------------------------------------------
+- cmd `go`: move to goals/project/journals dirs
+- cmd `goals`: `cd`: move to goals dir
 - cmd `goals`: list scopes
 - cmd `goals`: change a scope across all goals
 - cmd: `mv`: if source/destination outside the project, move normally
