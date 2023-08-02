@@ -8,11 +8,9 @@ See `design` for details on particular components.
 #-------------------------------------------------------------------------------
 # [todo]()
 #-------------------------------------------------------------------------------
-~ maybe: allow for nested note sets/topics. use case: quotes: dir for author, dir for book: files = quotes
-- support todos with priorities, fmt: ◻:1, ◻:2, ◻:...
 - reorganize `hnetxt-cli` commands:
   - bare commands:
-    - `journal` ← `journal touch`
+    - `journal` ← `journal touch` (and fix flags to match `Aim` behavior)
     - `register` ← `project create` (add `-u` flag to unregister)
     - `note` ← `notes touch` (make `notes new` behavior default when no arguments)
   - groups:
@@ -23,6 +21,25 @@ See `design` for details on particular components.
 - converter: `goals/months`
 - converter: `quotes`
 - converter: `words`
+- for goals: generate absent days for stats purposes?
+~ maybe: allow for nested note sets/topics. use case: quotes: dir for author, dir for book: files = quotes
+
+=-----------------------------------------------------------
+= [goals and intentions]()
+=-----------------------------------------------------------
++ bug: intentions that have ended are still getting included in the `Aim` file (fix `intentions:end` behavior)
+* feature: weekday-ly goals, eg "wednesday"
+* feature: todos with priorities, fmt: ◻:1, ◻:2, ◻:...
+* feature: send goals to email
+  - feature: ingest goal statuses from email
+* feature: make place to store reasons _why_ you are setting each intention (mirror file/topic note implementation)
+
+=-----------------------------------------------------------
+= [notes]()
+=-----------------------------------------------------------
+* remove distinction between "basic" and "topic" notes
+  - auto detect whether a note is a basic/topic note based on whether it's `dir/@.md` or `@.md`
+* change default note-naming behavior: `YYYYMMDD.md` → `YYYYMMDD-1.md` → `YYYYMMDD-2.md` → ...
 
 =-----------------------------------------------------------
 = [the big clean]()
@@ -30,6 +47,7 @@ See `design` for details on particular components.
 - `text/phrases`: notify
 - `text/quotes`: notify
 - `text/words`: notify
+- `text/todos`: notify
 - `text/written/materials/ideas`: notify + clean
 - `text/written/materials/people`: notify + clean
 - `text/written/materials/phenomena`: notify + clean
@@ -61,7 +79,6 @@ See `design` for details on particular components.
 ----------------------------------------
 > [migrations]()
 ----------------------------------------
-- `python hnetext project set-status`
 - `python hnetext project show-by-status`
 - `python hnetext words unknown`
 - `python hnetext catalyze`

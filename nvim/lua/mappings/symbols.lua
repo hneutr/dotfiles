@@ -20,8 +20,8 @@ local symbols_map = {
     ["="] = "≠",
     ["<"] = "≤",
     [">"] = "≥",
-    ['^'] = require('mappings.unicode.superscripts'),
-    ['_'] = require('mappings.unicode.subscripts'),
+    ['k'] = require('mappings.unicode.superscripts'),
+    ['j'] = require('mappings.unicode.subscripts'),
 
     -----------------------------------[ arrows ]-----------------------------------
     ["Left"] = "←",
