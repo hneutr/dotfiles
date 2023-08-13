@@ -8,6 +8,7 @@ See `design` for details on particular components.
 #-------------------------------------------------------------------------------
 # [todo]()
 #-------------------------------------------------------------------------------
++ bug: references aren't updating when moving from split to split
 - reorganize `hnetxt-cli` commands:
   - bare commands:
     - `journal` ← `journal touch` (and fix flags to match `Aim` behavior)
