@@ -20,7 +20,6 @@ See `design` for details on particular components.
     - `notes`
     - `meta` ← `notes meta`
 - converter: `goals/months`
-- converter: `quotes`
 - converter: `words`
 - for goals: generate absent days for stats purposes?
 ~ maybe: allow for nested note sets/topics. use case: quotes: dir for author, dir for book: files = quotes
@@ -46,7 +45,6 @@ See `design` for details on particular components.
 = [the big clean]()
 =-----------------------------------------------------------
 - `text/phrases`: notify
-- `text/quotes`: notify
 - `text/words`: notify
 - `text/todos`: notify
 - `text/written/materials/ideas`: notify + clean
