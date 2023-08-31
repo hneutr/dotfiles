@@ -8,38 +8,11 @@ See `design` for details on particular components.
 #-------------------------------------------------------------------------------
 # [todo]()
 #-------------------------------------------------------------------------------
-+ bug: references aren't updating when moving from split to split
-- reorganize `hnetxt-cli` commands:
-  - bare commands:
-    - `journal` ← `journal touch` (and fix flags to match `Aim` behavior)
-    - `register` ← `project create` (add `-u` flag to unregister)
-    - `note` ← `notes touch` (make `notes new` behavior default when no arguments)
-  - groups:
-    - `projects`: project cmds
-    - `journals` ← `journal`
-    - `notes`
-    - `meta` ← `notes meta`
-- converter: `goals/months`
-- converter: `words`
-- for goals: generate absent days for stats purposes?
-~ maybe: allow for nested note sets/topics. use case: quotes: dir for author, dir for book: files = quotes
-
-=-----------------------------------------------------------
-= [goals and intentions]()
-=-----------------------------------------------------------
-+ bug: intentions that have ended are still getting included in the `Aim` file (fix `intentions:end` behavior)
-* feature: weekday-ly goals, eg "wednesday"
-* feature: todos with priorities, fmt: ◻:1, ◻:2, ◻:...
-* feature: send goals to email
-  - feature: ingest goal statuses from email
-* feature: make place to store reasons _why_ you are setting each intention (mirror file/topic note implementation)
-
-=-----------------------------------------------------------
-= [notes]()
-=-----------------------------------------------------------
+* allow for nested note sets/topics. use case: quotes: dir for author, dir for book: files = quotes
 * remove distinction between "basic" and "topic" notes
   - auto detect whether a note is a basic/topic note based on whether it's `dir/@.md` or `@.md`
 * change default note-naming behavior: `YYYYMMDD.md` → `YYYYMMDD-1.md` → `YYYYMMDD-2.md` → ...
++ bug: references aren't updating when moving from split to split
 
 =-----------------------------------------------------------
 = [the big clean]()
@@ -60,6 +33,32 @@ See `design` for details on particular components.
 - `text/written/reflections/on-my-life/*` → `text/written/mirror/reflections`
 - `text/written/reflections/on-my-life/future` → `text/written/mirror/future`
 - `text/written/reflections/thoughts` → notify → `text/written/mirror/thoughts`, as appropriate
+
+=-----------------------------------------------------------
+
+- reorganize `hnetxt-cli` commands:
+  - bare commands:
+    - `journal` ← `journal touch` (and fix flags to match `Aim` behavior)
+    - `register` ← `project create` (add `-u` flag to unregister)
+    - `note` ← `notes touch` (make `notes new` behavior default when no arguments)
+  - groups:
+    - `projects`: project cmds
+    - `journals` ← `journal`
+    - `notes`
+    - `meta` ← `notes meta`
+
+=-----------------------------------------------------------
+= [goals and intentions]()
+=-----------------------------------------------------------
++ bug: intentions that have ended are still getting included in the `Aim` file (fix `intentions:end` behavior)
+* feature: weekday-ly goals, eg "wednesday"
+* feature: todos with priorities, fmt: ◻:1, ◻:2, ◻:...
+* feature: send goals to email
+  - feature: ingest goal statuses from email
+* feature: make place to store reasons _why_ you are setting each intention (mirror file/topic note implementation)
+- implement: `goals/months` converter
+- implement: `words` converter
+- for goals: generate absent days for stats purposes?
 
 =-----------------------------------------------------------
 = [cli]()
