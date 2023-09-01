@@ -1,4 +1,9 @@
+string = require("hl.string")
 local Object = require("util.object")
+local List = require("hl.list")
+local uuid = require("hd.uuid")
+
+local snips = require("snips")
 
 local ls = require("luasnip")
 
@@ -186,7 +191,16 @@ function Journal:str()
 end
 
 --------------------------------------------------------------------------------
---                                 access                                     --
+--                                  metadata                                  --
+--------------------------------------------------------------------------------
+local Metadata = require("hd.metadata")
+
+function Metadata:snippet()
+    return snips.to_snippet(self:components())
+end
+
+--------------------------------------------------------------------------------
+--                                   access                                   --
 --------------------------------------------------------------------------------
 return {
     Link = Link,
@@ -194,5 +208,6 @@ return {
     Divider = Divider,
     Header = Header,
     LinkHeader = LinkHeader,
+    Metadata = Metadata,
     Journal = Journal,
 }

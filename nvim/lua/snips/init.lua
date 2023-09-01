@@ -1,3 +1,17 @@
+local Object = require("util.object")
+local List = require("hl.list")
+
+local ls = require("luasnip")
+local t = ls.text_node
+local i = ls.insert_node
+local f = ls.function_node
+
+local WIDTH = 80
+local WIDTH_SMALL = 40
+local DIVIDER_FILL_CHAR = '-'
+local INPUT_FILL_CHAR = ' '
+local COMMENT = '-'
+
 --------------------------------------------------------------------------------
 --                                                                            --
 --                                                                            --
@@ -23,19 +37,6 @@
 -- --------------------
 -- 
 --------------------------------------------------------------------------------
-
-local Object = require("util.object")
-
-local ls = require("luasnip")
-local t = ls.text_node
-local i = ls.insert_node
-local f = ls.function_node
-
-local WIDTH = 80
-local WIDTH_SMALL = 40
-local DIVIDER_FILL_CHAR = '-'
-local INPUT_FILL_CHAR = ' '
-local COMMENT = '-'
 
 --------------------------------------------------------------------------------
 --                                   Block                                    --
@@ -242,6 +243,39 @@ function SmallLine:new(args)
     self.width = WIDTH_SMALL
 end
 
+--------------------------------------------------------------------------------
+--                                                                            --
+--                                                                            --
+--                                 to_snippet                                 --
+--                                                                            --
+--                                                                            --
+--------------------------------------------------------------------------------
+function to_snippet(components)
+    local groups = List()
+    local input_count = 1
+    components:foreach(function(component)
+        local previous_component_type = nil
+
+        if type(component) == "function" then
+            groups:append({apply = f, to = component})
+        elseif type(component) == "string" then
+            if component:startswith("INPUT:") then
+                groups:append({apply = i, to = input_count})
+                input_count = input_count + 1
+            else
+                if #groups == 0 or groups[#groups].apply ~= t then
+                    groups:append({apply = t, to = List()})
+                end
+
+                groups[#groups].to:append(component)
+            end
+        end
+    end)
+
+    return groups:map(function(g) return g.apply(g.to) end)
+end
+
+
 
 return {
     Block = Block,
@@ -253,4 +287,5 @@ return {
     Print = Print,
     BigLine = BigLine,
     SmallLine = SmallLine,
+    to_snippet = to_snippet,
 }

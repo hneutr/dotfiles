@@ -3,9 +3,9 @@ The goal is to do the following:
 2. simplify the move/remove behavior by assigning everything a fixed id (based on a timestamp)
 3. support _dynamic_ content, eg, have a way to see all of the moons of a given planet
 
-#-------------------------------------------------------------------------------
+=-------------------------------------------------------------------------------
 # [todo]()
-#-------------------------------------------------------------------------------
+=-------------------------------------------------------------------------------
 - initialize metadata for files/marks
   - populate with:
     - id
@@ -18,47 +18,22 @@ The goal is to do the following:
 
 # MAYBE: put metadata in an id-named file and edit it via pop-up floating window?
 
-#-------------------------------------------------------------------------------
-# [notes]()
-#-------------------------------------------------------------------------------
-- types:
-  - `file`: a file
-  - `section`: a file subsection
-
-=-----------------------------------------------------------
-= [creating a note]()
-=-----------------------------------------------------------
-as a `file`:
-  contexts: [`shell`]
-as a `section`:
-  contexts: [`vim`]
-
-=-----------------------------------------------------------
-= [finding a note]()
-=-----------------------------------------------------------
-to reference:
-  contexts: [`vim`]
-to open:
-  contexts: [`vim`, `shell`]
-
-=-----------------------------------------------------------
-= [moving a note]()
-=-----------------------------------------------------------
-section to file:
-  contexts: [`vim`]
-file to section:
-  contexts: [`vim`, `shell`]
-
-=-----------------------------------------------------------
-= [visualizing a note's references]()
-=-----------------------------------------------------------
-
-#-------------------------------------------------------------------------------
+=-------------------------------------------------------------------------------
 # [implementation: filename = location]()
-#-------------------------------------------------------------------------------
+=-------------------------------------------------------------------------------
 
-=-----------------------------------------------------------
-= [filename = location]()
+=---------------------------------------
+> [to improve]()
+=---------------------------------------
+- creating entries:
+  + putting them in specific places
+  - support creating subfiles (populating `of`)
+  - when creating a `section`: fill in the `of` field with the containing entry
+    - this involves:
+      1. parsing the entries within a file (along with their "size")
+      2. finding the nearest "bigger" entry
+  ~ maybe: support a file that defines metadata defaults for files created in the directory
+
 =-----------------------------------------------------------
 - paths:
   - [paths]():
@@ -70,21 +45,10 @@ file to section:
     - `{uuid}.md`: 1 per uuid
   - [relations]():
     - `{uuid}.md`: 1 per uuid
-- metadata:
-  location: xyz
-  title: string
-  is a: string
-  of: [how.to.list.this](uuid)
-  ...
-- search syntax: `~project/{of}.{is a}:title`
-  - `/{of}`: the label (if a location) in the `of` field
-  - `.{is a}`: the label (if a location) in the `is a` field
-  - `:title`: the title
-  - `~project`: list locations in other projects
 
-----------------------------------------
+=---------------------------------------
 > [on file modification]()
-----------------------------------------
+=---------------------------------------
 - regenerate search content:
   1. save `/{of}.{is a}:title` to: [paths/{uuid}.md]()
   2. cat [paths/*.md]() into [paths/index]()
@@ -96,31 +60,9 @@ file to section:
   2. save to: [references/{uuid}.md]()
 - save the title to: [titles/{uuid}.md]()
 
-----------------------------------------
-> [creating a note]()
-----------------------------------------
-~ todo: support a file that defines metadata defaults for files created in the directory
-as a `file`:
-  from `shell`: type `new`
-    1. create [{uuid}.md]() with metadata:
-      `location`: [{uuid}.md]()
-    2. open [{uuid}.md]()
-  from `vim`: type `New Note`
-    1. create [{uuid}.md]() with metadata:
-      `location`: [{uuid}.md]()
-    2. open [{uuid}.md]()
-as a `section`:
-  from `vim`: trigger a metadata snippet with:
-    `location`: [{uuid}.md]()
-    `part of`: name (uuid) of the current file
-
-----------------------------------------
+=---------------------------------------
 > [finding a note]()
-----------------------------------------
-create `vim` command to open a location (aka, a `uuid`):
-  1. find the location's path (via `rg` or `find`)
-  2. open it
-  2. go to the `uuid` definition (`id: {uuid}`)
+=---------------------------------------
 to reference:
   from `vim`: 
     1. fuzzy find over [paths/index]() (or the cross-project index)
@@ -133,9 +75,9 @@ to open:
     1. fuzzy find over [paths/index]() (or the cross-project index)
     2. open `vim` with a call to open the selection
 
-----------------------------------------
+=---------------------------------------
 > [visualizing a note's references]()
-----------------------------------------
+=---------------------------------------
 - how:
   1. search for references in [references/*.md]() (and the cross-project index)
   2. gather them into lists by field and invert the reference (swap referrer ←→ note)
@@ -143,7 +85,32 @@ to open:
   3. open in `vim`
 - use `vim`'s quickfixlist?
 
-----------------------------------------
+=---------------------------------------
 > [moving/removing a note]()
-----------------------------------------
+=---------------------------------------
 nothing special, do it manually? (maybe? has consequences for `.chaff/scratch`)
+
+=-----------------------------------------------------------
+= [usage]()
+=-----------------------------------------------------------
+- search syntax: `~project/{of}.{is a}:title`
+  - `/{of}`: the label (if a location) in the `of` field
+  - `.{is a}`: the label (if a location) in the `is a` field
+  - `:title`: the title
+  - `~project`: list locations in other projects
+
+=---------------------------------------
+> [metadata]()
+=---------------------------------------
+![title](location):
+  is a: string
+  of: [how.to.list.this](uuid)
+  ...
+
+=---------------------------------------
+> [creating a note]()
+=---------------------------------------
+- as a `file`:
+  - from `shell`: type `new`
+  - from `vim`: `<leader>n(jlo)`
+- as a `section`: snippet: `M`/`Mm`/`Mb`
