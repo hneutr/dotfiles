@@ -4,4 +4,4 @@ link:
             - ".md"
 vim:
     openerPrefix: "<leader>o"
-data_dir: "/Users/hne/data/hnetxt"
+data_dir: "/Users/hne/.data/hnetxt"

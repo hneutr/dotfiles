@@ -16,7 +16,6 @@ return require('packer').startup(function(use)
     use {'junegunn/fzf', run = function() vim.fn['fzf#install']() end } -- fzf
     use 'ibhagwan/fzf-lua'                                              -- fzf-lua
     use 'junegunn/goyo.vim'                                             -- distraction free + centered editing
-    use 'tpope/vim-repeat'                                              -- repeat stuff
     use 'wellle/targets.vim'                                            -- more objects
     use({"L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*"})                -- snippets
     use 'windwp/nvim-autopairs'                                         -- close things
@@ -34,7 +33,6 @@ return require('packer').startup(function(use)
     ---------------------------------[ languages ]----------------------------------
     use 'nvim-treesitter/nvim-treesitter'                               -- syntax/indent
     use 'jeetsukumaran/vim-pythonsense'                                 -- python text objects
-    use 'neovim/nvim-lspconfig'
     use 'sheerun/vim-polyglot'
 
 

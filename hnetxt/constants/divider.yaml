@@ -4,7 +4,7 @@ sizes:
     large:
         width: 80
         start_string: '='
-        color: orange
+        color: yellow
         fold_level: 0
     medium:
         width: 60
@@ -13,6 +13,6 @@ sizes:
         fold_level: 1
     small:
         width: 40
-        color: blue
+        color: yellow
         start_string: '='
         fold_level: 2

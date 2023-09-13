@@ -80,7 +80,7 @@ function hnetxt_ls() {
 }
 
 function new() {
-    nvim $(hnetxt new)
+    nvim $(hnetxt new $@)
 }
 
 function aim() {

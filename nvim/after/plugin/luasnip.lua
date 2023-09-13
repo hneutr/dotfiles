@@ -8,8 +8,8 @@ vim.api.nvim_create_autocmd({'BufEnter'}, {pattern="*", callback=function()
 
     local filetype = vim.bo.filetype
     if not vim.tbl_get(loaded_fts, filetype) then
-        local comment_str = string.gsub(vim.bo.commentstring, "%s?%%s$", '')
-        local ft_print_string = vim.tbl_get(vim.g.snip_ft_printstrings, filetype)
+        local ft_strings = vim.tbl_get(vim.g.snip_ft_strings, filetype) or {}
+        local comment_str = string.gsub(ft_strings.comment or vim.bo.commentstring, "%s?%%s$", '')
 
         ls.add_snippets(filetype, {
             s("block", snips.Block({comment=comment_str}):snippet()),
@@ -20,8 +20,8 @@ vim.api.nvim_create_autocmd({'BufEnter'}, {pattern="*", callback=function()
             s("fnb", snips.FunctionBlock({comment=comment_str}):snippet()),
             s("bl", snips.BigLine({comment=comment_str}):snippet()),
             s("l", snips.SmallLine({comment=comment_str}):snippet()),
-            s("p", snips.Print(ft_print_string):snippet()),
-            s("qp", snips.Print(ft_print_string):snippet(true)),
+            s("p", snips.Print(ft_strings.print):snippet()),
+            s("qp", snips.Print(ft_strings.print):snippet(true)),
         })
 
         loaded_fts[filetype] = true

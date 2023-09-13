@@ -143,13 +143,14 @@ vim.api.nvim_create_autocmd({"BufEnter"}, { pattern="*", callback=require'util'.
 --------------------------------------------------------------------------------
 --                                  plugins                                   --
 --------------------------------------------------------------------------------
-vim.g.snip_ft_printstrings = {
-    javascript = 'console.log(%s)',
-    lua = 'print(require("inspect")(%s))',
-    python = 'print(%s)',
-    vim = 'echo %s',
-    zsh = 'echo %s',
-    sh = 'echo %s',
+vim.g.snip_ft_strings = {
+    javascript = {print = 'console.log(%s)'},
+    lua = {print = 'print(require("inspect")(%s))'},
+    python = {print = 'print(%s)'},
+    markdown = {comment = '= %s'},
+    vim = {print = 'echo %s'},
+    zsh = {print = 'echo %s'},
+    sh = {print = 'echo %s'},
 }
 
 -- polyglot is super annoying
