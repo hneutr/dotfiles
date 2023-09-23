@@ -48,12 +48,12 @@ function project_root_exists() {
 }
 
 function hnetxt() {
-    lua $HOME/lib/hnetxt-cli/src/htc/init.lua $@
+    lua $HOME/lib/hnetxt-lua/src/htc/init.lua $@
 }
 
 function hnetxt_test() {
     local START_DIR=$PWD
-    cd $HOME/lib/hnetxt-cli
+    cd $HOME/lib/hnetxt-lua
     luarocks make > /dev/null
     cd $START_DIR
     hnetxt $@
@@ -98,3 +98,4 @@ function wr() {
 alias goals="hnetxt goals"
 alias meta="hnetxt notes meta"
 alias notes="hnetxt notes"
+alias fields="hnetxt fields"

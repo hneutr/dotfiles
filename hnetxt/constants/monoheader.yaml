@@ -1,0 +1,16 @@
+defaults: 
+    open: "="
+    close: "="
+    fill: "-"
+    pre: "[ "
+    post: " ]"
+    color: yellow
+    size: small
+sizes:
+    small:
+        width: 40
+        color: steve
+    medium:
+        width: 60
+    large:
+        width: 80

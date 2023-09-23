@@ -1,0 +1,12 @@
+LeftArrow:
+    string: '←'
+    color: red
+RightArrow:
+    string: '→'
+    color: blue
+UpArrow:
+    string: '↑'
+    color: blue
+DownArrow:
+    string: '↓'
+    color: blue

@@ -136,11 +136,6 @@ See `design` for details on particular components.
 =-----------------------------------------------------------
 
 ----------------------------------------
-> [flags]()
-----------------------------------------
-- ui: toggle flags mappings eg `<leader>fq` toggles a question flag on the line
-
-----------------------------------------
 > [mirrors]()
 ----------------------------------------
 - ui: view a file's mirrors (in a quickfixlist with `<c-j>/<c-l>` bound to open the item on the cursor's line)
@@ -148,7 +143,3 @@ See `design` for details on particular components.
   - eg by binding `<c-PREFIX>` to open up the PREFIX mirror of a given file
     - eg, `<c->` = open up the questions file
     - ideally support opening it up in edit/split/vsplit/tab
-
-=-----------------------------------------------------------
-= [misc tech]()
-=-----------------------------------------------------------
