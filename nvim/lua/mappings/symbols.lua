@@ -3,15 +3,20 @@ local symbols_map = {
     ["a"] = require('mappings.unicode.arrows'),
     ["d"] = require('mappings.unicode.doublestruck'),
     ["g"] = require('mappings.unicode.greek'),
+    ['j'] = require('mappings.unicode.subscripts'),
+    ['k'] = require('mappings.unicode.superscripts'),
     ['l'] = require('mappings.unicode.logic'),
     ["m"] = require('mappings.unicode.math'),
+    ["o"] = "◻",
     ["s"] = require('mappings.unicode.shapes'),
+    ["x"] = "⨉",
 
     -----------------------------[ uppercase letters ]------------------------------
     ["A"] = require('mappings.unicode.accents'),
     ["M"] = "ꟽ",
     ["P"] = "ꟼ",
 
+    ----------------------------[ numbers and symbols ]-----------------------------
     ----------------------------------[ numbers ]-----------------------------------
     ["0"] = "°",
 
@@ -20,14 +25,13 @@ local symbols_map = {
     ["="] = "≠",
     ["<"] = "≤",
     [">"] = "≥",
-    ['k'] = require('mappings.unicode.superscripts'),
-    ['j'] = require('mappings.unicode.subscripts'),
 
     -----------------------------------[ arrows ]-----------------------------------
     ["Left"] = "←",
     ["Right"] = "→",
     ["Up"] = "↑",
     ["Down"] = "↓",
+
 }
 
 function get_nested_mapping(key, val)

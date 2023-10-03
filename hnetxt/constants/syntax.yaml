@@ -1,6 +1,6 @@
 LeftArrow:
     string: '←'
-    color: red
+    color: blue
 RightArrow:
     string: '→'
     color: blue

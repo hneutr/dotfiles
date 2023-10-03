@@ -7,92 +7,89 @@ local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
 local c = ls.choice_node
+local sn = ls.snippet_node
+local ps = ls.parser.parse_snippet
+
+local extras = require('luasnip.extras')
+local fmt = require("luasnip.extras.fmt").fmt
 
 local function get_today() return vim.fn.strftime("%Y%m%d") end
+local today_s = extras.partial(os.date, "%Y%m%d")
 
 ls.add_snippets("markdown", {
-    s("time", f(function() return vim.fn.strftime("%X") end)),
+    ps("l", "[$1]($2)"),
     -- dividers
     s("d", mds.Divider('small'):snippet()),
     s("dm", mds.Divider('medium'):snippet()),
-    s("db", mds.Divider('large'):snippet()),
+    s("dl", mds.Divider('large'):snippet()),
+    mds.divider_s("D", "small"),
+    mds.divider_s("DM", "medium"),
     -- headers
-    s("h", mds.Header():snippet()),
-    s("hm", mds.Header({size='medium'}):snippet()),
-    s("hb", mds.Header({size='large'}):snippet()),
-    -- link headers
-    -- s("h", mds.LinkHeader():snippet()),
-    -- s("hm", mds.LinkHeader({size='medium'}):snippet()),
-    -- s("hb", mds.LinkHeader({size='large'}):snippet()),
-    -- links
-    s("l", mds.Link():snippet()),
-    -- flags
-    s("f", mds.Flags():snippet()),
+    ps("hl", mds.header("large")),
+    ps("hm", mds.header("medium")),
+    ps("h", mds.header()),
+    ps("hs", mds.header("small")),
+    ps("Hl", mds.link_header("large")),
+    ps("Hm", mds.link_header("medium")),
+    ps("H", mds.link_header()),
+    ps("Hs", mds.link_header("small")),
     -- metadata (simple)
     s("m", {
         t({"is a: "}), i(1, ""), 
         t({"", "of: "}), i(2, ""),
         t({"", tostring(mds.Divider('large')), ""}),
     }),
-    -- metadata
-    s("M", mds.Metadata({size='medium'}):snippet()),
-    s("Mb", mds.Metadata({size='large'}):snippet()),
-    s("Ms", mds.Metadata({size='small'}):snippet()),
-    -- today header
-    s("htd", mds.LinkHeader({content = get_today}):snippet()),
     -- misc
-    s("journal", mds.Journal():snippet()),
+    ps("person", [[
+        first name: $1
+        middle name: $2
+        last name: $3
+    ]]),
+    ps("book", [[
+        is a: book
+        by: $1
+        published in: ${2:YYYY}
+        type: ${3|read,recommendation|}
+        read in: ${4:YYYY}
+        recommended by: $5
+    ]]),
+    ps("quote", [[
+        is a: quote
+        of: $1
+        on page: $2
+        type: ${3|passage,description,assertion,perspective,witticism,on art,observation|}
+        remind: ${4|false,true|}
 
-    s("person", {
-        t({"is a: "}), i(1, "author"), 
-        t({"", "name:", "  first: "}), i(2, ""), 
-        t({"", "  middle: "}), i(3, ""),
-        t({"", "  last: "}), i(4, ""),
+        $5
+    ]]),
+    s("d", {
+        t('date: '),
+        f(get_today),
+        t({"", ""}),
     }),
-    s("book", {
-        t({"is a: "}), i(1, "book"), 
-        t({"", "by: "}), i(2, ""), 
-        t({"", "published in: "}), i(3, "YYYY"), 
-        t({"", "type: "}), i(4, "read|recommendation"), 
-        t({"", "read in: ["}), i(5, "YYYYMM"), t({"]",
-           "recommended by: "}), i(6, "someone"), 
-    }),
-    s("quote", {
-        t({"is a: quote",
-            "of: "}), i(1, ""), 
-        t({"", "on page: "}), i(2, ""),
-        t({"", "type: "}), c(3, {
-            t('passage'),
-            t('description'),
-            t('assertion'),
-            t('perspective'),
-            t('witticism'),
-            t('on art'),
-            t('observation'),
-        }),
-        t({"", "remind: "}), c(4, {
-            t('false'),
-            t('true'),
-        }),
-        t({"", "", ""}), i(5, ""),
-    }),
-    s("word", {
-        t({"is a: word",
-            "of: "}), i(1, ""), 
-        t({"", "type: "}), c(2, {
-            t('cool'),
-            t('unknown'),
-        })
-    }),
+    ps("t", "@: $1"),
+    s("thought", fmt(
+        [[
+            date: {today}
+            is a: {i1}
+            @: {i2}
+        ]],
+        {today = today_s, i1 = i(1, ""), i2 = i(2, "tag")})
+    ),
+    ps("word", [[
+        is a: word
+        of: $1
+        type: ${2|cool,unknown|}
+    ]]),
 })
 
-vim.keymap.set({"i", "s"}, "<C-n>", function()
+vim.keymap.set({"i", "s"}, "<C-.>", function()
 	if ls.choice_active() then
 		ls.change_choice(1)
 	end
 end, {silent = true})
 
-vim.keymap.set({"i", "s"}, "<C-p>", function()
+vim.keymap.set({"i", "s"}, "<C-,>", function()
 	if ls.choice_active() then
 		ls.change_choice(-1)
 	end

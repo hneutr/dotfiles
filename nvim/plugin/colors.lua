@@ -1,4 +1,17 @@
-vim.cmd([[colorscheme solarized]])
+vim.cmd.colorscheme "catppuccin"
+vim.go.termguicolors = true
+
+require("catppuccin").setup({
+    flavor = "mocha",
+    integrations = {
+        cmp = true,
+        gitsigns = true,
+        nvimtree = true,
+        treesitter = true,
+        notify = false,
+        mini = false,
+    }
+})
 
 local hl = vim.api.nvim_set_hl
 

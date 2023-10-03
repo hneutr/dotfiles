@@ -12,9 +12,9 @@ return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'                                        -- plugin manager
     use 'altercation/vim-colors-solarized'                              -- colorscheme
     use 'hneutr/nvimux'                                                 -- tmux replacement
-    use 'hneutr/vim-cool'                                               -- it's cool
-    use {'junegunn/fzf', run = function() vim.fn['fzf#install']() end } -- fzf
-    use 'ibhagwan/fzf-lua'                                              -- fzf-lua
+    use 'hneutr/vim-cool'
+    use {'junegunn/fzf', run = function() vim.fn['fzf#install']() end}
+    use 'ibhagwan/fzf-lua'
     use 'junegunn/goyo.vim'                                             -- distraction free + centered editing
     use 'wellle/targets.vim'                                            -- more objects
     use({"L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*"})                -- snippets
@@ -33,14 +33,13 @@ return require('packer').startup(function(use)
     ---------------------------------[ languages ]----------------------------------
     use 'nvim-treesitter/nvim-treesitter'                               -- syntax/indent
     use 'jeetsukumaran/vim-pythonsense'                                 -- python text objects
-    use 'sheerun/vim-polyglot'
 
+    use { "catppuccin/nvim", as = "catppuccin" }
 
     use_rocks 'inspect'
     use_rocks 'penlight'
     use_rocks {'lyaml', env = {YAML_DIR = "/opt/homebrew"}}
-    use_rocks {'hneutil-lua', server = "https://luarocks.org/manifests/hneutr"}
-    use "~/lib/hnetxt-nvim"
+    use "~/lib/hnetxt-lua"
 
     ----------------------------------[ testing ]-----------------------------------
 

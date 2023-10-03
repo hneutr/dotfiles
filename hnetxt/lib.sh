@@ -8,7 +8,7 @@ function project_root_exists() {
         alias mv=hnetxt_mv
         alias rm=hnetxt_rm
         alias touch=hnetxt_touch
-        alias vim=hnetxt_vim
+        # alias vim=hnetxt_vim
         alias ns=hnetxt_ls
         # alias new=hnetxt_new
         export PROJECT_ROOT=$directory
