@@ -2,6 +2,8 @@ local ls = require('luasnip')
 local snips = require('snips')
 local mds = require('snips.markdown')
 
+local NHeader = require("htl.text.neoheader")
+
 local s = ls.snippet
 local t = ls.text_node
 local i = ls.insert_node
@@ -16,6 +18,20 @@ local fmt = require("luasnip.extras.fmt").fmt
 local function get_today() return vim.fn.strftime("%Y%m%d") end
 local today_s = extras.partial(os.date, "%Y%m%d")
 
+local function header(trigger, size, as_link)
+    local content = "$1"
+
+    if as_link then
+        content = "[$1]($2)"
+    end
+
+    return ps(
+        trigger,
+        tostring(NHeader({size = size, content = content})) .. "\n",
+        {trim_empty = false}
+    )
+end
+
 ls.add_snippets("markdown", {
     ps("l", "[$1]($2)"),
     -- dividers
@@ -25,14 +41,14 @@ ls.add_snippets("markdown", {
     mds.divider_s("D", "small"),
     mds.divider_s("DM", "medium"),
     -- headers
-    ps("hl", mds.header("large")),
-    ps("hm", mds.header("medium")),
-    ps("h", mds.header()),
-    ps("hs", mds.header("small")),
-    ps("Hl", mds.link_header("large")),
-    ps("Hm", mds.link_header("medium")),
-    ps("H", mds.link_header()),
-    ps("Hs", mds.link_header("small")),
+    header("hl", "large"),
+    header("hm", "medium"),
+    header("h", "default"),
+    header("hs", "small"),
+    header("Hl", "large", true),
+    header("Hm", "medium", true),
+    header("H", "default", true),
+    header("Hs", "small", true),
     -- metadata (simple)
     s("m", {
         t({"is a: "}), i(1, ""), 

@@ -8,8 +8,8 @@ function project_root_exists() {
         alias mv=hnetxt_mv
         alias rm=hnetxt_rm
         alias touch=hnetxt_touch
-        # alias vim=hnetxt_vim
         alias ns=hnetxt_ls
+        # alias vim=hnetxt_vim
         # alias new=hnetxt_new
         export PROJECT_ROOT=$directory
     else
@@ -93,6 +93,10 @@ function journal() {
 
 function wr() {
     nvim $1 -c "lua require('htn.project.mirror').open('outlines')" +bnext +GoyoToggle
+}
+
+function gv() {
+    nvim $1 +GoyoToggle
 }
 
 alias goals="hnetxt goals"

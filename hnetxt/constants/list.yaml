@@ -20,9 +20,9 @@ types:
         toggle_key: d
         highlights:
             sigil: 
-                fg: gray
+                fg: green
             text:
-                fg: gray
+                fg: green
                 strikethrough: true
     reject:
         sigil: '⨉'
@@ -31,16 +31,16 @@ types:
             sigil: 
                 fg: red
             text:
-                fg: gray
+                fg: text
     maybe:
         sigil: '~'
         toggle_key: m
         sigil_regex: "\\~"
         highlights:
             sigil:
-                fg: gray
+                fg: text
             text:
-                fg: gray
+                fg: text
     question:
         sigil: "?"
         rg_regex: "\\?"
