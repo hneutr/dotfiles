@@ -1,8 +1,8 @@
 local ls = require('luasnip')
 local snips = require('snips')
-local mds = require('snips.markdown')
 
 local NHeader = require("htl.text.neoheader")
+local NDivider = require("htl.text.neodivider")
 
 local s = ls.snippet
 local t = ls.text_node
@@ -32,28 +32,32 @@ local function header(trigger, size, as_link)
     )
 end
 
+local function divider(trigger, size)
+    return ps(
+        trigger,
+        tostring(NDivider(size)) .. "\n",
+        {trim_empty = false}
+    )
+end
+
 ls.add_snippets("markdown", {
     ps("l", "[$1]($2)"),
     -- dividers
-    s("d", mds.Divider('small'):snippet()),
-    s("dm", mds.Divider('medium'):snippet()),
-    s("dl", mds.Divider('large'):snippet()),
-    mds.divider_s("D", "small"),
-    mds.divider_s("DM", "medium"),
+    divider("dl", "large"),
+    divider("dm", "medium"),
+    divider("ds", "small"),
     -- headers
     header("hl", "large"),
     header("hm", "medium"),
-    header("h", "default"),
     header("hs", "small"),
     header("Hl", "large", true),
     header("Hm", "medium", true),
-    header("H", "default", true),
     header("Hs", "small", true),
     -- metadata (simple)
     s("m", {
         t({"is a: "}), i(1, ""), 
-        t({"", "of: "}), i(2, ""),
-        t({"", tostring(mds.Divider('large')), ""}),
+        -- t({"", "of: "}), i(2, ""),
+        t({"", tostring(NDivider('large')), ""}),
     }),
     -- misc
     ps("person", [[
@@ -78,7 +82,7 @@ ls.add_snippets("markdown", {
 
         $5
     ]]),
-    s("d", {
+    s("date", {
         t('date: '),
         f(get_today),
         t({"", ""}),
@@ -94,7 +98,7 @@ ls.add_snippets("markdown", {
     ),
     ps("word", [[
         is a: word
-        of: $1
+        seen in: $1
         type: ${2|cool,unknown|}
     ]]),
 })
