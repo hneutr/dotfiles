@@ -1,8 +1,9 @@
-default_size: small
-sizes:
-    small:
-        content_start: '='
-    medium:
-        content_start: '='
-    large:
-        content_start: '='
+size: large
+fill: ━
+upper: ┏
+lower: ┗
+right: ╸
+middle:
+    large: ┣
+    medium: ┠
+    small: ┃

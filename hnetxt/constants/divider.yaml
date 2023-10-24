@@ -1,18 +1,11 @@
-default_size: small
-fill_char: '-'
-sizes:
-    large:
-        width: 80
-        start_string: '='
-        color: red
-        fold_level: 0
-    medium:
-        width: 60
-        start_string: '='
-        color: peach
-        fold_level: 1
-    small:
-        width: 40
-        color: yellow
-        start_string: '='
-        fold_level: 2
+size: large
+style: default
+fill: ━
+default: 
+    left: ╺
+    right: ╸
+metadata:
+    left: ━
+    right: ━
+    color: blue
+    fold_level: 20

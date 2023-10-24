@@ -14,6 +14,10 @@ require('nvim-treesitter.configs').setup {
         enable = true,
         additional_vim_regex_highlighting = true,
     },
+    indent = {
+        enable = true,
+        disable = {'markdown', 'markdown_inline'},
+    }
 }
 
 vim.api.nvim_set_hl(0, "@text.strong", {bold = true})

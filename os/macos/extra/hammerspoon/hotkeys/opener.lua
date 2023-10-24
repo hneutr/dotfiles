@@ -13,6 +13,7 @@ local keyToApplication = {
     s = "safari",
     t = "clock",
     w = "weather",
+    v = "Cisco AnyConnect Secure Mobility Client",
     z = "https://calendar.google.com/calendar/u/1/r",
 }
 

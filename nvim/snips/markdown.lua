@@ -1,8 +1,8 @@
 local ls = require('luasnip')
 local snips = require('snips')
 
-local NHeader = require("htl.text.neoheader")
-local NDivider = require("htl.text.neodivider")
+local Header = require("htl.text.header")
+local Divider = require("htl.text.divider")
 
 local s = ls.snippet
 local t = ls.text_node
@@ -27,15 +27,15 @@ local function header(trigger, size, as_link)
 
     return ps(
         trigger,
-        tostring(NHeader({size = size, content = content})) .. "\n",
+        tostring(Header({size = size, content = content})) .. "\n",
         {trim_empty = false}
     )
 end
 
-local function divider(trigger, size)
+local function divider(trigger, size, style)
     return ps(
         trigger,
-        tostring(NDivider(size)) .. "\n",
+        tostring(Divider(size, style)) .. "\n",
         {trim_empty = false}
     )
 end
@@ -53,12 +53,13 @@ ls.add_snippets("markdown", {
     header("Hl", "large", true),
     header("Hm", "medium", true),
     header("Hs", "small", true),
+    -- metadata dividers
+    divider("m", "large", "metadata"),
     -- metadata (simple)
-    s("m", {
-        t({"is a: "}), i(1, ""), 
-        -- t({"", "of: "}), i(2, ""),
-        t({"", tostring(NDivider('large')), ""}),
-    }),
+    -- s("m", {
+    --     t({"is a: "}), i(1, ""), 
+    --     t({"", tostring(Divider('large')), ""}),
+    -- }),
     -- misc
     ps("person", [[
         first name: $1
@@ -77,17 +78,17 @@ ls.add_snippets("markdown", {
         is a: quote
         of: $1
         on page: $2
-        type: ${3|passage,description,assertion,perspective,witticism,on art,observation|}
-        remind: ${4|false,true|}
 
         $5
     ]]),
+    -- type: ${3|passage,description,assertion,perspective,witticism,observation|}
     s("date", {
         t('date: '),
         f(get_today),
         t({"", ""}),
     }),
-    ps("t", "@: $1"),
+    -- make snippet to look for all tags and make a popup selector
+    -- ps("t", "@$1"),
     s("thought", fmt(
         [[
             date: {today}
@@ -99,7 +100,7 @@ ls.add_snippets("markdown", {
     ps("word", [[
         is a: word
         seen in: $1
-        type: ${2|cool,unknown|}
+        type: ${2|unknown,cool|}
     ]]),
 })
 
