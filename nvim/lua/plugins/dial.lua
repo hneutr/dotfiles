@@ -23,17 +23,6 @@ local ft_info = {
             augend.constant.new({elements = {"true", "false"}}),
         }
     },
-    -- markdown = {
-    --     pattern = '*.md',
-    --     augends = {
-    --         augend.constant.new({
-    --             -- elements = {"b✓", "⨉"}, -- ✔✓,☑
-    --             -- elements = {"+", "⨉"}, -- ✔✓,☑
-    --             elements = {"test",  "other"}, -- ✔✓,☑
-    --             cyclic = true 
-    --         }),
-    --     }
-    -- },
 }
 
 local groups = {}

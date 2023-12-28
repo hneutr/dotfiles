@@ -62,6 +62,9 @@ vim.o.splitright = true
 -- right side: (%c)
 vim.o.statusline = "%.100F%=%c"
 
+-- term colors
+vim.go.termguicolors = true
+
 -- extend mapping timeout time
 vim.o.timeoutlen = 1000
 

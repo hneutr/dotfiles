@@ -1,5 +1,5 @@
-local actions = require "fzf-lua.actions"
-require'fzf-lua'.setup {
+local actions = require("fzf-lua.actions")
+require('fzf-lua').setup {
     winopts = {
         height = .4,
         width = .4,

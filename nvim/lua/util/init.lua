@@ -1,6 +1,11 @@
 local BufferLines = require("hn.buffer_lines")
 local M = {}
 
+function lrequire(package_name)
+    return function()
+        return require(package_name)
+    end
+end
 
 function _G.escape(s)
     return (s:gsub('[%-%.%+%[%]%(%)%$%^%%%?%*]','%%%1'))

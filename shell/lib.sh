@@ -24,3 +24,7 @@ function popen() {
     local filename="${1:r}.pdf"
     open $filename
 }
+
+function zv() {
+    nvim $1 -c "lua require('zen-mode').toggle()"
+}

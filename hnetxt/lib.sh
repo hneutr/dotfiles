@@ -75,13 +75,6 @@ function wr() {
     nvim $1 -c "lua require('htn.project.mirror').open('outlines')" +bnext +GoyoToggle
 }
 
-# function gv() {
-#     # touch $1
-#     nvim $1
-#     # nvim $1 -c "GoyoToggle"
-#     # nvim $1 +GoyoToggle
-# }
-
 alias goals="hnetxt goals"
 alias fields="hnetxt fields"
 alias tags="hnetxt tags"

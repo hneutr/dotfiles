@@ -15,7 +15,6 @@ alias lst='tree --git-ignore -I .git\|.gitignore'
 alias nvim=$NVIM_PATH
 alias vi="nvim"
 alias vim="nvim"
-# alias gv="vim -c 'GoyoToggle' "
 alias term="nvim -c term"
 
 # python

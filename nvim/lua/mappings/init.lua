@@ -37,10 +37,6 @@ local maps = {
         {vim.g.mapleader .. "q", ":q<cr>"},
         -- close buffer
         {vim.g.mapleader .. "k", require('util').kill_buffer_and_go_to_next, {silent = true}},
-        -- fuzzy search
-        {vim.g.mapleader .. "df", require('fzf-lua').files},
-        -- start goyo
-        {vim.g.mapleader .. "dg", ":GoyoToggle<cr>"},
     },
     i = {
         -- esc
