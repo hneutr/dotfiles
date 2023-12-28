@@ -2,11 +2,17 @@ vim.g.goyo_height = 90
 
 function goyo_toggle()
     vim.cmd("Goyo")
+
     if vim.g.goyo_running then
         goyo_stop()
     else
         goyo_start()
     end
+end
+
+function goyo_quit()
+    vim.cmd("GoyoToggle")
+    vim.cmd("quit")
 end
 
 function goyo_start()
@@ -16,15 +22,7 @@ function goyo_start()
     vim.o.showcmd = false
     vim.wo.spell = true
 
-    vim.keymap.set(
-        "n",
-        " q",
-        function()
-            vim.cmd("GoyoToggle")
-            vim.cmd("quit")
-        end,
-        {silent = true}
-    )
+    vim.keymap.set("n", " q", goyo_quit, {silent = true})
 end
 
 function goyo_stop()

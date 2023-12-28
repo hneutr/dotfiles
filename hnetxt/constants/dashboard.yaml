@@ -1,0 +1,8 @@
+page:
+    size: [18, 11]
+    margin: .015
+colors:
+    page: surface0
+    background: surface1
+    text: text
+    ticks: yellow

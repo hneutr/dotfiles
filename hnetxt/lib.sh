@@ -7,10 +7,6 @@ function project_root_exists() {
     if [ -f $project_file ]; then
         alias mv=hnetxt_mv
         alias rm=hnetxt_rm
-        alias touch=hnetxt_touch
-        alias ns=hnetxt_ls
-        # alias vim=hnetxt_vim
-        # alias new=hnetxt_new
         export PROJECT_ROOT=$directory
     else
         local parent=$(dirname $directory)
@@ -25,14 +21,6 @@ function project_root_exists() {
 
             if [ ${+aliases[rm]} -eq 1 ]; then
                 unalias rm
-            fi
-
-            if [ ${+aliases[touch]} -eq 1 ]; then
-                unalias touch
-            fi
-
-            if [ ${+aliases[ns]} -eq 1 ]; then
-                unalias ns
             fi
 
             if [ ${+aliases[new]} -eq 1 ]; then
@@ -67,16 +55,8 @@ function hnetxt_rm() {
     hnetxt remove $@
 }
 
-function hnetxt_touch() {
-    hnetxt notes touch $@
-}
-
-function hnetxt_vim() {
-    nvim $(hnetxt notes touch $@)
-}
-
-function hnetxt_ls() {
-    hnetxt notes list $@
+function journal() {
+    nvim $(hnetxt journal $@) +GoyoToggle -c "1" 
 }
 
 function new() {
@@ -87,19 +67,24 @@ function aim() {
     nvim $(hnetxt aim $@)
 }
 
-function journal() {
-    nvim $(hnetxt journal $@) +GoyoToggle -c "1" 
+function track() {
+    nvim $(hnetxt track $@)
 }
 
 function wr() {
     nvim $1 -c "lua require('htn.project.mirror').open('outlines')" +bnext +GoyoToggle
 }
 
-function gv() {
-    nvim $1 +GoyoToggle
-}
+# function gv() {
+#     # touch $1
+#     nvim $1
+#     # nvim $1 -c "GoyoToggle"
+#     # nvim $1 +GoyoToggle
+# }
 
 alias goals="hnetxt goals"
-alias meta="hnetxt notes meta"
-alias notes="hnetxt notes"
 alias fields="hnetxt fields"
+alias tags="hnetxt tags"
+
+alias ht="hnetxt"
+alias htt="hnetxt_test"

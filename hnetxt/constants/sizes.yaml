@@ -10,3 +10,7 @@ small:
     width: 40
     color: yellow
     fold_level: 2
+tiny:
+    width: 20
+    color: teal
+    fold_level: 3

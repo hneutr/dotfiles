@@ -1,6 +1,4 @@
 local augend = require("dial.augend")
-local aucmd = vim.api.nvim_create_autocmd
-local util = require('util')
 
 local default_augends = {
     augend.integer.alias.decimal_int,
@@ -14,17 +12,28 @@ local ft_info = {
     python = {
         pattern = '*.py',
         augends = {
-            augend.constant.new{ elements = {"and", "or"} },
-            augend.constant.new{ elements = {"True", "False"} },
+            augend.constant.new({elements = {"and", "or"}}),
+            augend.constant.new({elements = {"True", "False"}}),
         }
     },
     lua = {
         pattern = '*.lua',
         augends = {
-            augend.constant.new{ elements = {"and", "or"} },
-            augend.constant.new{ elements = {"true", "false"} },
+            augend.constant.new({elements = {"and", "or"}}),
+            augend.constant.new({elements = {"true", "false"}}),
         }
     },
+    -- markdown = {
+    --     pattern = '*.md',
+    --     augends = {
+    --         augend.constant.new({
+    --             -- elements = {"b✓", "⨉"}, -- ✔✓,☑
+    --             -- elements = {"+", "⨉"}, -- ✔✓,☑
+    --             elements = {"test",  "other"}, -- ✔✓,☑
+    --             cyclic = true 
+    --         }),
+    --     }
+    -- },
 }
 
 local groups = {}
@@ -37,7 +46,7 @@ require("dial.config").augends:register_group(groups)
 local map_args = {noremap = true, buffer = true}
 
 for ft, info in pairs(ft_info) do
-    aucmd({'BufEnter'}, {pattern=info.pattern, callback=util.run_once({
+    vim.api.nvim_create_autocmd({'BufEnter'}, {pattern=info.pattern, callback=require('util').run_once({
         scope = 'b',
         key = ft .. '_dial_maps_applied',
         fn = function()
@@ -50,3 +59,28 @@ for ft, info in pairs(ft_info) do
         end,
     })})
 end
+
+vim.keymap.set("n", "<C-a>", function()
+    require("dial.map").manipulate("increment", "normal")
+end)
+vim.keymap.set("n", "<C-x>", function()
+    require("dial.map").manipulate("decrement", "normal")
+end)
+vim.keymap.set("n", "g<C-a>", function()
+    require("dial.map").manipulate("increment", "gnormal")
+end)
+vim.keymap.set("n", "g<C-x>", function()
+    require("dial.map").manipulate("decrement", "gnormal")
+end)
+vim.keymap.set("v", "<C-a>", function()
+    require("dial.map").manipulate("increment", "visual")
+end)
+vim.keymap.set("v", "<C-x>", function()
+    require("dial.map").manipulate("decrement", "visual")
+end)
+vim.keymap.set("v", "g<C-a>", function()
+    require("dial.map").manipulate("increment", "gvisual")
+end)
+vim.keymap.set("v", "g<C-x>", function()
+    require("dial.map").manipulate("decrement", "gvisual")
+end)

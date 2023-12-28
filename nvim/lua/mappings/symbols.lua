@@ -1,6 +1,7 @@
 local symbols_map = {
     -----------------------------[ lowercase letters ]------------------------------
     ["a"] = require('mappings.unicode.arrows'),
+    ["c"] = "✓",
     ["d"] = require('mappings.unicode.doublestruck'),
     ["g"] = require('mappings.unicode.greek'),
     ['j'] = require('mappings.unicode.subscripts'),

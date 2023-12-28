@@ -10,11 +10,14 @@ ls.config.set_config({
 --------------------------------------------------------------------------------
 --                                  mappings                                  --
 --------------------------------------------------------------------------------
-local map = vim.keymap.set
-
+local args = {silent = true}
 vim.cmd([[imap <silent><expr> <Tab> luasnip#expandable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>']])
-map("i", "<c-f>", function() require'luasnip'.jump(1) end, { silent = true })
-map("i", "<c-b>", function() require'luasnip'.jump(-1) end, { silent = true })
+
+vim.keymap.set("i", "<c-f>", function() ls.jump(1) end, args)
+vim.keymap.set("i", "<c-b>", function() ls.jump(-1) end, args)
+
+vim.keymap.set({"i", "s"}, "<c-.>", function() if ls.choice_active() then ls.change_choice(1) end end, args)
+vim.keymap.set({"i", "s"}, "<c-,>", function() if ls.choice_active() then ls.change_choice(-1) end end, args)
 
 --------------------------------------------------------------------------------
 --                            loading ft snips                                --

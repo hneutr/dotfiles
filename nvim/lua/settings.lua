@@ -94,7 +94,7 @@ vim.o.smartcase = true
 --------------------------------------------------------------------------------
 --                             window options                                 --
 --------------------------------------------------------------------------------
-vim.api.nvim_create_autocmd({"WinEnter"}, {pattern="*", callback=require'util'.run_once({
+vim.api.nvim_create_autocmd({"VimEnter", "WinNew"}, {pattern="*", callback=require'util'.run_once({
     scope = 'w',
     key = 'win_opts_applied',
     fn = function()

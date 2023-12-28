@@ -22,7 +22,7 @@ types:
             sigil: 
                 fg: green
             text:
-                fg: green
+                fg: surface0
                 strikethrough: true
     reject:
         sigil: '⨉'
@@ -31,16 +31,17 @@ types:
             sigil: 
                 fg: red
             text:
-                fg: text
+                fg: surface0
+                strikethrough: true
     maybe:
         sigil: '~'
         toggle_key: m
         sigil_regex: "\\~"
         highlights:
             sigil:
-                fg: text
+                fg: surface2
             text:
-                fg: text
+                fg: surface2
     question:
         sigil: "?"
         rg_regex: "\\?"
@@ -49,7 +50,6 @@ types:
             sigil: 
                 fg: yellow
             text:
-                underline: true
                 italic: true
         fold: true
     important:
@@ -57,26 +57,25 @@ types:
         toggle_key: i
         highlights:
             sigil:
-                fg: red
+                fg: maroon
             text:
-                underline: true
                 bold: true
-    possibility:
-        sigil: '⋊'
-        toggle_key: p
-        highlights: 
-            sigil:
-                fg: green
-            text:
-                italic: true
-        fold: true
-    detail:
-        sigil: '+'
-        toggle_key: a
-        highlights:
-            sigil:
-                fg: magenta
-        fold: true
+    # possibility:
+    #     sigil: '⋊'
+    #     toggle_key: p
+    #     highlights: 
+    #         sigil:
+    #             fg: green
+    #         text:
+    #             italic: true
+    #     fold: true
+    # detail:
+    #     sigil: '+'
+    #     toggle_key: a
+    #     highlights:
+    #         sigil:
+    #             fg: magenta
+    #     fold: true
 default_types:
     - bullet
     - dot
@@ -84,3 +83,9 @@ default_types:
     - todo
     - done
     - reject
+extra_types:
+    - question
+    - important
+    - maybe
+    # - possibility
+    # - detail

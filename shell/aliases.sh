@@ -3,6 +3,7 @@ alias lsl='ls -l'
 alias lsla='ls -la'
 alias lsf='ls -p | grep -v /'
 alias lsfa='ls -pa | grep -v /'
+alias ls1='ls -1'
 
 # mv
 alias rmv='$(which mv)'
@@ -14,8 +15,7 @@ alias lst='tree --git-ignore -I .git\|.gitignore'
 alias nvim=$NVIM_PATH
 alias vi="nvim"
 alias vim="nvim"
-alias gv="vim -c 'GoyoToggle' "
-alias gvt="vim -c 'GoyoToggle' text.md"
+# alias gv="vim -c 'GoyoToggle' "
 alias term="nvim -c term"
 
 # python

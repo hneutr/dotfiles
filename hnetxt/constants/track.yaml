@@ -1,0 +1,96 @@
+data_dir: "track-log"
+csv_name: ".log.csv"
+separator: ": "
+datatype_defaults:
+    number: 0
+    boolean: false
+    timespan: "TT-TT"
+    time: "TT"
+moralities:
+    good:
+        color: green
+        value: 1
+    neutral:
+        color: sapphire
+        value: 0
+    bad:
+        color: red
+        value: -1
+categories:
+        # emoji: ☀︎/☽
+        # emoji: ☀️ /🌙 ☼
+        # 179
+        #📔␦✍︎⍰⎕⎅☐◻︎❏  ✎⎅
+        # ♥︎↑
+        # ⚡︎⚯  ♐︎🫀
+        # ⚡️
+        # Δ⚡︎⍟⁌⌁⁍
+        # ⍰𝍌⊕⊞✎
+    - name: behaviors
+      activities:
+      - name: day
+        datatype: timespan
+        morality: neutral
+        emoji: sun
+        # ☀️
+      - name: journal
+        datatype: boolean
+        morality: good
+        emoji: hand-writing
+        # ✍︎
+      - name: exercise
+        datatype: boolean
+        morality: good
+        emoji: flexed-arm
+        # 💪🏼
+    - name: substances
+      activities:
+      - name: adderall
+        datatype: number
+        morality: neutral
+        emoji: pill
+        # 💊
+      - name: alcohol
+        datatype: boolean
+        morality: bad
+        emoji: beer
+        # 🍺
+    - name: writing
+      activities:
+      - name: words
+        datatype: number
+        morality: good
+        emoji: next-page
+        # ⎘
+      - name: wrote
+        datatype: timespan
+        morality: good
+        emoji: next-page
+        # ⎘
+      - name: craftwork
+        datatype: timespan
+        morality: good
+        # emoji: next-page
+      - name: toolwork
+        datatype: timespan
+        morality: neutral
+        # emoji: next-page
+comparison_activities:
+  - journal
+  - alcohol
+  - exercise
+  - adderall
+  - words
+
+# socialized
+    # dates
+    # hangout with friends
+
+# fitness
+# diet
+    # number of days cooked
+# money
+# substances
+# reading?
+# mental health
+# communication (getting to inbox zero on messages app)

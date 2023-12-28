@@ -57,5 +57,8 @@ ls.add_snippets("all", {
 
             return monday .. "—" .. sunday
         end)
-    })
+    }),
+    s("now", {f(function() return os.date("%H:%M") end)}),
+    s("00:00", {f(function() return os.date("%H:%M") end)}),
+    s("TT", {f(function() return os.date("%H:%M") end)}),
 })
