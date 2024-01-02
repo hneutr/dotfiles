@@ -1,0 +1,9 @@
+snippet: |
+    is a: quote
+    source: $1
+    on page: $2
+
+    $3
+string: |
+    {__text__}
+        — {source}

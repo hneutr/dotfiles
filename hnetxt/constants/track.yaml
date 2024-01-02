@@ -17,31 +17,25 @@ moralities:
         color: red
         value: -1
 categories:
-        # emoji: ☀︎/☽
-        # emoji: ☀️ /🌙 ☼
-        # 179
-        #📔␦✍︎⍰⎕⎅☐◻︎❏  ✎⎅
-        # ♥︎↑
-        # ⚡︎⚯  ♐︎🫀
-        # ⚡️
-        # Δ⚡︎⍟⁌⌁⁍
-        # ⍰𝍌⊕⊞✎
     - name: behaviors
       activities:
       - name: day
         datatype: timespan
         morality: neutral
         emoji: sun
+        color: maroon
         # ☀️
       - name: journal
         datatype: boolean
         morality: good
         emoji: hand-writing
+        color: teal
         # ✍︎
       - name: exercise
         datatype: boolean
         morality: good
         emoji: flexed-arm
+        color: green
         # 💪🏼
     - name: substances
       activities:
@@ -54,8 +48,9 @@ categories:
         datatype: boolean
         morality: bad
         emoji: beer
+        color: peach
         # 🍺
-    - name: writing
+    - name: work
       activities:
       - name: words
         datatype: number
@@ -66,15 +61,15 @@ categories:
         datatype: timespan
         morality: good
         emoji: next-page
-        # ⎘
+        color: blue
       - name: craftwork
         datatype: timespan
         morality: good
-        # emoji: next-page
+        color: pink
       - name: toolwork
         datatype: timespan
         morality: neutral
-        # emoji: next-page
+        color: mauve
 comparison_activities:
   - journal
   - alcohol
@@ -94,3 +89,12 @@ comparison_activities:
 # reading?
 # mental health
 # communication (getting to inbox zero on messages app)
+
+# emoji: ☀︎/☽
+# ☀️ /🌙 ☼
+#📔␦✍︎⍰⎕⎅☐◻︎❏  ✎⎅
+# ♥︎↑
+# ⚡︎⚯  ♐︎🫀
+# ⚡️
+# Δ⚡︎⍟⁌⌁⁍
+# ⍰𝍌⊕⊞✎

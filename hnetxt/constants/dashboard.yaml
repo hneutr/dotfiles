@@ -6,3 +6,4 @@ colors:
     background: surface1
     text: text
     ticks: yellow
+    highlight: yellow

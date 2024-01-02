@@ -35,23 +35,21 @@ function settex() {
 #------------------------------------------------------------------------------#
 function fvim() {
     # fuzzy find into vim
-    local IFS=$'\n'
-    local files=($(fzf --reverse --query="$1" --multi --select-1 --exit-0))
-    [[ -n "$files" ]] && vim "${files[@]}"
+    fzf --reverse --multi --select-1 --exit-0 --bind 'enter:become(vim {})'
 }
 
 function vload() {
     nvim -c "source .Session.vim" -c "silent! !rm .Session.vim"
 }
 
+function open_two_vertical_terminals() {
+    nvim -c "lua require('util').open_two_vertical_terminals()"
+}
 
 #------------------------------------------------------------------------------#
 #                         change directory functions                           #
 #------------------------------------------------------------------------------#
 function chpwd {
-  # activates an env if there is one
-  # cd_and_venv
-
   # sets a project root if there is one
   project_root_exists $PWD
 }

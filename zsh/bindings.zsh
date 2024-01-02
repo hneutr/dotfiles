@@ -1,6 +1,3 @@
-# fuzzy vim
-bindkey -s '^V' "fvim\n"
-
 # clear the screen
 bindkey '^X'    clear-screen
 
@@ -19,11 +16,12 @@ bindkey '^E'    end-of-line
 bindkey '^D'    delete-char
 
 # alt-LeftArrow
-bindkey "^[^[[D" backward-word
+bindkey "^[[1;3D" backward-word
 # alt-RightArrow
-bindkey "^[^[[C" forward-word
+bindkey "^[[1;3C" forward-word
 
-if [ -z "$NVIM" ]; then
-    # bindkey -s '^[t' 'deactivate_env && nvim -c "lua require'"'"'"'util'"'"'"'.open_two_vertical_terminals()"\n'
-    bindkey -s '^[t' 'nvim -c "lua require'"'"'"'util'"'"'"'.open_two_vertical_terminals()"\n'
-fi
+# fuzzy vim
+bindkey -s '^V' "fvim\n"
+
+# open two terminals
+bindkey -s '^[t' "open_two_vertical_terminals\n"
