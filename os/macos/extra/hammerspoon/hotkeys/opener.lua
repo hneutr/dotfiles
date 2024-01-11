@@ -3,17 +3,27 @@ local keyToApplication = {
     b = "bitwarden",
     c = "slack",
     d = "dictionary",
-    g = "https://mail.google.com/mail/u/1/#inbox",
-    i = "https://mail.google.com/mail/u/0/#inbox",
     e = "https://www.etymonline.com",
+    -- f
+    g = "https://mail.google.com/mail/u/0/#inbox",
+    -- h
+    i = "https://mail.google.com/mail/u/1/#inbox",
+    -- j
+    -- k
+    -- l
     m = "messages",
+    -- n
+    -- o
     p = "system settings",
     q = "spotify",
     r = "reminders",
     s = "safari",
     t = "clock",
-    w = "weather",
+    -- u
     v = "Cisco AnyConnect Secure Mobility Client",
+    w = "weather",
+    -- x
+    -- y
     z = "https://calendar.google.com/calendar/u/1/r",
 }
 

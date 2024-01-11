@@ -56,7 +56,7 @@ function hnetxt_rm() {
 }
 
 function journal() {
-    nvim $(hnetxt journal $@) +GoyoToggle -c "1" 
+    nvim $(hnetxt journal $@) -c "lua require('zen-mode').toggle()"
 }
 
 function new() {
@@ -72,11 +72,10 @@ function track() {
 }
 
 function wr() {
-    nvim $1 -c "lua require('htn.project.mirror').open('outlines')" +bnext +GoyoToggle
+    nvim $1 -c "lua require('htn.project.mirror').open('outlines')" +bnext -c "lua require('zen-mode').toggle()"
 }
 
 alias goals="hnetxt goals"
-alias fields="hnetxt fields"
 alias tags="hnetxt tags"
 
 alias ht="hnetxt"

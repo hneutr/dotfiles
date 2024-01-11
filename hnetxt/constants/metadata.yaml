@@ -1,0 +1,16 @@
+exclusion_suffix: "!"
+tag_prefix: "@"
+tag_delimiter: "."
+field_delimiter: ":"
+field_or_delimiter: "|"
+excluded_fields:
+- date
+- on page
+- first name
+- last name
+- middle name
+- published
+- read
+- title
+- born
+- speaker

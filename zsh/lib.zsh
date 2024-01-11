@@ -35,7 +35,7 @@ function settex() {
 #------------------------------------------------------------------------------#
 function fvim() {
     # fuzzy find into vim
-    fzf --reverse --multi --select-1 --exit-0 --bind 'enter:become(vim {})'
+    fzf --reverse --multi --select-1 --exit-0 --bind 'enter:become(nvim {})'
 }
 
 function vload() {

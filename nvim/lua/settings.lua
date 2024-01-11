@@ -134,6 +134,10 @@ vim.api.nvim_create_autocmd({"BufEnter"}, { pattern="*", callback=require'util'.
 
         vim.bo.infercase = true
 
+        vim.bo.spelllang = "en_us"
+
+        vim.bo.spellfile = vim.g.vim_config .. "spell/en.utf-8.add"
+
         -------------------------------[ indentation ]--------------------------
         vim.bo.autoindent = true
         vim.bo.cindent = true
