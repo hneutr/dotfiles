@@ -1,5 +1,5 @@
 snippet: |
     is a: recommendation
-    of: $1
-    by: $2
+      of: $1
+      by: $2
 string: "{of} by {by}"

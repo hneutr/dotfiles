@@ -1,5 +1,5 @@
 snippet: |
     is a: word
-    source: $1
-    type: ${2|unknown,cool|}
+      source: $1
+      @${2|unknown,cool|}
 string: "{__stem__} ({source})"
