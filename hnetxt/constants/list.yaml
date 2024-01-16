@@ -1,14 +1,17 @@
 types:
     bullet:
         sigil: '-'
+        toggle_key: l
+        toggle_to: 'line'
         highlight: false
     dot:
         sigil: '*'
-        sigil_regex: "\\*"
         toggle_key: o
+        sigil_regex: "\\*"
         highlight: false
     number:
         toggle_key: n
+        toggle_to: 'bullet'
         sigil_regex: "(\\d+)\\."
         highlight: false
     todo:
@@ -60,22 +63,7 @@ types:
                 fg: maroon
             text:
                 bold: true
-    # possibility:
-    #     sigil: '⋊'
-    #     toggle_key: p
-    #     highlights: 
-    #         sigil:
-    #             fg: green
-    #         text:
-    #             italic: true
-    #     fold: true
-    # detail:
-    #     sigil: '+'
-    #     toggle_key: a
-    #     highlights:
-    #         sigil:
-    #             fg: magenta
-    #     fold: true
+default_type: bullet
 default_types:
     - bullet
     - dot
