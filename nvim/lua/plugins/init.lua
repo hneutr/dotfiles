@@ -59,7 +59,7 @@ require("lazy").setup({
     {"kylechui/nvim-surround", config = lrequire('plugins.nvim-surround')},
 
     -- open/close pairs
-    {'windwp/nvim-autopairs', config = lrequire('plugins.autopairs')},
+    {'windwp/nvim-autopairs', config = lrequire('plugins.autopairs'), commit = "9fd4118" },
 
     -- comment things
     'tpope/vim-commentary',

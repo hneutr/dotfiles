@@ -1,5 +1,7 @@
 local actions = require("fzf-lua.actions")
-require('fzf-lua').setup {
+local fzf = require('fzf-lua')
+
+fzf.setup({
     winopts = {
         height = .4,
         width = .4,
@@ -26,5 +28,8 @@ require('fzf-lua').setup {
     },
     files = {
         fd_opts = "--color=never --type f --no-hidden --follow --exclude env",
+        actions = {
+            ["ctrl-g"] = false,
+        }
     }
-}
+})
