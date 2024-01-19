@@ -63,10 +63,6 @@ function new() {
     nvim $(hnetxt new $@)
 }
 
-function aim() {
-    nvim $(hnetxt aim $@)
-}
-
 function track() {
     nvim $(hnetxt track $@)
 }
@@ -75,7 +71,7 @@ function wr() {
     nvim $1 -c "lua require('htn.project.mirror').open('outlines')" +bnext -c "lua require('zen-mode').toggle()"
 }
 
-alias goals="hnetxt goals"
+alias aim="hnetxt aim"
 alias tags="hnetxt tags"
 
 alias ht="hnetxt"
