@@ -1,3 +1,5 @@
+local Path = require("hl.Path")
+
 vim.g.python3_host_prog = vim.env.NVIM_PYTHON
 
 vim.g.mapleader = " "
@@ -6,146 +8,157 @@ vim.g.mapleader = " "
 vim.g.symbol_insert_modifier = "M"
 
 -- write all the time
-vim.go.autowriteall = true
+vim.opt.autowriteall = true
 
-vim.go.background = 'dark'
+vim.opt.background = 'dark'
 
-vim.o.completeopt = "menuone,noinsert,noselect"
+vim.opt.completeopt = {"menuone", "noinsert", "noselect"}
 
-vim.o.dictionary = "/usr/dict/words"
+vim.opt.dictionary = "/usr/dict/words"
 
-vim.o.fileformats = "unix,dos,mac"
+vim.opt.fileformats = {"unix", "dos", "mac"}
 
 -- make substitutions global by default
-vim.o.gdefault = true
+vim.opt.gdefault = true
 
 -- use rg if available
 if vim.fn.executable('rg') > 0 then
-	vim.o.grepprg = "rg --vimgrep"
+	vim.opt.grepprg = "rg --vimgrep"
 end
 
--- cursor magic:
--- normal, visual, command = block
-local guicursor = "n-v-c:block-Cursor/lCursor-blinkon0"
--- insert = vertical
-local insert_guicursor = "i-ci:ver25-Cursor/lCursor"
--- replace = underscore
-local replace_guicursor = "r-cr:hor20-Cursor/lCursor"
-
-vim.o.guicursor = guicursor .. ',' .. insert_guicursor .. ',' .. replace_guicursor
+-- cursor
+vim.opt.guicursor = {
+    -- normal/visual/command: block
+    "n-v-c:block-Cursor/lCursor-blinkon0",
+    -- insert: |
+    "i-ci:ver25-Cursor/lCursor",
+    -- replace: _
+    "r-cr:hor20-Cursor/lCursor",
+}
 
 -- show results of a command while typing
-vim.o.inccommand = 'nosplit'
+vim.opt.inccommand = 'nosplit'
 
 -- redraw less
-vim.o.lazyredraw = true
+vim.opt.lazyredraw = true
 
 -- don't clutter with .swp files
-vim.o.swapfile = false
+vim.opt.swapfile = false
 
 -- shorten status updates:
 -- - a: standard abbreviations
 -- - c: don't give ins-completion-menu messages
 -- - A: don't give the ATTENTION message when a swap file is found
-vim.o.shortmess = "acA"
+vim.opt.shortmess = "acA"
 
 -- show matching parentheses
-vim.o.showmatch = true
+vim.opt.showmatch = true
 
-vim.o.splitbelow = true
+vim.opt.splitbelow = true
 
-vim.o.splitright = true
+vim.opt.splitright = true
 
 -- statusline:
 -- left side: full path (%.100F)
 -- switch to right side: (%=)
 -- right side: (%c)
-vim.o.statusline = "%.100F%=%c"
+vim.opt.statusline = "%.100F%=%c"
 
--- term colors
-vim.go.termguicolors = true
+vim.opt.spellsuggest = {"best", "5"}
+
+vim.opt.termguicolors = true
 
 -- extend mapping timeout time
-vim.o.timeoutlen = 1000
+vim.opt.timeoutlen = 1000
 
 -- shorten key code timeout time
-vim.o.ttimeoutlen = 0
+vim.opt.ttimeoutlen = 0
 
-vim.o.undodir = _G.joinpath(vim.g.vim_config, ".undodir")
+vim.opt.undodir = Path.join(vim.g.vim_config, ".undodir")
 
 -- save things regularly
-vim.o.updatetime = 300
+vim.opt.updatetime = 300
 
 -- ignore some filetypes in completion
-vim.o.wildignore =".DS_Store,.git,.git/*,*.tmp,*.swp,*.png,*.jpg,*.gif,*.gz"
+vim.opt.wildignore = {
+    ".DS_Store",
+    ".git",
+    ".git/*",
+    "*.tmp",
+    "*.swp",
+    "*.png",
+    "*.jpg",
+    "*.gif",
+    "*.gz",
+}
 
-vim.o.wildignorecase = true
+vim.opt.wildignorecase = true
 
-vim.o.wildmode = "list:longest,full"
+vim.opt.wildmode = {"list:longest", "full"}
 
 -- if there are spaces when </>, round down
-vim.o.shiftround = true
+vim.opt.shiftround = true
 
 -- ignore case when searching
-vim.o.ignorecase = true
+vim.opt.ignorecase = true
 
 -- override ignore case if search includes capital letters
-vim.o.smartcase = true
-
--- because ftplugins play with formatting opts, settings are in `/after/plugin/formatting.vim`
+vim.opt.smartcase = true
 
 --------------------------------------------------------------------------------
 --                             window options                                 --
 --------------------------------------------------------------------------------
-vim.api.nvim_create_autocmd({"VimEnter", "WinNew"}, {pattern="*", callback=require'util'.run_once({
-    scope = 'w',
-    key = 'win_opts_applied',
-    fn = function()
-        vim.wo.linebreak = true
+vim.api.nvim_create_autocmd(
+    {"VimEnter", "WinNew"},
+    {
+        pattern="*",
+        callback=function()
+            vim.opt_local.linebreak = true
 
-        vim.wo.cursorline = false
+            vim.opt_local.cursorline = false
 
-        -----------------------------------[ folds ]----------------------------
-        vim.wo.foldenable = false
-        vim.wo.foldmethod = 'indent'
-        vim.wo.foldnestmax = 1
-    end,
-})})
+            -- folds
+            vim.opt_local.foldenable = false
+            vim.opt_local.foldmethod = 'indent'
+            vim.opt_local.foldnestmax = 1
+        end
+    }
+)
 
 --------------------------------------------------------------------------------
 --                             buffer options                                 --
 --------------------------------------------------------------------------------
-vim.api.nvim_create_autocmd({"BufEnter"}, { pattern="*", callback=require'util'.run_once({
-    scope = 'b',
-    key = 'buf_opts_applied',
-    fn = function()
-        -- '.': current buffer
-        -- 'w': other windows
-        -- 'b': buffers in buffer list
-        -- 'u': unloaded buffers
-        -- 'i': OFF. current and included files
-        -- 't': OFF. scan tags
-        vim.bo.complete = ".,w,b,u"
+vim.api.nvim_create_autocmd(
+    {"VimEnter", "BufNew"},
+    {
+        pattern="*",
+        callback=function()
+            vim.opt_local.complete = {
+                ".", -- '.': current buffer
+                "w", -- 'w': other windows
+                "b", -- 'b': buffers in buffer list
+                "u", -- 'u': unloaded buffers
+            }
 
-        -- 100 is nice
-        vim.bo.textwidth = 100
+            vim.opt_local.textwidth = 100
 
-        vim.bo.undofile = true
+            vim.opt_local.undofile = true
 
-        vim.bo.infercase = true
+            vim.opt_local.infercase = true
 
-        vim.bo.spelllang = "en_us"
+            vim.opt_local.spelllang = "en_us"
 
-        vim.bo.spellfile = vim.g.vim_config .. "spell/en.utf-8.add"
+            vim.opt_local.spellfile = Path.join(vim.g.vim_config, "spell/en.utf-8.add")
 
-        -------------------------------[ indentation ]--------------------------
-        vim.bo.autoindent = true
-        vim.bo.cindent = true
-        vim.bo.shiftwidth = 4
-        vim.bo.softtabstop = 4
-        vim.bo.expandtab = true
-    end,
-})})
+            -- indent
+            vim.opt_local.autoindent = true
+            vim.opt_local.cindent = true
+            vim.opt_local.shiftwidth = 4
+            vim.opt_local.softtabstop = 4
+            vim.opt_local.expandtab = true
+        end,
+    }
+)
 
 --------------------------------------------------------------------------------
 --                                  plugins                                   --
@@ -159,13 +172,3 @@ vim.g.snip_ft_strings = {
     zsh = {print = 'echo %s'},
     sh = {print = 'echo %s'},
 }
-
--- polyglot is super annoying
-vim.g.polyglot_disabled = {"autoindent"}
-
--- default maps are stupid
-vim.g.vim_markdown_no_default_key_mappings = 1
-vim.g.vim_markdown_auto_insert_bullets = 0
-vim.g.vim_markdown_new_list_item_indent = 0
-
-vim.g.is_pythonsense_alternate_motion_keymaps = 1
