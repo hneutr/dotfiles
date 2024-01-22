@@ -1,6 +1,0 @@
-line_suffix: ">"
-size_to_level:
-    large: 1
-    medium: 2
-    small: 3
-default_line_level: 4

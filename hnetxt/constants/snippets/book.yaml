@@ -1,8 +1,0 @@
-snippet: |
-    is a: book
-      title: $1
-      by: $2
-      published: ${3:YYYY}
-      read: ${4:YYYY}
-      recommended by: $5
-string: "{by}, {title}"

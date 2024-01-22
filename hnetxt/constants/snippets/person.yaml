@@ -1,6 +1,0 @@
-snippet: |
-    is a: person
-      first name: $1
-      middle name: $2
-      last name: $3
-string: "{first name} {middle name} {last name}"
