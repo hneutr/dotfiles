@@ -36,13 +36,13 @@ function project_root_exists() {
 }
 
 function hnetxt() {
-    lua $HOME/lib/hnetxt-lua/src/htc/init.lua $@
+    luajit $HOME/lib/hnetxt-lua/src/htc/init.lua $@
 }
 
 function hnetxt_test() {
     local START_DIR=$PWD
     cd $HOME/lib/hnetxt-lua
-    luarocks make > /dev/null
+    luarocks --lua-version 5.1 make > /dev/null
     cd $START_DIR
     hnetxt $@
 }
