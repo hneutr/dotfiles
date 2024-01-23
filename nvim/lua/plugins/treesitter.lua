@@ -20,15 +20,5 @@ require('nvim-treesitter.configs').setup {
     }
 }
 
-vim.api.nvim_set_hl(0, "@text.strong", {bold = true})
-vim.api.nvim_set_hl(0, "@text.emphasis", {italic = true})
-vim.api.nvim_set_hl(0, "@punctuation.special.markdown", {link = "Function"})
-vim.api.nvim_set_hl(0, "@text.uri", {link = "string"})
-vim.api.nvim_set_hl(0, "@text.strike.markdown_inline", {strikethrough = true})
-
-vim.api.nvim_set_hl(0, "@text.title.1.markdown", {link = "Error"})
-vim.api.nvim_set_hl(0, "@text.title.1.marker.markdown", {link = "Error"})
-vim.api.nvim_set_hl(0, "@text.title.2.markdown", {link = "Constant"})
-vim.api.nvim_set_hl(0, "@text.title.2.marker.markdown", {link = "Constant"})
-vim.api.nvim_set_hl(0, "@text.title.3.markdown", {link = "Type"})
-vim.api.nvim_set_hl(0, "@text.title.3.marker.markdown", {link = "Type"})
+vim.api.nvim_set_hl(0, "@markup.strong", {link = "@spell"})
+vim.api.nvim_set_hl(0, "@markup.italic", {link = "@spell"})
