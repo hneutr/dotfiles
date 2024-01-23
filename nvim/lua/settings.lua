@@ -66,6 +66,7 @@ vim.opt.statusline = "%.100F%=%c"
 
 vim.opt.spellsuggest = {"best", "5"}
 
+-- term colors
 vim.opt.termguicolors = true
 
 -- extend mapping timeout time
@@ -109,7 +110,7 @@ vim.opt.smartcase = true
 --                             window options                                 --
 --------------------------------------------------------------------------------
 vim.api.nvim_create_autocmd(
-    {"VimEnter", "WinNew"},
+    {"VimEnter", "WinEnter"},
     {
         pattern="*",
         callback=function()
@@ -129,7 +130,7 @@ vim.api.nvim_create_autocmd(
 --                             buffer options                                 --
 --------------------------------------------------------------------------------
 vim.api.nvim_create_autocmd(
-    {"VimEnter", "BufNew"},
+    {"VimEnter", "BufEnter"},
     {
         pattern="*",
         callback=function()
