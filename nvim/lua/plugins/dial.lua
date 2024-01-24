@@ -1,4 +1,5 @@
 local augend = require("dial.augend")
+local List = require("hl.List")
 
 local default_augends = {
     augend.integer.alias.decimal_int,
@@ -23,11 +24,17 @@ local ft_info = {
             augend.constant.new({elements = {"true", "false"}}),
         }
     },
+    markdown = {
+        pattern = '*.md',
+        augends = {
+            augend.constant.new({elements = {"true", "false"}}),
+        }
+    },
 }
 
 local groups = {}
 for ft, info in pairs(ft_info) do
-    groups[ft] = table.concatenate(default_augends, info.augends)
+    groups[ft] = List.from(default_augends, info.augends)
 end
 
 require("dial.config").augends:register_group(groups)

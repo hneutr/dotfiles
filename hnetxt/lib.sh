@@ -67,11 +67,14 @@ function track() {
     nvim $(hnetxt track $@)
 }
 
+function aim() {
+    nvim $(hnetxt aim $@)
+}
+
 function wr() {
     nvim $1 -c "lua require('htn.project.mirror').open('outlines')" +bnext -c "lua require('zen-mode').toggle()"
 }
 
-alias aim="hnetxt aim"
 alias tags="hnetxt tags"
 
 alias ht="hnetxt"
