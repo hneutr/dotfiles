@@ -16,13 +16,6 @@ function _G.default_args(args, defaults)
 end
 
 --------------------------------------------------------------------------------
---                       improving vim.fn return types                        --
---------------------------------------------------------------------------------
-function _G.filereadable(path)
-    return vim.fn.filereadable(path) == 1
-end
-
---------------------------------------------------------------------------------
 --                                    misc                                    --
 --------------------------------------------------------------------------------
 function M.open_two_vertical_terminals()
@@ -129,7 +122,7 @@ function M.modify_line_end(char)
         line = line .. char
     end
 
-    BufferLines.cursor.set({ replacement = {line} })
+    BufferLines.cursor.set({replacement = {line}})
 end
 
 function M.kill_buffer_and_go_to_next()
