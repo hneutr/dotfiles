@@ -110,7 +110,7 @@ vim.opt.smartcase = true
 --                             window options                                 --
 --------------------------------------------------------------------------------
 vim.api.nvim_create_autocmd(
-    {"VimEnter", "WinEnter"},
+    {"VimEnter", "WinNew"},
     {
         pattern="*",
         callback=function()
@@ -130,7 +130,7 @@ vim.api.nvim_create_autocmd(
 --                             buffer options                                 --
 --------------------------------------------------------------------------------
 vim.api.nvim_create_autocmd(
-    {"VimEnter", "BufEnter"},
+    {"VimEnter", "BufNew"},
     {
         pattern="*",
         callback=function()
