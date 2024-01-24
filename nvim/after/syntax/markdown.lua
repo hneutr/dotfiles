@@ -1,5 +1,6 @@
 vim.cmd("syn clear markdownLinkText")
 
+vim.api.nvim_set_hl(0, "markdownListMarker", {link = "Function"})
 vim.api.nvim_set_hl(0, "@markup.list.markdown", {link = "Function"})
 vim.api.nvim_set_hl(0, "@markup.link.label.markdown_inline", {link = "Tag"})
 vim.api.nvim_set_hl(0, "@markup.link.url.markdown_inline", {link = "Conceal"})
