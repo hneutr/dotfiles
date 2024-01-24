@@ -16,9 +16,9 @@ local M = {
 }
 
 M.on_open = function(win)
-    vim.o.showmode = false
-    vim.o.showcmd = false
-    vim.wo.spell = true
+    vim.opt.showmode = false
+    vim.opt.showcmd = false
+    vim.opt_local.spell = true
 
     function quit_zen()
         vim.cmd("ZenMode")
@@ -29,9 +29,9 @@ M.on_open = function(win)
 end
 
 M.on_close = function()
-    vim.o.showmode = true
-    vim.o.showcmd = true
-    vim.wo.spell = false
+    vim.opt.showmode = true
+    vim.opt.showcmd = true
+    vim.opt_local.spell = false
 
     vim.keymap.set("n", " q", ":q<cr>", {silent = true})
 end

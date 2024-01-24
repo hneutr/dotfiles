@@ -2,6 +2,7 @@ vim.cmd([[colorscheme catppuccin]])
 
 require("catppuccin").setup({
     flavor = "mocha",
+    transparent_background = false,
     integrations = {
         cmp = true,
         gitsigns = true,
