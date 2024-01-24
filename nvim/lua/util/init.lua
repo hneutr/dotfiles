@@ -15,16 +15,6 @@ function _G.default_args(args, defaults)
     return vim.tbl_extend("keep", {}, args or {}, defaults)
 end
 
-function _G.joinpath(left, right)
-    local path = left
-
-    if not vim.endswith(left, '/') and not vim.startswith(right, '/') then
-        path = path .. '/'
-    end
-
-    return path .. right
-end
-
 --------------------------------------------------------------------------------
 --                       improving vim.fn return types                        --
 --------------------------------------------------------------------------------

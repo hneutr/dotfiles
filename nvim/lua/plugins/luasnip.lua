@@ -1,4 +1,5 @@
 local ls = require("luasnip")
+local Path = require("hl.Path")
 
 ls.config.set_config({
     history = false,
@@ -19,18 +20,6 @@ vim.keymap.set("i", "<c-b>", function() ls.jump(-1) end, args)
 vim.keymap.set({"i", "s"}, "<c-.>", function() if ls.choice_active() then ls.change_choice(1) end end, args)
 vim.keymap.set({"i", "s"}, "<c-,>", function() if ls.choice_active() then ls.change_choice(-1) end end, args)
 
---------------------------------------------------------------------------------
---                            loading ft snips                                --
---------------------------------------------------------------------------------
-local snips_dir = _G.joinpath(vim.g.vim_config, 'snips')
-
-function load_ft_snips()
-    for i, path in ipairs(vim.fn.readdir(snips_dir)) do
-        path = _G.joinpath(snips_dir, path)
-        if _G.filereadable(path) then
-            vim.cmd("source " .. path)
-        end
-    end
-end
-
-load_ft_snips()
+Path(vim.g.vim_config):join('snips'):iterdir():foreach(function(path)
+    vim.cmd("source " .. tostring(path))
+end)
