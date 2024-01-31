@@ -9,6 +9,11 @@ local default_augends = {
 local ft_info = {
     default = {
         pattern = '*',
+        augends = {
+            augend.constant.new({elements = {"true", "false"}}),
+            augend.constant.new({elements = {"and", "or"}}),
+            augend.constant.new({elements = {"True", "False"}}),
+        },
     },
     python = {
         pattern = '*.py',
