@@ -24,7 +24,7 @@ local keyToApplication = {
     w = "weather",
     -- x
     -- y
-    z = "https://calendar.google.com/calendar/u/1/r",
+    z = "https://calendar.google.com/calendar/u/0/r",
 }
 
 function getKeyToFunction()
