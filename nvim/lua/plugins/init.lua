@@ -48,7 +48,7 @@ require("lazy").setup({
     'hneutr/vim-cool',
 
     -- 2char motions
-    {'justinmk/vim-sneak', config = lrequire('plugins.sneak')},
+    {'justinmk/vim-sneak', init = lrequire('plugins.sneak')},
 
     -- text objects
     {'wellle/targets.vim'},
