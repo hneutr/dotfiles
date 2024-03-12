@@ -76,6 +76,7 @@ function wr() {
 }
 
 alias tags="hnetxt tags"
+alias project="hnetxt project"
 
 alias ht="hnetxt"
 alias htt="hnetxt_test"
