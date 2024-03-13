@@ -38,7 +38,6 @@ require("lazy").setup({
         'folke/zen-mode.nvim',
         opts = require("plugins.zen-mode"),
         keys = {{"<leader>dz", "<cmd>ZenMode<cr>"}},
-        commit = "50e2e2a",
     },
 
     -- manage tabs

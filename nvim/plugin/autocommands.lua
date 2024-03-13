@@ -17,6 +17,15 @@ aucmd({"TermOpen", "BufWinEnter"}, {pattern='*', callback=util.set_number_displa
 
 -- enter insert mode whenever we're in a terminal
 aucmd({"TermOpen", "BufWinEnter", "BufEnter"}, {pattern="term://*", command="startinsert"})
+aucmd(
+    {"TermOpen", "BufWinEnter", "BufEnter"},
+    {
+        pattern="term://*",
+        callback=function()
+            vim.opt.statusline = "terminal"
+        end
+    }
+)
 
 -- open file at last point
 aucmd({"BufReadPost"}, {pattern='*', command=[[if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif]]})
