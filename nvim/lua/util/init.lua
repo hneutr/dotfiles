@@ -26,6 +26,15 @@ function M.open_two_vertical_terminals()
     vim.api.nvim_input('A')
 end
 
+function M.set_statusline()
+    local statusline = "%.100F"
+    if vim.api.nvim_buf_get_name(0):startswith("term") then
+        statusline = "term"
+    end
+
+    vim.opt_local.statusline = statusline
+end
+
 function M.edit_without_nesting()
     local has_ui = vim.tbl_count(vim.api.nvim_list_uis()) > 0
     local server_address = vim.env.NVIM

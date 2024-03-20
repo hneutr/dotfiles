@@ -75,6 +75,10 @@ function wr() {
     nvim $1 -c "lua require('htn.project.mirror').open('outlines')" +bnext -c "lua require('zen-mode').toggle()"
 }
 
+function quote() {
+    nvim $(hnetxt quote $@) -c "lua require('htn.ui').quote()"
+}
+
 alias tags="hnetxt tags"
 alias project="hnetxt project"
 

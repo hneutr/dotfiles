@@ -105,9 +105,6 @@ Dict({
 
     splitright = true,
 
-    -- full path
-    statusline = "%.100F", 
-
     spellfile = Path.join(vim.g.vim_config, "spell/en.utf-8.add"),
 
     spelllang = "en_us",
