@@ -20,6 +20,6 @@ vim.keymap.set("i", "<c-b>", function() ls.jump(-1) end, args)
 vim.keymap.set({"i", "s"}, "<c-.>", function() if ls.choice_active() then ls.change_choice(1) end end, args)
 vim.keymap.set({"i", "s"}, "<c-,>", function() if ls.choice_active() then ls.change_choice(-1) end end, args)
 
-Path(vim.g.vim_config):join('snips'):iterdir():foreach(function(path)
+PATHS.config:join('snips'):iterdir():foreach(function(path)
     vim.cmd("source " .. tostring(path))
 end)
