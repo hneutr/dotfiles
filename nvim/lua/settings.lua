@@ -15,6 +15,8 @@ vim.g.symbol_insert_modifier = "M"
 
 vim.g.snip_ft_strings = {
     javascript = {print = 'console.log(%s)'},
+    typescript = {print = 'console.log(%s)'},
+    typescriptreact = {print = 'console.log(%s)'},
     lua = {print = 'print(require("inspect")(%s))'},
     python = {print = 'print(%s)'},
     markdown = {comment = '= %s'},
