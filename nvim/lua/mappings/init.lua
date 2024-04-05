@@ -1,9 +1,9 @@
-local maps = {
+local maps = Dict({
     n = {
         -- select last selection
-        {'gV', '`[v`]'},
+        gV = '`[v`]',
         -- play 'q' macro
-        {'Q', '@q'},
+        Q = '@q',
         -- easier backstepping
         {"<c-e>", "gE"},
         -- swap */# (match _W_ord) and g*/g# (match _w_ord)
@@ -25,65 +25,73 @@ local maps = {
         -- next/previous buffer
         {"<tab>", ":bnext<cr>"},
         {"<s-tab>", ":bprev<cr>"},
-        -- move to end/start of line
-        {vim.g.mapleader .. "l", "$"},
-        {vim.g.mapleader .. "h", "^"},
-        -- Conditionally modify character at end of line
-        {vim.g.mapleader .. ",", function() require('util').modify_line_end(',') end, {silent = true}},
-        {vim.g.mapleader .. ";", function() require('util').modify_line_end(';') end, {silent = true}},
-        -- run last command
-        {vim.g.mapleader .. "c", ":<c-p><cr>"},
-        -- quit
-        {vim.g.mapleader .. "q", ":q<cr>"},
-        -- close buffer
-        {vim.g.mapleader .. "k", require('util').kill_buffer_and_go_to_next, {silent = true}},
+
+        [vim.g.mapleader] = {
+            -- start/end of line
+            h = "^",
+            l = "$",
+            -- rerun last command
+            c = ":<c-p><cr>",
+            -- quit
+            q = ":q<cr>",
+            -- close buffer
+            k = {require('util').kill_buffer_and_go_to_next, {silent = true}},
+            -- Conditionally modify character at end of line
+            [","] = {function() require('util').modify_line_end(',') end, {silent = true}},
+            [";"] = {function() require('util').modify_line_end(';') end, {silent = true}},
+        },
     },
-    i = {
-        -- esc
-        {"jk", "<esc>", {nowait=true}},
-        -- paste
-        {"<c-]>", '<c-r>"'},
-        -- forward delete (macos)
-        {"<c-d>", "<del>"},
-        -- delete next/previous word
-        {"<c-s>", "<c-\\><c-o>de"},
-        {"<c-w>", "<c-\\><c-o>db"},
-        -- indent/unindent
-        {"<c-l>", "<c-t>"},
-        {"<c-h>", "<c-d>"},
-        -- move to start/end of line (shell)
-        {"<c-e>", "<c-o>A"},
-        {"<c-a>", "<c-o>I"},
-    },
+    i = Dict.update(
+        {
+            -- esc
+            jk = {"<esc>", {nowait = true}},
+            -- paste
+            {"<c-]>", '<c-r>"'},
+            -- forward delete (macos)
+            {"<c-d>", "<del>"},
+            -- delete next/previous word
+            {"<c-s>", "<c-\\><c-o>de"},
+            {"<c-w>", "<c-\\><c-o>db"},
+            -- indent/dedent
+            {"<c-l>", "<c-t>"},
+            {"<c-h>", "<c-d>"},
+            -- move to start/end of line (shell)
+            {"<c-e>", "<c-o>A"},
+            {"<c-a>", "<c-o>I"},
+        },
+        require('mappings.symbols'):transformk(function(k)
+            return string.format("<%s-%s>", vim.g.symbol_insert_modifier, k)
+        end)
+    ),
     v = {
-        -- keep visual selection after indent/unindent
+        -- retain visual selection after indent/dedent
         {'>', '>gv'},
         {'<', '<gv'},
     },
     nx = {
         -- easy align
-        {"ga", "<Plug>(EasyAlign)"},
+        ga = "<Plug>(EasyAlign)",
     },
     nv = {
-        -- easy commandmode
-        {"<cr>", ':'},
         -- move by visual line
-        {"j", "gj"},
-        {"k", "gk"},
+        j = "gj",
+        k = "gk",
+        -- center after jumping + consistent direction next/previous behavior
+        n = {"'Nn'[v:searchforward].'zz'", {expr = true}},
+        N = {"'nN'[v:searchforward].'zz'", {expr = true}},
         -- center after jumping
         {"<c-f>", "<c-f>zz"},
         {"<c-b>", "<c-b>zz"},
-        -- center after jumping + consistent direction next/previous behavior
-        {'n', "'Nn'[v:searchforward].'zz'", {expr = true}},
-        {'N', "'nN'[v:searchforward].'zz'", {expr = true}},
+        -- easy commandmode
+        {"<cr>", ':'},
     },
     c = {
         -- move to start/end of line (shell)
         {"<c-a>", "<home>"},
         {"<c-e>", "<end>"},
         -- next/previous command (shell)
-        { "<c-n>", "<down>"},
-        { "<c-p>", "<up>"},
+        {"<c-n>", "<down>"},
+        {"<c-p>", "<up>"},
         -- move to next/previous word (shell)
         {"<m-left>", "<s-left>"},
         {"<m-right>", "<s-right>"},
@@ -102,20 +110,39 @@ local maps = {
         {"<c-k>", "<c-\\><c-n><c-w>k", {nowait = true}},
         {"<c-l>", "<c-\\><c-n><c-w>l", {nowait = true}},
     },
-}
+})
 
-for _, mapping in ipairs(require('mappings.symbols')) do
-    table.insert(maps.i, mapping)
-end
+maps:transformv(function(nested_mappings)
+    local to_flatten = List({nested_mappings})
+    local mappings = List()
+    while #to_flatten > 0 do
+        local current = to_flatten:pop()
 
-for modes_str, maps in pairs(maps) do
-    local modes = {}
-    for i = 1, #modes_str do
-        table.insert(modes, modes_str:sub(i, i))
+        mappings:extend(List(current))
+
+        Dict(current):foreach(function(lhs, val)
+            local rhs, opts
+            if type(val) == "table" then
+                if #val > 0 then
+                    rhs, opts = unpack(val)
+                else
+                    to_flatten:append(Dict(val):transformk(function(_lhs) return lhs .. _lhs end))
+                end
+            else
+                rhs = val
+            end
+
+            if rhs then
+                mappings:append({lhs, rhs, opts})
+            end
+        end)
     end
 
-    for _, map in ipairs(maps) do
-        local lhs, rhs, opts = unpack(map)
+    return mappings
+end):foreach(function(modes, mappings)
+    modes = List(modes)
+    mappings:foreach(function(mapping)
+        local lhs, rhs, opts = unpack(mapping)
         vim.keymap.set(modes, lhs, rhs, opts)
-    end
-end
+    end)
+end)
