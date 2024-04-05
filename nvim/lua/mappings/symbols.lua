@@ -1,4 +1,6 @@
-local symbols_map = Dict({
+-- search: https://unicodeplus.com/search
+-- wikipedia: https://en.wikipedia.org/wiki/Unicode_block
+local mappings = Dict({
     ----------------------------------[ letters ]-----------------------------------
     ["A"] = require('mappings.unicode.accents'),
     ["a"] = require('mappings.unicode.arrows'),
@@ -30,25 +32,21 @@ local symbols_map = Dict({
 
 })
 
-function get_nested_mapping(key, val)
-    local mappings = List()
-    if type(val) == "string" then
-        mappings:append({key, val})
-    else
-        for suffix, subval in pairs(val) do
-            for _, submapping in ipairs(get_nested_mapping(key .. suffix, subval)) do
-                table.insert(mappings, submapping)
-            end
-        end
-    end
-
-    return mappings
-end
-
-local symbols = List()
-symbols_map:foreach(function(key, val)
-    local lhs = string.format("<%s-%s>", vim.g.symbol_insert_modifier, key)
-    symbols:extend(get_nested_mapping(lhs, val))
+mappings:transformk(function(key)
+    return string.format("<%s-%s>", vim.g.symbol_insert_modifier, key)
 end)
 
-return symbols
+local to_flatten = List({mappings})
+
+local flat_mappings = List()
+while #to_flatten > 0 do
+    to_flatten:pop():foreach(function(lhs, rhs)
+        if type(rhs) == 'string' then
+            flat_mappings:append({lhs, rhs})
+        else
+            to_flatten:append(Dict(rhs):transformk(function(_lhs) return lhs .. _lhs end))
+        end
+    end)
+end
+
+return flat_mappings
