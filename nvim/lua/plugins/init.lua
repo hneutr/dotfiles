@@ -81,4 +81,7 @@ require("lazy").setup({
     
     -- personal library
     {dir = "~/lib/hnetxt-lua"},
+
+    -- sqlite, for the help
+    {"kkharji/sqlite.lua"},
 })
