@@ -1,5 +1,6 @@
-local symbols_map = {
-    -----------------------------[ lowercase letters ]------------------------------
+local symbols_map = Dict({
+    ----------------------------------[ letters ]-----------------------------------
+    ["A"] = require('mappings.unicode.accents'),
     ["a"] = require('mappings.unicode.arrows'),
     ["c"] = "✓",
     ["d"] = require('mappings.unicode.doublestruck'),
@@ -12,17 +13,11 @@ local symbols_map = {
     ["s"] = require('mappings.unicode.shapes'),
     ["x"] = "⨉",
 
-    -----------------------------[ uppercase letters ]------------------------------
-    ["A"] = require('mappings.unicode.accents'),
-    ["M"] = "ꟽ",
-    ["P"] = "ꟼ",
-
-    ----------------------------[ numbers and symbols ]-----------------------------
     ----------------------------------[ numbers ]-----------------------------------
     ["0"] = "°",
 
     ----------------------------------[ symbols ]-----------------------------------
-    ['-'] = "—",
+    ['-'] = "—", -- em dash
     ["="] = "≠",
     ["<"] = "≤",
     [">"] = "≥",
@@ -33,15 +28,12 @@ local symbols_map = {
     ["Up"] = "↑",
     ["Down"] = "↓",
 
-}
+})
 
 function get_nested_mapping(key, val)
-    prefix = prefix or ""
-
-    local mappings = {}
+    local mappings = List()
     if type(val) == "string" then
-        table.insert(mappings, {key, val})
-        mappings[key] = val
+        mappings:append({key, val})
     else
         for suffix, subval in pairs(val) do
             for _, submapping in ipairs(get_nested_mapping(key .. suffix, subval)) do
@@ -53,13 +45,10 @@ function get_nested_mapping(key, val)
     return mappings
 end
 
-local symbols = {}
-for key, val in pairs(symbols_map) do
-    local lhs = "<" .. vim.g.symbol_insert_modifier .. "-" .. key .. ">"
-
-    for _, mapping in ipairs(get_nested_mapping(lhs, val)) do
-        table.insert(symbols, mapping)
-    end
-end
+local symbols = List()
+symbols_map:foreach(function(key, val)
+    local lhs = string.format("<%s-%s>", vim.g.symbol_insert_modifier, key)
+    symbols:extend(get_nested_mapping(lhs, val))
+end)
 
 return symbols

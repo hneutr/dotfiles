@@ -65,15 +65,15 @@ local maps = {
         {"ga", "<Plug>(EasyAlign)"},
     },
     nv = {
-        -- enter commandmode easily
+        -- easy commandmode
         {"<cr>", ':'},
         -- move by visual line
         {"j", "gj"},
         {"k", "gk"},
-        -- center after jump
+        -- center after jumping
         {"<c-f>", "<c-f>zz"},
         {"<c-b>", "<c-b>zz"},
-        -- center after jump + consistent direction next/previous behavior
+        -- center after jumping + consistent direction next/previous behavior
         {'n', "'Nn'[v:searchforward].'zz'", {expr = true}},
         {'N', "'nN'[v:searchforward].'zz'", {expr = true}},
     },
@@ -90,17 +90,17 @@ local maps = {
     },
     t = {
         -- exit
-        {"<esc>", "<c-\\><c-n>", {nowait=true}},
-        {"<c-[>", "<c-\\><c-n>", {nowait=true}},
+        {"<esc>", "<c-\\><c-n>", {nowait = true}},
+        {"<c-[>", "<c-\\><c-n>", {nowait = true}},
         -- paste
         {"<c-]>", '<c-\\><c-n>""pA'},
         -- <c-r> like in insert mode
         {"<c-r>", [['<c-\><c-n>"'.nr2char(getchar()).'pi']], {expr = true}},
         -- consistent window movement commands
-        {"<c-h>", "<c-\\><c-n><c-w>h", {nowait=true}},
-        {"<c-j>", "<c-\\><c-n><c-w>j", {nowait=true}},
-        {"<c-k>", "<c-\\><c-n><c-w>k", {nowait=true}},
-        {"<c-l>", "<c-\\><c-n><c-w>l", {nowait=true}},
+        {"<c-h>", "<c-\\><c-n><c-w>h", {nowait = true}},
+        {"<c-j>", "<c-\\><c-n><c-w>j", {nowait = true}},
+        {"<c-k>", "<c-\\><c-n><c-w>k", {nowait = true}},
+        {"<c-l>", "<c-\\><c-n><c-w>l", {nowait = true}},
     },
 }
 
