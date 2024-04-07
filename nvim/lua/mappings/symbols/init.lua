@@ -4,6 +4,7 @@ return Dict({
     ----------------------------------[ letters ]-----------------------------------
     ["A"] = require('mappings.symbols.accents'),
     ["a"] = require('mappings.symbols.arrows'),
+    ["C"] = "⊂",
     ["c"] = "✓",
     ["d"] = require('mappings.symbols.doublestruck'),
     ["g"] = require('mappings.symbols.greek'),

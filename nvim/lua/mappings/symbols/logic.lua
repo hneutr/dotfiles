@@ -35,7 +35,6 @@ return {
             ["l"] = "⪽",
         }
     },
-
     -- letters (uppercase)
     ["A"] = "Ɐ",
     ["E"] = "Ǝ",
