@@ -76,7 +76,7 @@ function wr() {
 }
 
 function quote() {
-    nvim $(hnetxt quote $@) -c "lua require('htn.ui').quote()"
+    nvim $(hnetxt quote $@) +"lua require('htn.ui').quote()"
 }
 
 alias tags="hnetxt tags"

@@ -22,6 +22,14 @@ require("lazy").setup({
         config = lrequire("plugins.catppuccin"),
     },
 
+    -- edit without nesting
+    {
+        "willothy/flatten.nvim",
+        config = true,
+        lazy = false,
+        priority = 1001,
+    },
+
     -- treesitter
     {'nvim-treesitter/nvim-treesitter', config = lrequire('plugins.treesitter')},
 
@@ -80,9 +88,9 @@ require("lazy").setup({
     -- cycle true/false, etc
     {'monaqa/dial.nvim', config = lrequire('plugins.dial')},
     
-    -- personal library
-    {dir = "~/lib/hnetxt-lua"},
-
     -- sqlite, for the help
     {"kkharji/sqlite.lua"},
+
+    -- personal library
+    {dir = "~/lib/hnetxt-lua"},   
 })

@@ -35,31 +35,6 @@ function M.set_statusline()
     vim.opt_local.statusline = statusline
 end
 
-function M.edit_without_nesting()
-    local has_ui = vim.tbl_count(vim.api.nvim_list_uis()) > 0
-    local server_address = vim.env.NVIM
-
-    if server_address and has_ui then
-        -- start a job with the source vim instance
-        local server = vim.fn.jobstart({'nc', '-U', server_address}, {rpc = true})
-
-        -- get the filename of the newly opened buffer
-        local filename = vim.fn.fnameescape(vim.fn.expand('%:p'))
-
-        -- wipeout the buffer
-        vim.api.nvim_buf_delete(0, {})
-
-        -- open the buffer in the source vim instance
-        vim.fn.rpcrequest(server, "nvim_command", "edit " .. filename)
-
-        -- call the autocommand to enter windows
-        vim.fn.rpcrequest(server, "nvim_command", "doautocmd BufWinEnter")
-
-        -- quit the "other" instance of vim
-        vim.cmd("quitall")
-    end
-end
-
 -- Store visual selection marks, save, restore visual selection marks
 function M.save_and_restore_visual_selection_marks()
     local start_line, start_col = unpack(vim.api.nvim_buf_get_mark(0, "["))

@@ -1,10 +1,7 @@
-local general_g = vim.api.nvim_create_augroup('general_g', { clear = true })
+local util = require('util')
+
+local general_g = vim.api.nvim_create_augroup('general_g', {clear = true})
 local aucmd = vim.api.nvim_create_autocmd
-
-local util = require'util'
-
--- avoid nested vim sessions
-aucmd({"VimEnter"}, {pattern='*', group=general_g, callback=util.edit_without_nesting})
 
 -- diagnostics suck
 aucmd({"BufEnter"}, {pattern='*', group=general_g, callback=function() vim.diagnostic.disable(0) end})
