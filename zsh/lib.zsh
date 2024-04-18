@@ -17,7 +17,7 @@ function setmd() {
     local filename="${1:r}"
     local input="${filename}.md"
     local output="${filename}.pdf"
-    pandoc -s -o $output $input
+    pandoc --pdf-engine=lualatex -s -o $output $input
 }
 
 function settex() {
