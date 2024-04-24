@@ -79,6 +79,10 @@ function quote() {
     nvim $(hnetxt quote $@) +"lua require('htn.ui').quote()"
 }
 
+function lang() {
+    cd $(hnetxt language)
+}
+
 alias tags="hnetxt tags"
 alias project="hnetxt project"
 

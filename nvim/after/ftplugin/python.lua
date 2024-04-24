@@ -1,1 +1,1 @@
-vim.keymap.set('n', ' ;', function() require'util'.modify_line_end(':') end, { silent = true, buffer = 0 })
+vim.keymap.set('n', ' ;', require('util').modify_line_end(':'), {silent = true, buffer = 0})

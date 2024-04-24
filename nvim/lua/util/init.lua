@@ -7,10 +7,6 @@ function lrequire(package_name)
     end
 end
 
-function _G.escape(s)
-    return (s:gsub('[%-%.%+%[%]%(%)%$%^%%%?%*]','%%%1'))
-end
-
 function _G.default_args(args, defaults)
     return vim.tbl_extend("keep", {}, args or {}, defaults)
 end
@@ -83,30 +79,21 @@ end
 -- delimiters: ,;:
 --------------------------------------------------------------------------------
 function M.modify_line_end(char)
-    local delimiters = {',', ';', ':'}
-    local found_delimiter
-    local line = BufferLines.cursor.get()
-    line = line:gsub('%s*$', '')
+    return function()
+        local delimiters = List({',', ';', ':'})
+        local line = BufferLines.cursor.get():rstrip()
 
-    for i, _char in ipairs(delimiters) do
-        if vim.endswith(line, _char) then
-            found_delimiter = true
-
-            line = line:sub(1, line:len() - 1)
-
-            if _char ~= char then
-                line = line .. char
+        local new_line
+        while #delimiters > 0 and not new_line do
+            local delimiter = delimiters:pop()
+            if line:endswith(delimiter) then
+                local suffix = delimiter == char and "" or char
+                new_line = line:removesuffix(delimiter) .. suffix
             end
-
-            break
         end
-    end
 
-    if not found_delimiter then
-        line = line .. char
+        BufferLines.cursor.set({replacement = {new_line or line .. char}})
     end
-
-    BufferLines.cursor.set({replacement = {line}})
 end
 
 function M.kill_buffer_and_go_to_next()

@@ -37,8 +37,8 @@ local maps = Dict({
             -- close buffer
             k = {require('util').kill_buffer_and_go_to_next, {silent = true}},
             -- Conditionally modify character at end of line
-            [","] = {function() require('util').modify_line_end(',') end, {silent = true}},
-            [";"] = {function() require('util').modify_line_end(';') end, {silent = true}},
+            [","] = {require('util').modify_line_end(','), {silent = true}},
+            [";"] = {require('util').modify_line_end(';'), {silent = true}},
         },
     },
     i = Dict.update(
