@@ -33,18 +33,20 @@ end
 
 -- Store visual selection marks, save, restore visual selection marks
 function M.save_and_restore_visual_selection_marks()
-    local start_line, start_col = unpack(vim.api.nvim_buf_get_mark(0, "["))
-    local end_line, end_col = unpack(vim.api.nvim_buf_get_mark(0, "]"))
+    if vim.bo.modified then
+        local start_line, start_col = unpack(vim.api.nvim_buf_get_mark(0, "["))
+        local end_line, end_col = unpack(vim.api.nvim_buf_get_mark(0, "]"))
 
-    pcall(function() vim.cmd("silent write") end)
+        pcall(function() vim.cmd("silent write") end)
 
-    start_line = math.max(start_line, 0)
-    end_line = math.min(end_line, vim.fn.line('$') - 1)
+        start_line = math.max(start_line, 0)
+        end_line = math.min(end_line, vim.fn.line('$') - 1)
 
-    pcall(function()
-        vim.api.nvim_buf_set_mark(0, "[", start_line, start_col, {})
-        vim.api.nvim_buf_set_mark(0, "]", end_line, end_col, {})
-    end)
+        pcall(function()
+            vim.api.nvim_buf_set_mark(0, "[", start_line, start_col, {})
+            vim.api.nvim_buf_set_mark(0, "]", end_line, end_col, {})
+        end)
+    end
 end
 
 --------------------------------------------------------------------------------
