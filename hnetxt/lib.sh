@@ -83,7 +83,7 @@ function lang() {
     cd $(hnetxt language)
 }
 
-alias tags="hnetxt tags"
+alias tax="hnetxt tax"
 alias project="hnetxt project"
 
 alias ht="hnetxt"
