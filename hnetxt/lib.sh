@@ -23,10 +23,6 @@ function project_root_exists() {
                 unalias rm
             fi
 
-            if [ ${+aliases[new]} -eq 1 ]; then
-                unalias new
-            fi
-
             alias vim=nvim
         else
             # call recursively if we're not bottomed out yet
@@ -57,10 +53,6 @@ function hnetxt_rm() {
 
 function journal() {
     nvim $(hnetxt journal $@) -c "lua require('zen-mode').toggle()"
-}
-
-function new() {
-    nvim $(hnetxt new $@)
 }
 
 function track() {
