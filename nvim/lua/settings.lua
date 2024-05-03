@@ -17,7 +17,7 @@ vim.g.snip_ft_strings = {
     javascript = {print = 'console.log(%s)'},
     typescript = {print = 'console.log(%s)'},
     typescriptreact = {print = 'console.log(%s)'},
-    lua = {print = 'print(require("inspect")(%s))'},
+    lua = {print = 'print(%s)'},
     python = {print = 'print(%s)'},
     markdown = {comment = '= %s'},
     vim = {print = 'echo %s'},
