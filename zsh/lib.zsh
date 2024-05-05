@@ -1,4 +1,5 @@
-source $DOTFILES/hnetxt/lib.sh
+source $HOME/lib/hnetxt-lua/lib.sh
+# source $DOTFILES/hnetxt/lib.sh
 
 #------------------------------------------------------------------------------#
 #                                    misc                                      #

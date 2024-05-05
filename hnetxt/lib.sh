@@ -76,6 +76,7 @@ function lang() {
 }
 
 alias tax="hnetxt tax"
+alias ref="hnetxt ref"
 alias project="hnetxt project"
 
 alias ht="hnetxt"
