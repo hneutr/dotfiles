@@ -1,26 +1,28 @@
-local nvimux = require('nvimux')
+local prefix = "<C-Space>"
+local modes = List({"n", "v", "i", "t"})
 
-local cmd = vim.api.nvim_create_user_command
-cmd("Tvsplit", "vspl|term", {})
-cmd("Tsplit", "spl|term", {})
-cmd("Ttab", "tabnew|term", {})
+local mappings = Dict({
+    l = "vspl|term",
+    j = "spl|term",
+    t = "tabnew|term",
+    x = "x",
+    X = "tabclose",
+    ["!"] = "wincmd T",
+})
 
--- Nvimux custom bindings
-nvimux.bindings.bind_all{
-  {'j', ':Tsplit', {'n', 'v', 'i', 't'}},
-  {'l', ':Tvsplit', {'n', 'v', 'i', 't'}},
-  {'c', ':Ttab', {'n', 'v', 'i', 't'}},
-  {'X', ':tabclose', {'n', 'v', 'i', 't'}},
-}
+for i in List.range(1, 9):iter() do
+    mappings[tostring(i)] = string.format("tabn %s", tostring(i))
+end
 
--- Nvimux configuration
-nvimux.config.set_all{
-  prefix = '<C-Space>',
-  open_term_by_default = true,
-  quickterm_direction = 'botright',
-  quickterm_orientation = 'vertical',
-  quickterm_scope = 't',
-  quickterm_size = '80',
-}
+mappings:foreach(function(lhs, cmd)
+    vim.keymap.set(
+        modes,
+        prefix .. lhs,
+        function()
+            vim.api.nvim_command(":" .. cmd)
+        end,
+        {silent = true}
+    )
+end)
 
-nvimux.bootstrap()
+-- vim.opt_global.tabline = "%N"

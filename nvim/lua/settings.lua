@@ -61,7 +61,7 @@ Dict({
         -- replace: _
         "r-cr:hor20-Cursor/lCursor",
     },
-
+    
     -- ignore case when searching
     ignorecase = true,
 
