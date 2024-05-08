@@ -50,8 +50,6 @@ function open_two_vertical_terminals() {
 #                         change directory functions                           #
 #------------------------------------------------------------------------------#
 function chpwd {
-  # sets a project root if there is one
-  project_root_exists $PWD
 }
 
 # call the change directory functions at startup

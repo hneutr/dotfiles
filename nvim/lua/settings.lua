@@ -1,11 +1,3 @@
-local Path = require("hl.Path")
-local List = require("hl.List")
-local Dict = require("hl.Dict")
-
-PATHS = Dict({
-    config = Path.home:join('.config/nvim/'),
-})
-
 vim.g.python3_host_prog = vim.env.NVIM_PYTHON
 
 vim.g.mapleader = " "
@@ -109,7 +101,7 @@ Dict({
 
     splitright = true,
 
-    spellfile = tostring(PATHS.config:join("spell/en.utf-8.add")),
+    spellfile = tostring(Conf.paths.spell_file),
 
     spelllang = "en_us",
 
@@ -128,7 +120,7 @@ Dict({
     -- shorten key code timeout time
     ttimeoutlen = 0,
 
-    undodir = tostring(PATHS.config:join(".undodir")),
+    undodir = tostring(Conf.paths.undo_dir),
 
     undofile = true,
 

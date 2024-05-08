@@ -1,5 +1,4 @@
 local ls = require("luasnip")
-local Path = require("hl.Path")
 
 ls.config.set_config({
     history = false,
@@ -20,6 +19,6 @@ vim.keymap.set("i", "<c-b>", function() ls.jump(-1) end, args)
 vim.keymap.set({"i", "s"}, "<c-.>", function() if ls.choice_active() then ls.change_choice(1) end end, args)
 vim.keymap.set({"i", "s"}, "<c-,>", function() if ls.choice_active() then ls.change_choice(-1) end end, args)
 
-PATHS.config:join('snips'):iterdir():foreach(function(path)
+Conf.paths.luasnips_dir:iterdir():foreach(function(path)
     vim.cmd("source " .. tostring(path))
 end)
