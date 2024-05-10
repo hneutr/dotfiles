@@ -110,6 +110,7 @@ local maps = Dict({
         {"<c-k>", "<c-\\><c-n><c-w>k", {nowait = true}},
         {"<c-l>", "<c-\\><c-n><c-w>l", {nowait = true}},
     },
+    nvit = require('mappings.windows'):transformk(function(k) return "<C-Space>" .. k end),
 })
 
 maps:transformv(function(nested_mappings)

@@ -49,9 +49,6 @@ require("lazy").setup({
         commit = "50e2e2a",
     },
 
-    -- manage tabs
-    {'hneutr/nvimux', config = lrequire('plugins.nvimux')},
-
     -- highlight searches
     'hneutr/vim-cool',
 
