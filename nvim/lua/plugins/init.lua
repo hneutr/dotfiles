@@ -1,93 +1,101 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable",
-    lazypath,
-  })
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable",
+        lazypath,
+    })
 end
 
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({
-    -- colorscheme
+require("lazy").setup(
     {
-        "catppuccin/nvim",
-        name = "catppuccin",
-        priority = 1000,
-        config = lrequire("plugins.catppuccin"),
-    },
+        -- colorscheme
+        {
+            "catppuccin/nvim",
+            name = "catppuccin",
+            priority = 1000,
+            config = lrequire("plugins.catppuccin"),
+        },
 
-    -- edit without nesting
+        -- edit without nesting
+        {
+            "willothy/flatten.nvim",
+            config = true,
+            lazy = false,
+            priority = 1001,
+        },
+
+        -- treesitter
+        {'nvim-treesitter/nvim-treesitter', config = lrequire('plugins.treesitter')},
+
+        -- find things
+        'junegunn/fzf',
+        {
+            'ibhagwan/fzf-lua',
+            config = lrequire('plugins.fzf-lua'),
+            keys = {{"<leader>df", function() require('fzf-lua').files() end}},
+        },
+
+        -- zen mode
+        {
+            'folke/zen-mode.nvim',
+            opts = require("plugins.zen-mode"),
+            keys = {{"<leader>dz", "<cmd>ZenMode<cr>"}},
+            commit = "50e2e2a",
+        },
+
+        -- highlight searches
+        'hneutr/vim-cool',
+
+        -- 2char motions
+        {'justinmk/vim-sneak', init = lrequire('plugins.sneak')},
+
+        -- text objects
+        {'wellle/targets.vim'},
+
+        -- snippets
+        {"L3MON4D3/LuaSnip", config = lrequire("plugins.luasnip")},
+
+        -- surround things
+        {"kylechui/nvim-surround", config = lrequire('plugins.nvim-surround')},
+
+        -- open/close pairs
+        {'windwp/nvim-autopairs', config = lrequire('plugins.autopairs'), commit = "9fd4118" },
+
+        -- align things
+        {'junegunn/vim-easy-align'},
+
+        -- paired options
+        'tpope/vim-unimpaired',
+
+        -- paste without modifying registers
+        'vim-scripts/ReplaceWithRegister',
+
+        -- move things up/down
+        {'zirrostig/vim-schlepp', init = lrequire("plugins.schlepp")},
+
+        -- cycle true/false, etc
+        {'monaqa/dial.nvim', config = lrequire('plugins.dial')},
+        
+        -- sqlite, for the help
+        {"kkharji/sqlite.lua"},
+
+        -- personal library
+        {dir = "~/lib/hnetxt-lua"},   
+    },
     {
-        "willothy/flatten.nvim",
-        config = true,
-        lazy = false,
-        priority = 1001,
-    },
-
-    -- treesitter
-    {'nvim-treesitter/nvim-treesitter', config = lrequire('plugins.treesitter')},
-
-    -- find things
-    'junegunn/fzf',
-    {
-        'ibhagwan/fzf-lua',
-        config = lrequire('plugins.fzf-lua'),
-        keys = {{"<leader>df", function() require('fzf-lua').files() end}},
-    },
-
-    -- zen mode
-    {
-        'folke/zen-mode.nvim',
-        opts = require("plugins.zen-mode"),
-        keys = {{"<leader>dz", "<cmd>ZenMode<cr>"}},
-        commit = "50e2e2a",
-    },
-
-    -- highlight searches
-    'hneutr/vim-cool',
-
-    -- 2char motions
-    {'justinmk/vim-sneak', init = lrequire('plugins.sneak')},
-
-    -- text objects
-    {'wellle/targets.vim'},
-
-    -- snippets
-    {"L3MON4D3/LuaSnip", config = lrequire("plugins.luasnip")},
-
-    -- surround things
-    {"kylechui/nvim-surround", config = lrequire('plugins.nvim-surround')},
-
-    -- open/close pairs
-    {'windwp/nvim-autopairs', config = lrequire('plugins.autopairs'), commit = "9fd4118" },
-
-    -- comment things
-    'tpope/vim-commentary',
-
-    -- align things
-    {'junegunn/vim-easy-align'},
-
-    -- paired options
-    'tpope/vim-unimpaired',
-
-    -- paste without modifying registers
-    'vim-scripts/ReplaceWithRegister',
-
-    -- move things up/down
-    {'zirrostig/vim-schlepp', init = lrequire("plugins.schlepp")},
-
-    -- cycle true/false, etc
-    {'monaqa/dial.nvim', config = lrequire('plugins.dial')},
-    
-    -- sqlite, for the help
-    {"kkharji/sqlite.lua"},
-
-    -- personal library
-    {dir = "~/lib/hnetxt-lua"},   
-})
+        -- profiling = {
+        --     -- Enables extra stats on the debug tab related to the loader cache.
+        --     -- Additionally gathers stats about all package.loaders
+        --     loader = true,
+        --     -- Track each new require in the Lazy profiling tab
+        --     require = true,
+        -- },
+    }
+)
