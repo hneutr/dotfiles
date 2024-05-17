@@ -14,7 +14,7 @@ fzf.setup({
             map(0, 't', "<c-n>", "<down>", {})
             map(0, 't', "<c-p>", "<up>", {})
 
-            vim.o.laststatus = false
+            vim.o.laststatus = 0
             vim.api.nvim_create_autocmd({"WinLeave"}, {buffer=0, callback=function() vim.o.laststatus = 2 end})
         end,
     },

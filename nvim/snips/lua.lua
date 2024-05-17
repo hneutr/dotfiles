@@ -7,6 +7,7 @@ local ps = ls.parser.parse_snippet
 ls.add_snippets("lua", {
     ps("die", "os.exit()\n", {trim_empty = false}),
     ps("pd", "print(Dict($1))"),
+    ps("dp", "Dict.print($1)"),
     ps("P", 'print(require("inspect")($1))'),
     -- tests
     ps("before", [[
