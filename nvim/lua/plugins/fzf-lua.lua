@@ -20,10 +20,10 @@ fzf.setup({
     },
     actions = {
         files = {
-            ["default"]     = actions.file_edit_or_qf,
-            ["ctrl-j"]      = actions.file_split,
-            ["ctrl-l"]      = actions.file_vsplit,
-            ["ctrl-t"]      = actions.file_tabedit,
+            ["default"] = actions.file_edit_or_qf,
+            ["ctrl-j"] = actions.file_split,
+            ["ctrl-l"] = actions.file_vsplit,
+            ["ctrl-t"] = actions.file_tabedit,
         },
     },
     files = {

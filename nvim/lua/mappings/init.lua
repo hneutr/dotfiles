@@ -58,6 +58,8 @@ local maps = Dict({
             -- move to start/end of line (shell)
             {"<c-e>", "<c-o>A"},
             {"<c-a>", "<c-o>I"},
+            -- moonlander zero to sort of match normal keyboard
+            {"<c-->", '0'},
         },
         require('mappings.symbols'):transformk(function(k)
             return string.format("<%s-%s>", vim.g.symbol_insert_modifier, k)
@@ -67,10 +69,6 @@ local maps = Dict({
         -- retain visual selection after indent/dedent
         {'>', '>gv'},
         {'<', '<gv'},
-    },
-    nx = {
-        -- easy align
-        ga = "<Plug>(EasyAlign)",
     },
     nv = {
         -- move by visual line

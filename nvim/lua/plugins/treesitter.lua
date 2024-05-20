@@ -17,7 +17,14 @@ require('nvim-treesitter.configs').setup {
     indent = {
         enable = true,
         disable = {'markdown', 'markdown_inline'},
-    }
+    },
+    incremental_selection = {
+        enable = true,
+    },
+    textobjects = {
+        enable = true,
+        disable = {'markdown', 'markdown_inline'},
+    },
 }
 
 vim.api.nvim_set_hl(0, "@markup.strong", {link = "@spell"})

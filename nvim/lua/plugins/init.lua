@@ -18,12 +18,13 @@ require("lazy").setup(
         -- colorscheme
         {
             "catppuccin/nvim",
+            lazy = false,
             name = "catppuccin",
             priority = 1000,
             config = lrequire("plugins.catppuccin"),
         },
 
-        -- edit without nesting
+        -- open things from :term in the parent nvim
         {
             "willothy/flatten.nvim",
             config = true,
@@ -31,11 +32,16 @@ require("lazy").setup(
             priority = 1001,
         },
 
-        -- treesitter
-        {'nvim-treesitter/nvim-treesitter', config = lrequire('plugins.treesitter')},
+        {
+            'nvim-treesitter/nvim-treesitter',
+            config = lrequire('plugins.treesitter'),
+        },
 
-        -- find things
+        {"kkharji/sqlite.lua"},
+
+        -- fuzzy search
         'junegunn/fzf',
+
         {
             'ibhagwan/fzf-lua',
             config = lrequire('plugins.fzf-lua'),
@@ -45,47 +51,74 @@ require("lazy").setup(
         -- zen mode
         {
             'folke/zen-mode.nvim',
+            commit = "50e2e2a",
             opts = require("plugins.zen-mode"),
             keys = {{"<leader>dz", "<cmd>ZenMode<cr>"}},
-            commit = "50e2e2a",
         },
 
-        -- highlight searches
+        -- search highlighting
         'hneutr/vim-cool',
 
         -- 2char motions
-        {'justinmk/vim-sneak', init = lrequire('plugins.sneak')},
+        {
+            'justinmk/vim-sneak',
+            config = lrequire("plugins.sneak"),
+            keys = {
+                {'s', '<Plug>Sneak_s', remap = true},
+                {'S', '<Plug>Sneak_S', remap = true},
+                {'f', '<Plug>Sneak_f', remap = true, mode = ""},
+                {'F', '<Plug>Sneak_F', remap = true, mode = ""},
+                {'t', '<Plug>Sneak_t', remap = true, mode = ""},
+                {'T', '<Plug>Sneak_T', remap = true, mode = ""},
+            },
+        },
 
         -- text objects
-        {'wellle/targets.vim'},
+        'wellle/targets.vim',
 
         -- snippets
-        {"L3MON4D3/LuaSnip", config = lrequire("plugins.luasnip")},
+        {
+            "L3MON4D3/LuaSnip",
+            config = lrequire("plugins.luasnip"),
+        },
 
-        -- surround things
-        {"kylechui/nvim-surround", config = lrequire('plugins.nvim-surround')},
+        -- surround stuff
+        {
+            "kylechui/nvim-surround",
+            config = lrequire('plugins.nvim-surround'),
+        },
 
         -- open/close pairs
-        {'windwp/nvim-autopairs', config = lrequire('plugins.autopairs'), commit = "9fd4118" },
+        {
+            'windwp/nvim-autopairs',
+            commit = "9fd4118",
+            config = lrequire('plugins.autopairs'),
+        },
 
-        -- align things
-        {'junegunn/vim-easy-align'},
+        {
+            'junegunn/vim-easy-align',
+            keys = {{"ga", "<Plug>(EasyAlign)", mode = {"n", "x"}}}
+        },
 
         -- paired options
         'tpope/vim-unimpaired',
 
-        -- paste without modifying registers
+        -- paste without changing registers
         'vim-scripts/ReplaceWithRegister',
 
         -- move things up/down
-        {'zirrostig/vim-schlepp', init = lrequire("plugins.schlepp")},
+        {
+            'zirrostig/vim-schlepp',
+            config = lrequire("plugins.schlepp"),
+            keys = {
+                {"<up>", "<Plug>SchleppUp", mode = "v"},
+                {"<down>", "<Plug>SchleppDown", mode = "v"},
+            }
+        },
 
-        -- cycle true/false, etc
+        -- cycle stuff
         {'monaqa/dial.nvim', config = lrequire('plugins.dial')},
         
-        -- sqlite, for the help
-        {"kkharji/sqlite.lua"},
-
         -- personal library
         {dir = "~/lib/hnetxt-lua"},   
     },

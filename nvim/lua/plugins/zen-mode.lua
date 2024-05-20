@@ -1,4 +1,4 @@
-local M = {
+return {
     window = {
         backdrop = 1,
         height = 0.9,
@@ -13,27 +13,18 @@ local M = {
             list = false,
         },
     },
+    on_open = function()
+        vim.opt.showmode = false
+        vim.opt.showcmd = false
+        vim.opt_local.spell = true
+
+        vim.keymap.set("n", "<leader>q", "<cmd>ZenMode | quit<cr>", {silent = true})
+    end,
+    on_close = function()
+        vim.opt.showmode = true
+        vim.opt.showcmd = true
+        vim.opt_local.spell = false
+
+        vim.keymap.set("n", " q", ":q<cr>", {silent = true})
+    end,
 }
-
-M.on_open = function(win)
-    vim.opt.showmode = false
-    vim.opt.showcmd = false
-    vim.opt_local.spell = true
-
-    function quit_zen()
-        vim.cmd("ZenMode")
-        vim.cmd("quit")
-    end
-
-    vim.keymap.set("n", " q", quit_zen, {silent = true})
-end
-
-M.on_close = function()
-    vim.opt.showmode = true
-    vim.opt.showcmd = true
-    vim.opt_local.spell = false
-
-    vim.keymap.set("n", " q", ":q<cr>", {silent = true})
-end
-
-return M
