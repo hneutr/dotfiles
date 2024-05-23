@@ -62,14 +62,14 @@ require("lazy").setup(
         -- 2char motions
         {
             'justinmk/vim-sneak',
-            config = lrequire("plugins.sneak"),
+            init = lrequire("plugins.sneak"),
             keys = {
                 {'s', '<Plug>Sneak_s', remap = true},
                 {'S', '<Plug>Sneak_S', remap = true},
-                {'f', '<Plug>Sneak_f', remap = true, mode = ""},
-                {'F', '<Plug>Sneak_F', remap = true, mode = ""},
-                {'t', '<Plug>Sneak_t', remap = true, mode = ""},
-                {'T', '<Plug>Sneak_T', remap = true, mode = ""},
+                {'f', '<Plug>Sneak_f', remap = true, mode = {"n", "x"}},
+                {'F', '<Plug>Sneak_F', remap = true, mode = {"n", "x"}},
+                {'t', '<Plug>Sneak_t', remap = true, mode = {"n", "x"}},
+                {'T', '<Plug>Sneak_T', remap = true, mode = {"n", "x"}},
             },
         },
 

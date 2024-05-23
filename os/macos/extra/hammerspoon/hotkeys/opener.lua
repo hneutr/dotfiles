@@ -15,7 +15,7 @@ local keyToApplication = {
     -- n
     -- o
     p = "system settings",
-    q = "spotify",
+    q = "music",
     r = "reminders",
     s = "safari",
     t = "clock",

@@ -1,6 +1,5 @@
 function hard_source() {
     if [ -f "$1" ]; then
-        chmod +x $1
         source $1
     fi
 }
