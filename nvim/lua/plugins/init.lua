@@ -120,7 +120,21 @@ require("lazy").setup(
         {'monaqa/dial.nvim', config = lrequire('plugins.dial')},
         
         -- personal library
-        {dir = "~/lib/hnetxt-lua"},   
+        {dir = "~/lib/hnetxt-lua"},
+        
+        -- folds
+        {"kevinhwang91/promise-async"},
+        {
+            "kevinhwang91/nvim-ufo",
+            config = function()
+                require('ufo').setup({
+                    provider_selector = function() return '' end,
+                    open_fold_hl_timeout = 0,
+                })
+                
+                vim.cmd("highlight UfoFoldedFg NONE")
+            end
+        },
     },
     {
         -- profiling = {
