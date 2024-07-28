@@ -1,4 +1,3 @@
-local BufferLines = require("hn.buffer_lines")
 local M = {}
 
 function lrequire(package_name)
@@ -83,7 +82,7 @@ end
 function M.modify_line_end(char)
     return function()
         local delimiters = List({',', ';', ':'})
-        local line = BufferLines.cursor.get():rstrip()
+        local line = vim.fn.getline("."):rstrip()
 
         local new_line
         while #delimiters > 0 and not new_line do
@@ -94,7 +93,7 @@ function M.modify_line_end(char)
             end
         end
 
-        BufferLines.cursor.set({replacement = {new_line or line .. char}})
+        vim.fn.setline(".", new_line or line .. char)
     end
 end
 

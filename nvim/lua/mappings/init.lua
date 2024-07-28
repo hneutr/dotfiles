@@ -77,9 +77,12 @@ local maps = Dict({
         -- center after jumping + consistent direction next/previous behavior
         n = {"'Nn'[v:searchforward].'zz'", {expr = true}},
         N = {"'nN'[v:searchforward].'zz'", {expr = true}},
+        -- center after jumping
+        {"<c-f>", "<c-f>zz"},
+        {"<c-b>", "<c-b>zz"},
         -- center after jumping + consistent jump size
-        {"<c-f>", string.format("%djzz", math.floor(vim.go.lines / 2))},
-        {"<c-b>", string.format("%dkzz", math.floor(vim.go.lines / 2))},
+        -- {"<c-f>", string.format("%djzz", math.floor(vim.go.lines / 2))},
+        -- {"<c-b>", string.format("%dkzz", math.floor(vim.go.lines / 2))},
         -- easy commandmode
         {"<cr>", ':'},
     },

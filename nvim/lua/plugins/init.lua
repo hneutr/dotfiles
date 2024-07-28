@@ -135,6 +135,15 @@ require("lazy").setup(
                 vim.cmd("highlight UfoFoldedFg NONE")
             end
         },
+
+        {"nvim-tree/nvim-web-devicons"},
+        -- {
+        --     "OXY2DEV/markview.nvim",
+        --     dependencies = {"nvim-tree/nvim-web-devicons"},
+        --     config = function ()
+        --         require("markview").setup()
+        --     end
+        -- },
     },
     {
         -- profiling = {

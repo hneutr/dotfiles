@@ -19,6 +19,12 @@ return {
         vim.opt_local.spell = true
 
         vim.keymap.set("n", "<leader>q", "<cmd>ZenMode | quit<cr>", {silent = true})
+        
+        -- vim.api.nvim_create_autocmd(
+        --
+        -- )
+        -- vim.api.nvim_create_augroup("htn_au_group", {clear = true})
+        --
     end,
     on_close = function()
         vim.opt.showmode = true
@@ -26,5 +32,7 @@ return {
         vim.opt_local.spell = false
 
         vim.keymap.set("n", " q", ":q<cr>", {silent = true})
+        
+        -- vim.api.nvim_del_augroup_by_name("hne-zen")
     end,
 }

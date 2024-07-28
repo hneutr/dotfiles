@@ -1,8 +1,8 @@
 #-----------------------------------[ exa ]------------------------------------#
-if [ -x "$(command -v exa)" ]; then
-    alias ls='exa --git --header --group'
-    alias lsla='exa --long --git -a --header --group'
-    alias tree='exa --tree --level=2 --long -a --header --git'
+if [ -x "$(command -v eza)" ]; then
+    alias ls='eza --git --header --group'
+    alias lsla='eza --long --git -a --header --group'
+    alias tree='eza --tree --level=2 --long -a --header --git'
 fi
 
 #------------------------------------[ fd ]------------------------------------#
