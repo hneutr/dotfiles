@@ -136,12 +136,93 @@ require("lazy").setup(
             end
         },
 
-        {"nvim-tree/nvim-web-devicons"},
+        -- {"nvim-tree/nvim-web-devicons"},
         -- {
         --     "OXY2DEV/markview.nvim",
-        --     dependencies = {"nvim-tree/nvim-web-devicons"},
-        --     config = function ()
-        --         require("markview").setup()
+        --     ft = "markdown",
+        --     dependencies = {
+        --         "nvim-treesitter/nvim-treesitter",
+        --         "nvim-tree/nvim-web-devicons"
+        --     },
+        --     config = function()
+        --         require("markview").setup({
+        --             -- buf_ignore = { "nofile" },
+        --             -- modes = { "n", "no" },
+        --             --
+        --             -- options = {
+        --             --     on_enable = {},
+        --             --     on_disable = {}
+        --             -- },
+        --             --
+        --             -- block_quotes = {},
+        --             -- checkboxes = {},
+        --             -- code_blocks = {},
+        --             -- headings = {},
+        --             -- horizontal_rules = {},
+        --             -- inline_codes = {},
+        --             -- links = {},
+        --             -- list_items = {},
+        --             -- tables = {}
+        --             -- headings = {
+        --             --     enable = true,
+        --             --     shift_width = vim.o.shiftwidth,
+        --             --
+        --             --     -- These are just for showing how various
+        --             --     -- styles can be used for the headings
+        --             --     heading_1 = {
+        --             --         style = "simple",
+        --             --         hl = "col_1"
+        --             --     },
+        --             --     heading_2 = {
+        --             --         style = "label",
+        --             --         hl = "col_2",
+        --             --
+        --             --         corner_left = " ",
+        --             --         padding_left = nil,
+        --             --
+        --             --         icon = "⑄ ",
+        --             --
+        --             --         padding_right = " ",
+        --             --         padding_right_hl = "col_2_fg",
+        --             --
+        --             --         corner_right = "█▓▒░",
+        --             --
+        --             --         sign = "▶ ",
+        --             --         sign_hl = "col_2_fg"
+        --             --     },
+        --             --     heading_3 = {
+        --             --         style = "icon",
+        --             --         hl = "col_3",
+        --             --
+        --             --         shift_char = "─",
+        --             --         icon = "┤ ",
+        --             --
+        --             --         text = "Heading lvl. 3",
+        --             --
+        --             --         sign = "▷ ",
+        --             --         sign_hl = "col_2_fg"
+        --             --     },
+        --             --
+        --             --     --- Similar tables for the other headings
+        --             --     heading_4 = {...},
+        --             --     heading_5 = {...},
+        --             --     heading_6 = {...},
+        --             --
+        --             --
+        --             --     -- For headings made with = or -
+        --             --     setext_1 = {
+        --             --         style = "simple",
+        --             --         hl = "col_1"
+        --             --     },
+        --             --     setext_2 = {
+        --             --         style = "github",
+        --             --
+        --             --         hl = "col_2",
+        --             --         icon = " 🔗  ",
+        --             --         line = "─"
+        --             --     }
+        --             -- }
+        --         });
         --     end
         -- },
     },
