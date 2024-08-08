@@ -6,6 +6,7 @@ vim.api.nvim_create_autocmd({'BufEnter'}, {pattern="*.md", callback=util.run_onc
     fn = function()
         vim.wo.conceallevel = 2
         vim.wo.linebreak = true
+        vim.wo.smoothscroll = true
         vim.bo.expandtab = true
         vim.bo.commentstring = "> %s"
         vim.bo.textwidth = 0
