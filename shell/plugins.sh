@@ -12,12 +12,29 @@ fi
 
 #------------------------------------[ rg ]------------------------------------#
 if [ -x "$(command -v fd)" ]; then
-    export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git/*' --glob '!Library/*'"
+    function () {
+        local excludes="--glob '!.git/*'"
+        excludes="$excludes --glob '!Downloads/*'"
+        excludes="$excludes --glob '!Library/*'"
+        excludes="$excludes --glob '!Movies/*'"
+        excludes="$excludes --glob '!Music/*'"
+        excludes="$excludes --glob '!Pictures/*'"
+        excludes="$excludes --glob '!node_modules/*'"
+        export FZF_DEFAULT_COMMAND="rg --files $excludes"
+    }
     alias rgl="rg -l"
 fi
 
 #-----------------------------------[ bfs ]------------------------------------#
 if [ -x "$(command -v bfs)" ]; then
-    # stupid fzf wouldn't search my documents directory
-    export FZF_ALT_C_COMMAND="bfs -type d -nohidden 2>/dev/null -exclude -name Library"
+    function () {
+        local excludes="-exclude -name Library"
+        excludes="$excludes -exclude -name Movies"
+        excludes="$excludes -exclude -name Music"
+        excludes="$excludes -exclude -name Pictures"
+        excludes="$excludes -exclude -name Downloads"
+        excludes="$excludes -exclude -name node_modules"
+        # stupid fzf wouldn't search my documents directory
+        export FZF_ALT_C_COMMAND="bfs -type d -nohidden 2>/dev/null $excludes"
+    }
 fi
