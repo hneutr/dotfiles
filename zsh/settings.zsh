@@ -58,6 +58,9 @@ setopt hash_list_all
 # complete as much of a completion until it gets ambiguous.
 setopt list_ambiguous           
 
+# add completion dir
+fpath=($DOTFILES/zsh/site-functions $DOTFILES/zsh/site-functions/htc $fpath)
+
 # init completion
 autoload -Uz compinit
 

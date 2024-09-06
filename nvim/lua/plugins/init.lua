@@ -135,94 +135,75 @@ require("lazy").setup(
                 vim.cmd("highlight UfoFoldedFg NONE")
             end
         },
-
-        -- {"nvim-tree/nvim-web-devicons"},
         -- {
         --     "OXY2DEV/markview.nvim",
-        --     ft = "markdown",
+        --     lazy = false,      -- Recommended
+        --     -- ft = "markdown" -- If you decide to lazy-load anyway
+        --
         --     dependencies = {
+        --         -- You will not need this if you installed the
+        --         -- parsers manually
+        --         -- Or if the parsers are in your $RUNTIMEPATH
         --         "nvim-treesitter/nvim-treesitter",
+        --
         --         "nvim-tree/nvim-web-devicons"
         --     },
         --     config = function()
+        --         vim.wo.signcolumn = "no"
+        --
+        --         local headings = Dict({
+        --             heading_1 = {
+        --                 style = "label",
+        --                 -- align = "center",
+        --                 align = "left",
+        --                 icon = "",
+        --                 sign = "",
+        --
+        --                 padding_left = " ",
+        --                 padding_right = " ",
+        --
+        --                 corner_left = "┃",
+        --                 corner_left_hl = "Heading1Corner",
+        --
+        --                 hl = "Heading1"
+        --             }
+        --         })
+        --         -- local heading_defaults = {
+        --         --     sign = nil,
+        --         --     icon = "",
+        --         -- }
+        --
         --         require("markview").setup({
-        --             -- buf_ignore = { "nofile" },
-        --             -- modes = { "n", "no" },
-        --             --
-        --             -- options = {
-        --             --     on_enable = {},
-        --             --     on_disable = {}
-        --             -- },
-        --             --
-        --             -- block_quotes = {},
-        --             -- checkboxes = {},
-        --             -- code_blocks = {},
-        --             -- headings = {},
-        --             -- horizontal_rules = {},
-        --             -- inline_codes = {},
-        --             -- links = {},
-        --             -- list_items = {},
-        --             -- tables = {}
-        --             -- headings = {
-        --             --     enable = true,
-        --             --     shift_width = vim.o.shiftwidth,
-        --             --
-        --             --     -- These are just for showing how various
-        --             --     -- styles can be used for the headings
-        --             --     heading_1 = {
-        --             --         style = "simple",
-        --             --         hl = "col_1"
-        --             --     },
-        --             --     heading_2 = {
-        --             --         style = "label",
-        --             --         hl = "col_2",
-        --             --
-        --             --         corner_left = " ",
-        --             --         padding_left = nil,
-        --             --
-        --             --         icon = "⑄ ",
-        --             --
-        --             --         padding_right = " ",
-        --             --         padding_right_hl = "col_2_fg",
-        --             --
-        --             --         corner_right = "█▓▒░",
-        --             --
-        --             --         sign = "▶ ",
-        --             --         sign_hl = "col_2_fg"
-        --             --     },
-        --             --     heading_3 = {
-        --             --         style = "icon",
-        --             --         hl = "col_3",
-        --             --
-        --             --         shift_char = "─",
-        --             --         icon = "┤ ",
-        --             --
-        --             --         text = "Heading lvl. 3",
-        --             --
-        --             --         sign = "▷ ",
-        --             --         sign_hl = "col_2_fg"
-        --             --     },
-        --             --
-        --             --     --- Similar tables for the other headings
-        --             --     heading_4 = {...},
-        --             --     heading_5 = {...},
-        --             --     heading_6 = {...},
-        --             --
-        --             --
-        --             --     -- For headings made with = or -
-        --             --     setext_1 = {
-        --             --         style = "simple",
-        --             --         hl = "col_1"
-        --             --     },
-        --             --     setext_2 = {
-        --             --         style = "github",
-        --             --
-        --             --         hl = "col_2",
-        --             --         icon = " 🔗  ",
-        --             --         line = "─"
-        --             --     }
-        --             -- }
-        --         });
+        --             modes = {"n", "i", "no", "c"},
+        --             hybrid_modes = {"i"},
+        --             highlight_groups = {
+        --                 {
+        --                     group_name = "Heading1",
+        --                     -- value = {fg = "#1e1e2e", bg = "#a6e3a1"}
+        --                     -- value = {fg = "#1e1e2e", bg = "#f38ba9"}
+        --                     value = {fg = "#f38ba9", bg = "#1e1e2e"}
+        --                 },
+        --                 {
+        --                     group_name = "Heading1Corner",
+        --                     -- value = {fg = "#a6e3a1"}
+        --                     value = {fg = "#f38ba9"}
+        --                 },
+        --                 {
+        --                     group_name = "Heading2",
+        --                     -- value = {fg = "#1e1e2e", bg = "#a6e3a1"}
+        --                     value = {fg = "#1e1e2e", bg = "#fab388"}
+        --                 },
+        --             },
+        --             headings = {
+        --                 enable = true,
+        --                 shift_width = 0,
+        --                 heading_1 = headings.heading_1,
+        --                 heading_2 = {
+        --                     style = "simple",
+        --                     hl = "Heading2",
+        --                 },
+        --             }
+        --         })
         --     end
         -- },
     },
