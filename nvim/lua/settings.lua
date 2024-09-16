@@ -70,6 +70,9 @@ Dict({
 
     -- adjust case when searching
     infercase = true,
+    
+    -- no statusline
+    laststatus = 0,
 
     -- redraw less
     lazyredraw = true,

@@ -13,3 +13,7 @@ require('util')
 require('settings')
 require('mappings')
 require('plugins')
+
+
+-- vim.cmd("hi! link StatusLine Normal")
+-- vim.cmd("hi! link StatusLineNC Normal")
