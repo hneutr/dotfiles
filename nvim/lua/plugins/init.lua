@@ -135,77 +135,12 @@ require("lazy").setup(
                 vim.cmd("highlight UfoFoldedFg NONE")
             end
         },
-        -- {
-        --     "OXY2DEV/markview.nvim",
-        --     lazy = false,      -- Recommended
-        --     -- ft = "markdown" -- If you decide to lazy-load anyway
-        --
-        --     dependencies = {
-        --         -- You will not need this if you installed the
-        --         -- parsers manually
-        --         -- Or if the parsers are in your $RUNTIMEPATH
-        --         "nvim-treesitter/nvim-treesitter",
-        --
-        --         "nvim-tree/nvim-web-devicons"
-        --     },
-        --     config = function()
-        --         vim.wo.signcolumn = "no"
-        --
-        --         local headings = Dict({
-        --             heading_1 = {
-        --                 style = "label",
-        --                 -- align = "center",
-        --                 align = "left",
-        --                 icon = "",
-        --                 sign = "",
-        --
-        --                 padding_left = " ",
-        --                 padding_right = " ",
-        --
-        --                 corner_left = "┃",
-        --                 corner_left_hl = "Heading1Corner",
-        --
-        --                 hl = "Heading1"
-        --             }
-        --         })
-        --         -- local heading_defaults = {
-        --         --     sign = nil,
-        --         --     icon = "",
-        --         -- }
-        --
-        --         require("markview").setup({
-        --             modes = {"n", "i", "no", "c"},
-        --             hybrid_modes = {"i"},
-        --             highlight_groups = {
-        --                 {
-        --                     group_name = "Heading1",
-        --                     -- value = {fg = "#1e1e2e", bg = "#a6e3a1"}
-        --                     -- value = {fg = "#1e1e2e", bg = "#f38ba9"}
-        --                     value = {fg = "#f38ba9", bg = "#1e1e2e"}
-        --                 },
-        --                 {
-        --                     group_name = "Heading1Corner",
-        --                     -- value = {fg = "#a6e3a1"}
-        --                     value = {fg = "#f38ba9"}
-        --                 },
-        --                 {
-        --                     group_name = "Heading2",
-        --                     -- value = {fg = "#1e1e2e", bg = "#a6e3a1"}
-        --                     value = {fg = "#1e1e2e", bg = "#fab388"}
-        --                 },
-        --             },
-        --             headings = {
-        --                 enable = true,
-        --                 shift_width = 0,
-        --                 heading_1 = headings.heading_1,
-        --                 heading_2 = {
-        --                     style = "simple",
-        --                     hl = "Heading2",
-        --                 },
-        --             }
-        --         })
-        --     end
-        -- },
+
+        {
+            'MeanderingProgrammer/render-markdown.nvim',
+            dependencies = {'nvim-treesitter/nvim-treesitter'},
+            config = lrequire("plugins/render-markdown"),
+        }
     },
     {
         -- profiling = {

@@ -14,3 +14,5 @@ vim.api.nvim_set_hl(0, "@markup.heading.2.markdown", {link = "Constant"})
 vim.api.nvim_set_hl(0, "@markup.heading.2.marker.markdown", {link = "Constant"})
 vim.api.nvim_set_hl(0, "@markup.heading.3.markdown", {link = "Type"})
 vim.api.nvim_set_hl(0, "@markup.heading.3.marker.markdown", {link = "Type"})
+
+vim.api.nvim_set_hl(0, "RenderMarkdownDash", {link = "Function"})
