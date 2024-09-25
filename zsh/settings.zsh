@@ -47,6 +47,8 @@ setopt SHARE_HISTORY
 # show completions automatically
 setopt auto_list
 
+# setopt completealiases
+
 # spelling correction for commands
 setopt correct
 

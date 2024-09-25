@@ -28,3 +28,5 @@ function popen() {
 function zv() {
     nvim $1 -c "lua require('zen-mode').toggle()"
 }
+
+source $HOME/lib/hnetxt-lua/bin/lib.sh
