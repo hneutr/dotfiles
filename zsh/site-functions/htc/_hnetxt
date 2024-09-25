@@ -14,15 +14,67 @@ _hnetxt() {
     && return 0
 
   case $words[1] in
-    etyparse)
+    quote)
       options=(
         $options
         {-h,--help}"[Show this help message and exit]"
-        "-R[download references also]"
+        {-p,--path}"[dir]: :_files"
       )
       _arguments -s -S \
         $options \
         ": :_files" \
+        && return 0
+      ;;
+
+    journal)
+      options=(
+        $options
+        {-h,--help}"[Show this help message and exit]"
+      )
+      _arguments -s -S \
+        $options \
+        && return 0
+      ;;
+
+    remove)
+      options=(
+        $options
+        {-h,--help}"[Show this help message and exit]"
+        "-r[delete recursively]"
+        "-d[delete directories]"
+        "-f[force]"
+      )
+      _arguments -s -S \
+        $options \
+        ": :_files" \
+        && return 0
+      ;;
+
+    ety)
+      options=(
+        $options
+        {-h,--help}"[Show this help message and exit]"
+      )
+      _arguments -s -S \
+        $options \
+        ": :_files" \
+        && return 0
+      ;;
+
+    ontology)
+      options=(
+        $options
+        {-h,--help}"[Show this help message and exit]"
+        {-p,--path}": :_files"
+        "-i[include instances]"
+        "-I[only print instances]"
+        "-a[by attribute]"
+        "-t[by tag]"
+        "-V[exclude attribute values]"
+      )
+      _arguments -s -S \
+        $options \
+        "*: :_files" \
         && return 0
       ;;
 
@@ -35,6 +87,49 @@ _hnetxt() {
       _arguments -s -S \
         $options \
         "*: :_files" \
+        && return 0
+      ;;
+
+    clean)
+      options=(
+        $options
+        {-h,--help}"[Show this help message and exit]"
+      )
+      _arguments -s -S \
+        $options \
+        && return 0
+      ;;
+
+    persist)
+      options=(
+        $options
+        {-h,--help}"[Show this help message and exit]"
+        "-r[reparse taxonomy]"
+      )
+      _arguments -s -S \
+        $options \
+        && return 0
+      ;;
+
+    aim)
+      options=(
+        $options
+        {-h,--help}"[Show this help message and exit]"
+      )
+      _arguments -s -S \
+        $options \
+        && return 0
+      ;;
+
+    x_of_the_day|x-of-the-day)
+      options=(
+        $options
+        {-h,--help}"[Show this help message and exit]"
+        "-r[rerun]"
+      )
+      _arguments -s -S \
+        $options \
+        ": :_files" \
         && return 0
       ;;
 
@@ -65,8 +160,8 @@ _hnetxt() {
           options=(
             $options
             {-h,--help}"[Show this help message and exit]"
-            {-p,--path}"[project directory]: :_files"
-            {-c,--created}"[project start date (default\: 20240922)]: :_files"
+            {-p,--path}"[directory (default=cwd)]: :_files"
+            {-c,--created}"[start date (default\: 20240924)]: :_files"
           )
           _arguments -s -S \
             $options \
@@ -77,23 +172,10 @@ _hnetxt() {
       esac
       ;;
 
-    test)
+    track)
       options=(
         $options
         {-h,--help}"[Show this help message and exit]"
-      )
-      _arguments -s -S \
-        $options \
-        && return 0
-      ;;
-
-    remove)
-      options=(
-        $options
-        {-h,--help}"[Show this help message and exit]"
-        "-r[delete recursively]"
-        "-d[delete directories]"
-        "-f[force]"
       )
       _arguments -s -S \
         $options \
@@ -113,119 +195,6 @@ _hnetxt() {
         && return 0
       ;;
 
-    on)
-      options=(
-        $options
-        {-h,--help}"[Show this help message and exit]"
-        {-p,--path}": :_files"
-        "-i[include instances]"
-        "-I[only print instances]"
-        "-a[by attribute]"
-        "-t[by tag]"
-        "-V[exclude attribute values]"
-      )
-      _arguments -s -S \
-        $options \
-        "*: :_files" \
-        && return 0
-      ;;
-
-    track)
-      options=(
-        $options
-        {-h,--help}"[Show this help message and exit]"
-      )
-      _arguments -s -S \
-        $options \
-        ": :_files" \
-        && return 0
-      ;;
-
-    persist)
-      options=(
-        $options
-        {-h,--help}"[Show this help message and exit]"
-        "-r[reparse taxonomy]"
-      )
-      _arguments -s -S \
-        $options \
-        && return 0
-      ;;
-
-    journal)
-      options=(
-        $options
-        {-h,--help}"[Show this help message and exit]"
-      )
-      _arguments -s -S \
-        $options \
-        && return 0
-      ;;
-
-    x_of_the_day|x-of-the-day)
-      options=(
-        $options
-        {-h,--help}"[Show this help message and exit]"
-        "-r[rerun]"
-      )
-      _arguments -s -S \
-        $options \
-        ": :_files" \
-        && return 0
-      ;;
-
-    ety)
-      options=(
-        $options
-        {-h,--help}"[Show this help message and exit]"
-      )
-      _arguments -s -S \
-        $options \
-        ": :_files" \
-        && return 0
-      ;;
-
-    aim)
-      options=(
-        $options
-        {-h,--help}"[Show this help message and exit]"
-      )
-      _arguments -s -S \
-        $options \
-        && return 0
-      ;;
-
-    quote)
-      options=(
-        $options
-        {-h,--help}"[Show this help message and exit]"
-        {-p,--path}"[media dir]: :_files"
-      )
-      _arguments -s -S \
-        $options \
-        && return 0
-      ;;
-
-    clean)
-      options=(
-        $options
-        {-h,--help}"[Show this help message and exit]"
-      )
-      _arguments -s -S \
-        $options \
-        && return 0
-      ;;
-
-    language)
-      options=(
-        $options
-        {-h,--help}"[Show this help message and exit]"
-      )
-      _arguments -s -S \
-        $options \
-        && return 0
-      ;;
-
   esac
 
   return 1
@@ -233,22 +202,19 @@ _hnetxt() {
 
 _hnetxt_cmds() {
   local -a commands=(
-    "etyparse:download a word from etymonline"
-    "define"
-    "project"
-    "test"
-    "remove:rm within a project"
-    "move:mv within a project"
-    "on:print the ontology"
-    "track:print the tracking path"
-    "persist:save things used by services"
-    "journal:print the journal path"
-    {x_of_the_day,x-of-the-day}":set the x-of-the-day files"
-    "ety:open etymonline to the word"
-    "aim:print the goals path"
     "quote:add a quote"
+    "journal:open the journal"
+    "remove:remove tracked files"
+    "ety:open etymonline to the word"
+    "ontology:print the ontology"
+    "define:add a word to the dictionary"
     "clean:clean the db"
-    "language:print the language dir"
+    "persist:save things used by services"
+    "aim:open daily aims"
+    {x_of_the_day,x-of-the-day}":set the x-of-the-day files"
+    "project"
+    "track:open the tracking file"
+    "move:move tracked files"
   )
   _describe "command" commands
 }

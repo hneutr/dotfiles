@@ -1,4 +1,4 @@
-source $HOME/lib/hnetxt-lua/lib.sh
+source $HOME/lib/hnetxt-lua/bin/lib.sh
 
 #------------------------------------------------------------------------------#
 #                                    misc                                      #

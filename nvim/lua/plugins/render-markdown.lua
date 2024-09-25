@@ -1,5 +1,5 @@
 require('render-markdown').setup({
-    render_modes = {'n', 'v', 'i', 'c'},
+    render_modes = true,
     heading = {
         enabled = true,
         sign = false,
@@ -7,7 +7,9 @@ require('render-markdown').setup({
         icons = {''},
         width = {'full', 'block'},
         min_width = 60,
+        min_width = {-1, 60, 40, 20},
         border = true,
+        border_virtual = true,
         above = '▄',
         below = '▀',
     },
