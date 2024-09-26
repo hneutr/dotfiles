@@ -8,6 +8,7 @@ require('render-markdown').setup({
         width = {'full', 'block'},
         min_width = 60,
         min_width = {-1, 60, 40, 20},
+        right_pad = {-1, 1},
         border = true,
         border_virtual = true,
         above = '▄',

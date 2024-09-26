@@ -114,4 +114,30 @@ function M.run_once(args)
     end
 end
 
+function M.fix_quotes(lines)
+    local quotes = {
+        ['’'] = "'",
+        ['“'] = '"',
+        ['”'] = '"',
+    }
+    
+    for i, line in ipairs(lines) do
+        for old, new in pairs(quotes) do
+            line = line:gsub(old, new)
+        end
+
+        lines[i] = line
+    end
+
+    return lines
+end
+
+vim.paste = (function(lines, phase)
+    if vim.g.ft_paste_function[vim.bo.filetype] then
+        lines = M[vim.g.ft_paste_function[vim.bo.filetype]](lines)
+    end
+
+    vim.api.nvim_put(lines, 'c', true, true)
+end)
+
 return M

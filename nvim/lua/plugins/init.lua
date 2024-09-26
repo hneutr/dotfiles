@@ -122,19 +122,19 @@ require("lazy").setup(
         -- personal library
         {dir = "~/lib/hnetxt-lua"},
         
-        -- folds
-        {"kevinhwang91/promise-async"},
-        {
-            "kevinhwang91/nvim-ufo",
-            config = function()
-                require('ufo').setup({
-                    provider_selector = function() return '' end,
-                    open_fold_hl_timeout = 0,
-                })
-                
-                vim.cmd("highlight UfoFoldedFg NONE")
-            end
-        },
+        -- folds (was messing with gj/gk)
+        -- {"kevinhwang91/promise-async"},
+        -- {
+        --     "kevinhwang91/nvim-ufo",
+        --     config = function()
+        --         require('ufo').setup({
+        --             provider_selector = function() return '' end,
+        --             open_fold_hl_timeout = 0,
+        --         })
+        --
+        --         vim.cmd("highlight UfoFoldedFg NONE")
+        --     end
+        -- },
 
         {
             'MeanderingProgrammer/render-markdown.nvim',

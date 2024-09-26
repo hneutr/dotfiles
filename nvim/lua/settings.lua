@@ -17,6 +17,10 @@ vim.g.snip_ft_strings = {
     sh = {print = 'echo %s'},
 }
 
+vim.g.ft_paste_function = {
+    markdown = "fix_quotes"
+}
+
 Dict({
     -- write all the time
     autowriteall = true, 
