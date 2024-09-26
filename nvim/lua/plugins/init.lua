@@ -119,6 +119,13 @@ require("lazy").setup(
         -- cycle stuff
         {'monaqa/dial.nvim', config = lrequire('plugins.dial')},
         
+        -- markdown rendering
+        {
+            'MeanderingProgrammer/render-markdown.nvim',
+            dependencies = {'nvim-treesitter/nvim-treesitter'},
+            config = lrequire("plugins/render-markdown"),
+        },
+
         -- personal library
         {dir = "~/lib/hnetxt-lua"},
         
@@ -136,11 +143,6 @@ require("lazy").setup(
         --     end
         -- },
 
-        {
-            'MeanderingProgrammer/render-markdown.nvim',
-            dependencies = {'nvim-treesitter/nvim-treesitter'},
-            config = lrequire("plugins/render-markdown"),
-        }
     },
     {
         -- profiling = {
