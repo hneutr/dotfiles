@@ -37,3 +37,5 @@ alias po="popen"
 # lua
 alias lua="lua5.1"
 alias lm="luarocks make &> /dev/null && lua "
+
+alias timevim="rm $HOME/Desktop/startuptime.log && vim --startuptime $HOME/Desktop/startuptime.log"

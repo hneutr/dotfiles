@@ -119,17 +119,7 @@ require("lazy").setup(
         -- cycle stuff
         {'monaqa/dial.nvim', config = lrequire('plugins.dial')},
         
-        -- markdown rendering
-        {
-            'MeanderingProgrammer/render-markdown.nvim',
-            dependencies = {'nvim-treesitter/nvim-treesitter'},
-            config = lrequire("plugins/render-markdown"),
-        },
-
-        -- personal library
-        {dir = "~/lib/hnetxt-lua"},
-        
-        -- folds (was messing with gj/gk)
+        -- folds
         -- {"kevinhwang91/promise-async"},
         -- {
         --     "kevinhwang91/nvim-ufo",
@@ -143,6 +133,15 @@ require("lazy").setup(
         --     end
         -- },
 
+        -- markdown rendering
+        {
+            'MeanderingProgrammer/render-markdown.nvim',
+            dependencies = {'nvim-treesitter/nvim-treesitter'},
+            config = lrequire("plugins/render-markdown"),
+        },
+
+        -- personal library
+        {dir = "~/lib/hnetxt-lua"},
     },
     {
         -- profiling = {
