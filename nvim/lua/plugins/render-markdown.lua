@@ -29,8 +29,12 @@ require('render-markdown').setup({
         enabled = true,
         icon = '▋',
     },
+    checkbox = {
+        enabled = true,
+        unchecked = {icon = '◻'},
+        checked = {icon = '✓'},
+    },
     bullet = {enabled = false},
-    checkbox = {enabled = false},
     pipe_table = {enabled = false},
     link = {enabled = false},
     sign = {enabled = false},
