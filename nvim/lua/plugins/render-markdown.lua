@@ -1,6 +1,4 @@
-local M = require('render-markdown')
-
-M.setup({
+require('render-markdown').setup({
     render_modes = true,
     heading = {
         enabled = true,
@@ -37,13 +35,3 @@ M.setup({
     link = {enabled = false},
     sign = {enabled = false},
 })
-
-vim.keymap.set(
-    "n",
-    "<leader>r",
-    function()
-        M.disable()
-        M.enable()
-    end,
-    {}
-)

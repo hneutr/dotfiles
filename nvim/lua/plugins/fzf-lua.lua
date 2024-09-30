@@ -2,6 +2,7 @@ local actions = require("fzf-lua.actions")
 local fzf = require('fzf-lua')
 
 fzf.setup({
+    fzf_colors = true,
     winopts = {
         height = .4,
         width = .4,

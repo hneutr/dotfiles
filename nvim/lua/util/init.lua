@@ -23,7 +23,7 @@ end
 
 function M.set_statusline()
     local statusline = "%.100F"
-    if vim.api.nvim_buf_get_name(0):startswith("term") then
+    if vim.api.nvim_buf_get_name(0):match("^term") then
         statusline = "term"
     end
 

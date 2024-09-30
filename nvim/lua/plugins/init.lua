@@ -138,6 +138,18 @@ require("lazy").setup(
             'MeanderingProgrammer/render-markdown.nvim',
             dependencies = {'nvim-treesitter/nvim-treesitter'},
             config = lrequire("plugins/render-markdown"),
+            lazy = false,
+            keys = {
+                {
+                    "<leader>r",
+                    function()
+                        local M = require('render-markdown')
+                        M.disable()
+                        M.enable()
+                    end,
+                    mode = "n",
+                },
+            },
         },
 
         -- personal library
