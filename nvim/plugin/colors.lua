@@ -1,14 +1,17 @@
-local hl = vim.api.nvim_set_hl
+local group_to_highlight = {
+    StatusLine = {ctermfg = 12, ctermbg = 0},
 
--- status line
-hl(0, "StatusLine", {ctermfg = 12, ctermbg = 0})
+    Folded = {},
 
-hl(0, "Folded", {})
+    -- line number column
+    LineNr = {ctermfg = 10},
+    LineNrAbove = {ctermfg = 10, ctermbg = 0},
+    LineNrBelow = {ctermfg = 10, ctermbg = 0},
 
--- line number column
-hl(0, "LineNr", {ctermfg = 10})
-hl(0, "LineNrAbove", {ctermfg = 10, ctermbg = 0})
-hl(0, "LineNrBelow", {ctermfg = 10, ctermbg = 0})
+    -- match line number column
+    SignColumn = {},
+}
 
--- make sign column the same color as the line number column
-hl(0, "SignColumn", {})
+for group, highlight in pairs(group_to_highlight) do
+    vim.api.nvim_set_hl(0, group, highlight)
+end
