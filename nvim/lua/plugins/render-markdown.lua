@@ -2,7 +2,6 @@ require('render-markdown').setup({
     render_modes = true,
     heading = {
         enabled = true,
-        sign = false,
         position = 'inline',
         icons = {''},
         width = {'full', 'block'},
@@ -16,7 +15,6 @@ require('render-markdown').setup({
     },
     code = {
         enabled = true,
-        sign = false,
         style = 'full',
         position = '',
     },
@@ -28,11 +26,15 @@ require('render-markdown').setup({
     quote = {
         enabled = true,
         icon = '▋',
+        repeat_linebreak = true,
     },
     checkbox = {
         enabled = true,
         unchecked = {icon = '◻'},
         checked = {icon = '✓'},
+    },
+    callout = {
+        todo = {raw = '[!TODO]', rendered = 'todo:', highlight = 'RenderMarkdownInfo'},
     },
     bullet = {enabled = false},
     pipe_table = {enabled = false},

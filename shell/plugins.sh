@@ -20,6 +20,7 @@ if [ -x "$(command -v fd)" ]; then
         excludes="$excludes --glob '!Music/*'"
         excludes="$excludes --glob '!Pictures/*'"
         excludes="$excludes --glob '!node_modules/*'"
+        excludes="$excludes --glob '!__pycache__/*'"
         export FZF_DEFAULT_COMMAND="rg --files $excludes"
     }
     alias rgl="rg -l"
@@ -34,6 +35,9 @@ if [ -x "$(command -v bfs)" ]; then
         excludes="$excludes -exclude -name Pictures"
         excludes="$excludes -exclude -name Downloads"
         excludes="$excludes -exclude -name node_modules"
+        excludes="$excludes -exclude -name research"
+        excludes="$excludes -exclude -name classes"
+        excludes="$excludes -exclude -name __pycache__"
         # stupid fzf wouldn't search my documents directory
         export FZF_ALT_C_COMMAND="bfs -type d -nohidden 2>/dev/null $excludes"
     }
