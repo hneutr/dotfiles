@@ -35,6 +35,12 @@ require('render-markdown').setup({
     },
     callout = {
         todo = {raw = '[!TODO]', rendered = 'todo:', highlight = 'RenderMarkdownInfo'},
+        prose_end = {
+            raw = '[!end]',
+            rendered = '◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇',
+            highlight = 'Statement',
+            quote_icon = "◇",
+        },
     },
     bullet = {enabled = false},
     pipe_table = {enabled = false},

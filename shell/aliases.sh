@@ -39,3 +39,4 @@ alias lua="lua5.1"
 alias lm="luarocks make &> /dev/null && lua "
 
 alias timevim="rm $HOME/Desktop/startuptime.log && vim --startuptime $HOME/Desktop/startuptime.log"
+alias testmd="vim $HOME/Desktop/test.md"
