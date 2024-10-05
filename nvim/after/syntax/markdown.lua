@@ -11,7 +11,7 @@ local syntax = {
     ["@markup.link.markdown_inline"] = {link = "Delimiter"},
 
     -- quotes
-    ["@markup.quote.markdown"] = {italic = true, bold = false},
+    ["@markup.quote.markdown"] = {bold = false, link = "FloatTitle"},
 
     -- breaks
     ["RenderMarkdownDash"] = {link = "Function"},

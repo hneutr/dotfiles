@@ -78,8 +78,11 @@ local maps = Dict({
         n = {"'Nn'[v:searchforward].'zz'", {expr = true}},
         N = {"'nN'[v:searchforward].'zz'", {expr = true}},
         -- center after jumping
-        {"<c-f>", "<c-f>zz"},
-        {"<c-b>", "<c-b>zz"},
+        {"<c-u>", "<c-u>zz"},
+        {"<c-d>", "<c-d>zz"},
+        -- idk what a "page" is other than a screen
+        {"<c-f>", "<c-d>zz"},
+        {"<c-b>", "<c-u>zz"},
         -- easy commandmode
         {"<cr>", ':'},
     },

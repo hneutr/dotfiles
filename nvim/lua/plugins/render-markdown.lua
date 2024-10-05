@@ -34,7 +34,8 @@ require('render-markdown').setup({
         checked = {icon = '✓'},
     },
     callout = {
-        todo = {raw = '[!TODO]', rendered = 'todo:', highlight = 'RenderMarkdownInfo'},
+        todo = {raw = '[!todo]', rendered = 'todo:', highlight = 'RenderMarkdownInfo'},
+        change = {raw = '[!change]', rendered = 'change:', highlight = 'Character'},
         prose_end = {
             raw = '[!end]',
             rendered = '◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇',
