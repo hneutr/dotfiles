@@ -1,5 +1,12 @@
 require('render-markdown').setup({
     render_modes = true,
+    anti_conceal = {
+        enabled = true,
+        ignore = {
+            dash = true,
+            callout = true,
+        },
+    },
     heading = {
         enabled = true,
         position = 'inline',
@@ -34,14 +41,9 @@ require('render-markdown').setup({
         checked = {icon = '✓'},
     },
     callout = {
-        todo = {raw = '[!todo]', rendered = 'todo:', highlight = 'RenderMarkdownInfo'},
-        change = {raw = '[!change]', rendered = 'change:', highlight = 'Character'},
-        prose_end = {
-            raw = '[!end]',
-            rendered = '◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇',
-            highlight = 'Statement',
-            quote_icon = "◇",
-        },
+        todo = {raw = '[!todo]', rendered = 'todo:  ', highlight = 'RenderMarkdownInfo'},
+        change = {raw = '[!change]', rendered = 'change:  ', highlight = 'Character'},
+        prose_end = {raw = '[!end]', quote_icon = "◇", rendered = string.rep("◇", 79), highlight = 'Statement'},
     },
     bullet = {enabled = false},
     pipe_table = {enabled = false},
