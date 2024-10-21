@@ -33,7 +33,21 @@ local ft_info = {
         pattern = '*.md',
         augends = {
             augend.constant.new({elements = {"true", "false"}}),
-        }
+            -- headers
+            augend.user.new({
+                find = function(line, cursor)
+                    local start, stop = line:find("^#+%s")
+                    if start and stop < 8 then
+                        return {from = start, to = stop}
+                    end
+                end,
+                add = function(text, addend, cursor)
+                    local n = math.min(#text + addend - 1, 6)
+                    text = n < 1 and "" or ("%s "):format(string.rep("#", n))
+                    return {text = text, cursor = 1}
+                end,
+            }),
+        },
     },
 }
 
