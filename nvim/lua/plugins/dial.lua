@@ -37,7 +37,7 @@ local ft_info = {
             augend.user.new({
                 find = function(line, cursor)
                     local start, stop = line:find("^#+%s")
-                    if start and stop < 8 then
+                    if start and stop < 8 and cursor <= stop then
                         return {from = start, to = stop}
                     end
                 end,
