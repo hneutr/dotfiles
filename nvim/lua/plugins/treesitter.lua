@@ -1,4 +1,4 @@
-require('nvim-treesitter.configs').setup {
+return {
     ensure_installed = {
         "lua",
         "python",
@@ -26,6 +26,3 @@ require('nvim-treesitter.configs').setup {
         disable = {'markdown', 'markdown_inline'},
     },
 }
-
-vim.api.nvim_set_hl(0, "@markup.strong", {link = "@spell"})
-vim.api.nvim_set_hl(0, "@markup.italic", {link = "@spell"})

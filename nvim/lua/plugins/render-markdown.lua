@@ -1,4 +1,4 @@
-require('render-markdown').setup({
+return {
     render_modes = true,
     anti_conceal = {
         enabled = true,
@@ -43,10 +43,11 @@ require('render-markdown').setup({
     callout = {
         todo = {raw = '[!todo]', rendered = 'todo:  ', highlight = 'RenderMarkdownInfo'},
         change = {raw = '[!change]', rendered = 'change:  ', highlight = 'Character'},
+        note = {raw = '[!note]', rendered = 'note:  ', highlight = 'Special'},
         prose_end = {raw = '[!end]', quote_icon = "◇", rendered = string.rep("◇", 79), highlight = 'Statement'},
     },
     bullet = {enabled = false},
     pipe_table = {enabled = false},
     link = {enabled = false},
     sign = {enabled = false},
-})
+}

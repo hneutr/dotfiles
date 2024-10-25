@@ -1,6 +1,12 @@
 vim.cmd("syn clear markdownLinkText")
 
 local syntax = {
+    -- bold
+    ["@markup.strong"] = {link = "@spell"},
+
+    -- italic
+    ["@markup.italic"] = {link = "@spell"},
+
     -- lists
     ["markdownListMarker"] = {link = "Function"},
     ["@markup.list.markdown"] = {link = "Function"},

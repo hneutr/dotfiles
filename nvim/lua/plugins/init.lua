@@ -21,7 +21,8 @@ require("lazy").setup(
             lazy = false,
             name = "catppuccin",
             priority = 1000,
-            config = lrequire("plugins.catppuccin"),
+            opts = require("plugins.catppuccin"),
+            config = function() vim.cmd.colorscheme("catppuccin") end,
         },
 
         -- open things from :term in the parent nvim
@@ -34,7 +35,8 @@ require("lazy").setup(
 
         {
             'nvim-treesitter/nvim-treesitter',
-            config = lrequire('plugins.treesitter'),
+            opts = require("plugins.treesitter"),
+            main = "nvim-treesitter.configs",
         },
 
         {"kkharji/sqlite.lua"},
@@ -113,31 +115,23 @@ require("lazy").setup(
             keys = {
                 {"<up>", "<Plug>SchleppUp", mode = "v"},
                 {"<down>", "<Plug>SchleppDown", mode = "v"},
-            }
+            },
         },
 
         -- cycle stuff
         {'monaqa/dial.nvim', config = lrequire('plugins.dial')},
-        
-        -- folds
-        -- {"kevinhwang91/promise-async"},
-        -- {
-        --     "kevinhwang91/nvim-ufo",
-        --     config = function()
-        --         require('ufo').setup({
-        --             provider_selector = function() return '' end,
-        --             open_fold_hl_timeout = 0,
-        --         })
-        --
-        --         vim.cmd("highlight UfoFoldedFg NONE")
-        --     end
-        -- },
 
         -- markdown rendering
         {
             'MeanderingProgrammer/render-markdown.nvim',
             dependencies = {'nvim-treesitter/nvim-treesitter'},
-            config = lrequire("plugins/render-markdown"),
+            opts = require("plugins/render-markdown"),
+        },
+
+        {
+            'echasnovski/mini.fuzzy',
+            version = '*',
+            opts = {},
         },
 
         -- personal library

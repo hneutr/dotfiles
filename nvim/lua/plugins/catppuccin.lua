@@ -1,4 +1,4 @@
-require("catppuccin").setup({
+return {
     compile_path = tostring(Path.home / ".cache/catppuccin"),
     flavor = "mocha",
     transparent_background = false,
@@ -10,6 +10,4 @@ require("catppuccin").setup({
         notify = false,
         mini = false,
     }
-})
-
-vim.cmd([[colorscheme catppuccin]])
+}
