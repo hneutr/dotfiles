@@ -119,15 +119,20 @@ require("lazy").setup(
         },
 
         -- cycle stuff
-        {'monaqa/dial.nvim', config = lrequire('plugins.dial')},
+        {
+            'monaqa/dial.nvim',
+            config = lrequire('plugins.dial'),
+        },
 
         -- markdown rendering
         {
             'MeanderingProgrammer/render-markdown.nvim',
             dependencies = {'nvim-treesitter/nvim-treesitter'},
             opts = require("plugins/render-markdown"),
+            ft = "markdown",
         },
 
+        -- fuzzy find algorithm
         {
             'echasnovski/mini.fuzzy',
             version = '*',
