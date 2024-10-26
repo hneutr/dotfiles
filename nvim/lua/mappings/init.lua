@@ -97,6 +97,10 @@ local maps = Dict({
         {"<m-left>", "<s-left>"},
         {"<m-right>", "<s-right>"},
     },
+    ca = {
+        {"l", "lua"},
+        {"lp", "lua vim.print()<Left>"},
+    },
     t = {
         -- exit
         {"<esc>", "<c-\\><c-n>", {nowait = true}},
@@ -142,9 +146,8 @@ maps:transformv(function(nested_mappings)
 
     return mappings
 end):foreach(function(modes, mappings)
-    modes = List(modes)
+    modes = modes:match("a$") and modes or List(modes)
     mappings:foreach(function(mapping)
-        local lhs, rhs, opts = unpack(mapping)
-        vim.keymap.set(modes, lhs, rhs, opts)
+        vim.keymap.set(modes, unpack(mapping))
     end)
 end)
