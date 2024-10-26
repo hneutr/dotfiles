@@ -34,8 +34,6 @@ local maps = Dict({
             c = ":<c-p><cr>",
             -- quit
             q = ":q<cr>",
-            -- close buffer
-            k = {require('util').kill_buffer_and_go_to_next, {silent = true}},
             -- Conditionally modify character at end of line
             [","] = {require('util').modify_line_end(','), {silent = true}},
             [";"] = {require('util').modify_line_end(';'), {silent = true}},

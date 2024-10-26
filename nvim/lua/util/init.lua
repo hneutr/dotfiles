@@ -18,53 +18,7 @@ function M.open_two_vertical_terminals()
     vim.api.nvim_input('<esc>')
     vim.cmd("silent vsplit")
     vim.cmd("silent terminal")
-    vim.api.nvim_input('A')
-end
-
-function M.set_statusline()
-    local statusline = "%.100F"
-    if vim.api.nvim_buf_get_name(0):match("^term") then
-        statusline = "term"
-    end
-
-    vim.opt_local.statusline = statusline
-end
-
--- Store visual selection marks, save, restore visual selection marks
-function M.save_and_restore_visual_selection_marks()
-    if vim.bo.modified then
-        local start_line, start_col = unpack(vim.api.nvim_buf_get_mark(0, "["))
-        local end_line, end_col = unpack(vim.api.nvim_buf_get_mark(0, "]"))
-
-        pcall(function() vim.cmd("silent write") end)
-
-        start_line = math.max(start_line, 0)
-        end_line = math.min(end_line, vim.fn.line('$') - 1)
-
-        pcall(function()
-            vim.api.nvim_buf_set_mark(0, "[", start_line, start_col, {})
-            vim.api.nvim_buf_set_mark(0, "]", end_line, end_col, {})
-        end)
-    end
-end
-
---------------------------------------------------------------------------------
---                             set_number_display                             --
---------------------------------------------------------------------------------
--- Varies the display of numbers.
---
--- This is not a 'mode' specific setting, so a simple autocommand won't work.
--- Numbers should not show up in a terminal buffer, regardless of if that
--- buffer is in terminal mode or not.
---------------------------------------------------------------------------------
-function M.set_number_display()
-    if vim.bo.buftype == 'terminal' then
-        vim.wo.number = false
-        vim.wo.relativenumber = false
-    else
-        vim.wo.number = true
-        vim.wo.relativenumber = true
-    end
+    vim.api.nvim_input('<C-h>')
 end
 
 --------------------------------------------------------------------------------
@@ -97,30 +51,13 @@ function M.modify_line_end(char)
     end
 end
 
-function M.kill_buffer_and_go_to_next()
-    local buf_number = vim.fn.bufnr('%')
-    vim.cmd("bnext")
-    vim.api.nvim_buf_delete(buf_number, {})
-end
-
-
-function M.run_once(args)
-    args = _G.default_args(args, {scope = 'b', key = '', fn = function() return end })
-    return function()
-        if not vim[args.scope][args.key] then
-            args.fn()
-            vim[args.scope][args.key] = true
-        end
-    end
-end
-
 function M.fix_quotes(lines)
     local quotes = {
         ['’'] = "'",
         ['“'] = '"',
         ['”'] = '"',
     }
-    
+
     for i, line in ipairs(lines) do
         for old, new in pairs(quotes) do
             line = line:gsub(old, new)
