@@ -7,7 +7,7 @@ List({
 
     -- save post-change
     {
-        {"BufModifiedSet"},
+        {"TextChanged", "InsertLeave"},
         {
             callback = function()
                 if vim.bo.modified then
