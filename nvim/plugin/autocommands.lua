@@ -98,7 +98,5 @@ List({
         }
     }
 }):foreach(function(item)
-    local event, opts = unpack(item)
-    opts.pattern = opts.pattern or "*"
-    vim.api.nvim_create_autocmd(event, opts)
+    vim.api.nvim_create_autocmd(unpack(item))
 end)

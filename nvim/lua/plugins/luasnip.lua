@@ -1,5 +1,4 @@
 local ls = require("luasnip")
-local s = ls.snippet
 
 ls.config.set_config({
     history = false,
@@ -23,8 +22,5 @@ vim.keymap.set({"i", "s"}, "<c-,>", function() if ls.choice_active() then ls.cha
 
 vim.api.nvim_create_autocmd(
     {'BufEnter'},
-    {
-        pattern = "*",
-        callback = function() require('snips')(vim.bo.filetype) end
-    }
+    {callback = function() require('snips')(vim.bo.filetype) end}
 )
