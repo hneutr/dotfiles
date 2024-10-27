@@ -5,7 +5,7 @@ return {
         "javascript",
         "markdown",
         "markdown_inline",
-        "bash"
+        "bash",
     },
     sync_install = false,
     auto_install = true,
