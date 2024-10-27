@@ -77,8 +77,8 @@ List({
                 end
 
                 local row, col = unpack(vim.api.nvim_buf_get_mark(0, '"'))
+                row = math.min(row, vim.fn.line('$'))
                 row = math.max(row, 0)
-                row = math.min(row, vim.fn.line('$') - 1)
 
                 vim.api.nvim_win_set_cursor(0, {row, col})
             end

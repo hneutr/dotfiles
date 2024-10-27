@@ -2,6 +2,7 @@ local Object = require("util.object")
 local List = require("hl.list")
 
 local ls = require("luasnip")
+local s = ls.snippet
 local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
@@ -35,7 +36,7 @@ local COMMENT = '-'
 --------------------------------------------------------------------------------
 -- fnb (function block)
 -- --------------------
--- 
+--
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
@@ -246,46 +247,57 @@ end
 --------------------------------------------------------------------------------
 --                                                                            --
 --                                                                            --
---                                 to_snippet                                 --
+--                                   Loader                                   --
 --                                                                            --
 --                                                                            --
 --------------------------------------------------------------------------------
-function to_snippet(components)
-    local groups = List()
-    local input_count = 1
-    components:foreach(function(component)
-        local previous_component_type = nil
+local FTLoader = {}
 
-        if type(component) == "function" then
-            groups:append({apply = f, to = component})
-        elseif type(component) == "string" then
-            if component:startswith("INPUT:") then
-                groups:append({apply = i, to = input_count})
-                input_count = input_count + 1
-            else
-                if #groups == 0 or groups[#groups].apply ~= t then
-                    groups:append({apply = t, to = List()})
-                end
-
-                groups[#groups].to:append(component)
-            end
-        end
-    end)
-
-    return groups:map(function(g) return g.apply(g.to) end)
+function FTLoader.key(filetype)
+    return string.format("ls_%s_snips_loaded", filetype)
 end
 
+function FTLoader.is_loaded(filetype)
+    return vim.g[FTLoader.key(filetype)] == true
+end
 
+function FTLoader.set_loaded(filetype)
+    vim.g[FTLoader.key(filetype)] = true
+end
 
-return {
-    Block = Block,
-    H1 = H1,
-    H2 = H2,
-    H3 = H3,
-    H4 = H4,
-    FunctionBlock = FunctionBlock,
-    Print = Print,
-    BigLine = BigLine,
-    SmallLine = SmallLine,
-    to_snippet = to_snippet,
-}
+function FTLoader.load(filetype)
+    if FTLoader.is_loaded(filetype) then
+        return
+    end
+
+    local ft_strings = vim.tbl_get(vim.g.snip_ft_strings, filetype) or {}
+    local comment_str = string.gsub(ft_strings.comment or vim.bo.commentstring, "%s?%%s$", '')
+
+    local snips = List()
+
+    pcall(function() snips:extend(require(string.format("snips.%s", filetype))) end)
+
+    if filetype ~= 'all' then
+        snips:extend({
+            s("block", Block({comment = comment_str}):snippet()),
+            s("h1", H1({comment = comment_str}):snippet()),
+            s("h2", H2({comment = comment_str}):snippet()),
+            s("h3", H3({comment = comment_str}):snippet()),
+            s("h4", H4({comment = comment_str}):snippet()),
+            s("fnb", FunctionBlock({comment = comment_str}):snippet()),
+            s("bl", BigLine({comment = comment_str}):snippet()),
+            s("l", SmallLine({comment = comment_str}):snippet()),
+            s("p", Print(ft_strings.print):snippet()),
+            s("qp", Print(ft_strings.print):snippet(true)),
+        })
+    end
+
+    ls.add_snippets(filetype, snips)
+
+    FTLoader.set_loaded(filetype)
+end
+
+return function(filetype)
+    FTLoader.load('all')
+    FTLoader.load(filetype)
+end

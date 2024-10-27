@@ -2,7 +2,7 @@ local ls = require("luasnip")
 local s = ls.snippet
 local ps = ls.parser.parse_snippet
 
-ls.add_snippets("lua", {
+return {
     ps("die", "os.exit()\n", {trim_empty = false}),
     ps("pd", "print(Dict($1))"),
     ps("dp", "Dict.print($1)"),
@@ -28,4 +28,4 @@ ls.add_snippets("lua", {
             $2
         end)
     ]]),
-})
+}
