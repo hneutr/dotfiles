@@ -39,7 +39,8 @@ require("lazy").setup(
             main = "nvim-treesitter.configs",
         },
 
-        {"kkharji/sqlite.lua"},
+        -- sqlite
+        "kkharji/sqlite.lua",
 
         -- fuzzy search
         'junegunn/fzf',
@@ -135,20 +136,10 @@ require("lazy").setup(
         -- fuzzy find algorithm
         {
             'echasnovski/mini.fuzzy',
-            version = '*',
             opts = {},
         },
 
         -- personal library
         {dir = "~/lib/hnetxt-lua"},
-    },
-    {
-        -- profiling = {
-        --     -- Enables extra stats on the debug tab related to the loader cache.
-        --     -- Additionally gathers stats about all package.loaders
-        --     loader = true,
-        --     -- Track each new require in the Lazy profiling tab
-        --     require = true,
-        -- },
     }
 )

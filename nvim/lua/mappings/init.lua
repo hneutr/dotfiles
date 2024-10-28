@@ -54,7 +54,6 @@ local maps = Dict({
         {
             -- esc
             jk = {"<esc>", {nowait = true}},
-            kj = {"<esc>", {nowait = true}},
 
             -- paste
             {"<c-]>", '<c-r>"'},

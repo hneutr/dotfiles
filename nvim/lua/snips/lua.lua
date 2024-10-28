@@ -1,5 +1,7 @@
 local ls = require("luasnip")
 local s = ls.snippet
+local t = ls.text_node
+local i = ls.insert_node
 local ps = ls.parser.parse_snippet
 
 return {
@@ -27,5 +29,16 @@ return {
         it("$1", function()
             $2
         end)
+    ]]),
+    ps("if", [[
+        if $1 then
+            $2
+        end
+    ]]),
+    ps("elseif", "elseif $1 then"),
+    ps("fn", [[
+        function($1)
+            $2
+        end
     ]]),
 }

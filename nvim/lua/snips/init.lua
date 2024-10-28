@@ -297,7 +297,7 @@ function FTLoader.load(filetype)
     FTLoader.set_loaded(filetype)
 end
 
-return function(filetype)
+return function()
     FTLoader.load('all')
-    FTLoader.load(filetype)
+    FTLoader.load(vim.bo.filetype)
 end
