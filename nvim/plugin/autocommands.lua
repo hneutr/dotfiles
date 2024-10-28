@@ -11,20 +11,17 @@ List({
         {
             callback = function()
                 if vim.bo.modified then
-                    for _, markset in ipairs({{'<', '>'}, {'[', ']'}}) do
-                        local start_line, start_col = unpack(vim.api.nvim_buf_get_mark(0, markset[1]))
-                        local end_line, end_col = unpack(vim.api.nvim_buf_get_mark(0, markset[2]))
+                    local start_line, start_col = unpack(vim.api.nvim_buf_get_mark(0, '['))
+                    local end_line, end_col = unpack(vim.api.nvim_buf_get_mark(0, ']'))
 
-                        pcall(function() vim.cmd("silent write") end)
+                    start_line = math.max(start_line, 1)
+                    end_line = math.min(end_line, vim.fn.line('$') - 1)
 
-                        start_line = math.max(start_line, 1)
-                        end_line = math.min(end_line, vim.fn.line('$'))
-
-                        pcall(function()
-                            vim.api.nvim_buf_set_mark(0, markset[1], start_line, start_col, {})
-                            vim.api.nvim_buf_set_mark(0, markset[2], end_line, end_col, {})
-                        end)
-                    end
+                    pcall(function()
+                        vim.cmd("silent write")
+                        vim.api.nvim_buf_set_mark(0, '[', start_line, start_col, {})
+                        vim.api.nvim_buf_set_mark(0, ']', end_line, end_col, {})
+                    end)
                 end
             end,
         },
