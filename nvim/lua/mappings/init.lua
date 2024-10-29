@@ -10,28 +10,24 @@ local maps = Dict({
         {"<c-e>", "gE"},
 
         -- swap */# (match _W_ord) and g*/g# (match _w_ord)
-        {'*', 'g*'},
-        {'g*', '*'},
-        {'#', 'g#'},
-        {'g#', '#'},
+        ['*'] = 'g*',
+        ['g*'] = '*',
+        ['#'] = 'g#',
+        ['g#'] = '#',
 
         -- don't store "{"/"}" motions in jump list
-        {'}', ':<c-u>execute "keepjumps normal! " . v:count1 . "}"<cr>', {silent = true}},
-        {'{', ':<c-u>execute "keepjumps normal! " . v:count1 . "{"<cr>', {silent = true}},
+        ['{'] = {':<c-u>execute "keepjumps normal! " . v:count1 . "{"<cr>', {silent = true}},
+        ['}'] = {':<c-u>execute "keepjumps normal! " . v:count1 . "}"<cr>', {silent = true}},
 
-        -- mark before searching (p = "previous")
-        {'/', 'mp/'},
-        {'?', 'mp?'},
-
-        -- windows navigation
-        {"<c-h>", "<c-w>h"},
-        {"<c-j>", "<c-w>j"},
-        {"<c-k>", "<c-w>k"},
-        {"<c-l>", "<c-w>l"},
+        -- window navigation
+        ["<c-h>"] = "<c-w>h",
+        ["<c-j>"] = "<c-w>j",
+        ["<c-k>"] = "<c-w>k",
+        ["<c-l>"] = "<c-w>l",
 
         -- next/previous buffer
-        {"<tab>", ":bnext<cr>"},
-        {"<s-tab>", ":bprev<cr>"},
+        ["<tab>"] = ":bnext<cr>",
+        ["<s-tab>"] = ":bprev<cr>",
 
         -- leader keys
         [vim.g.mapleader] = {
@@ -50,40 +46,32 @@ local maps = Dict({
             [";"] = {require('util').modify_line_end(';'), {silent = true}},
         },
     },
-    i = Dict.update(
-        {
-            -- esc
-            jk = {"<esc>", {nowait = true}},
+    i = Dict(require('mappings.symbols'), {
+        -- esc
+        jk = {"<esc>", {nowait = true}},
 
-            -- paste
-            {"<c-]>", '<c-r>"'},
+        -- paste
+        ["<c-]>"] = '<c-r>"',
 
-            -- forward delete (macos)
-            {"<c-d>", "<del>"},
+        -- forward delete (macos)
+        ["<c-d>"] = "<del>",
 
-            -- delete next/previous word
-            {"<c-s>", "<c-\\><c-o>de"},
-            {"<c-w>", "<c-\\><c-o>db"},
+        -- delete next/previous word
+        ["<c-s>"] = "<c-\\><c-o>de",
+        ["<c-w>"] = "<c-\\><c-o>db",
 
-            -- indent/dedent
-            {"<c-l>", "<c-t>"},
-            {"<c-h>", "<c-d>"},
+        -- indent/dedent
+        ["<c-l>"] = "<c-t>",
+        ["<c-h>"] = "<c-d>",
 
-            -- move to start/end of line (shell)
-            {"<c-e>", "<c-o>A"},
-            {"<c-a>", "<c-o>I"},
-
-            -- moonlander zero to sort of match normal keyboard
-            {"<c-->", '0'},
-        },
-        require('mappings.symbols'):transformk(function(k)
-            return string.format("<%s-%s>", vim.g.symbol_insert_modifier, k)
-        end)
-    ),
+        -- move to start/end of line (shell)
+        ["<c-e>"] = "<c-o>A",
+        ["<c-a>"] = "<c-o>I",
+    }),
     v = {
         -- retain visual selection after indent/dedent
-        {'>', '>gv'},
-        {'<', '<gv'},
+        ['>'] = '>gv',
+        ['<'] = '<gv',
     },
     nv = {
         -- move by visual line
@@ -95,85 +83,68 @@ local maps = Dict({
         N = {"'nN'[v:searchforward].'zz'", {expr = true}},
 
         -- center after jumping
-        {"<c-u>", "<c-u>zz"},
-        {"<c-d>", "<c-d>zz"},
+        ["<c-u>"] = "<c-u>zz",
+        ["<c-d>"] = "<c-d>zz",
 
         -- idk what a "page" is other than a screen
-        {"<c-f>", "<c-d>zz"},
-        {"<c-b>", "<c-u>zz"},
+        ["<c-f>"] = "<c-d>zz",
+        ["<c-b>"] = "<c-u>zz",
 
         -- easy commandmode
-        {"<cr>", ':'},
+        ["<cr>"] = ':',
     },
     c = {
         -- move to start/end of line (shell)
-        {"<c-a>", "<home>"},
-        {"<c-e>", "<end>"},
+        ["<c-a>"] = "<home>",
+        ["<c-e>"] = "<end>",
 
         -- next/previous command (shell)
-        {"<c-n>", "<down>"},
-        {"<c-p>", "<up>"},
+        ["<c-n>"] = "<down>",
+        ["<c-p>"] = "<up>",
 
         -- move to next/previous word (shell)
-        {"<m-left>", "<s-left>"},
-        {"<m-right>", "<s-right>"},
+        ["<m-left>"] = "<s-left>",
+        ["<m-right>"] = "<s-right>",
     },
     ca = {
-        {"l", "lua"},
-        {"lp", "lua vim.print()<Left>"},
+        l = "lua",
+        lp = "lua vim.print()<Left>",
     },
     t = {
         -- exit
-        {"<esc>", "<c-\\><c-n>", {nowait = true}},
-        {"<c-[>", "<c-\\><c-n>", {nowait = true}},
+        ["<esc>"] = {"<c-\\><c-n>", {nowait = true}},
+        ["<c-[>"] = {"<c-\\><c-n>", {nowait = true}},
 
         -- paste
-        {"<c-]>", '<c-\\><c-n>""pA'},
+        ["<c-]>"] = '<c-\\><c-n>""pA',
 
         -- <c-r> like in insert mode
-        {"<c-r>", [['<c-\><c-n>"'.nr2char(getchar()).'pi']], {expr = true}},
+        ["<c-r>"] = {[['<c-\><c-n>"'.nr2char(getchar()).'pi']], {expr = true}},
 
         -- consistent window movement commands
-        {"<c-h>", "<c-\\><c-n><c-w>h", {nowait = true}},
-        {"<c-j>", "<c-\\><c-n><c-w>j", {nowait = true}},
-        {"<c-k>", "<c-\\><c-n><c-w>k", {nowait = true}},
-        {"<c-l>", "<c-\\><c-n><c-w>l", {nowait = true}},
+        ["<c-h>"] = {"<c-\\><c-n><c-w>h", {nowait = true}},
+        ["<c-j>"] = {"<c-\\><c-n><c-w>j", {nowait = true}},
+        ["<c-k>"] = {"<c-\\><c-n><c-w>k", {nowait = true}},
+        ["<c-l>"] = {"<c-\\><c-n><c-w>l", {nowait = true}},
     },
     nvit = {
         ["<C-Space>"] = require('mappings.windows'),
     },
 })
 
-maps:transformv(function(nested_mappings)
-    local to_flatten = List({nested_mappings})
-    local mappings = List()
-    while #to_flatten > 0 do
-        local current = to_flatten:pop()
+maps:foreach(function(modes, nested_maps)
+    modes = modes:match("a$") and modes or List(modes)
 
-        mappings:extend(List(current))
+    local submaps = List({nested_maps})
+    while #submaps > 0 do
+        Dict(submaps:pop()):foreach(function(lhs, val)
+            val = type(val) == "string" and {val} or val
 
-        Dict(current):foreach(function(lhs, val)
-            local rhs, opts
-            if type(val) == "table" then
-                if #val > 0 then
-                    rhs, opts = unpack(val)
-                else
-                    to_flatten:append(Dict(val):transformk(function(_lhs) return lhs .. _lhs end))
-                end
+            if #val == 0 then
+                submaps:append(Dict(val):transformk(function(_lhs) return lhs .. _lhs end))
             else
-                rhs = val
-            end
-
-            if rhs then
-                mappings:append({lhs, rhs, opts})
+                vim.keymap.set(modes, lhs, unpack(val))
             end
         end)
     end
-
-    return mappings
-end):foreach(function(modes, mappings)
-    modes = modes:match("a$") and modes or List(modes)
-    mappings:foreach(function(mapping)
-        vim.keymap.set(modes, unpack(mapping))
-    end)
 end)

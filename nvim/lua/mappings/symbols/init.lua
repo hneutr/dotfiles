@@ -2,9 +2,7 @@
 -- wikipedia: https://en.wikipedia.org/wiki/Unicode_block
 return Dict({
     ----------------------------------[ letters ]-----------------------------------
-    A = require('mappings.symbols.accents'),
     -- a = require('mappings.symbols.arrows'),
-    C = "⊂",
     -- d = require('mappings.symbols.doublestruck'),
     g = require('mappings.symbols.greek'),
     j = require('mappings.symbols.subscripts'),
@@ -28,4 +26,6 @@ return Dict({
     Right = "→",
     Up = "↑",
     Down = "↓",
-})
+}):transformk(function(k)
+    return string.format("<%s-%s>", vim.g.symbol_insert_modifier, k)
+end)
