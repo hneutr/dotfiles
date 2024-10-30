@@ -6,8 +6,7 @@ local maps = Dict({
         -- play 'q' macro
         Q = '@q',
 
-        -- easier backstepping
-        {"<c-e>", "gE"},
+        ["<c-e>"] = {"gE", {desc = "go to end of previous word"}},
 
         -- swap */# (match _W_ord) and g*/g# (match _w_ord)
         ['*'] = 'g*',
@@ -25,35 +24,28 @@ local maps = Dict({
         ["<c-k>"] = "<c-w>k",
         ["<c-l>"] = "<c-w>l",
 
-        -- next/previous buffer
-        ["<tab>"] = ":bnext<cr>",
-        ["<s-tab>"] = ":bprev<cr>",
-
         -- leader keys
-        [vim.g.mapleader] = {
-            -- start/end of line
-            h = "^",
-            l = "$",
+        ["<leader>"] = {
 
-            -- rerun last command
-            c = ":<c-p><cr>",
+            q = {":q<cr>", {desc = "quit"}},
 
-            -- quit
-            q = ":q<cr>",
+            h = {"^", {desc = "go to start of line"}},
+            l = {"$", {desc = "go to end of line"}},
 
-            -- Conditionally modify character at end of line
-            [","] = {require('util').modify_line_end(','), {silent = true}},
-            [";"] = {require('util').modify_line_end(';'), {silent = true}},
+            c = {":<c-p><cr>", {desc = "run last command"}},
+
+            [","] = {require('util').modify_line_end(','), {silent = true, desc = "toggle trailing ,"}},
+            [";"] = {require('util').modify_line_end(';'), {silent = true, desc = "toggle trailing ;"}},
         },
     },
-    i = Dict(require('mappings.symbols'), {
+    i = {
         -- esc
         jk = {"<esc>", {nowait = true}},
 
         -- paste
         ["<c-]>"] = '<c-r>"',
 
-        -- forward delete (macos)
+        -- forward delete (ala macos)
         ["<c-d>"] = "<del>",
 
         -- delete next/previous word
@@ -67,7 +59,21 @@ local maps = Dict({
         -- move to start/end of line (shell)
         ["<c-e>"] = "<c-o>A",
         ["<c-a>"] = "<c-o>I",
-    }),
+
+        -- meta
+        ["<M-0>"] = "°",
+
+        ['<M-->'] = "—", -- em dash
+        ["<M-=>"] = "≠",
+        ["<M-<>"] = "≤",
+        ["<M->>"] = "≥",
+        ["<M-`>"] = "≈",
+
+        ["<M-Left>"] = "←",
+        ["<M-Right>"] = "→",
+        ["<M-Up>"] = "↑",
+        ["<M-Down>"] = "↓",
+    },
     v = {
         -- retain visual selection after indent/dedent
         ['>'] = '>gv',
@@ -94,15 +100,15 @@ local maps = Dict({
         ["<cr>"] = ':',
     },
     c = {
-        -- move to start/end of line (shell)
+        -- move to start/end of line (ala shell)
         ["<c-a>"] = "<home>",
         ["<c-e>"] = "<end>",
 
-        -- next/previous command (shell)
+        -- next/previous command (ala shell)
         ["<c-n>"] = "<down>",
         ["<c-p>"] = "<up>",
 
-        -- move to next/previous word (shell)
+        -- move to next/previous word (ala shell)
         ["<m-left>"] = "<s-left>",
         ["<m-right>"] = "<s-right>",
     },
@@ -118,7 +124,7 @@ local maps = Dict({
         -- paste
         ["<c-]>"] = '<c-\\><c-n>""pA',
 
-        -- <c-r> like in insert mode
+        -- <c-r> ala insert mode
         ["<c-r>"] = {[['<c-\><c-n>"'.nr2char(getchar()).'pi']], {expr = true}},
 
         -- consistent window movement commands
@@ -128,7 +134,23 @@ local maps = Dict({
         ["<c-l>"] = {"<c-\\><c-n><c-w>l", {nowait = true}},
     },
     nvit = {
-        ["<C-Space>"] = require('mappings.windows'),
+        ["<C-Space>"] = Dict({
+            l = "vspl|term",
+            j = "spl|term",
+            c = "tabnew|term",
+            x = "x",
+            X = "tabclose",
+            ["!"] = "wincmd T",
+            ["1"] = "tabn 1",
+            ["2"] = "tabn 2",
+            ["3"] = "tabn 3",
+            ["4"] = "tabn 4",
+            ["5"] = "tabn 5",
+            ["6"] = "tabn 6",
+            ["7"] = "tabn 7",
+            ["8"] = "tabn 8",
+            ["9"] = "tabn 9",
+        }):transformv(function(rhs) return "<cmd>" .. rhs .. "<cr>" end),
     },
 })
 

@@ -37,8 +37,8 @@ return {
     ]]),
     ps("elseif", "elseif $1 then"),
     ps("fn", [[
-        function($1)
-            $2
+        function $1($2)
+            $3
         end
     ]]),
 }
