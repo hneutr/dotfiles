@@ -93,7 +93,17 @@ List({
                 vim.api.nvim_win_set_cursor(0, cursor)
             end,
         }
-    }
+    },
+
+    -- unmap <cr> in command window
+    {
+        "CmdwinEnter",
+        {
+            callback = function()
+                vim.keymap.set({'n', 'i'}, "<CR>", "<CR>", {buffer = true})
+            end,
+        }
+    },
 }):foreach(function(item)
     vim.api.nvim_create_autocmd(unpack(item))
 end)
