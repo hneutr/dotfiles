@@ -4,7 +4,7 @@ List({
         mappings = {
             {"gV", '`[v`]', desc = "reselect last selection"},
 
-            {'q', '@q', {desc = "play 'q' macro"}},
+            {'Q', '@q', {desc = "play 'q' macro"}},
 
             {"<c-e>", "gE", {desc = "go to end of prev word"}},
 
@@ -136,6 +136,9 @@ List({
             {"<c-j>", "<c-\\><c-n><c-w>j", {nowait = true}},
             {"<c-k>", "<c-\\><c-n><c-w>k", {nowait = true}},
             {"<c-l>", "<c-\\><c-n><c-w>l", {nowait = true}},
+
+            -- open `@.md`
+            {"<C-2>", "vim @.md<cr>"},
         },
     },
     {

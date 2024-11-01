@@ -1,7 +1,7 @@
 List({
     -- diagnostics suck
     {
-        {"BufEnter"},
+        "BufEnter",
         {callback = function() vim.diagnostic.disable(0) end},
     },
 
@@ -46,7 +46,10 @@ List({
     -- enter insert mode whenever we're in a terminal
     {
         {"TermOpen", "BufWinEnter", "BufEnter"},
-        {pattern = "term://*", command = "startinsert"}
+        {
+            pattern = "term://*",
+            command = "startinsert",
+        }
     },
 
     -- statusline
@@ -66,7 +69,7 @@ List({
 
     -- open file at last point
     {
-        {"BufReadPost"},
+        "BufReadPost",
         {
             callback = function()
                 if vim.fn.bufname():match("%.git/COMMIT_EDITMSG") then
@@ -84,7 +87,7 @@ List({
 
     -- remove trailing whitespace
     {
-        {"BufWritePre"},
+        "BufWritePre",
         {
             pattern = {"*.py", "*.lua", "*.js", "*.yaml", "*.ts", "*.html", "*.sh"},
             callback = function()
