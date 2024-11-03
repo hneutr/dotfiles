@@ -1,11 +1,17 @@
 local Object = require("util.object")
-local List = require("hl.list")
 
 local ls = require("luasnip")
 local s = ls.snippet
 local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
+local ps = ls.parser.parse_snippet
+
+local M = {}
+
+M.opts = {
+    fill = '-',
+}
 
 local WIDTH = 80
 local WIDTH_SMALL = 40
@@ -60,14 +66,14 @@ end
 
 function Block:divider()
     local str = self.comment
-    str = str .. string.rep(self.divider_fill_char, self.width - (2 * str:len()))
+    str = str .. self.divider_fill_char:rep(self.width - (2 * #str))
     str = str .. self.comment
     return str
 end
 
 function Block:spacer()
     local str = self.comment
-    str = str .. string.rep(' ', self.width - (2 * str:len()))
+    str = str .. string.rep(' ', self.width - (2 * #str))
     str = str .. self.comment
     return str
 end
@@ -76,28 +82,15 @@ function Block:set_text(text)
     self.text = text or ''
 end
 
-function Block:snippet()
-    return {
-        t{self:divider(), self.comment .. " "},
-        i(1),
-        t{"", self:divider()},
-    }
-end
-
 --------------------------------------------------------------------------------
 --                                  Function                                  --
 --------------------------------------------------------------------------------
 local FunctionBlock = Block:extend()
 
-function FunctionBlock:underline()
-    return string.rep(self.divider_fill_char, self.text:len())
-end
-
-function FunctionBlock.fill_underline(args, _, user_args)
+function FunctionBlock.underline(args, _, user_args)
     local text = args[1][1]
     local obj = user_args[1]
-    obj:set_text(text)
-    return obj:underline()
+    return obj.divider_fill_char:rep(#text)
 end
 
 function FunctionBlock:snippet()
@@ -105,7 +98,7 @@ function FunctionBlock:snippet()
         t({self:divider(), self.comment .. " "}),
         i(1),
         t({"", self.comment .. " "}),
-        f(FunctionBlock.fill_underline, {1}, {user_args = {{self}}}),
+        f(FunctionBlock.underline, {1}, {user_args = {{self}}}),
         t({"", self.comment .. " ", self:divider()}),
     }
 end
@@ -128,22 +121,15 @@ function Header:after()
 end
 
 function Header:set_text(text)
-    Header.super.set_text(self, text)
-
-    self.to_fill = {total = self.width - self.text:len()}
-    self.to_fill.left = math.max(math.floor(self.to_fill.total / 2), self.comment:len())
-    self.to_fill.right = math.max(self.to_fill.total - self.to_fill.left, self.comment:len())
+    local total = self.width - #text
+    self.to_fill = {}
+    self.to_fill.left = math.max(math.floor(total / 2), #self.comment)
+    self.to_fill.right = math.max(total - self.to_fill.left, #self.comment)
 end
 
 function Header:side_fill(side)
-    local str = self.comment
-    str = str .. string.rep(self.input_fill_char, self.to_fill[side] - str:len())
-
-    if side == 'right' then
-        str = str:reverse()
-    end
-
-    return str
+    local pad_fn = side == 'right' and string.lpad or string.rpad
+    return pad_fn(self.comment, self.to_fill[side], self.input_fill_char)
 end
 
 function Header.side_fill_fn(args, _, user_args)
@@ -183,13 +169,13 @@ function H3:before() return {self:divider(), ""} end
 
 -------------------------------------[ H4 ]-------------------------------------
 H4 = Header:extend()
-H4.beside_text = { left = '[ ', right = ' ]'}
+H4.beside_text = {left = '[ ', right = ' ]'}
 
 function H4:side_fill(side)
     local beside_text = H4.beside_text[side]
-    local to_fill = self.to_fill[side] - self.comment:len() - beside_text:len()
+    local to_fill = self.to_fill[side] - #self.comment - #beside_text
 
-    local str = self.comment .. string.rep(self.divider_fill_char, to_fill)
+    local str = self.comment .. self.divider_fill_char:rep(to_fill)
 
     if side == 'right' then
         str = beside_text .. str:reverse()
@@ -201,48 +187,18 @@ function H4:side_fill(side)
 end
 
 -----------------------------------[ Print ]------------------------------------
-local Print = Object:extend()
-
-function Print:new(print_string)
-    self.print_string = print_string or 'print(%s)'
-    self.open, self.close = self.print_string:match("^(.*)%%s(.*)$")
-end
-
-function Print:snippet(add_quotes)
-    local open = self.open
-    local close = self.close
-
-    if add_quotes then
-        open = open .. '"'
-        close = '"' .. close
-    end
-
-    return {t(open), i(1), t(close)}
+local function print_snippet(str, add_quotes)
+    return string.format(str or 'print(%s)', add_quotes and '"$1"' or "$1")
 end
 
 ----------------------------------[ BigLine ]-----------------------------------
-local BigLine = Block:extend()
-
-function BigLine:divider()
-    local str = self.comment
-    str = str .. string.rep(self.divider_fill_char, self.width - (str:len()))
-    return str
-end
-
-
-function BigLine:snippet()
-    return {
-        t{self:divider(), "", ""},
-        i(1),
-    }
+local function big_line_snippet(str)
+    return str:rpad(WIDTH, M.opts.fill) .. "\n$1"
 end
 
 ---------------------------------[ SmallLine ]----------------------------------
-local SmallLine = BigLine:extend()
-
-function SmallLine:new(args)
-    SmallLine.super.new(self, args)
-    self.width = WIDTH_SMALL
+local function small_line_snippet(str)
+    return str:rpad(WIDTH_SMALL, M.opts.fill) .. "\n$1"
 end
 
 --------------------------------------------------------------------------------
@@ -272,7 +228,7 @@ function FTLoader.load(filetype)
     end
 
     local ft_strings = vim.tbl_get(vim.g.snip_ft_strings, filetype) or {}
-    local comment_str = string.gsub(ft_strings.comment or vim.bo.commentstring, "%s?%%s$", '')
+    local comment_str = vim.bo.commentstring:gsub("%s?%%s$", '')
 
     local snips = List()
 
@@ -280,16 +236,16 @@ function FTLoader.load(filetype)
 
     if filetype ~= 'all' then
         snips:extend({
-            s("block", Block({comment = comment_str}):snippet()),
             s("h1", H1({comment = comment_str}):snippet()),
             s("h2", H2({comment = comment_str}):snippet()),
             s("h3", H3({comment = comment_str}):snippet()),
             s("h4", H4({comment = comment_str}):snippet()),
             s("fnb", FunctionBlock({comment = comment_str}):snippet()),
-            s("bl", BigLine({comment = comment_str}):snippet()),
-            s("l", SmallLine({comment = comment_str}):snippet()),
-            s("p", Print(ft_strings.print):snippet()),
-            s("qp", Print(ft_strings.print):snippet(true)),
+
+            ps("bl", big_line_snippet(comment_str)),
+            ps("l", small_line_snippet(comment_str)),
+            ps("p", print_snippet(ft_strings.print)),
+            ps("qp", print_snippet(ft_strings.print, true)),
         })
     end
 

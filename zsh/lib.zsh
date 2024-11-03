@@ -32,7 +32,7 @@ function vload() {
 }
 
 function open_two_vertical_terminals() {
-    nvim -c "lua require('util').open_two_vertical_terminals()"
+    nvim -c "lua open_two_vertical_terminals()"
 }
 
 #------------------------------------------------------------------------------#

@@ -8,7 +8,6 @@ vim.g.snip_ft_strings = {
     typescriptreact = {print = 'console.log(%s)'},
     lua = {print = 'print(%s)'},
     python = {print = 'print(%s)'},
-    markdown = {comment = '= %s'},
     vim = {print = 'echo %s'},
     zsh = {print = 'echo %s'},
     sh = {print = 'echo %s'},
