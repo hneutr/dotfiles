@@ -11,5 +11,4 @@ require("htl")
 require('util')
 
 require('settings')
-require('mappings')
 require('plugins')

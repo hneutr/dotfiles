@@ -51,7 +51,8 @@ Block.arg_defaults = {
 }
 
 function Block:new(args)
-    args = _G.default_args(args, Block.arg_defaults)
+    args = vim.tbl_extend("keep", {}, args or {}, Block.arg_defaults)
+
     for k, v in pairs(args) do
         self[k] = v
     end

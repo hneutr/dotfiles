@@ -2,7 +2,7 @@ List({
     {
         modes = "n",
         mappings = {
-            {"gV", '`[v`]', desc = "reselect last selection"},
+            {"gV", '`[v`]', {desc = "reselect last selection"}},
 
             {'Q', '@q', {desc = "play 'q' macro"}},
 
@@ -31,10 +31,10 @@ List({
                 {"h", "^", {desc = "go to start of line"}},
                 {"l", "$", {desc = "go to end of line"}},
 
-                {'c', ":<c-p><cr>", {desc = "run last command"}},
+                {'c', ":<c-p><cr>", {desc = "rerun previous command"}},
 
-                {",", require('util').modify_line_end(','), {silent = true, desc = "toggle trailing ,"}},
-                {";", require('util').modify_line_end(';'), {silent = true, desc = "toggle trailing ;"}},
+                {",", toggle_trailing_punctuation(','), {silent = true, desc = "toggle trailing ,"}},
+                {";", toggle_trailing_punctuation(';'), {silent = true, desc = "toggle trailing ;"}},
             },
         }
     },
@@ -45,7 +45,7 @@ List({
 
             {"<c-]>", '<c-r>"', {desc = "paste"}},
 
-            {"<c-d>", "<del>", {desc = "forward delete (ala macos)"}},
+            {"<c-d>", "<del>", {desc = "delete next char (ala macos)"}},
 
             {"<c-s>", "<c-\\><c-o>de", {desc = "delete next word"}},
             {"<c-w>", "<c-\\><c-o>db", {desc = "delete prev word"}},
@@ -72,8 +72,8 @@ List({
     {
         modes = "v",
         mappings = {
-            {'>', '>gv', {desc = "reselect after indent"}},
-            {'<', '<gv', {desc = "reselect after dedent"}},
+            {'>', '>gv', {desc = "indent + reselect"}},
+            {'<', '<gv', {desc = "dedent + reselect"}},
         },
     },
     {
@@ -86,7 +86,7 @@ List({
             -- easy commandmode
             {"<cr>", ':'},
 
-            -- center after jumping + consistent direction next/previous behavior
+            -- center after jumping + consistent direction next/prev behavior
             {"n", "'Nn'[v:searchforward].'zz'", {expr = true}},
             {"N", "'nN'[v:searchforward].'zz'", {expr = true}},
 
@@ -116,7 +116,7 @@ List({
         modes = "ca",
         mappings = {
             {'l', "lua"},
-            {'lp', "lua vim.print()<Left>"},
+            {'lp', spaceless_abbreviation("lua vim.print()<Left>")},
         },
     },
     {

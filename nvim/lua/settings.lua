@@ -2,9 +2,6 @@ vim.g.python3_host_prog = vim.env.NVIM_PYTHON
 
 vim.g.mapleader = " "
 
--- use "option-char" to insert non-ascii characters
-vim.g.symbol_insert_modifier = "M"
-
 vim.g.snip_ft_strings = {
     javascript = {print = 'console.log(%s)'},
     typescript = {print = 'console.log(%s)'},
@@ -17,13 +14,15 @@ vim.g.snip_ft_strings = {
     sh = {print = 'echo %s'},
 }
 
-vim.g.ft_paste_function = {
-    markdown = "fix_quotes"
+vim.g.ft_punctuation_toggles = {
+    python = {[';'] = ':'},
 }
+
+vim.g.filetypes_to_fix_quotes_on_paste = {"markdown"}
 
 Dict({
     -- write all the time
-    autowriteall = true, 
+    autowriteall = true,
 
     background = 'dark',
 
@@ -44,7 +43,7 @@ Dict({
 
     expandtab = true,
 
-    fileformats = {"unix", "mac"}, 
+    fileformats = {"unix", "mac"},
 
     foldenable = false,
 
@@ -53,7 +52,7 @@ Dict({
     foldnestmax = 1,
 
     -- substitutions default to global
-    gdefault = true, 
+    gdefault = true,
 
 	grepprg = "rg --vimgrep",
 
@@ -65,7 +64,7 @@ Dict({
         -- replace: _
         "r-cr:hor20-Cursor/lCursor",
     },
-    
+
     -- ignore case when searching
     ignorecase = true,
 
@@ -74,7 +73,7 @@ Dict({
 
     -- adjust case when searching
     infercase = true,
-    
+
     -- redraw less
     lazyredraw = true,
 
