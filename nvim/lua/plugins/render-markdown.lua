@@ -5,12 +5,13 @@ return {
         ignore = {
             dash = true,
             callout = true,
+            check_scope = true,
         },
     },
     heading = {
         enabled = true,
         position = 'inline',
-        icons = {''},
+        icons = {' '},
         width = {'full', 'block'},
         min_width = 60,
         min_width = {-1, 60, 40, 20},
@@ -38,13 +39,47 @@ return {
     checkbox = {
         enabled = true,
         unchecked = {icon = '◻'},
-        checked = {icon = '✓'},
+        checked = {
+            icon = '✓',
+            scope_highlight = "RenderMarkdownChecked",
+        },
+        custom = {
+            maybe = {
+                raw = '[~]',
+                rendered = '~',
+                highlight = 'Delimiter',
+                scope_highlight = "Delimiter",
+            },
+            reject = {
+                raw = '[!]',
+                rendered = '⨉',
+                highlight = 'rainbow1',
+                scope_highlight = "rainbow1",
+            },
+        },
     },
     callout = {
-        todo = {raw = '[!todo]', rendered = 'todo:  ', highlight = 'RenderMarkdownInfo'},
-        change = {raw = '[!change]', rendered = 'change:  ', highlight = 'Character'},
-        note = {raw = '[!note]', rendered = 'note:  ', highlight = 'Special'},
-        prose_end = {raw = '[!end]', quote_icon = "◇", rendered = string.rep("◇", 79), highlight = 'Statement'},
+        todo = {
+            raw = '[!todo]',
+            rendered = 'todo:  ',
+            highlight = 'RenderMarkdownInfo',
+        },
+        change = {
+            raw = '[!change]',
+            rendered = 'change:  ',
+            highlight = 'Character',
+        },
+        note = {
+            raw = '[!note]',
+            rendered = 'note:  ',
+            highlight = 'Special',
+        },
+        prose_end = {
+            raw = '[!end]',
+            quote_icon = "◇",
+            rendered = string.rep("◇", 79),
+            highlight = 'Statement',
+        },
     },
     bullet = {enabled = false},
     pipe_table = {enabled = false},

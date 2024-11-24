@@ -1,11 +1,13 @@
 vim.cmd("syn clear markdownLinkText")
+vim.cmd([[highlight clear SpellLocal]])
+vim.cmd([[highlight clear SpellCap]])
 
 local syntax = {
     -- bold
-    ["@markup.strong"] = {link = "@spell"},
+    ["@markup.strong.markdown_inline"] = {bold = true},
 
     -- italic
-    ["@markup.italic"] = {link = "@spell"},
+    ["@markup.italic.markdown_inline"] = {italic = true},
 
     -- lists
     ["markdownListMarker"] = {link = "Function"},
