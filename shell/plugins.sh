@@ -26,6 +26,9 @@ if [ -x "$(command -v fd)" ]; then
     alias rgl="rg -l"
 fi
 
+#------------------------------------[ fzf ]-----------------------------------#
+export FZF_DEFAULT_OPTS="--reverse --multi --select-1 --exit-0"
+
 #-----------------------------------[ bfs ]------------------------------------#
 if [ -x "$(command -v bfs)" ]; then
     function () {

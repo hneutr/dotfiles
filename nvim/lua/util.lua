@@ -4,14 +4,6 @@ function lrequire(package_name)
     end
 end
 
-function open_two_vertical_terminals()
-    vim.cmd("silent terminal")
-    vim.api.nvim_input('<esc>')
-    vim.cmd("silent vsplit")
-    vim.cmd("silent terminal")
-    vim.api.nvim_input('<C-h>')
-end
-
 --------------------------------------------------------------------------------
 -- if the line ends with `char`, remove it
 -- otherwise, remove trailing punctuation + add `char`

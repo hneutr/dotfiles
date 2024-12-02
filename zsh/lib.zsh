@@ -1,4 +1,3 @@
-
 #------------------------------------------------------------------------------#
 #                                    misc                                      #
 #------------------------------------------------------------------------------#
@@ -22,18 +21,26 @@ function settex() {
 #------------------------------------------------------------------------------#
 #                                    vim                                       #
 #------------------------------------------------------------------------------#
-function fvim() {
-    # fuzzy find into vim
-    fzf --reverse --multi --select-1 --exit-0 --bind 'enter:become(nvim {})'
+function fuzzyvim(){
+    setopt localoptions pipefail no_aliases 2> /dev/null
+
+    local file=$(eval "${FZF_DEFAULT_COMMAND}" | $(__fzfcmd) -m "$@" | while read item; do
+        echo -n "${(q)item}"
+    done)
+
+    local ret=$?
+
+    if [[ -n $file ]]; then
+        zle push-line
+        BUFFER="$EDITOR $file"
+        zle accept-line
+    fi
+
+    zle reset-prompt
+    return $ret
 }
 
-function vload() {
-    nvim -c "source .Session.vim" -c "silent! !rm .Session.vim"
-}
-
-function open_two_vertical_terminals() {
-    nvim -c "lua open_two_vertical_terminals()"
-}
+zle -N fuzzyvim
 
 #------------------------------------------------------------------------------#
 #                         change directory functions                           #

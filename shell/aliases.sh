@@ -15,7 +15,8 @@ alias lst='tree --git-ignore -I .git\|.gitignore'
 alias nvim=$NVIM_PATH
 alias vi="nvim"
 alias vim="nvim"
-alias term="nvim -c term"
+alias session='nvim -c "Session load"'
+alias vsplit_terms='nvim -c "OpenVSplitTerminals"'
 
 # python
 alias python="python3"

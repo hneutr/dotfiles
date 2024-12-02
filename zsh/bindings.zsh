@@ -20,8 +20,8 @@ bindkey "^[[1;3D" backward-word
 # alt-RightArrow
 bindkey "^[[1;3C" forward-word
 
-# fuzzy vim
-bindkey -s '^V' "fvim\n"
+# open vsplit terminals
+bindkey -s '^[t' "vsplit_terms\n"
 
-# open two terminals
-bindkey -s '^[t' "open_two_vertical_terminals\n"
+# fuzzy vim
+bindkey ^v fuzzyvim
