@@ -43,5 +43,5 @@ local commands = {
 
 for name, cmd in pairs(commands) do
     cmd = type(cmd) == "function" and {fn = cmd} or cmd
-    vim.api.nvim_buf_create_user_command(0, name, cmd.fn, cmd.opts or {})
+    vim.api.nvim_create_user_command(name, cmd.fn, cmd.opts or {})
 end
