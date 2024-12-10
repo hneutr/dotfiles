@@ -56,6 +56,12 @@ return {
                 highlight = 'rainbow1',
                 scope_highlight = "rainbow1",
             },
+            important = {
+                raw = '[#]',
+                rendered = '!',
+                highlight = 'Keyword',
+                scope_highlight = "Keyword",
+            },
         },
     },
     callout = {

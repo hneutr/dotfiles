@@ -21,7 +21,7 @@ local groups = {
                 end
             end,
             add = function(text, addend, cursor)
-                local n = math.min(#text + addend - 1, 6)
+                local n = math.min(#text + (addend * -1) - 1, 6)
                 text = n < 1 and "" or ("%s "):format(string.rep("#", n))
                 return {text = text, cursor = 1}
             end,

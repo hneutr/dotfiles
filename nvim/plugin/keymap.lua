@@ -47,7 +47,16 @@ List({
 
             {"<c-d>", "<del>", {desc = "delete next char (ala macos)"}},
 
-            {"<c-s>", "<c-\\><c-o>de", {desc = "delete next word"}},
+            {
+                "<c-s>",
+                function()
+                    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+                    local line = vim.api.nvim_buf_get_text(0, row - 1, col, row, -1, {})[1]
+                    local object = line:lstrip():match("%s") and "t " or "$"
+                    vim.api.nvim_input("<C-o>d" .. object)
+                end,
+                {desc = "delete next word"}
+            },
             {"<c-w>", "<c-\\><c-o>db", {desc = "delete prev word"}},
 
             {"<c-l>", "<c-t>", {desc = "indent"}},
