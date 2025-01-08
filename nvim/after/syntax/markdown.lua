@@ -24,6 +24,9 @@ local syntax = {
     -- breaks
     ["RenderMarkdownDash"] = {link = "Function"},
     ["@punctuation.special.markdown"] = {link = "Function"},
+
+    -- don't add highlights for "indented" code
+    ["@markup.raw.block.markdown"] = {link = "@spell"},
 }
 
 for key, val in pairs(syntax) do

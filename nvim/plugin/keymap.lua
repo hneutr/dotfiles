@@ -47,8 +47,10 @@ Dict({
             "<c-s>",
             function()
                 local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-                local line = vim.api.nvim_buf_get_text(0, row - 1, col, row, -1, {})[1]:lstrip()
-                local object = line:find("%s") ~= 2 and "e" or "l" -- deals with the 1 char case
+                local line = vim.api.nvim_buf_get_text(0, row - 1, col, row - 1, -1, {})[1]
+
+                -- deals with the 1 char case and whitespace at start
+                local object = (line:sub(1, 1) == " " or line:find("%s") ~= 2) and "e" or "l"
                 vim.api.nvim_input("<C-o>d" .. object)
             end,
             {desc = "delete next word"}

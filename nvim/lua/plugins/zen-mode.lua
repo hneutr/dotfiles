@@ -1,3 +1,20 @@
+local function change_markdown_render_config(opening)
+    if vim.opt.ft:get() ~= 'markdown' then
+        return
+    end
+
+    local conf = require("plugins.render-markdown")()
+
+    if opening then
+        conf.dash = {
+            width = 20,
+            left_margin = 30,
+        }
+    end
+
+    require("render-markdown").setup(conf)
+end
+
 return {
     window = {
         backdrop = 1,
@@ -19,6 +36,7 @@ return {
         vim.opt_local.spell = true
 
         vim.keymap.set("n", "<leader>q", "<cmd>ZenMode | quit<cr>", {silent = true})
+        change_markdown_render_config(true)
     end,
     on_close = function()
         vim.opt.showmode = true
@@ -26,5 +44,6 @@ return {
         vim.opt_local.spell = false
 
         vim.keymap.set("n", " q", ":q<cr>", {silent = true})
+        change_markdown_render_config(false)
     end,
 }
