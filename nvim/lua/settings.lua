@@ -1,5 +1,3 @@
-vim.g.python3_host_prog = vim.env.NVIM_PYTHON
-
 vim.g.mapleader = " "
 
 vim.g.snip_ft_strings = {
@@ -19,7 +17,7 @@ vim.g.ft_punctuation_toggles = {
 
 vim.g.filetypes_to_fix_quotes_on_paste = {"markdown"}
 
-Dict({
+local opts = {
     -- write all the time
     autowriteall = true,
 
@@ -53,7 +51,7 @@ Dict({
     -- substitutions default to global
     gdefault = true,
 
-	grepprg = "rg --vimgrep",
+    grepprg = "rg --vimgrep",
 
     guicursor = {
         -- normal/visual/command: block
@@ -85,11 +83,11 @@ Dict({
     shiftwidth = 4,
 
     -- shorten messages
-    shortmess = List({
+    shortmess = table.concat({
         "a", -- standard abbreviations
         "c", -- no ins-completion-menu messages
         "A", -- no swap file messages
-    }):join(),
+    }),
 
     -- show matching parentheses
     showmatch = true,
@@ -146,6 +144,8 @@ Dict({
     wildignorecase = true,
 
     wildmode = {"list:longest", "full"},
-}):foreach(function(key, val)
-    vim.opt[key] = val
-end)
+}
+
+for opt, val in pairs(opts) do
+    vim.opt[opt] = val
+end

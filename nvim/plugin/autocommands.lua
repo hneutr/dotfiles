@@ -1,11 +1,5 @@
-List({
-    -- diagnostics suck
-    {
-        "BufEnter",
-        {callback = function() vim.diagnostic.disable(0) end},
-    },
-
-    -- save post-change
+local autocommands = {
+    -- save on change
     {
         {"TextChanged", "InsertLeave"},
         {
@@ -27,47 +21,7 @@ List({
         },
     },
 
-    -- turn numbers on for normal buffers; turn them off for terminal buffers
-    {
-        {"TermOpen", "BufWinEnter"},
-        {
-            callback = function()
-                if vim.bo.buftype == 'terminal' then
-                    vim.wo.number = false
-                    vim.wo.relativenumber = false
-                else
-                    vim.wo.number = true
-                    vim.wo.relativenumber = true
-                end
-            end
-        },
-    },
-
-    -- enter insert mode whenever we're in a terminal
-    {
-        {"TermOpen", "BufWinEnter", "BufEnter"},
-        {
-            pattern = "term://*",
-            command = "startinsert",
-        }
-    },
-
-    -- statusline
-    {
-        {"VimEnter", "BufWinEnter", "TermOpen"},
-        {
-            callback = function()
-                local statusline = "%.100F"
-                if vim.api.nvim_buf_get_name(0):match("^term") then
-                    statusline = "term"
-                end
-
-                vim.opt_local.statusline = statusline
-            end
-        }
-    },
-
-    -- open file at last point
+    -- open at last position
     {
         "BufReadPost",
         {
@@ -98,6 +52,45 @@ List({
         }
     },
 
+    -- show line numbers in non-terminal buffers
+    {
+        {"BufEnter", "TermOpen"},
+        {
+            callback = function()
+                local is_term_buf = vim.bo.buftype == 'terminal'
+                vim.wo.number = not is_term_buf
+                vim.wo.relativenumber = not is_term_buf
+            end
+        },
+    },
+
+    -- enter insert mode in terminal buffers
+    {
+        {"BufWinEnter", "BufEnter", "TermOpen"},
+        {
+            pattern = "term://*",
+            command = "startinsert",
+        }
+    },
+
+    -- set statusline
+    {
+        {"VimEnter", "BufWinEnter", "TermOpen"},
+        {
+            callback = function()
+                vim.opt_local.statusline = vim.bo.buftype == 'terminal' and "term" or "%.100F"
+            end
+        }
+    },
+
+    -- turn off diagnostics, because diagnostics suck
+    {
+        "BufEnter",
+        {
+            callback = function() vim.diagnostic.disable(0) end
+        },
+    },
+
     -- unmap <cr> in command window
     {
         "CmdwinEnter",
@@ -108,26 +101,20 @@ List({
         }
     },
 
-    -- dim linenumbers in inactive markdown files
+    -- dim stuff in inactive windows
     {
         {"WinLeave", "BufLeave", "WinEnter", "BufEnter"},
         {
-            pattern = "*.md",
             callback = function(tbl)
-                if not vim.g.md_linenumber_ns then
-                    vim.g.md_linenumber_ns = vim.api.nvim_create_namespace("md_linenumber_ns")
-                    for _, hl in ipairs({"LineNr", "LineNrAbove", "LineNrBelow"}) do
-                        vim.api.nvim_set_hl(vim.g.md_linenumber_ns, hl, {link = "NonText"})
-                    end
-                end
-
                 vim.api.nvim_win_set_hl_ns(
                     vim.fn.win_getid(),
-                    tbl.event:match("Leave") and vim.g.md_linenumber_ns or 0
+                    tbl.event:match("Leave") and vim.api.nvim_get_namespaces()['inactive_win'] or 0
                 )
             end,
         },
     },
-}):foreach(function(item)
-    vim.api.nvim_create_autocmd(unpack(item))
-end)
+}
+
+for _, autocommand in ipairs(autocommands) do
+    vim.api.nvim_create_autocmd(unpack(autocommand))
+end
