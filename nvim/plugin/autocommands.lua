@@ -108,7 +108,7 @@ List({
         }
     },
 
-    -- show linenumbers only in active markdown file
+    -- dim linenumbers in inactive markdown files
     {
         {"WinLeave", "BufLeave", "WinEnter", "BufEnter"},
         {
@@ -116,8 +116,8 @@ List({
             callback = function(tbl)
                 if not vim.g.md_linenumber_ns then
                     vim.g.md_linenumber_ns = vim.api.nvim_create_namespace("md_linenumber_ns")
-                    for _, hl in ipairs({"LineNrAbove", "LineNrBelow"}) do
-                        vim.api.nvim_set_hl(vim.g.md_linenumber_ns, hl, {fg = "#1e1e2f", bg = "#1e1e2f"})
+                    for _, hl in ipairs({"LineNr", "LineNrAbove", "LineNrBelow"}) do
+                        vim.api.nvim_set_hl(vim.g.md_linenumber_ns, hl, {link = "NonText"})
                     end
                 end
 
