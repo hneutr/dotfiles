@@ -107,6 +107,19 @@ List({
             end,
         }
     },
+
+    -- show linenumbers only in active markdown file
+    {
+        {"WinLeave", "BufLeave", "WinEnter"},
+        {
+            pattern = "*.md",
+            callback = function(tbl)
+                for _, hl in ipairs({"LineNr", "LineNrAbove", "LineNrBelow"}) do
+                    vim.api.nvim_set_hl(0, hl, {fg = tbl.event == "WinEnter" and "#cdd6f5" or "#1e1e2f"})
+                end
+            end,
+        },
+    },
 }):foreach(function(item)
     vim.api.nvim_create_autocmd(unpack(item))
 end)
