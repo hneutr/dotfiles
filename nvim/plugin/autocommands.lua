@@ -110,13 +110,21 @@ List({
 
     -- show linenumbers only in active markdown file
     {
-        {"WinLeave", "BufLeave", "WinEnter"},
+        {"WinLeave", "BufLeave", "WinEnter", "BufEnter"},
         {
             pattern = "*.md",
             callback = function(tbl)
-                for _, hl in ipairs({"LineNr", "LineNrAbove", "LineNrBelow"}) do
-                    vim.api.nvim_set_hl(0, hl, {fg = tbl.event == "WinEnter" and "#cdd6f5" or "#1e1e2f"})
+                if not vim.g.md_linenumber_ns then
+                    vim.g.md_linenumber_ns = vim.api.nvim_create_namespace("md_linenumber_ns")
+                    for _, hl in ipairs({"LineNrAbove", "LineNrBelow"}) do
+                        vim.api.nvim_set_hl(vim.g.md_linenumber_ns, hl, {fg = "#1e1e2f", bg = "#1e1e2f"})
+                    end
                 end
+
+                vim.api.nvim_win_set_hl_ns(
+                    vim.fn.win_getid(),
+                    tbl.event:match("Leave") and vim.g.md_linenumber_ns or 0
+                )
             end,
         },
     },
