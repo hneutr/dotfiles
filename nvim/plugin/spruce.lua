@@ -71,7 +71,6 @@ function M.add_margins(win)
     local horizontal_space = vim.api.nvim_win_get_width(0) - M.opts.width - 2
 
     data[win] = {buffer = vim.api.nvim_create_buf(false, true)}
-
     data[win].margins = vim.tbl_map(
         function(margin)
             return vim.api.nvim_open_win(
@@ -105,7 +104,11 @@ function M.close(win)
     vim.opt.showmode = true
     vim.opt.showcmd = true
 
-    vim.tbl_map(function(_win) vim.api.nvim_win_close(_win, true) end, data[win].margins)
+    vim.tbl_map(
+        function(_win) vim.api.nvim_win_close(_win, true) end,
+        data[win].margins
+    )
+
     vim.api.nvim_buf_delete(data[win].buffer, {force = true})
 
     vim.keymap.set("n", " q", ":q<cr>", {silent = true})

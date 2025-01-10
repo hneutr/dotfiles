@@ -52,14 +52,14 @@ local autocommands = {
         }
     },
 
-    -- show line numbers in non-terminal buffers
+    -- hide line numbers in terminal buffers
     {
         {"BufEnter", "TermOpen"},
         {
+            pattern = "term://*",
             callback = function()
-                local is_term_buf = vim.bo.buftype == 'terminal'
-                vim.wo.number = not is_term_buf
-                vim.wo.relativenumber = not is_term_buf
+                vim.wo.number = false
+                vim.wo.relativenumber = false
             end
         },
     },
@@ -106,10 +106,17 @@ local autocommands = {
         {"WinLeave", "BufLeave", "WinEnter", "BufEnter"},
         {
             callback = function(tbl)
-                vim.api.nvim_win_set_hl_ns(
-                    vim.fn.win_getid(),
-                    tbl.event:match("Leave") and vim.api.nvim_get_namespaces()['inactive_win'] or 0
-                )
+                local win = vim.fn.win_getid()
+                local ns = vim.api.nvim_get_hl_ns({winid = win})
+
+                local namespaces = vim.api.nvim_get_namespaces()
+
+                if ns == 0 or ns == -1 or ns == namespaces.inactive_win then
+                    vim.api.nvim_win_set_hl_ns(
+                        win,
+                        tbl.event:match("Leave") and namespaces.inactive_win or 0
+                    )
+                end
             end,
         },
     },

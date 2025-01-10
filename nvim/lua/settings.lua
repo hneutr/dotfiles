@@ -77,6 +77,12 @@ local opts = {
     -- break lines at word boundaries
     linebreak = true,
 
+    -- show line numbers
+    number = true,
+
+    -- make them relative
+    relativenumber = true,
+
     -- if there are spaces when </>, round down
     shiftround = true,
 
