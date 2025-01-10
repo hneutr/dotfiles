@@ -26,7 +26,7 @@ function popen() {
 }
 
 function zv() {
-    nvim $1 -c "lua require('zen-mode').toggle()"
+    nvim $1 -c "lua Spruce.toggle()"
 }
 
 source $HOME/lib/hnetxt-lua/bin/lib.sh

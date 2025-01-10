@@ -1,6 +1,7 @@
 local highlights_by_namespace = {
     ["0"] = {
-        LineNr = {link = "Normal"},
+        -- can't link to Normal bc zen-mode weirdness
+        LineNr = {ctermfg = 10},
 
         SignColumn = {},
         Folded = {},

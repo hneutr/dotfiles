@@ -85,8 +85,9 @@ local opts = {
     -- shorten messages
     shortmess = table.concat({
         "a", -- standard abbreviations
-        "c", -- no ins-completion-menu messages
-        "A", -- no swap file messages
+        "c", -- hide ins-completion-menu messages
+        "C", -- hide "scanning tags" messages
+        "A", -- hide swap file messages
     }),
 
     -- show matching parentheses
