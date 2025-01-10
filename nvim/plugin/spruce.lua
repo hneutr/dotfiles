@@ -8,7 +8,9 @@ local M = {
         win_conf = {
             win = 0,
             style = 'minimal',
+            focusable = false,
             noautocmd = true,
+            -- hide = true,
         },
         namespaces = {
             spruce_margin = {
