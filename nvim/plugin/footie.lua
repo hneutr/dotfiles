@@ -109,7 +109,7 @@ vim.api.nvim_create_autocmd(
             data[tbl.buf] = M.get_locations()
             local new_location = data[tbl.buf][row]
 
-            if old_location and new_location and old_location ~= new_location then
+            if old_location ~= new_location then
                 M.update_location_references(old_location, new_location)
             end
         end
