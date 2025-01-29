@@ -6,6 +6,7 @@ return {
         "markdown",
         "markdown_inline",
         "bash",
+        "query",
     },
     sync_install = false,
     auto_install = true,
@@ -15,13 +16,13 @@ return {
     },
     indent = {
         enable = true,
-        disable = {'markdown', 'markdown_inline'},
+        -- disable = {'markdown', 'markdown_inline'},
     },
     incremental_selection = {
         enable = true,
     },
     textobjects = {
         enable = true,
-        disable = {'markdown', 'markdown_inline'},
+        -- disable = {'markdown', 'markdown_inline'},
     },
 }

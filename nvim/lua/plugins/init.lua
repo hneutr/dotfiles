@@ -51,14 +51,6 @@ require("lazy").setup(
             keys = {{"<leader>df", function() require('fzf-lua').files() end}},
         },
 
-        -- zen mode
-        {
-            'folke/zen-mode.nvim',
-            commit = "50e2e2a",
-            opts = require("plugins.zen-mode"),
-            keys = {{"<leader>dz", "<cmd>ZenMode<cr>"}},
-        },
-
         -- search highlighting
         'hneutr/vim-cool',
 

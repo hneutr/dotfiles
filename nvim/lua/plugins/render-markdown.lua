@@ -74,9 +74,19 @@ local conf = {
             highlight = 'Statement',
         },
     },
+    link = {
+        enabled = true,
+        image = '',
+        email = '',
+        hyperlink = '',
+        footnote = {
+            superscript = false,
+            prefix = '^',
+            suffix = '',
+        },
+    },
     bullet = {enabled = false},
     pipe_table = {enabled = false},
-    link = {enabled = false},
     sign = {enabled = false},
 }
 

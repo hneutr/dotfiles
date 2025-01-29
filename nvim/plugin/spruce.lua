@@ -88,6 +88,8 @@ function M.add_margins(win)
             {split = 'right', width = math.ceil(horizontal_space  / 2)},
         }
     )
+
+    data[win].windows = vim.list_extend({win}, data[win].margins)
 end
 
 function M.close(win)
@@ -129,8 +131,25 @@ function M.toggle()
     return M.close(win) or M.open(win)
 end
 
-vim.keymap.set({"n"}, "<leader>ds", M.toggle)
+vim.keymap.set({"n"}, "<leader>dz", M.toggle)
 vim.api.nvim_create_user_command("Spruce", M.toggle, {bar = true})
+
+vim.api.nvim_create_autocmd(
+    {"BufEnter", "BufWinEnter"},
+    {
+        callback = function()
+            local d = data[vim.fn.win_getid()] or {}
+            vim.tbl_map(
+                function(win)
+                    vim.wo[win].number = false
+                    vim.wo[win].relativenumber = false
+                end,
+                d.windows or {}
+            )
+        end,
+    }
+)
+
 Spruce = M
 
 return M

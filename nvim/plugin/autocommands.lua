@@ -54,12 +54,12 @@ local autocommands = {
 
     -- hide line numbers in terminal buffers
     {
-        {"BufEnter", "TermOpen"},
+        {"BufEnter", "BufWinEnter", "TermOpen"},
         {
-            pattern = "term://*",
             callback = function()
-                vim.wo.number = false
-                vim.wo.relativenumber = false
+                local show_numbers = vim.bo.buftype ~= "terminal"
+                vim.wo.number = show_numbers
+                vim.wo.relativenumber = show_numbers
             end
         },
     },
