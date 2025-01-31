@@ -18,7 +18,7 @@ local conf = {
         border_virtual = true,
     },
     code = {
-        position = '',
+        position = 'left',
     },
     quote = {
         icon = '▋',

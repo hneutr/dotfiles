@@ -1,8 +1,8 @@
 local autocommands = {
-    -- save on change
     {
         {"TextChanged", "InsertLeave"},
         {
+            desc = "autosave changes",
             callback = function()
                 if vim.bo.modified then
                     local start_line, start_col = unpack(vim.api.nvim_buf_get_mark(0, '['))
@@ -21,10 +21,10 @@ local autocommands = {
         },
     },
 
-    -- open at last position
     {
         "BufReadPost",
         {
+            desc = "open at last position",
             callback = function()
                 if vim.fn.bufname():match("%.git/COMMIT_EDITMSG") then
                     return
@@ -39,10 +39,10 @@ local autocommands = {
         },
     },
 
-    -- remove trailing whitespace
     {
         "BufWritePre",
         {
+            desc = "remove trailing whitespace",
             pattern = {"*.py", "*.lua", "*.js", "*.yaml", "*.ts", "*.html", "*.sh"},
             callback = function()
                 local cursor = vim.api.nvim_win_get_cursor(0)
@@ -52,10 +52,19 @@ local autocommands = {
         }
     },
 
-    -- hide line numbers in terminal buffers
+    {
+        "BufWritePost",
+        {
+            desc = "remove save messages",
+            pattern = {'*'},
+            command = 'redrawstatus',
+        }
+    },
+
     {
         {"BufEnter", "BufWinEnter", "TermOpen"},
         {
+            desc = "hide line numbers in terminal buffers",
             callback = function()
                 local show_numbers = vim.bo.buftype ~= "terminal"
                 vim.wo.number = show_numbers
@@ -64,47 +73,47 @@ local autocommands = {
         },
     },
 
-    -- enter insert mode in terminal buffers
     {
         {"BufWinEnter", "BufEnter", "TermOpen"},
         {
+            desc = "enter insert mode in terminal buffers",
             pattern = "term://*",
             command = "startinsert",
         }
     },
 
-    -- set statusline
     {
         {"VimEnter", "BufWinEnter", "TermOpen"},
         {
+            desc = "set statusline",
             callback = function()
                 vim.opt_local.statusline = vim.bo.buftype == 'terminal' and "term" or "%.100F"
             end
         }
     },
 
-    -- turn off diagnostics, because diagnostics suck
     {
         "BufEnter",
         {
+            desc = "turn off diagnostics, because diagnostics suck",
             callback = function() vim.diagnostic.disable(0) end
         },
     },
 
-    -- unmap <cr> in command window
     {
         "CmdwinEnter",
         {
+            desc = "unmap <cr> in command window",
             callback = function()
                 vim.keymap.set({'n', 'i'}, "<CR>", "<CR>", {buffer = true})
             end,
         }
     },
 
-    -- dim stuff in inactive windows
     {
         {"WinLeave", "BufLeave", "WinEnter", "BufEnter"},
         {
+            desc = "dim stuff in inactive windows",
             callback = function(tbl)
                 local win = vim.fn.win_getid()
                 local ns = vim.api.nvim_get_hl_ns({winid = win})
