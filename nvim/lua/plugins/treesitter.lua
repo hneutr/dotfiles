@@ -23,6 +23,5 @@ return {
     },
     textobjects = {
         enable = true,
-        -- disable = {'markdown', 'markdown_inline'},
     },
 }

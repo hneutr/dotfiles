@@ -1,21 +1,21 @@
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
     vim.fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable",
-        lazypath,
+        'git',
+        'clone',
+        '--filter=blob:none',
+        '--branch=stable',
+        'https://github.com/folke/lazy.nvim.git',
+        lazypath
     })
 end
 
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup(
-    {
-        -- colorscheme
+require('lazy').setup({
+    spec = {
+        -- Some colorscheme
         {
             "catppuccin/nvim",
             lazy = false,
@@ -25,18 +25,20 @@ require("lazy").setup(
             config = function() vim.cmd.colorscheme("catppuccin") end,
         },
 
+        -- treesitter
+        {
+            'nvim-treesitter/nvim-treesitter',
+            build = ':TSUpdate',
+            opts = require("plugins.treesitter"),
+            main = "nvim-treesitter.configs",
+        },
+
         -- open things from :term in the parent nvim
         {
             "willothy/flatten.nvim",
             config = true,
             lazy = false,
             priority = 1001,
-        },
-
-        {
-            'nvim-treesitter/nvim-treesitter',
-            opts = require("plugins.treesitter"),
-            main = "nvim-treesitter.configs",
         },
 
         -- sqlite
@@ -120,9 +122,12 @@ require("lazy").setup(
         -- markdown rendering
         {
             'MeanderingProgrammer/render-markdown.nvim',
-            dependencies = {'nvim-treesitter/nvim-treesitter'},
+            dependencies = {
+                'nvim-treesitter/nvim-treesitter',
+                'echasnovski/mini.nvim',
+            },
             config = require("plugins/render-markdown"),
-            ft = "markdown",
+            -- ft = "markdown",
         },
 
         -- fuzzy find algorithm
@@ -133,5 +138,5 @@ require("lazy").setup(
 
         -- personal library
         {dir = "~/lib/hnetxt-lua"},
-    }
-)
+    },
+})
