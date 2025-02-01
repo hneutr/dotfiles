@@ -19,6 +19,9 @@ local conf = {
     },
     code = {
         position = 'left',
+        sign = false,
+        icon = '',
+        language_name = false,
     },
     quote = {
         icon = '▋',

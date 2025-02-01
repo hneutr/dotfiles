@@ -127,7 +127,7 @@ require('lazy').setup({
                 'echasnovski/mini.nvim',
             },
             config = require("plugins/render-markdown"),
-            -- ft = "markdown",
+            ft = "markdown",
         },
 
         -- fuzzy find algorithm
