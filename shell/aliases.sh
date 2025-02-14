@@ -17,6 +17,8 @@ alias vi="nvim"
 alias vim="nvim"
 alias session='nvim -c "Session load"'
 alias vsplit_terms='nvim -c "OpenVSplitTerminals"'
+alias timevim="rm $HOME/Desktop/startuptime.log && vim --startuptime $HOME/Desktop/startuptime.log"
+alias testmd="vim $HOME/Desktop/test.md"
 
 # python
 alias python="python3"
@@ -39,5 +41,5 @@ alias po="popen"
 alias lua="lua5.1"
 alias lm="luarocks make &> /dev/null && lua "
 
-alias timevim="rm $HOME/Desktop/startuptime.log && vim --startuptime $HOME/Desktop/startuptime.log"
-alias testmd="vim $HOME/Desktop/test.md"
+# brew
+alias bup="brew update"
