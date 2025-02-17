@@ -119,6 +119,19 @@ require('lazy').setup({
             config = lrequire('plugins.dial'),
         },
 
+        -- icons
+        {
+            'echasnovski/mini.icons',
+            version = '*',
+            opts = {style = 'ascii'},
+        },
+
+        -- fuzzy find algorithm
+        {
+            'echasnovski/mini.fuzzy',
+            opts = {},
+        },
+
         -- markdown rendering
         {
             'MeanderingProgrammer/render-markdown.nvim',
@@ -130,13 +143,8 @@ require('lazy').setup({
             ft = "markdown",
         },
 
-        -- fuzzy find algorithm
-        {
-            'echasnovski/mini.fuzzy',
-            opts = {},
-        },
-
         -- personal library
         {dir = "~/lib/hnetxt-lua"},
+
     },
 })

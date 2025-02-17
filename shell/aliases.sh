@@ -42,4 +42,4 @@ alias lua="lua5.1"
 alias lm="luarocks make &> /dev/null && lua "
 
 # brew
-alias bup="brew update"
+alias bup="brew upgrade"
