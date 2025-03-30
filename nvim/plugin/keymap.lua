@@ -171,3 +171,5 @@ Dict({
 
     List(keymaps):foreach(function(keymap) vim.keymap.set(modes, unpack(keymap)) end)
 end)
+
+vim.keymap.del("n", "gri", {})

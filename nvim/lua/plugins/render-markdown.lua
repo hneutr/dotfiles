@@ -20,34 +20,35 @@ local conf = {
     code = {
         position = 'left',
         sign = false,
-        language_name = false,
+        style = 'normal',
     },
     quote = {
         icon = '▋',
         repeat_linebreak = true,
     },
     checkbox = {
-        unchecked = {icon = '◻'},
+        unchecked = {icon = ' '},
         checked = {
-            icon = '✓',
+            icon = ' ',
             scope_highlight = "RenderMarkdownChecked",
         },
         custom = {
             maybe = {
                 raw = '[~]',
+                -- rendered = '󰾟 ',
                 rendered = '~',
                 highlight = 'Delimiter',
                 scope_highlight = "Delimiter",
             },
             reject = {
                 raw = '[!]',
-                rendered = '⨉',
+                rendered = '󰅗 ',
                 highlight = 'rainbow1',
                 scope_highlight = "rainbow1",
             },
             important = {
                 raw = '[#]',
-                rendered = '!',
+                rendered = '󰀧 ',
                 highlight = 'Keyword',
                 scope_highlight = "Keyword",
             },

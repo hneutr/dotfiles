@@ -80,40 +80,40 @@ function M.update_location_references(old, new)
     end
 end
 
-vim.api.nvim_create_autocmd(
-    "BufRead",
-    {
-        pattern = {"*.md"},
-        callback = function(tbl)
-            data[tbl.buf] = M.get_locations()
-        end,
-    }
-)
+-- vim.api.nvim_create_autocmd(
+--     "BufRead",
+--     {
+--         pattern = {"*.md"},
+--         callback = function(tbl)
+--             data[tbl.buf] = M.get_locations()
+--         end,
+--     }
+-- )
 
-vim.api.nvim_create_autocmd(
-    {"TextChanged", "InsertLeave"},
-    {
-        pattern = {"*.md"},
-        callback = function(tbl)
-            if not tbl.buf or not data[tbl.buf] then
-                return
-            end
-
-            if vim.api.nvim_buf_get_mark(0, '[')[1] ~= vim.api.nvim_buf_get_mark(0, ']')[1] then
-                return
-            end
-
-            local row = vim.api.nvim_win_get_cursor(0)[1] - 1
-            local old_location = data[tbl.buf][row]
-
-            data[tbl.buf] = M.get_locations()
-            local new_location = data[tbl.buf][row]
-
-            if old_location ~= new_location then
-                M.update_location_references(old_location, new_location)
-            end
-        end
-    }
-)
+-- vim.api.nvim_create_autocmd(
+--     {"TextChanged", "InsertLeave"},
+--     {
+--         pattern = {"*.md"},
+--         callback = function(tbl)
+--             if not tbl.buf or not data[tbl.buf] then
+--                 return
+--             end
+--
+--             if vim.api.nvim_buf_get_mark(0, '[')[1] ~= vim.api.nvim_buf_get_mark(0, ']')[1] then
+--                 return
+--             end
+--
+--             local row = vim.api.nvim_win_get_cursor(0)[1] - 1
+--             local old_location = data[tbl.buf][row]
+--
+--             data[tbl.buf] = M.get_locations()
+--             local new_location = data[tbl.buf][row]
+--
+--             if old_location ~= new_location then
+--                 M.update_location_references(old_location, new_location)
+--             end
+--         end
+--     }
+-- )
 
 return M
