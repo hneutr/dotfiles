@@ -29,6 +29,8 @@ local syntax = {
     -- these annoy me
     SpellLocal = {},
     SpellCap = {},
+
+    ["@markup.math.latex"] = {},
 }
 
 for key, val in pairs(syntax) do

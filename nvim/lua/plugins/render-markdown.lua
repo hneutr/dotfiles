@@ -11,7 +11,6 @@ local conf = {
         position = 'inline',
         icons = {' '},
         width = {'full', 'block'},
-        min_width = 60,
         min_width = {-1, 60, 40, 20},
         right_pad = {-1, 1},
         border = true,
@@ -35,7 +34,6 @@ local conf = {
         custom = {
             maybe = {
                 raw = '[~]',
-                -- rendered = '󰾟 ',
                 rendered = '~',
                 highlight = 'Delimiter',
                 scope_highlight = "Delimiter",
@@ -55,25 +53,10 @@ local conf = {
         },
     },
     callout = {
-        todo = {
-            raw = '[!todo]',
-            rendered = 'todo:  ',
-            highlight = 'RenderMarkdownInfo',
-        },
-        change = {
-            raw = '[!change]',
-            rendered = 'change:  ',
-            highlight = 'Character',
-        },
-        note = {
-            raw = '[!note]',
-            rendered = 'note:  ',
-            highlight = 'Special',
-        },
         prose_end = {
             raw = '[!end]',
             quote_icon = "◇",
-            rendered = string.rep("◇", 79),
+            rendered = ("◇"):rep(79),
             highlight = 'Statement',
         },
     },
@@ -97,6 +80,15 @@ local zen_conf = vim.tbl_extend("force", conf, {
     dash = {
         width = 20,
         left_margin = 30,
+    },
+    heading = {
+        position = 'inline',
+        icons = {' '},
+        width = {'full', 'block'},
+        min_width = {-1, 60, 40, 20},
+        right_pad = {-1, 1},
+        border = true,
+        border_virtual = true,
     },
 })
 

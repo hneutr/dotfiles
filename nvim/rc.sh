@@ -7,3 +7,4 @@ export NVIM_APPIMAGE_URL="https://github.com/neovim/neovim/releases/download/${N
 export NVIM_PYTHON='/Users/hne/.pyenv/shims/python3'
 
 export EDITOR=nvim
+export MANPAGER="nvim +Man!"

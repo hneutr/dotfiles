@@ -160,7 +160,7 @@ require('lazy').setup({
                     pairs_conf[char] = {
                         action = "closeopen",
                         pair = char .. char,
-                        neigh_pattern = '[^%a\\][^%a]',
+                        neigh_pattern = '[^%a\\,.][^%a]',
                         register = {cr = false},
                     }
                 end
