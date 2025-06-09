@@ -1,5 +1,3 @@
--- vim.cmd("syn clear markdownLinkText")
-
 local syntax = {
     -- bold
     ["@markup.strong.markdown_inline"] = {bold = true},

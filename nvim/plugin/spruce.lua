@@ -10,7 +10,6 @@ local M = {
             style = 'minimal',
             focusable = false,
             noautocmd = true,
-            -- hide = true,
         },
         namespaces = {
             spruce_margin = {
@@ -50,6 +49,7 @@ function M.open(win)
     vim.opt.showcmd = false
 
     if vim.opt.ft:get() == 'markdown' then
+        require('render-markdown').buf_disable()
         require("plugins.render-markdown")(true)
     end
 

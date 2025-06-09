@@ -11,9 +11,9 @@ local conf = {
         position = 'inline',
         icons = {' '},
         width = {'full', 'block'},
-        min_width = {-1, 60, 40, 20},
-        right_pad = {-1, 1},
-        border = true,
+        min_width = {-1, 60, 40, 20, -1, -1},
+        right_pad = {-1, 1, 1, 1, 0, 0},
+        border = {true, true, true, true, false, false},
         border_virtual = true,
     },
     code = {
@@ -80,15 +80,6 @@ local zen_conf = vim.tbl_extend("force", conf, {
     dash = {
         width = 20,
         left_margin = 30,
-    },
-    heading = {
-        position = 'inline',
-        icons = {' '},
-        width = {'full', 'block'},
-        min_width = {-1, 60, 40, 20},
-        right_pad = {-1, 1},
-        border = true,
-        border_virtual = true,
     },
 })
 
