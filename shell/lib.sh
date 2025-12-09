@@ -26,7 +26,7 @@ function popen() {
 }
 
 function zv() {
-    nvim $1 -c "Spruce"
+    nvim $1 +Spruce
 }
 
 source $HOME/lib/hnetxt-lua/bin/lib.sh

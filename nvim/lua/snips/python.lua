@@ -5,7 +5,7 @@ return {
     -- imports
     ps("die", "import sys; sys.exit()\n", {trim_empty = false}),
     ps("idefd", "from collections import defaultdict\n", {trim_empty = false}),
-    ps("idefd", "from pathlib import Path\n", {trim_empty = false}),
+    ps("ipath", "from pathlib import Path\n", {trim_empty = false}),
     ps("ipd", "import pandas as pd\n", {trim_empty = false}),
     ps("inp", "import numpy as np\n", {trim_empty = false}),
     ps("iplt", "import matplotlib.pyplot as plt\n", {trim_empty = false}),

@@ -77,6 +77,10 @@ local opts = {
     -- break lines at word boundaries
     linebreak = true,
 
+    -- no mouse
+    mouse = "",
+    mousescroll = "ver:0,hor:0",
+
     -- show line numbers
     number = true,
 
