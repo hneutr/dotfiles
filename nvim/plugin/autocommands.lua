@@ -92,13 +92,13 @@ local autocommands = {
         }
     },
 
-    {
-        "BufEnter",
-        {
-            desc = "turn off diagnostics, because diagnostics suck",
-            callback = function() vim.diagnostic.disable(0) end
-        },
-    },
+    -- {
+    --     "BufEnter",
+    --     {
+    --         desc = "turn off diagnostics, because diagnostics suck",
+    --         callback = function() vim.diagnostic.disable(0) end
+    --     },
+    -- },
 
     {
         "CmdwinEnter",

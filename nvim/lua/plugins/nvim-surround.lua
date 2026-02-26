@@ -1,10 +1,6 @@
 local get_selection = require("nvim-surround.config").get_selection
 
 require("nvim-surround").setup({
-    keymaps = {
-        visual = "s",
-        visual_line = "S",
-    },
     surrounds = {
         ["("] = {
             add = {"(", ")"},
@@ -56,3 +52,8 @@ require("nvim-surround").setup({
         },
     }
 })
+
+vim.g.nvim_surround_no_normal_mappings = true
+vim.keymap.set("n", "sa", "<Plug>(nvim-surround-normal)", {desc = "Add a surrounding pair"})
+vim.keymap.set("n", "sd", "<Plug>(nvim-surround-delete)", {desc = "Delete a surrounding pair"})
+vim.keymap.set("n", "sr", "<Plug>(nvim-surround-change)", {desc = "Change a surrounding pair"})

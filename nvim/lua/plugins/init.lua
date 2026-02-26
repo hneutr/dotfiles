@@ -88,10 +88,6 @@ require('lazy').setup({
             keys = {{"ga", "<Plug>(EasyAlign)", mode = {"n", "x"}}}
         },
 
-        -- paired options
-        -- note: I only use `[o`/`o]`, so could prolly just implement those
-        'tpope/vim-unimpaired',
-
         -- paste without changing registers
         'vim-scripts/ReplaceWithRegister',
 
@@ -185,5 +181,41 @@ require('lazy').setup({
             dir = "~/lib/hnetxt-lua",
         },
 
+        -- {
+        --     "olimorris/codecompanion.nvim",
+        --     version = "^18.0.0",
+        --     opts = {
+        --         interactions = {
+        --             chat = {
+        --                 adapter = {
+        --                     name = "ollama",
+        --                     model = "deepseek-r1:8b",
+        --                 },
+        --             },
+        --             inline = {
+        --                 adapter = {
+        --                     name = "ollama",
+        --                     model = "deepseek-r1:8b",
+        --                 },
+        --             },
+        --             cmd = {
+        --                 adapter = {
+        --                     name = "ollama",
+        --                     model = "deepseek-r1:8b",
+        --                 },
+        --             },
+        --             background = {
+        --                 adapter = {
+        --                     name = "ollama",
+        --                     model = "deepseek-r1:8b",
+        --                 },
+        --             },
+        --         },
+        --     },
+        --     dependencies = {
+        --         "nvim-lua/plenary.nvim",
+        --         "nvim-treesitter/nvim-treesitter",
+        --     },
+        -- }
     },
 })

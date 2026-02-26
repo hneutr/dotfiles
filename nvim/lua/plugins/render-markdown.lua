@@ -1,5 +1,6 @@
 local conf = {
     render_modes = true,
+    debounce = 200,
     anti_conceal = {
         ignore = {
             dash = true,

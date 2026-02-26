@@ -38,7 +38,7 @@ vim.paste = (function(lines)
         end
     end
 
-    vim.api.nvim_put(lines, 'c', true, true)
+    vim.api.nvim_put(lines, 'c', false, true)
 end)
 
 function spaceless_abbreviation(str)
