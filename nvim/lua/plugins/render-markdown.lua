@@ -51,6 +51,12 @@ local conf = {
                 highlight = 'Keyword',
                 scope_highlight = "Keyword",
             },
+            question = {
+                raw = '[?]',
+                rendered = '󰞋 ',
+                highlight = 'DiagnosticWarn',
+                scope_highlight = "DiagnosticWarn",
+            },
         },
     },
     callout = {
