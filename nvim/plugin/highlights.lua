@@ -1,6 +1,5 @@
 local highlights_by_namespace = {
     ["0"] = {
-        -- can't link to Normal bc zen-mode weirdness
         LineNr = {ctermfg = 10},
 
         SignColumn = {},
@@ -8,6 +7,7 @@ local highlights_by_namespace = {
 
         StatusLine = {link = "Normal"},
         StatusLineNC = {link = "NonText"},
+        EndOfBuffer = {fg = "#1e1e2f", bg = "#1e1e2f"},
     },
     inactive_win = {
         LineNr = {link = "NonText"},

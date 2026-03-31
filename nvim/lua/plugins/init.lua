@@ -28,13 +28,17 @@ require('lazy').setup({
         {
             -- treesitter
             'nvim-treesitter/nvim-treesitter',
+            lazy = false,
             build = ':TSUpdate',
             opts = require("plugins.treesitter"),
-            main = "nvim-treesitter.configs",
+            branch = 'main',
         },
 
         -- treesitter text objects
-        'nvim-treesitter/nvim-treesitter-textobjects',
+        {
+            'nvim-treesitter/nvim-treesitter-textobjects',
+            branch = "main",
+        },
 
         {
             -- open things from :term in the parent nvim

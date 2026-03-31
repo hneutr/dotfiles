@@ -1,6 +1,6 @@
 local keyToApplication = {
     a = "kitty",
-    b = "bitwarden",
+    b = "BambuStudio",
     c = "slack",
     d = "dictionary",
     e = "https://www.etymonline.com",

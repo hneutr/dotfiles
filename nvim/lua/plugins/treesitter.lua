@@ -1,4 +1,5 @@
 return {
+    install_dir = vim.fn.stdpath('data') .. '/site',
     ensure_installed = {
         "lua",
         "python",
@@ -8,7 +9,7 @@ return {
         "bash",
         "query",
     },
-    sync_install = false,
+    sync_install = true,
     auto_install = true,
 
     highlight = {
