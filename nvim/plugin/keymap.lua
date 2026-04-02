@@ -159,6 +159,32 @@ Dict({
             return {v[1], "<cmd>" .. v[2] .. "<cr>"}
         end),
     },
+    ["n x o"] = {
+        {
+            -- select parent treesitter node or outer incremental lsp selections
+            "<M-o>",
+            function()
+                if vim.treesitter.get_parser(nil, nil, { error = false }) then
+                    require("vim.treesitter._select").select_parent(vim.v.count1)
+                else
+                    vim.lsp.buf.selection_range(vim.v.count1)
+                end
+            end,
+            {silent = true},
+        },
+        {
+            -- select child treesitter node or inner incremental lsp selections
+            "<M-i>",
+            function()
+                if vim.treesitter.get_parser(nil, nil, { error = false }) then
+                    require("vim.treesitter._select").select_child(vim.v.count1)
+                else
+                    vim.lsp.buf.selection_range(-vim.v.count1)
+                end
+            end,
+            {silent = true},
+        }
+    },
 }):foreach(function(modes, keymaps)
     modes = modes:split()
 

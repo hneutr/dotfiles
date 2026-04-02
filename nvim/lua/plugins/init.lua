@@ -183,43 +183,16 @@ require('lazy').setup({
         {
             -- personal library
             dir = "~/lib/hnetxt-lua",
-        },
+             config = function()
+                local plugin = require("lazy.core.config").plugins["hnetxt-lua"]
+                local root = plugin.dir
 
-        -- {
-        --     "olimorris/codecompanion.nvim",
-        --     version = "^18.0.0",
-        --     opts = {
-        --         interactions = {
-        --             chat = {
-        --                 adapter = {
-        --                     name = "ollama",
-        --                     model = "deepseek-r1:8b",
-        --                 },
-        --             },
-        --             inline = {
-        --                 adapter = {
-        --                     name = "ollama",
-        --                     model = "deepseek-r1:8b",
-        --                 },
-        --             },
-        --             cmd = {
-        --                 adapter = {
-        --                     name = "ollama",
-        --                     model = "deepseek-r1:8b",
-        --                 },
-        --             },
-        --             background = {
-        --                 adapter = {
-        --                     name = "ollama",
-        --                     model = "deepseek-r1:8b",
-        --                 },
-        --             },
-        --         },
-        --     },
-        --     dependencies = {
-        --         "nvim-lua/plenary.nvim",
-        --         "nvim-treesitter/nvim-treesitter",
-        --     },
-        -- }
+                package.path = table.concat({
+                package.path,
+                root .. "/src/?.lua",
+                root .. "/src/?/init.lua",
+                }, ";")
+            end
+        },
     },
 })

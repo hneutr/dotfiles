@@ -42,11 +42,8 @@ Spruce = {
             }
         }
     },
+    data = {}
 }
-
-
-
-local data = {}
 
 function Spruce.apply_keymap(key, opts)
     opts = opts or {silent = true, buffer = true}
@@ -66,7 +63,7 @@ function Spruce.open(win)
 
     vim.tbl_map(
         function(id) vim.api.nvim_win_set_hl_ns(id, namespaces.spruce_margin) end,
-        data[win].margins
+        Spruce.data[win].margins
     )
 
     vim.b.spruce = true
@@ -84,6 +81,7 @@ function Spruce.open(win)
     end
 
     Spruce.apply_keymap("open")
+    vim.fn.win_gotoid(win)
 end
 
 function Spruce.get_namespaces()
@@ -104,11 +102,11 @@ end
 function Spruce.add_margins(win)
     local horizontal_space = vim.api.nvim_win_get_width(0) - Spruce.opts.width - 2
 
-    data[win] = {buffer = vim.api.nvim_create_buf(false, true)}
-    data[win].margins = vim.tbl_map(
+    Spruce.data[win] = {buffer = vim.api.nvim_create_buf(false, true)}
+    Spruce.data[win].margins = vim.tbl_map(
         function(margin)
             return vim.api.nvim_open_win(
-                data[win].buffer,
+                Spruce.data[win].buffer,
                 false,
                 vim.tbl_extend("force", margin, Spruce.opts.win_conf)
             )
@@ -121,13 +119,13 @@ function Spruce.add_margins(win)
         }
     )
 
-    data[win].windows = vim.list_extend({win}, data[win].margins)
+    Spruce.data[win].windows = vim.list_extend({win}, Spruce.data[win].margins)
 end
 
 function Spruce.close(win)
     win = win or vim.fn.win_getid()
 
-    if not data[win] then
+    if not Spruce.data[win] then
         return false
     end
 
@@ -144,10 +142,10 @@ function Spruce.close(win)
 
     vim.tbl_map(
         function(_win) vim.api.nvim_win_close(_win, true) end,
-        data[win].margins
+        Spruce.data[win].margins
     )
 
-    vim.api.nvim_buf_delete(data[win].buffer, {force = true})
+    vim.api.nvim_buf_delete(Spruce.data[win].buffer, {force = true})
 
     Spruce.apply_keymap("close")
 
@@ -155,7 +153,7 @@ function Spruce.close(win)
         require("plugins.render-markdown")()
     end
 
-    data[win] = nil
+    Spruce.data[win] = nil
 
     return true
 end
@@ -172,7 +170,7 @@ vim.api.nvim_create_autocmd(
     {"BufEnter", "BufWinEnter"},
     {
         callback = function()
-            local d = data[vim.fn.win_getid()] or {}
+            local d = Spruce.data[vim.fn.win_getid()] or {}
             vim.tbl_map(
                 function(win)
                     vim.wo[win].number = false
