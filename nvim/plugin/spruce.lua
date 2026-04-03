@@ -11,13 +11,27 @@ Spruce = {
             focusable = false,
             noautocmd = true,
         },
+        settings = {
+            opt = {
+                showmode = false,
+                showcmd = false,
+            },
+            opt_local = {
+                number = false,
+                relativenumber = false,
+                spell = true,
+            },
+            b = {
+                spruce = true,
+            }
+        },
         namespaces = {
-            spruce_margin = {
+            spruce_text = {
+                StatusLine = {fg = "#1e1e2f"},
                 StatusLineNC = {fg = "#1e1e2f"},
                 WinSeparator = {fg = "#1e1e2f"},
             },
-            spruce_text = {
-                StatusLine = {fg = "#1e1e2f"},
+            spruce_margin = {
                 StatusLineNC = {fg = "#1e1e2f"},
                 WinSeparator = {fg = "#1e1e2f"},
             },
@@ -42,8 +56,24 @@ Spruce = {
             }
         }
     },
-    data = {}
+    data = {},
+    namespaces = {},
 }
+
+function Spruce.apply_namespaces()
+    local namespaces = vim.api.nvim_get_namespaces()
+
+    for name, highlights in pairs(Spruce.opts.namespaces) do
+        if not Spruce.namespaces[name] then
+            Spruce.namespaces[name] = vim.api.nvim_create_namespace(name)
+            for group, highlight in pairs(highlights) do
+                vim.api.nvim_set_hl(Spruce.namespaces[name], group, highlight)
+            end
+        end
+    end
+
+    return namespaces
+end
 
 function Spruce.apply_keymap(key, opts)
     opts = opts or {silent = true, buffer = true}
@@ -52,51 +82,30 @@ function Spruce.apply_keymap(key, opts)
     end
 end
 
-function Spruce.open(win)
-    win = win or vim.fn.win_getid()
+function Spruce.apply_settings(flip)
+    for scope, settings in pairs(Spruce.opts.settings) do
+        for setting, value in pairs(settings) do
+            if flip then
+                value = not value
+            end
 
+            vim[scope][setting] = value
+        end
+    end
+end
+
+function Spruce.open(win)
     Spruce.add_margins(win)
 
-    local namespaces = Spruce.get_namespaces()
+    vim.api.nvim_win_set_hl_ns(win, Spruce.namespaces.spruce_text)
 
-    vim.api.nvim_win_set_hl_ns(win, namespaces.spruce_text)
-
-    vim.tbl_map(
-        function(id) vim.api.nvim_win_set_hl_ns(id, namespaces.spruce_margin) end,
-        Spruce.data[win].margins
-    )
-
-    vim.b.spruce = true
-
-    vim.opt_local.number = false
-    vim.opt_local.relativenumber = false
-    vim.opt_local.spell = true
-
-    vim.opt.showmode = false
-    vim.opt.showcmd = false
+    Spruce.apply_keymap("open")
+    Spruce.apply_settings()
 
     if vim.opt.ft:get() == 'markdown' then
         require('render-markdown').buf_disable()
         require("plugins.render-markdown")(true)
     end
-
-    Spruce.apply_keymap("open")
-    vim.fn.win_gotoid(win)
-end
-
-function Spruce.get_namespaces()
-    local namespaces = vim.api.nvim_get_namespaces()
-
-    for name, highlights in pairs(Spruce.opts.namespaces) do
-        if not namespaces[name] then
-            namespaces[name] = vim.api.nvim_create_namespace(name)
-            for group, highlight in pairs(highlights) do
-                vim.api.nvim_set_hl(namespaces[name], group, highlight)
-            end
-        end
-    end
-
-    return namespaces
 end
 
 function Spruce.add_margins(win)
@@ -105,11 +114,15 @@ function Spruce.add_margins(win)
     Spruce.data[win] = {buffer = vim.api.nvim_create_buf(false, true)}
     Spruce.data[win].margins = vim.tbl_map(
         function(margin)
-            return vim.api.nvim_open_win(
+            local margin_win = vim.api.nvim_open_win(
                 Spruce.data[win].buffer,
                 false,
                 vim.tbl_extend("force", margin, Spruce.opts.win_conf)
             )
+
+            vim.api.nvim_win_set_hl_ns(margin_win, Spruce.namespaces.spruce_margin)
+
+            return margin_win
         end,
         {
             {split = 'above', height = Spruce.opts.margins.top},
@@ -123,54 +136,42 @@ function Spruce.add_margins(win)
 end
 
 function Spruce.close(win)
-    win = win or vim.fn.win_getid()
+    local data = Spruce.data[win]
 
-    if not Spruce.data[win] then
+    if not data then
         return false
     end
 
+    vim.tbl_map(function(_win) vim.api.nvim_win_close(_win, true) end, data.margins)
+
+    vim.api.nvim_buf_delete(data.buffer, {force = true})
     vim.api.nvim_win_set_hl_ns(win, 0)
 
-    vim.b.spruce = false
-
-    vim.opt_local.number = true
-    vim.opt_local.relativenumber = true
-    vim.opt_local.spell = false
-
-    vim.opt.showmode = true
-    vim.opt.showcmd = true
-
-    vim.tbl_map(
-        function(_win) vim.api.nvim_win_close(_win, true) end,
-        Spruce.data[win].margins
-    )
-
-    vim.api.nvim_buf_delete(Spruce.data[win].buffer, {force = true})
+    Spruce.data[win] = nil
 
     Spruce.apply_keymap("close")
+    Spruce.apply_settings(true)
 
     if vim.opt.ft:get() == 'markdown' then
         require("plugins.render-markdown")()
     end
 
-    Spruce.data[win] = nil
-
     return true
 end
 
 function Spruce.toggle()
-    Spruce[vim.b.spruce and "close" or "open"](vim.fn.win_getid())
+    Spruce[vim.b.spruce and "close" or "open"](vim.api.nvim_get_current_win())
 end
 
+Spruce.apply_namespaces()
 Spruce.apply_keymap("init", {silent = true})
 
 vim.api.nvim_create_user_command("Spruce", Spruce.toggle, {bar = true})
-
 vim.api.nvim_create_autocmd(
     {"BufEnter", "BufWinEnter"},
     {
         callback = function()
-            local d = Spruce.data[vim.fn.win_getid()] or {}
+            local d = Spruce.data[vim.api.nvim_get_current_win()] or {}
             vim.tbl_map(
                 function(win)
                     vim.wo[win].number = false

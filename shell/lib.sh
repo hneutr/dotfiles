@@ -26,7 +26,7 @@ function popen() {
 }
 
 function zv() {
-    nvim $1 +Spruce
+    nvim $1 -c "lua vim.schedule(Spruce.toggle)"
 }
 
 source $HOME/lib/hnetxt-lua/bin/lib.sh
