@@ -2,13 +2,13 @@ vim.api.nvim_set_hl(0, "TabLineNumber", {fg = "#74c7ed", bg = "#11111c"})
 vim.api.nvim_set_hl(0, "TabLineNumberSel", {fg = "#74c7ed", bg = "#1e1e2f"})
 
 local function get_name_of_first_listed_buf(tab)
-    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(tab)) do
-        local bufnr = vim.api.nvim_win_get_buf(win)
-
+    for _, bufnr in ipairs(vim.fn.tabpagebuflist(tab)) do
         if vim.api.nvim_get_option_value('buflisted', {buf = bufnr}) then
             return vim.fn.fnamemodify(vim.fn.bufname(bufnr), ':t:r')
         end
     end
+
+    return ""
 end
 
 local function format_tabstr(text, hl_suffix)
