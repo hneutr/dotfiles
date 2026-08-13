@@ -20,7 +20,7 @@ function tabline()
 
     local tabline_str = ""
     for tab, _ in pairs(vim.api.nvim_list_tabpages()) do
-        local hl_suffix = tab == vim.fn.tabpagenr() and "Sel" or ""
+        local hl_suffix = tab == vim.fn.tabpagenr() ? "Sel" : ""
 
         local hl = "TabLine" .. (tab == vim.fn.tabpagenr() and "Sel" or "")
 
@@ -31,8 +31,8 @@ function tabline()
         local left_pad = (" "):rep(pad_n - #tab_n_str)
         local right_pad = (" "):rep(pad_n)
 
-        tabline_str = tabline_str .. format_tabstr(tab_n_str, "Number" .. hl_suffix)
-        tabline_str = tabline_str .. format_tabstr(left_pad .. name .. right_pad, hl_suffix)
+        tabline_str ..= format_tabstr(tab_n_str, "Number" .. hl_suffix)
+        tabline_str ..= format_tabstr(left_pad .. name .. right_pad, hl_suffix)
     end
 
     return tabline_str

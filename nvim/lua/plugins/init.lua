@@ -71,8 +71,8 @@ require('lazy').setup({
             keys = {
                 {'s', '<Plug>Sneak_s', remap = true, mode = {"n"}},
                 {'S', '<Plug>Sneak_S', remap = true, mode = {"n"}},
-                {'z', '<Plug>Sneak_s', remap = true, mode = {"x", "o"}},
-                {'Z', '<Plug>Sneak_S', remap = true, mode = {"x", "o"}},
+                {'q', '<Plug>Sneak_s', remap = true, mode = {"x", "o"}},
+                {'Q', '<Plug>Sneak_S', remap = true, mode = {"x", "o"}},
                 {'f', '<Plug>Sneak_f', remap = true, mode = {"n", "x", "o"}},
                 {'F', '<Plug>Sneak_F', remap = true, mode = {"n", "x", "o"}},
                 {'t', '<Plug>Sneak_t', remap = true, mode = {"n", "x", "o"}},

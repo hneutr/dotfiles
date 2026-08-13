@@ -1,5 +1,6 @@
 # homebrew
 export PATH="$HOMEBREW_PREFIX:$PATH"
+export PATH="/opt/homebrew/bin:$PATH"
 
 # locale
 export LANG=en_US.UTF-8
